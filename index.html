@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ritter Manager</title>
+<style>
+:root{--bg:#f3ead6;--card:#fffaf0;--ink:#2d2417;--mut:#7a6a50;--acc:#8b1e1e;--line:#d8c9a6;--sky1:#9fd0f0;--sky2:#f6e7c1;--grass:#6e9a4a;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1610;--card:#2a2218;--ink:#f1e6cf;--mut:#b5a380;--acc:#d9534f;--line:#4a3d2a;--sky1:#1d2b4a;--sky2:#6a4a3a;--grass:#3d5a2c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1b1610;--card:#2a2218;--ink:#f1e6cf;--mut:#b5a380;--acc:#d9534f;--line:#4a3d2a;--sky1:#1d2b4a;--sky2:#6a4a3a;--grass:#3d5a2c;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman",serif;max-width:560px;margin:0 auto;padding:12px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.top span{color:var(--mut);font-size:14px}
+.scene{height:190px;border-radius:14px;border:2px solid var(--line);background:linear-gradient(var(--sky1),var(--sky2));position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
+.scene:after{content:"";position:absolute;left:0;right:0;bottom:0;height:34px;background:var(--grass)}
+.scene svg.k{height:150px;position:relative;z-index:2;margin-bottom:8px}
+.castle{position:absolute;right:8px;bottom:30px;opacity:.85;height:90px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:15px}
+.bar{height:8px;border-radius:5px;background:var(--line);overflow:hidden;margin-top:3px}
+.bar i{display:block;height:100%}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+button{font:inherit;font-size:15px;padding:11px 8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;min-height:44px}
+button.p{background:var(--acc);color:#fff;border-color:var(--acc)}
+button:disabled{opacity:.45;cursor:default}
+button small{display:block;color:var(--mut);font-size:12px}
+button.p small{color:#fbe3e3}
+.msg{margin-top:10px;padding:8px 12px;border-left:4px solid var(--acc);background:var(--card);border-radius:6px;font-size:15px;min-height:20px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line)}
+.row:last-child{border:0}
+h3{margin:4px 0 6px;font-size:16px}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:14px;margin-bottom:6px}
+.fs{height:190px;justify-content:space-around}
+.hit{animation:hit .4s}
+@keyframes hit{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px);filter:brightness(1.8)}60%{transform:translateX(8px)}}
+.dmg{position:absolute;top:30px;font-weight:bold;font-size:24px;color:#c0221f;z-index:5;animation:up 1s forwards;text-shadow:0 1px 0 #fff}
+@keyframes up{to{transform:translateY(-26px);opacity:0}}
+.moves{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.moves button{font-size:26px;padding:10px 4px}
+.moves button small{font-size:12px}
+.mut{color:var(--mut);font-size:13px}
+.fs{height:290px;display:block}
+.fs .box{position:absolute;background:var(--card);border:2px solid var(--line);border-radius:10px;padding:5px 8px;font-size:13px;width:170px;z-index:6}
+.fs .eb{top:8px;left:8px}.fs .pb{bottom:40px;right:8px}
+.fs .es{position:absolute;right:14px;top:50px;z-index:2}.fs .es svg.k{height:105px;margin:0}
+.fs .ps{position:absolute;left:10px;bottom:28px;z-index:3}.fs .ps svg.k{height:140px;margin:0}
+.fs .dmg{top:20px}
+.fs .es.big svg.k{height:132px}
+body{padding-bottom:64px}
+#snd{position:fixed;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;gap:6px;z-index:50}
+#snd button{min-height:36px;padding:6px 12px;font-size:13px;border-radius:18px;box-shadow:0 1px 4px #0004}
+#snd .off{opacity:.55;text-decoration:line-through}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const AC=["#6b4a2b","#8b6b43","#9aa3ab","#c3ccd4","#7fd6e0"],WC=["#a67c52","#b8bec4","#dfe6ec","#f1f5f9","#ff8a45"],SC=["none","#8b5a2b","#8f98a0","#c0392b"];
+const W=[["Holzschwert",0,0],["Eisenschwert",40,3],["Stahlschwert",120,6],["Langschwert",300,10],["Drachenklinge",700,16]];
+const A=[["Lumpen",0,0],["Lederwams",40,2],["Kettenhemd",120,4],["Plattenpanzer",300,7],["Mithril-Rüstung",700,11]];
+const SH=[["Kein Schild",0,0],["Holzschild",30,1],["Eisenschild",100,2],["Turmschild",280,4]];
+const RANKS=[[0,"Knappe"],[50,"Ritter"],[150,"Edelritter"],[400,"Baron"],[900,"Graf"],[2000,"Herzog"],[5000,"Held des Königreichs"]];
+const ENAMES=["Ritter Eisenhart","Sir Grimmwald","Ritter Schwarzdorn","Sir Bertram","Ritter Blutfels","Sir Hagen","Die Rote Gräfin","Ritter Donnerhelm"];
+const MV={A:["⚔️","Angriff"],F:["🎭","Finte"],P:["🛡️","Parade"]},BEATS={A:"F",F:"P",P:"A"};
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const fresh=()=>({name:"Sir Kunibert",day:1,en:6,gold:20,ruhm:0,st:3,au:3,ge:3,w:0,a:0,s:0,xp:{st:0,au:0,ge:0},exp:0,it:{h:2,H:0,k:0,e:0},wins:0,losses:0});
+const AU={ctx:null,mus:true,sfx:true,mode:null,want:null,timer:null,step:0,unlocked:false};
+try{const a=JSON.parse(localStorage.getItem("ritter_au")||"{}");if(a.m===false)AU.mus=false;if(a.s===false)AU.sfx=false}catch(e){}
+const auSave=()=>{try{localStorage.setItem("ritter_au",JSON.stringify({m:AU.mus,s:AU.sfx}))}catch(e){}};
+function ac(){if(!AU.ctx){try{AU.ctx=new(window.AudioContext||window.webkitAudioContext)();AU.mg=AU.ctx.createGain();AU.mg.gain.value=.5;AU.mg.connect(AU.ctx.destination)}catch(e){return null}}if(AU.ctx.state==="suspended")AU.ctx.resume();return AU.ctx}
+function tone(f,t0,d,type,vol,dest,f2){const c=AU.ctx,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f,t0);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+d);g.gain.setValueAtTime(vol,t0);g.gain.exponentialRampToValueAtTime(.001,t0+d);o.connect(g);g.connect(dest||c.destination);o.start(t0);o.stop(t0+d+.02)}
+function noise(t0,d,vol){const c=AU.ctx,n=Math.floor(c.sampleRate*d),b=c.createBuffer(1,n,c.sampleRate),a=b.getChannelData(0);for(let i=0;i<n;i++)a[i]=(Math.random()*2-1)*(1-i/n);const s=c.createBufferSource(),g=c.createGain();g.gain.value=vol;s.buffer=b;s.connect(g);g.connect(c.destination);s.start(t0)}
+function sfx(n){if(!AU.sfx)return;const c=ac();if(!c)return;const t=c.currentTime,D=c.destination,arp=(a,g,ty)=>a.forEach((f,i)=>tone(f,t+i*g,g*1.6,ty||"triangle",.12));
+ switch(n){
+ case"click":tone(660,t,.05,"square",.05);break;
+ case"hit":noise(t,.18,.25);tone(220,t,.15,"sawtooth",.15,D,70);break;
+ case"crit":noise(t,.25,.3);tone(330,t,.2,"sawtooth",.18,D,60);tone(990,t+.05,.2,"square",.08);break;
+ case"miss":tone(500,t,.2,"sine",.1,D,200);break;
+ case"hurt":noise(t,.2,.2);tone(160,t,.3,"sawtooth",.18,D,50);break;
+ case"heal":arp([523,659,784],.09);break;
+ case"buff":tone(300,t,.35,"triangle",.14,D,900);break;
+ case"coin":tone(988,t,.07,"square",.07);tone(1319,t+.07,.2,"square",.07);break;
+ case"poison":tone(220,t,.4,"sine",.15,D,110);tone(233,t,.4,"sine",.1,D,120);break;
+ case"win":arp([523,659,784,1047],.13);break;
+ case"lose":arp([392,330,262,196],.2,"sawtooth");break;
+ case"level":arp([523,659,784,1047,1319],.09);break;}}
+const MEL={home:[440,0,523,0,659,0,523,0,494,0,587,0,440,0,392,0],battle:[294,294,0,349,294,0,440,0,392,392,0,349,330,0,294,0],boss:[262,0,262,311,0,262,392,0,349,0,311,0,294,0,262,0]},BAS={home:[110,87,98,82],battle:[73,87,98,82],boss:[65,65,78,58]};
+function tick(){const c=AU.ctx;if(!c||c.state!=="running"||!AU.mode)return;const m=AU.mode,s=AU.step++%16,t=c.currentTime+.03,n=MEL[m][s],q=Math.floor(s/4)%4,d=m==="home"?.35:.18;
+ if(n)tone(n,t,d*1.4,m==="home"?"triangle":"square",m==="home"?.09:.04,AU.mg);
+ if(m==="home"){if(s%4===0)tone(BAS.home[q],t,.7,"sine",.12,AU.mg)}else tone(BAS[m][q],t,d,"sawtooth",.05,AU.mg);}
+function musicStop(){if(AU.timer){clearInterval(AU.timer);AU.timer=null}AU.mode=null}
+function musicStart(){musicStop();const m=AU.want;if(!m||!AU.mus||!ac())return;AU.mode=m;AU.step=0;AU.timer=setInterval(tick,m==="home"?380:m==="boss"?165:210)}
+function musicSet(m){AU.want=m;if(AU.unlocked&&AU.mus&&AU.mode!==m)musicStart()}
+function toggleM(){AU.mus=!AU.mus;auSave();if(AU.mus){AU.unlocked=true;ac();musicStart()}else musicStop();updSnd()}
+function toggleS(){AU.sfx=!AU.sfx;auSave();updSnd();if(AU.sfx)sfx("coin")}
+function updSnd(){document.getElementById("mb").className=AU.mus?"":"off";document.getElementById("sb").className=AU.sfx?"":"off"}
+const sd=document.createElement("div");sd.id="snd";sd.innerHTML=`<button id="mb" onclick="toggleM()" aria-label="Musik an oder aus">🎵 Musik</button><button id="sb" onclick="toggleS()" aria-label="Sound an oder aus">🔊 Sound</button>`;document.body.appendChild(sd);updSnd();
+document.addEventListener("pointerdown",()=>{if(AU.unlocked)return;AU.unlocked=true;ac();if(AU.mus)musicStart()});
+document.addEventListener("click",e=>{const b=e.target.closest("button");if(b&&!b.closest("#snd")&&!b.disabled)sfx("click")});
+const SK=[
+{n:"Schwerthieb",lv:1,pp:99,pw:1,acc:95,d:"Solider Standardangriff"},
+{n:"Schildstoß",lv:2,pp:8,pw:.8,acc:95,fx:"stun",d:"40 % Betäubung"},
+{n:"Kräftiger Schlag",lv:3,pp:6,pw:1.6,acc:80,d:"Mächtig, aber ungenau"},
+{n:"Kriegsruf",lv:4,pp:4,pw:0,acc:100,fx:"buff",d:"Schaden +50 % (3 Runden)"},
+{n:"Blutiger Schnitt",lv:5,pp:5,pw:.7,acc:95,fx:"bleed",d:"Blutung für 3 Runden"},
+{n:"Eiserne Haltung",lv:6,pp:4,pw:0,acc:100,fx:"guard",d:"Schaden −50 % (3 Runden)"},
+{n:"Wirbelsturm",lv:8,pp:3,pw:2.2,acc:85,d:"Sehr stark"},
+{n:"Drachenschlag",lv:10,pp:2,pw:3.2,acc:90,d:"Legendärer Hieb"}];
+const IT=[{k:"h",n:"Heiltrank",p:15,d:"+40 LP",e:"🧪"},{k:"H",n:"Großer Heiltrank",p:40,d:"+100 LP",e:"⚗️"},{k:"k",n:"Kraft-Elixier",p:25,d:"Schaden +50 % (3 Runden)",e:"💥"},{k:"g",n:"Gegengift",p:20,d:"Heilt Gift und Brand",e:"💊"},{k:"e",n:"Eisenhaut-Trank",p:25,d:"Schaden −50 % (3 Runden)",e:"🛡️"}];
+const lvl=()=>1+Math.floor(Math.sqrt(S.exp/20)),expFor=l=>(l-1)*(l-1)*20;
+let S=fresh(),msg="Willkommen, edler Ritter! Trainiere, verdiene Gold und bestehe Abenteuer.",F=null;
+try{const x=localStorage.getItem("ritter1");if(x)S=Object.assign(fresh(),JSON.parse(x));}catch(e){}
+S.it=Object.assign({h:0,H:0,k:0,e:0,g:0},S.it);S.boss=S.boss||0;S.troph=S.troph||0;
+const save=()=>{try{localStorage.setItem("ritter1",JSON.stringify(S))}catch(e){}};
+const app=document.getElementById("app");
+const rank=()=>{let r=RANKS[0][1];for(const x of RANKS)if(S.ruhm>=x[0])r=x[1];return r};
+const maxhp=()=>40+S.au*6+lvl()*4;
+
+function knight(w,a,s,flip,plume){
+ const ac=AC[a],helm=a>0?AC[a]:"#e0b48a",pl=plume||(a>=3?"#c0221f":null);
+ return `<svg class="k" viewBox="0 0 130 160" ${flip?'style="transform:scaleX(-1)"':''}>
+ <ellipse cx="62" cy="152" rx="34" ry="5" fill="#0003"/>
+ <rect x="44" y="104" width="13" height="44" rx="4" fill="${a>0?ac:'#5b4636'}"/><rect x="65" y="104" width="13" height="44" rx="4" fill="${a>0?ac:'#5b4636'}"/>
+ <rect x="40" y="144" width="19" height="7" rx="3" fill="#3a2a1c"/><rect x="63" y="144" width="19" height="7" rx="3" fill="#3a2a1c"/>
+ <rect x="36" y="58" width="50" height="50" rx="9" fill="${ac}" stroke="#0004"/>
+ <rect x="36" y="94" width="50" height="6" fill="#5b3a1c"/>
+ <circle cx="61" cy="42" r="17" fill="${helm}" stroke="#0004"/>
+ ${a>0?'<rect x="52" y="39" width="20" height="5" rx="2" fill="#1b1b1b"/>':'<circle cx="55" cy="40" r="2" fill="#222"/><circle cx="67" cy="40" r="2" fill="#222"/><path d="M55 49q6 4 12 0" stroke="#7a4a2a" fill="none"/>'}
+ ${pl?`<path d="M61 25q-4-14 12-12q-8 4-4 12z" fill="${pl}"/>`:''}
+ <rect x="84" y="66" width="22" height="10" rx="5" fill="${ac}"/>
+ <rect x="104" y="20" width="7" height="78" rx="2" fill="${WC[w]}" stroke="#0005"/><polygon points="104,20 111,20 107.5,8" fill="${WC[w]}" stroke="#0005"/>
+ <rect x="97" y="94" width="21" height="6" rx="2" fill="#7a4a1c"/><rect x="105" y="100" width="5" height="12" fill="#5b3a1c"/>
+ ${s>0?`<path d="M14 66h30v22q0 18-15 26q-15-8-15-26z" fill="${SC[s]}" stroke="#0006" stroke-width="2"/><path d="M29 70v40M17 82h24" stroke="#fff6" stroke-width="3"/>`:''}
+ </svg>`}
+const castle=`<svg class="castle" viewBox="0 0 100 90"><g fill="#8d8473" stroke="#0003"><rect x="10" y="30" width="22" height="60"/><rect x="68" y="30" width="22" height="60"/><rect x="28" y="48" width="44" height="42"/><path d="M8 30h26v-8h-5v4h-4v-4h-4v4h-4v-4h-5zM66 30h26v-8h-5v4h-4v-4h-4v4h-4v-4h-5z"/></g><path d="M42 90v-18q8-12 16 0v18z" fill="#4a3a28"/><path d="M50 22v-14l12 4-12 4" fill="#c0221f"/></svg>`;
+const bar=(v,m,c)=>`<div class="bar"><i style="width:${Math.max(0,Math.min(100,v/m*100))}%;background:${c}"></i></div>`;
+
+function home(){musicSet("home");
+ const need=k=>Math.ceil(S[k]/2)+1;
+ app.innerHTML=`<div class="top"><b>${S.name}</b><span>${rank()} · Tag ${S.day}</span></div>
+ <div class="scene">${castle}${knight(S.w,S.a,S.s)}</div>
+ <div class="card"><div class="stats">
+ <div>💪 Stärke <b>${S.st}</b>${bar(S.xp.st,need("st"),"#c0392b")}</div>
+ <div>❤️ Ausdauer <b>${S.au}</b>${bar(S.xp.au,need("au"),"#2e8b57")}</div>
+ <div>🎯 Geschick <b>${S.ge}</b>${bar(S.xp.ge,need("ge"),"#2a7ab8")}</div>
+ <div>⚡ Energie <b>${S.en}/6</b>${bar(S.en,6,"#e0a800")}</div>
+ <div>🪙 Gold <b>${S.gold}</b></div><div>🏆 Ruhm <b>${S.ruhm}</b></div><div style="grid-column:1/-1">⭐ Stufe <b>${lvl()}</b> <span class="mut">(${S.exp} EP)</span>${bar(S.exp-expFor(lvl()),expFor(lvl()+1)-expFor(lvl()),"#8e44ad")}</div></div>
+ <div class="mut" style="margin-top:6px">Waffe: ${W[S.w][0]} · Rüstung: ${A[S.a][0]} · ${SH[S.s][0]}<br>Siege ${S.wins} · Niederlagen ${S.losses} · Pokale ${S.troph} · Bosse ${S.boss}/3</div></div>
+ <div class="msg">${msg}</div>
+ <div class="grid">
+ <button onclick="train('st')" ${S.en<1?"disabled":""}>💪 Stärke trainieren<small>1 Energie</small></button>
+ <button onclick="train('au')" ${S.en<1?"disabled":""}>🏃 Ausdauer trainieren<small>1 Energie</small></button>
+ <button onclick="train('ge')" ${S.en<1?"disabled":""}>🎯 Geschick trainieren<small>1 Energie</small></button>
+ <button onclick="work()" ${S.en<1?"disabled":""}>⚒️ Arbeiten<small>1 Energie · Gold</small></button>
+ <button class="p" onclick="startFight()" ${S.en<2?"disabled":""}>⚔️ Abenteuer<small>2 Energie</small></button>
+ <button onclick="shop()">🔨 Schmiede<small>Ausrüstung & Tränke</small></button>
+ <button onclick="startTour()" ${S.en<4||S.gold<20?"disabled":""}>🏟️ Turnier<small>4 Energie · 20 🪙 · 3 Kämpfe</small></button>
+ ${BOSS[S.boss]?`<button class="p" onclick="startBoss()" ${S.en<3||S.ruhm<BOSS[S.boss].req?"disabled":""}>👑 Bosskampf<small>${S.ruhm<BOSS[S.boss].req?"ab "+BOSS[S.boss].req+" Ruhm":BOSS[S.boss].n}</small></button>`:`<button disabled>👑 Alle Bosse besiegt</button>`}
+ <button onclick="newDay()" style="grid-column:1/-1">🌙 Schlafen · Neuer Tag</button></div>
+ <div class="card"><h3>📜 Fähigkeiten</h3>${SK.map(s=>`<div class="row"><span>${s.lv<=lvl()?"":"🔒 "}${s.n}</span><span class="mut">${s.lv<=lvl()?s.d:"ab Stufe "+s.lv}</span></div>`).join("")}<div class="mut" style="margin-top:6px">Tränke: ${IT.map(t=>t.e+" "+S.it[t.k]).join("  ")}</div></div>
+ <p class="mut" style="text-align:center"><a href="#" onclick="if(confirm('Spiel wirklich zurücksetzen?')){S=fresh();save();msg='Ein neues Abenteuer beginnt!';home()}return false" style="color:var(--mut)">Neu starten</a></p>`;
+}
+function train(k){
+ if(S.en<1)return;S.en--;S.xp[k]++;
+ const n={st:"Stärke",au:"Ausdauer",ge:"Geschick"}[k];
+ if(S.xp[k]>=Math.ceil(S[k]/2)+1){S[k]++;S.xp[k]=0;sfx("level");msg=`Training erfolgreich! <b>${n} steigt auf ${S[k]}.</b>`}
+ else msg=`Du trainierst hart. ${n} wird besser – bald ist es soweit.`;
+ save();home();
+}
+function work(){
+ if(S.en<1)return;S.en--;const g=rnd(8,14)+Math.floor(S.st/3);S.gold+=g;sfx("coin");
+ const t=["Du hilfst dem Schmied","Du bewachst die Stadttore","Du hackst Holz für den Burgvogt","Du eskortierst einen Händler"];
+ msg=`${t[rnd(0,3)]} und verdienst <b>${g} Gold</b>.`;save();home();
+}
+function newDay(){
+ S.day++;S.en=6;const e=rnd(1,5);
+ msg=["Ein neuer Morgen. Der Hahn kräht!","Die Sonne geht auf – ein guter Tag für Abenteuer.","Ein Bote bringt dir 5 Gold vom König."][e<=3?e-1:e===4?0:2];
+ if(msg.includes("5 Gold"))S.gold+=5;save();home();
+}
+function shop(){musicSet("home");
+ const sec=(t,L,k,ic)=>`<h3>${ic} ${t}</h3>`+L.map((x,i)=>{
+  const own=S[k]===i,can=i>S[k]&&S.gold>=x[1],lower=i<S[k];
+  return `<div class="row"><span>${x[0]} <span class="mut">+${x[2]}</span></span>${own?'<b>✔ angelegt</b>':lower?'<span class="mut">besser vorhanden</span>':`<button ${can?"":"disabled"} onclick="buy('${k}',${i})">${x[1]} 🪙</button>`}</div>`}).join("");
+ app.innerHTML=`<div class="top"><b>🔨 Schmiede</b><span>🪙 ${S.gold}</span></div>
+ <div class="scene" style="height:170px">${knight(S.w,S.a,S.s)}</div>
+ <div class="card">${sec("Waffen",W,"w","🗡️")}${sec("Rüstungen",A,"a","🛡️")}${sec("Schilde",SH,"s","🔰")}<h3>🧪 Tränke</h3>${IT.map(t=>`<div class="row"><span>${t.e} ${t.n} ×${S.it[t.k]} <span class="mut">${t.d}</span></span><button ${S.gold>=t.p?"":"disabled"} onclick="buyIt('${t.k}')">${t.p} 🪙</button></div>`).join("")}</div>
+ <div class="grid"><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`;
+}
+function buy(k,i){const L={w:W,a:A,s:SH}[k];if(S.gold<L[i][1])return;S.gold-=L[i][1];S[k]=i;sfx("coin");msg=`Gekauft: <b>${L[i][0]}</b>!`;save();shop();}
+
+function buyIt(k){const t=IT.find(x=>x.k===k);if(S.gold<t.p)return;S.gold-=t.p;S.it[k]++;sfx("coin");save();shop()}
+const hasSk=()=>SK.map((s,i)=>i).filter(i=>SK[i].lv<=lvl());
+const ENS=["Eisenhart","Grimmwald","Schwarzdorn","Bertram","Blutfels","Hagen","Donnerhelm","Wolfram"];
+const ET=[
+{t:"Ritter",hp:1,atk:1,def:1,mv:[["Schlag",1,92,"",5],["Wuchtschlag",1.6,75,"",3],["Deckung",0,100,"guard",2]]},
+{t:"Räuber",hp:.8,atk:.9,def:.6,tint:"#2f7d32",mv:[["Dolchstoß",1,95,"",4],["Giftdolch",.7,92,"poison",4],["Deckung",0,100,"guard",1]]},
+{t:"Feuerritter",hp:1,atk:1.1,def:.9,tint:"#e67e22",mv:[["Schlag",1,90,"",3],["Brandschlag",.9,88,"burn",4],["Wuchtschlag",1.6,75,"",2]]},
+{t:"Panzerritter",hp:1.4,atk:.8,def:1.5,tint:"#5d6d7e",mv:[["Hammerschlag",1.2,80,"stun",3],["Schlag",1,92,"",3],["Schildwall",0,100,"guard",3]]},
+{t:"Bogenschütze",hp:.7,atk:1.2,def:.4,tint:"#8e5a2b",mv:[["Pfeil",1,96,"",4],["Pfeilhagel",1.8,70,"",3]]}];
+const BOSS=[
+{n:"Räuberhauptmann Graukopf",L:3,req:40,hp:2.4,atk:1,def:1,tint:"#2f7d32",mv:[["Säbelhieb",1,92,"",4],["Giftdolch",.8,92,"poison",3],["Plünderschlag",1.7,75,"",2]]},
+{n:"Der Schwarze Ritter",L:6,req:150,hp:2.5,atk:1.1,def:1.2,tint:"#222",mv:[["Dunkler Hieb",1.1,92,"",4],["Hammerschlag",1.3,80,"stun",3],["Schattenklinge",1.8,78,"",3],["Deckung",0,100,"guard",1]]},
+{n:"Drachenlord Vulkanus",L:10,req:500,hp:3,atk:1.2,def:1.3,tint:"#d35400",mv:[["Klauenhieb",1,92,"",3],["Feueratem",1,90,"burn",4],["Schwanzschlag",1.5,80,"stun",2],["Inferno",2.2,72,"burn",2]]}];
+function mk(L,t,boss){
+ const hp=Math.round((40+L*12)*t.hp);
+ return {lvl:L,name:boss?t.n:`${t.t} ${ENS[rnd(0,ENS.length-1)]}`,ehp:hp,emax:hp,atk:(3+L*2)*t.atk,def:Math.floor(L*.8*t.def),tier:Math.min(4,Math.floor(L/2)),tint:t.tint||"#6b2d8f",mv:t.mv,boss:!!boss,enr:false};
+}
+function setup(e,tour,keep){
+ F=Object.assign({php:keep?keep.php:maxhp(),pmax:maxhp(),menu:"main",anim:"",dmg:"",over:false,next:false,tour:tour||0,pp:keep?keep.pp:null,pb:{buff:0,guard:0,poison:0,burn:0,stun:0},eb:{bleed:0,stun:0,guard:0},log:e.boss?`${e.name} versperrt dir den Weg! Das wird ein harter Kampf.`:"Ein fremder Gegner fordert dich heraus! Was tust du?"},e);
+ if(!F.pp){F.pp={};SK.forEach((s,i)=>F.pp[i]=s.pp)}
+ save();fight();
+}
+function startFight(){if(S.en<2)return;S.en-=2;setup(mk(Math.max(1,lvl()+rnd(-1,1)),ET[rnd(0,4)]))}
+function startTour(){if(S.en<4||S.gold<20)return;S.en-=4;S.gold-=20;setup(mk(Math.max(1,lvl()),ET[rnd(0,4)]),1)}
+function nextTour(){const k={php:Math.min(F.pmax,F.php+Math.round(F.pmax*.3)),pp:F.pp},r=F.tour+1;setup(mk(Math.max(1,lvl()+r-1),ET[rnd(0,4)]),r,k)}
+function startBoss(){const b=BOSS[S.boss];if(!b||S.en<3||S.ruhm<b.req)return;S.en-=3;setup(mk(b.L,b,true))}
+function fmenu(m){F.menu=m;fight()}
+function fight(){
+ const f=F;if(!f.over)musicSet(f.boss?"boss":"battle");const ic=(o,m)=>Object.keys(m).filter(k=>o[k]>0).map(k=>m[k]).join("");
+ let ui;
+ if(f.over)ui=f.next?`<button class="p" style="grid-column:1/-1" onclick="nextTour()">Nächster Gegner ⚔️</button>`:`<button class="p" style="grid-column:1/-1" onclick="home()">Zurück zur Burg</button>`;
+ else if(f.menu==="skills")ui=hasSk().map(i=>{const s=SK[i],pp=f.pp[i];return `<button ${pp<1?"disabled":""} onclick="useSkill(${i})">${s.n}<small>${s.pp<99?pp+"/"+s.pp+"× · ":""}${s.d}</small></button>`}).join("")+`<button onclick="fmenu('main')">← Zurück</button>`;
+ else if(f.menu==="items")ui=IT.map(t=>`<button ${S.it[t.k]<1?"disabled":""} onclick="useItem('${t.k}')">${t.e} ${t.n} ×${S.it[t.k]}<small>${t.d}</small></button>`).join("")+`<button onclick="fmenu('main')">← Zurück</button>`;
+ else ui=`<button class="p" onclick="fmenu('skills')">⚔️ Kämpfen</button><button onclick="fmenu('items')">🎒 Tränke</button><button onclick="flee()" style="grid-column:1/-1">🏃 Fliehen</button>`;
+ const dm=(w)=>f.anim===w&&f.dmg?`<span class="dmg" style="left:30px">-${f.dmg}</span>`:"";
+ app.innerHTML=`<div class="scene fs">
+ <div class="box eb"><b>${f.name}</b> <span class="mut">Lv${f.lvl}${f.tour?" · Turnier "+f.tour+"/3":""}${f.boss?" · BOSS":""}</span> ${ic(f.eb,{bleed:"🩸",stun:"💫",guard:"🛡️"})}${bar(f.ehp,f.emax,"#c0392b")}<span class="mut">${Math.max(0,f.ehp)}/${f.emax}</span></div>
+ <div class="es ${f.boss?"big":""} ${f.anim==="e"?"hit":""}">${dm("e")}${knight(f.tier,f.tier,Math.min(3,Math.floor(f.lvl/3)),true,f.tint)}</div>
+ <div class="ps ${f.anim==="p"?"hit":""}">${dm("p")}${knight(S.w,S.a,S.s)}</div>
+ <div class="box pb"><b>${S.name}</b> <span class="mut">Lv${lvl()}</span> ${ic(f.pb,{buff:"💥",guard:"🛡️",poison:"☠️",burn:"🔥",stun:"💫"})}${bar(f.php,f.pmax,"#2e8b57")}<span class="mut">${Math.max(0,f.php)}/${f.pmax}</span></div></div>
+ <div class="msg">${f.log}</div><div class="grid">${ui}</div>`;
+}
+function fin(l){F.log=l.join("<br>");F.menu="main";fight()}
+function useSkill(i){
+ const f=F,s=SK[i],l=[`${S.name} setzt <b>${s.n}</b> ein!`];
+ if(s.pp<99){if(f.pp[i]<1)return;f.pp[i]--}
+ f.anim="";f.dmg="";
+ if(Math.random()*100>=s.acc){l.push("Der Angriff geht daneben!");sfx("miss")}
+ else{
+  if(s.pw>0){
+   let d=5+Math.floor(S.st*1.3)+W[S.w][2];d=d*s.pw*(f.pb.buff>0?1.5:1)+rnd(0,3);
+   const crit=Math.random()<S.ge*.03;if(crit)d*=1.5;if(f.eb.guard)d*=.5;
+   d=Math.max(1,Math.round(d-f.def));f.ehp-=d;f.anim="e";f.dmg=d;sfx(crit?"crit":"hit");l.push((crit?"<b>Kritischer Treffer!</b> ":"")+`${d} Schaden.`);
+  }
+  if(s.fx==="stun"&&Math.random()<.4){f.eb.stun=1;l.push("Der Gegner ist betäubt! 💫")}
+  if(s.fx==="bleed"){f.eb.bleed=3;l.push("Der Gegner blutet! 🩸")}
+  if(s.fx==="buff"){sfx("buff");f.pb.buff=3;l.push("Dein Schaden steigt! 💥")}
+  if(s.fx==="guard"){sfx("buff");f.pb.guard=3;l.push("Du gehst in Verteidigung! 🛡️")}
+ }
+ enemyTurn(l);
+}
+function useItem(k){
+ const f=F;if(S.it[k]<1)return;S.it[k]--;const t=IT.find(x=>x.k===k),l=[`Du benutzt ${t.n}.`];sfx(k==="k"||k==="e"?"buff":"heal");f.anim="";f.dmg="";
+ if(k==="h"||k==="H"){const h=k==="h"?40:100,b=f.php;f.php=Math.min(f.pmax,f.php+h);l.push(`Du heilst ${f.php-b} LP. 💚`)}
+ if(k==="k"){f.pb.buff=3;l.push("Dein Schaden steigt für 3 Runden! 💥")}
+ if(k==="g"){f.pb.poison=0;f.pb.burn=0;l.push("Gift und Brand sind geheilt! 💊")}
+ if(k==="e"){f.pb.guard=3;l.push("Deine Haut wird hart wie Eisen! 🛡️")}
+ enemyTurn(l);
+}
+function flee(){const l=[];if(F.boss||F.tour){F.log="Hier gibt es kein Entkommen!";return fight()}if(Math.random()<.5+S.ge*.03){F.over=true;l.push("Du ergreifst die Flucht! Kein Ruhm, aber auch kein Verlust.");msg="Du bist geflohen.";save();return fin(l)}l.push("Flucht gescheitert!");enemyTurn(l)}
+function enemyTurn(l){
+ const f=F;
+ if(f.ehp<=0)return endFight(true,l);
+ f.eb.guard=0;
+ if(f.eb.bleed>0){const d=4+f.lvl;f.ehp-=d;f.eb.bleed--;l.push(`${f.name} blutet: ${d} Schaden. 🩸`);if(f.ehp<=0)return endFight(true,l)}
+ if(f.boss&&!f.enr&&f.ehp<f.emax/2){f.enr=true;f.atk*=1.3;l.push(`<b>${f.name} gerät in Rage!</b> 😡`)}
+ if(f.eb.stun){f.eb.stun=0;l.push(`${f.name} ist betäubt und setzt aus.`)}
+ else{
+  const tot=f.mv.reduce((a,m)=>a+m[4],0);let r=Math.random()*tot,m=f.mv[0];
+  for(const x of f.mv){if(r<x[4]){m=x;break}r-=x[4]}
+  l.push(`${f.name} setzt <b>${m[0]}</b> ein!`);
+  if(m[3]==="guard"){f.eb.guard=1;l.push("Der Gegner geht in Deckung. 🛡️")}
+  else if(Math.random()*100>=m[2]-S.ge){l.push("Du weichst aus!");sfx("miss")}
+  else{
+   let d=(f.atk+rnd(0,3))*m[1]-A[S.a][2]-SH[S.s][2];if(f.pb.guard>0)d*=.5;d=Math.max(1,Math.round(d));f.php-=d;f.anim="p";f.dmg=d;sfx("hurt");l.push(`Du erleidest ${d} Schaden.`);
+   if(m[3]==="poison"){f.pb.poison=4;sfx("poison");l.push("Du bist vergiftet! ☠️")}
+   if(m[3]==="burn"){f.pb.burn=3;l.push("Du brennst! 🔥")}
+   if(m[3]==="stun"&&Math.random()<.5){f.pb.stun=1;l.push("Du bist betäubt! 💫")}
+  }
+ }
+ if(f.pb.poison>0){const d=2+Math.floor(f.lvl/2);f.php-=d;f.pb.poison--;l.push(`Gift: ${d} Schaden. ☠️`)}
+ if(f.pb.burn>0){const d=4+f.lvl;f.php-=d;f.pb.burn--;l.push(`Verbrennung: ${d} Schaden. 🔥`)}
+ if(f.pb.buff>0)f.pb.buff--;if(f.pb.guard>0)f.pb.guard--;
+ if(f.php<=0)return endFight(false,l);
+ if(f.pb.stun){f.pb.stun=0;l.push("Du bist betäubt und verlierst deinen Zug!");return enemyTurn(l)}
+ fin(l);
+}
+function endFight(win,l){
+ const f=F;f.over=true;const old=lvl();AU.want=null;musicStop();sfx(win?"win":"lose");
+ if(win){
+  const m=f.boss?3:1,r=(10+f.lvl*6)*m,g=(15+f.lvl*8)*m,x=(15+f.lvl*10)*m;
+  S.ruhm+=r;S.gold+=g;S.exp+=x;S.wins++;l.push(`<b>🏆 Sieg!</b> +${r} Ruhm, +${g} Gold, +${x} EP.`);
+  if(f.boss){S.boss++;S.it.H++;S.it.g++;l.push("Beute: Großer Heiltrank ⚗️ und Gegengift 💊!");msg=`Boss ${f.name} besiegt!`}
+  else{if(Math.random()<.3){S.it.h++;l.push("Du findest einen Heiltrank! 🧪")}msg=`Du hast ${f.name} besiegt!`}
+  if(f.tour){if(f.tour<3){f.next=true;l.push(`Turnierrunde ${f.tour}/3 geschafft – du verschnaufst kurz.`)}else{S.troph++;S.gold+=100;S.exp+=50;S.ruhm+=30;l.push("<b>🏟️ Turniersieger!</b> Pokal, +100 Gold, +30 Ruhm, +50 EP.");msg="Du hast das Turnier gewonnen!"}}
+ }else{const x=Math.floor(S.gold*.1);S.gold-=x;S.ruhm=Math.max(0,S.ruhm-5);S.exp+=5;S.losses++;l.push(`<b>💀 Niederlage.</b> −${x} Gold, −5 Ruhm, +5 EP.`);msg=f.tour?"Du bist im Turnier ausgeschieden.":"Du wurdest besiegt – trainiere und kehre stärker zurück!"}
+ const nl=lvl();if(nl>old){setTimeout(()=>sfx("level"),1500);l.push(`<b>⭐ Stufe ${nl} erreicht!</b>`);SK.filter(s=>s.lv>old&&s.lv<=nl).forEach(s=>l.push(`Neue Fähigkeit: <b>${s.n}</b>!`))}
+ save();fin(l);
+}
+home();
+</script>
+</body>
+</html>
