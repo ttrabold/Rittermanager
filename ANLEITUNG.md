@@ -442,6 +442,23 @@ Ab dem dritten besiegten Boss steht dir der Endlose Turm offen. Ein Besuch koste
 - Du kannst den Turm nach jeder Etage **verlassen**. Verlierst du, endet der Lauf.
 - Deine höchste Etage wird als **Turm-Rekord** gespeichert.
 
+### Die Ebenen des Turms
+
+Nach jedem Turm-Boss betrittst du eine neue, immer bedrohlichere Ebene:
+
+| Etagen | Ebene | Was dich erwartet |
+|---|---|---|
+| 1–5 | 🏰 Eingangshalle | Fackeln, Banner und alte Mauern |
+| 6–10 | ⛓️ Verliese | Ketten, Moder und tropfendes Wasser |
+| 11–15 | 💎 Kristallhöhle | Eisig glühende Kristalle |
+| 16–20 | 🌋 Lavahallen | Brodelnde Lava und fliegende Funken |
+| 21–25 | 👻 Geisterhallen | Grüne Geisterflammen und schwebende Gespenster |
+| 26–30 | ⛈️ Sturmspitze | Auf dem Turmdach, mitten in Blitz und Regen |
+| 31–35 | 👁️ Schattenreich | Rote Augen starren aus der Finsternis |
+| ab 36 | 🌀 Weltenriss | Die Wirklichkeit zerbricht in einem kosmischen Strudel |
+
+Jede Ebene hat ihre **eigene Musik und Geräuschkulisse**: knisternde Fackeln, tropfendes Wasser und klirrende Ketten, singende Kristalle, grollende Lava, flüsternde Geister, Regen und Donner, ein bedrohliches Dröhnen im Schattenreich und kosmische Klänge im Weltenriss. Betrittst du eine neue Ebene, ertönt ein tiefer Gong.
+
 ---
 
 ## Wiedergeburt
