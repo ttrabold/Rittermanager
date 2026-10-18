@@ -32,7 +32,7 @@ function build(id){const b=BLD.find(x=>x.id===id),lv=S.bld[id];if(lv>=b.max)retu
 function castleScr(){musicSet("home");
  app.innerHTML=`<div class="top"><b>🏗️ Burgausbau</b><span>🪙 ${S.gold}</span></div>
  <div class="scene">${BG}${bldSvg()}${castle}${pk()}</div>
- <div class="msg">Gebäude liefern <b>jede Nacht</b> Erträge. Volle Erträge gibt es, wenn du am Tag mindestens <b>4 Energie</b> genutzt hast, halbe ab 2. Wer nur faulenzt, bekommt nichts.</div>
+ <div class="msg" data-quiet>Gebäude liefern <b>jede Nacht</b> Erträge. Volle Erträge gibt es, wenn du am Tag mindestens <b>4 Energie</b> genutzt hast, halbe ab 2. Wer nur faulenzt, bekommt nichts.</div>
  <div class="card"><div style="margin-bottom:6px">${matRow()}</div>${BLD.map(b=>{const lv=S.bld[b.id],c=lv<b.max?bCost(b,lv+1):null;
   return `<div class="row"><span>${b.e} <b>${b.n}</b> <span class="mut">Stufe ${lv}/${b.max}</span><br><span class="mut">${b.d} · jetzt: ${lv?yTxt(b.y(lv)):"–"}${c?` → ${yTxt(b.y(lv+1))}<br>Kosten: ${costH(c.m,c.g)}`:" · voll ausgebaut"}</span></span>${c?`<button ${hasM(c.m)&&S.gold>=c.g?"":"disabled"} onclick="build('${b.id}')">${lv?"Ausbauen":"Bauen"}</button>`:'<span class="mut">✔</span>'}</div>`}).join("")}</div>
  <div class="grid"><button onclick="trader()">🛒 Händler</button><button onclick="home()">← Zurück zur Burg</button></div>`}
@@ -114,5 +114,5 @@ function newDay(){if(document.getElementById("night"))return;
 function nightShow(rep){const fast=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches,el=document.createElement("div");el.id="night";el.className="night"+(fast?" fast":"");
  el.innerHTML=`<div class="nsky">${Array.from({length:18},(_,i)=>`<i style="left:${(i*53)%100}%;top:${(i*29)%45}%;animation-delay:${.4+(i%5)*.1}s"></i>`).join("")}<span class="nmoon">🌙</span><span class="nzz">Z z z</span><span class="nsun">☀️</span></div>
  <div class="card nrep" hidden>${rep}<div class="grid"><button class="p" style="grid-column:1/-1" onclick="nightClose(home)">☀️ Auf in den Tag!</button></div></div>`;
- document.body.appendChild(el);sfx("night");setTimeout(()=>sfx("morning"),fast?50:1900);setTimeout(()=>{const r=el.querySelector(".nrep");if(r)r.hidden=false},fast?100:2700)}
+ document.body.appendChild(el);sfx("night");setTimeout(()=>sfx("morning"),fast?50:1900);setTimeout(()=>{const r=el.querySelector(".nrep");if(r){r.hidden=false;say(r.innerText.replace(/Auf in den Tag!/,""))}},fast?100:2700)}
 function nightClose(go){const el=document.getElementById("night");if(el)el.remove();go()}
