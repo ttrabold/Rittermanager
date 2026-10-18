@@ -35,6 +35,26 @@ Willkommen, edler Ritter (oder edle Ritterin)! Hier erfährst du alles, was du �
 
 Du beginnst als einfacher Knappe ohne Rüstung und mit einem Holzschwert. Verdiene Gold, bestehe Abenteuer, gewinne Turniere und besiege zwölf mächtige Bosse, bis du zur **Unsterblichen Legende** und schließlich zum **Halbgott** (oder zur **Halbgöttin**) wirst. Danach wartet der Endlose Turm, und mit der Wiedergeburt kannst du noch einmal von vorn beginnen, nur stärker.
 
+### Schritt für Schritt
+
+Damit der Anfang nicht überfordert, stehen dir zu Beginn nur **Arbeiten, Abenteuer, Markt und Schlafen** zur Verfügung. Alles Weitere schaltest du nach und nach frei:
+
+| Wann | Neu freigeschaltet |
+|---|---|
+| Stufe 2 | 📜 Fähigkeiten |
+| Stufe 3 | 🎒 Inventar |
+| Stufe 4 | 👑 Bosskampf |
+| Stufe 6 | 📜 Tagesaufträge |
+| Stufe 8 | 🏟️ Turnier |
+| Stufe 10 | 🍺 Taverne |
+| Stufe 12 | 🧰 Werkstatt und 🛒 Händler |
+| Stufe 15 | 📅 Kalender (Markttag, Turniertag) und 🌕 Vollmond-Jagd |
+| Stufe 18 | 🏗️ Burgausbau |
+| 3. Boss besiegt | 🗼 Endloser Turm |
+| Alle Bosse besiegt | 🌟 Wiedergeburt |
+
+Jede Freischaltung wird mit **🔓 Neu freigeschaltet** angekündigt. Der neue Knopf trägt ein rotes **NEU**, bis du ihn zum ersten Mal benutzt. Was du einmal freigeschaltet hast, bleibt dir erhalten, auch nach einer Wiedergeburt.
+
 ---
 
 ## Die Burg – dein Hauptbildschirm

@@ -155,3 +155,4 @@ svg.vP{transform:scaleX(-1)}
 .coin{position:relative;display:inline-block;width:1em;height:1em;margin:0 .08em;border-radius:50%;vertical-align:-.15em;background:linear-gradient(135deg,#fff1a8 0%,#ffd23f 35%,#e9a800 65%,#b97c00 100%);box-shadow:inset 0 0 0 .07em #9a6400,0 .05em .08em #0006}
 .coin::after{content:"";position:absolute;inset:.2em;border-radius:50%;border:.065em solid #a86f00;background:linear-gradient(315deg,#fff1a8,#f5c21a 50%,#d39400)}
 .bthumb{width:88px;height:76px;flex:none;border-radius:10px;border:1px solid var(--line);background:linear-gradient(var(--sky1),var(--sky2))}
+.newtag{display:inline-block;margin-left:4px;padding:0 5px;border-radius:6px;background:#e53935;color:#fff;font-size:10px;font-weight:bold;vertical-align:2px;letter-spacing:.5px;animation:pl2 1s ease-in-out infinite alternate}

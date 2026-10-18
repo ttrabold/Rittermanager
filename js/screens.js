@@ -55,35 +55,21 @@ function inv(){musicSet("home");
  <div class="grid"><button onclick="shop()">🏪 Markt</button><button onclick="workshop()">🧰 Werkstatt</button><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`;window.scrollTo(0,0)}
 function home(){musicSet("home");if(QN.length){msg+="<br>"+QN.join("<br>");QN=[]}
  app.innerHTML=`<div class="top">${editName?`<span style="display:flex;gap:6px;flex:1;margin-right:8px"><input id="nm" maxlength="20" value="${S.name}" onkeydown="if(event.key==='Enter')saveName()" style="flex:1;min-width:0;font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)"><button onclick="saveName()" style="min-height:36px;padding:4px 12px">✔</button></span>`:`<b>${S.name} <a href="#" onclick="editName=true;home();document.getElementById('nm').focus();return false" aria-label="Ritter umbenennen" style="text-decoration:none">✏️</a> <a href="#" onclick="toggleSex();return false" aria-label="Zwischen Ritter und Ritterin wechseln" title="Ritter/Ritterin wechseln" style="text-decoration:none">${S.sex==="f"?"♀️":"♂️"}</a></b>`}<span>${rank()}${S.star?" · 🌟×"+S.star:""}</span></div>
- ${calLine()}
+ ${has("cal")?calLine():""}
  <div class="scene">${BG}${bldSvg()}${castleSvg()}${pk()}</div>
  <div class="card"><div class="stats">
  <div>💪 Stärke <b>${S.st}</b></div>
  <div>❤️ Ausdauer <b>${S.au}</b></div>
  <div>🎯 Geschick <b>${S.ge}</b></div>
  <div>⚡ Energie <b>${S.en}/${enMax()}</b>${bar(S.en,enMax(),"#e0a800")}</div>
- <div><i class=coin></i> Gold <b>${S.gold}</b></div><div>🏆 Ruhm <b>${S.ruhm}</b></div><div style="grid-column:1/-1">🎖️ ${ttn()?"<b>"+ttn()+"</b>":'<span class="mut">kein Titel</span>'} · <a href="#" onclick="titles();return false" style="color:var(--acc)">Titel (${S.tt.length}/${TT.length})</a> · <a href="#" onclick="guide();return false" style="color:var(--acc)">📖 Anleitung</a></div>
+ <div><i class=coin></i> Gold <b>${S.gold}</b></div><div>🏆 Ruhm <b>${S.ruhm}</b></div><div style="grid-column:1/-1">🎖️ ${ttn()?"<b>"+ttn()+"</b>":'<span class="mut">kein Titel</span>'}${S.tt.length?` · <a href="#" onclick="titles();return false" style="color:var(--acc)">Titel (${S.tt.length}/${TT.length})</a>`:""} · <a href="#" onclick="guide();return false" style="color:var(--acc)">📖 Anleitung</a></div>
  <div style="grid-column:1/-1">⭐ Stufe <b>${lvl()}</b> <span class="mut">(${S.exp} EP)</span>${bar(S.exp-expFor(lvl()),expFor(lvl()+1)-expFor(lvl()),"#8e44ad")}</div></div>
- <div class="mut" style="margin-top:6px">Waffe: ${iname("w")} · Rüstung: ${iname("a")} · ${SH[S.s][0]}<br>Siege ${S.wins} · Niederlagen ${S.losses} · Pokale ${S.troph} · Bosse ${S.boss}/${BOSS.length} · Turm-Rekord ${S.tbest}</div></div>
+ <div class="mut" style="margin-top:6px">Waffe: ${iname("w")} · Rüstung: ${iname("a")} · ${SH[S.s][0]}<br>Siege ${S.wins} · Niederlagen ${S.losses}${has("tour")?" · Pokale "+S.troph:""}${has("boss")?` · Bosse ${S.boss}/${BOSS.length}`:""}${has("tower")?" · Turm-Rekord "+S.tbest:""}</div></div>
  <div class="msg">${msg}</div>
- ${questCard()}
- <div class="grid">
- <button onclick="work()" ${S.en<1?"disabled":""}>⚒️ Arbeiten<small>1 Energie · Gold</small></button>
- <button class="p" onclick="startFight()" ${S.en<2?"disabled":""}>⚔️ Abenteuer<small>2 Energie</small></button>
- <button onclick="shop()">🏪 Markt<small>Ausrüstung & Tränke</small></button>
- <button onclick="trader()">🛒 Händler<small>Materialien</small></button>
- <button onclick="workshop()">🧰 Werkstatt<small>Berufe · 1 Energie</small></button>
- <button onclick="inv()">🎒 Inventar<small>Ausrüstung & Beutel</small></button>
- <button onclick="startTour()" ${S.en<4||S.gold<tourFee()?"disabled":""}>🏟️ Turnier<small>4 Energie · ${tourFee()?tourFee()+" <i class=coin></i>":"heute gratis!"} · 3 Kämpfe</small></button>
- <button onclick="startTower()" ${!S.tunl||S.en<4?"disabled":""}>🗼 Endloser Turm<small>${!S.tunl?"ab Boss 3":"4 Energie · "+(S.tcur>1?"weiter ab Etage "+S.tcur:"Rekord "+S.tbest)}</small></button>
- ${BOSS[S.boss]?`<button class="p" style="grid-column:1/-1" onclick="startBoss()" ${S.en<3||S.ruhm<BOSS[S.boss].req?"disabled":""}>👑 Bosskampf<small>${S.ruhm<BOSS[S.boss].req?"ab "+BOSS[S.boss].req+" Ruhm":BOSS[S.boss].n}</small></button>`:`<button disabled style="grid-column:1/-1">👑 Alle Bosse besiegt</button>`}
- ${isFull(S.day)&&S.moonDone!==S.day?`<button class="p" style="grid-column:1/-1;background:#3949ab;border-color:#3949ab" onclick="startMoon()" ${S.en<3?"disabled":""}>🌕 Vollmond-Jagd<small>3 Energie · nur heute Nacht · ein Versuch</small></button>`:""}
- <button onclick="castleScr()">🏗️ Burgausbau<small>Gebäude & Erträge</small></button>
- <button onclick="TV.rum=rnd(0,99);tavern()">🍺 Taverne<small>Würfelpoker · noch ${tavLeft()} heute</small></button>
- <button onclick="rebirth()" ${S.boss<BOSS.length?"disabled":""}>🌟 Wiedergeburt<small>${S.boss<BOSS.length?"nach allen Bossen":"Neustart mit Bonus"}</small></button>
- <button onclick="newDay()">🌙 Schlafen<small>Erträge · neuer Tag</small></button></div>
- <div class="card"><h3>📜 Fähigkeiten <span class="mut">(${(S.sk||[]).filter(knowSk).length}/${SK_MAX} angelegt)</span></h3><div class="mut">${eqSk().map(id=>SKD(id).n).join(" · ")}</div>${SK.some(x=>x.id!=="hieb"&&knowSk(x.id)&&!(S.sk||[]).includes(x.id))&&(S.sk||[]).length<SK_MAX?'<div style="margin-top:4px">⚠️ Du hast freie Plätze!</div>':""}<div class="grid"><button style="grid-column:1/-1" onclick="skillsScr()">📜 Fähigkeiten verwalten<small>${SK.filter(x=>knowSk(x.id)).length}/${SK.length} gelernt</small></button></div><div class="mut" style="margin-top:6px">Tränke: ${IT.map(t=>t.e+" "+S.it[t.k]).join("  ")}</div></div>
- <p class="mut" style="text-align:center"><a href="#" onclick="if(confirm('Spiel wirklich zurücksetzen?')){S=fresh();save();msg='Ein neues Abenteuer beginnt!';home()}return false" style="color:var(--mut)">Neu starten</a></p>`;
+ ${has("quests")?questCard():""}
+ ${homeGrid()}
+ ${has("skills")?"":"<!--"}<div class="card"><h3>📜 Fähigkeiten <span class="mut">(${(S.sk||[]).filter(knowSk).length}/${SK_MAX} angelegt)</span></h3><div class="mut">${eqSk().map(id=>SKD(id).n).join(" · ")}</div>${SK.some(x=>x.id!=="hieb"&&knowSk(x.id)&&!(S.sk||[]).includes(x.id))&&(S.sk||[]).length<SK_MAX?'<div style="margin-top:4px">⚠️ Du hast freie Plätze!</div>':""}<div class="grid"><button style="grid-column:1/-1" onclick="seen('skills');skillsScr()">📜 Fähigkeiten verwalten${newTag("skills")}<small>${SK.filter(x=>knowSk(x.id)).length}/${SK.length} gelernt</small></button></div><div class="mut" style="margin-top:6px">Tränke: ${IT.map(t=>t.e+" "+S.it[t.k]).join("  ")}</div></div>${has("skills")?"":"-->"}
+ <p class="mut" style="text-align:center"><a href="#" onclick="if(confirm('Spiel wirklich zurücksetzen?')){S=fresh();unlCheck();S.lvl0=1;S.sk=[];qGen();save();msg='Ein neues Abenteuer beginnt!';home()}return false" style="color:var(--mut)">Neu starten</a></p>`;
 }
 function work(){
  if(S.en<1)return;S.en--;const g=rnd(8,14)+lvl()*2;S.gold+=g;sfx("coin");
@@ -114,3 +100,19 @@ function skillsScr(){musicSet("hall");const sk=(S.sk||[]).filter(knowSk),pp=s=>s
  ${Array.from({length:SK_MAX},(_,k)=>{const id=sk[k];return id?row(SKD(id),`<button onclick="skUn('${id}')">Ablegen</button>`):`<div class="row"><span class="mut">— freier Platz ${k+1} —</span></div>`}).join("")}</div>
  <div class="card"><h3>📖 Alle Fähigkeiten</h3>${SK.filter(s=>s.id!=="hieb").map(s=>knowSk(s.id)?row(s,sk.includes(s.id)?'<span class="mut">✔ angelegt</span>':`<button ${sk.length>=SK_MAX?"disabled":""} onclick="skEq('${s.id}')">${sk.length>=SK_MAX?"Plätze voll":"Anlegen"}</button>`):`<div class="row"><span>🔒 <b>${s.n}</b><br><span class="mut">${s.d}</span></span><span class="mut">ab Stufe ${s.lv}</span></div>`).join("")}</div>
  <div class="grid"><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`;window.scrollTo(0,0)}
+
+// Burg-Knöpfe: nur freigeschaltete Funktionen, neue mit „NEU“-Markierung
+function homeGrid(){const b=(id,js,lbl,sub,dis,cls)=>`<button ${cls?`class="${cls}"`:""} ${dis?"disabled":""} onclick="${id?`seen('${id}');`:""}${js}">${lbl}${id?newTag(id):""}<small>${sub}</small></button>`,half=[],full=[];
+ half.push(b("","work()","⚒️ Arbeiten","1 Energie · Gold",S.en<1),b("","startFight()","⚔️ Abenteuer","2 Energie",S.en<2,"p"),b("","shop()","🏪 Markt","Ausrüstung & Tränke"));
+ if(has("inv"))half.push(b("inv","inv()","🎒 Inventar","Ausrüstung & Beutel"));
+ if(has("craft"))half.push(b("craft","workshop()","🧰 Werkstatt","Berufe · 1 Energie"),b("craft","trader()","🛒 Händler","Materialien"));
+ if(has("tour"))half.push(b("tour","startTour()","🏟️ Turnier",`4 Energie · ${tourFee()?tourFee()+" <i class=coin></i>":"heute gratis!"} · 3 Kämpfe`,S.en<4||S.gold<tourFee()));
+ if(has("tower"))half.push(b("tower","startTower()","🗼 Endloser Turm","4 Energie · "+(S.tcur>1?"weiter ab Etage "+S.tcur:"Rekord "+S.tbest),S.en<4));
+ if(has("tavern"))half.push(b("tavern","TV.rum=rnd(0,99);tavern()","🍺 Taverne",`Würfelpoker · noch ${tavLeft()} heute`));
+ if(has("burg"))half.push(b("burg","castleScr()","🏗️ Burgausbau","Gebäude & Erträge"));
+ if(has("boss"))full.push(BOSS[S.boss]?b("boss","startBoss()","👑 Bosskampf",S.ruhm<BOSS[S.boss].req?"ab "+BOSS[S.boss].req+" Ruhm":BOSS[S.boss].n,S.en<3||S.ruhm<BOSS[S.boss].req,"p"):'<button disabled>👑 Alle Bosse besiegt</button>');
+ if(has("cal")&&isFull(S.day)&&S.moonDone!==S.day)full.push(`<button class="p" style="background:#3949ab;border-color:#3949ab" ${S.en<3?"disabled":""} onclick="startMoon()">🌕 Vollmond-Jagd<small>3 Energie · nur heute Nacht · ein Versuch</small></button>`);
+ const span=h=>h.replace("<button ",'<button style="grid-column:1/-1" ');
+ if(half.length%2)half[half.length-1]=span(half[half.length-1]);
+ const end=has("rebirth")?[b("rebirth","rebirth()","🌟 Wiedergeburt",S.boss<BOSS.length?"nach allen Bossen":"Neustart mit Bonus",S.boss<BOSS.length),b("","newDay()","🌙 Schlafen","Erträge · neuer Tag")]:[span(b("","newDay()","🌙 Schlafen",has("burg")?"Erträge · neuer Tag":"Neuer Tag"))];
+ return `<div class="grid">${half.join("")}${full.map(span).join("")}${end.join("")}</div>`}

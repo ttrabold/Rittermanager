@@ -146,7 +146,7 @@ function endFight(win,l){
   if(f.tower){S.tbest=Math.max(S.tbest,f.tower);S.tcur=f.tower+1;f.next=true;l.push(`Etage ${f.tower} geschafft! Du verschnaufst kurz (+20 % LP).`);if(Math.random()<.25){S.it.a++;l.push("Du findest einen Äthertrank! 🔷")}if(f.tower%10===0){towerLoot(l);S.it.A++;l.push("Dazu ein Großer Äthertrank! 💠")}}
   if(f.tour){if(f.tour<3){f.next=true;l.push(`Turnierrunde ${f.tour}/3 geschafft – du verschnaufst kurz.`)}else{S.troph++;tourLoot(l);S.gold+=100;S.exp+=50;S.ruhm+=30;l.push("<b>🏟️ Turniersieger!</b> Pokal, +100 Gold, +30 Ruhm, +50 EP.");if(isTourDay(S.day)){S.gold+=100;S.exp+=50;S.ruhm+=30;tourLoot(l);l.push("🏟️ <b>Turniertag:</b> doppelte Siegprämie!")}msg="Du hast das Turnier gewonnen!"}}
  }else{const x=Math.floor(S.gold*.1);S.gold-=x;S.ruhm=Math.max(0,S.ruhm-5);S.exp+=5;S.losses++;if(f.tower)S.tcur=1;l.push(`<b>💀 Niederlage.</b> −${x} Gold, −5 Ruhm, +5 EP.`);msg=f.tower?`Der Turm hat dich bezwungen – du musst wieder auf Etage 1 beginnen. Rekord: Etage ${S.tbest}.`:f.tour?"Du bist im Turnier ausgeschieden.":"Du wurdest besiegt – trainiere und kehre stärker zurück!"}
- levelCheck(l);
+ levelCheck(l);unlCheck(l);
  checkTitles(l);save();fin(l);
 }
 

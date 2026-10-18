@@ -5,7 +5,7 @@ function pick(t){let r=Math.random()*Object.values(t).reduce((a,b)=>a+b,0);for(c
 function dropMat(f,l){const got={},add=(k,n)=>{S.mat[k]+=n;got[k]=(got[k]||0)+n};
  if(f.boss){add("ds",rnd(1,2));add("ak",2);add("mi",rnd(1,2));add(pick({hk:1,fb:1,gp:1}),2)}
  else{const t=DROP[f.et]||DROP.Ritter;add(pick(t),1);if(Math.random()<.5)add(pick(t),1);if(f.lvl>=8&&Math.random()<.15)add("mi",1)}
- l.push("Materialien: "+Object.entries(got).map(([k,n])=>`${MT(k).e} ${MT(k).n} ×${n}`).join(", "))}
+ if(has("craft"))l.push("Materialien: "+Object.entries(got).map(([k,n])=>`${MT(k).e} ${MT(k).n} ×${n}`).join(", "))}
 const prNeed=lv=>lv*6;
 const upCost=(sd,n)=>{const m=sd==="w"?{ez:2*n}:{le:2*n,ez:n};if(n>=3)m.mi=n-2;if(n>=5)m.ds=1;return m};
 const maxUp=()=>Math.min(5,Math.ceil(S.pr.sm.lv/2));
