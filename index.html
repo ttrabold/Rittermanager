@@ -5,18 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ritter Manager</title>
 <style>
-:root{--bg:#f3ead6;--card:#fffaf0;--ink:#2d2417;--mut:#7a6a50;--acc:#8b1e1e;--line:#d8c9a6;--sky1:#9fd0f0;--sky2:#f6e7c1;--grass:#6e9a4a;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1610;--card:#2a2218;--ink:#f1e6cf;--mut:#b5a380;--acc:#d9534f;--line:#4a3d2a;--sky1:#1d2b4a;--sky2:#6a4a3a;--grass:#3d5a2c;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#1b1610;--card:#2a2218;--ink:#f1e6cf;--mut:#b5a380;--acc:#d9534f;--line:#4a3d2a;--sky1:#1d2b4a;--sky2:#6a4a3a;--grass:#3d5a2c;color-scheme:dark}
+:root{--bg:#f3ead6;--card:#fffaf0;--ink:#2d2417;--mut:#7a6a50;--acc:#8b1e1e;--line:#d8c9a6;--sky1:#78b4e3;--sky2:#f9d9a6;--grass:#6e9a4a;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1610;--card:#2a2218;--ink:#f1e6cf;--mut:#b5a380;--acc:#d9534f;--line:#4a3d2a;--sky1:#0b1430;--sky2:#3b3157;--grass:#3d5a2c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1b1610;--card:#2a2218;--ink:#f1e6cf;--mut:#b5a380;--acc:#d9534f;--line:#4a3d2a;--sky1:#0b1430;--sky2:#3b3157;--grass:#3d5a2c;color-scheme:dark}
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman",serif;max-width:560px;margin:0 auto;padding:12px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
 .top span{color:var(--mut);font-size:14px}
 .scene{height:190px;border-radius:14px;border:2px solid var(--line);background:linear-gradient(var(--sky1),var(--sky2));position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
-.scene:after{content:"";position:absolute;left:0;right:0;bottom:0;height:34px;background:var(--grass)}
+.bg{position:absolute;left:0;bottom:0;width:100%;height:100%;z-index:0;pointer-events:none}
+:root{--mt1:#b3c0d6;--mt2:#8494ad;--snow:#f4f7fb;--hill:#6f9a52;--tree:#3d6a34;--sun:#fff3c4;--glow:#ffd98a;--cloud:#fff;--cop:.85;--star:0;--plat:#00000030}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--mt1:#2a3354;--mt2:#1d2540;--snow:#c9d3ea;--hill:#20331d;--tree:#11200f;--sun:#f3efd2;--glow:#9fb4ff;--cloud:#7c86a8;--cop:.35;--star:1;--plat:#00000055}}
+:root[data-theme="dark"]{--mt1:#2a3354;--mt2:#1d2540;--snow:#c9d3ea;--hill:#20331d;--tree:#11200f;--sun:#f3efd2;--glow:#9fb4ff;--cloud:#7c86a8;--cop:.35;--star:1;--plat:#00000055}
+.cl{animation:drift 90s linear infinite}
+@keyframes drift{from{transform:translateX(-220px)}to{transform:translateX(720px)}}
+.ffy{animation:ffy 3.5s ease-in-out infinite alternate}
+@keyframes ffy{from{transform:translate(0,0);opacity:.15}to{transform:translate(9px,-12px);opacity:1}}
+.k .br{animation:br 2.6s ease-in-out infinite}
+@keyframes br{50%{transform:translateY(1.3px)}}
+.fs .es:before,.fs .ps:before{content:"";position:absolute;left:50%;bottom:-8px;width:150px;height:26px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,var(--plat),transparent)}
+@media (prefers-reduced-motion:reduce){.cl,.ffy,.k .br,.tw,.fk,.fl2,.dr,.rot,.pl,.wv{animation:none}}
 .scene svg.k{height:150px;position:relative;z-index:2;margin-bottom:8px}
-.castle{position:absolute;right:8px;bottom:30px;opacity:.85;height:90px}
+.castle{position:absolute;right:8px;bottom:26px;height:90px;z-index:1}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:15px}
 .bar{height:8px;border-radius:5px;background:var(--line);overflow:hidden;margin-top:3px}
@@ -309,29 +320,59 @@ const rank=()=>{let r=RANKS[0][1];for(const x of RANKS)if(S.ruhm>=x[0])r=x[1];re
 const maxhp=()=>40+S.au*6+lvl()*4+fxv("hp");
 
 function knight(w,a,s,flip,plume,ow,oa,wi,ai,fem){
- const wc=ow||WC[w],ac=oa||AC[a],helm=a>0||oa?ac:"#e0b48a",pl=plume||(a>=3||oa?"#c0221f":null);
+ const arm=a>0||!!oa,wc=ow||WC[w],ac=oa||AC[a],sk="#e0b48a",pl=plume||(a>=3||oa?"#c0221f":null),ln="#0005",
+  tab=plume||"#7a1d1d",lc=arm?ac:"#5b4636",bt=arm?"#3d3833":"#3a2a1c",hc=fem?"#8a4b22":"#5a3a1e";
+ const leg=x=>`<path d="M${x} 104h13l-1.5 38h-10z" fill="${lc}" stroke="${ln}"/>${arm?`<circle cx="${x+6.5}" cy="122" r="5" fill="${ac}" stroke="${ln}"/><path d="M${x+3.5} 121h6" stroke="#fff5"/>`:""}<path d="M${x-2} 141h16l7 9h-23z" fill="${bt}" stroke="#0004"/>`;
+ const limb=(d,c)=>`<path d="${d}" stroke="#0005" stroke-width="12" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${c}" stroke-width="9" fill="none" stroke-linecap="round"/>`;
  return `<svg class="k" viewBox="0 0 130 160" ${flip?'style="transform:scaleX(-1)"':''}>
  <ellipse cx="62" cy="152" rx="34" ry="5" fill="#0003"/>${ai&&AV[ai]?AV[ai](1):""}
- <rect x="44" y="104" width="13" height="44" rx="4" fill="${a>0||oa?ac:'#5b4636'}"/><rect x="65" y="104" width="13" height="44" rx="4" fill="${a>0||oa?ac:'#5b4636'}"/>
- <rect x="40" y="144" width="19" height="7" rx="3" fill="#3a2a1c"/><rect x="63" y="144" width="19" height="7" rx="3" fill="#3a2a1c"/>
- <rect x="36" y="58" width="50" height="50" rx="9" fill="${ac}" stroke="#0004"/>
- <rect x="36" y="94" width="50" height="6" fill="#5b3a1c"/>
- ${fem?`<path d="M47 32Q18 40 26 80Q30 92 40 84Q34 62 50 54Z" fill="#8a4b22" stroke="#0004"/>`:""}
- <circle cx="61" cy="42" r="17" fill="${helm}" stroke="#0004"/>
- ${a>0||oa?'<rect x="52" y="39" width="20" height="5" rx="2" fill="#1b1b1b"/>':'<circle cx="55" cy="40" r="2" fill="#222"/><circle cx="67" cy="40" r="2" fill="#222"/><path d="M55 49q6 4 12 0" stroke="#7a4a2a" fill="none"/>'}
- ${fem&&!(a>0||oa)?`<path d="M44 42Q42 22 61 24Q80 22 78 42Q72 30 61 30Q50 30 44 42z" fill="#8a4b22"/><path d="M52 37l-3-2M70 37l3-2M54 38l-3-1M68 38l3-1" stroke="#222" stroke-width="1.2"/><path d="M57 49q4 3 8 0" stroke="#c0392b" stroke-width="2" fill="none"/>`:""}
- ${pl?`<path d="M61 25q-4-14 12-12q-8 4-4 12z" fill="${pl}"/>`:''}
- ${ai&&AV[ai]?AV[ai](0):""}<rect x="84" y="66" width="22" height="10" rx="5" fill="${ac}"/>
- ${wi&&VIS[wi]?weaponSvg(wi):`<rect x="104" y="20" width="7" height="78" rx="2" fill="${wc}" stroke="#0005"/><polygon points="104,20 111,20 107.5,8" fill="${wc}" stroke="#0005"/>`}
- <rect x="97" y="94" width="21" height="6" rx="2" fill="#7a4a1c"/><rect x="105" y="100" width="5" height="12" fill="#5b3a1c"/>
- ${s>0?`<path d="M14 66h30v22q0 18-15 26q-15-8-15-26z" fill="${SC[s]}" stroke="#0006" stroke-width="2"/><path d="M29 70v40M17 82h24" stroke="#fff6" stroke-width="3"/>`:''}
- </svg>`}
-const castle=`<svg class="castle" viewBox="0 0 100 90"><g fill="#8d8473" stroke="#0003"><rect x="10" y="30" width="22" height="60"/><rect x="68" y="30" width="22" height="60"/><rect x="28" y="48" width="44" height="42"/><path d="M8 30h26v-8h-5v4h-4v-4h-4v4h-4v-4h-5zM66 30h26v-8h-5v4h-4v-4h-4v4h-4v-4h-5z"/></g><path d="M42 90v-18q8-12 16 0v18z" fill="#4a3a28"/><path d="M50 22v-14l12 4-12 4" fill="#c0221f"/></svg>`;
+ ${leg(44)}${leg(65)}<g class="br">
+ ${limb("M38 64Q29 82 33 101",ac)}<circle cx="33" cy="103" r="5.5" fill="${arm?ac:sk}" stroke="${ln}"/>
+ ${arm?`<path d="M39 95h44l4 16h-52z" fill="${ac}" stroke="${ln}"/><path d="M37 103h48" stroke="#0003"/><path d="M51 96h20l-3 28h-14z" fill="${tab}" stroke="#0004"/><path d="M53 100h16" stroke="#d4a017" stroke-width="1.5"/>
+ <path d="M38 60Q61 52 84 60L81 99Q61 106 41 99Z" fill="${ac}" stroke="${ln}"/><path d="M61 57V101" stroke="#0002" stroke-width="2"/><path d="M45 64Q50 60 56 60L54 92Q48 90 46 86Z" fill="#fff3"/>`
+ :`<path d="M38 60Q61 54 84 60L87 114H35Z" fill="${ac}" stroke="#0004"/><path d="M54 60l7 10 7-10" stroke="#0003" fill="none" stroke-width="2"/>`}
+ <rect x="39" y="92" width="44" height="6" rx="2" fill="#5b3a1c"/><rect x="58" y="91.5" width="7" height="7" rx="1.5" fill="#d4a017" stroke="#0004"/>
+ ${arm?[37,85].map(x=>`<ellipse cx="${x}" cy="63" rx="11" ry="8" fill="${ac}" stroke="${ln}"/><path d="M${x-10} 66q10 6 20 0" stroke="#0003" fill="none"/><path d="M${x-6} 59q6-3 12 0" stroke="#fff5" fill="none"/>`).join(""):""}
+ ${fem?`<path d="M47 32Q18 40 26 80Q30 92 40 84Q34 62 50 54Z" fill="${hc}" stroke="#0004"/>`:""}
+ ${arm?`<rect x="51" y="53" width="20" height="8" rx="3" fill="${ac}" stroke="${ln}"/>
+ <path d="M44 48Q43 24 61 24Q79 24 78 48L77 55Q61 61 45 55Z" fill="${ac}" stroke="${ln}"/><path d="M61 25V38" stroke="#0003" stroke-width="2"/><path d="M48 42Q48 30 56 27" stroke="#fff6" stroke-width="2.5" fill="none" stroke-linecap="round"/><rect x="50" y="39" width="22" height="5" rx="2" fill="#1b1b1b"/><path d="M66 48h6M66 51h5" stroke="#1b1b1b" stroke-width="1.2"/>`
+ :`<rect x="56" y="54" width="10" height="7" fill="${sk}"/><circle cx="61" cy="42" r="17" fill="${sk}" stroke="#0004"/>
+ <path d="M44 42Q42 22 61 24Q80 22 78 42Q72 30 61 30Q50 30 44 42z" fill="${hc}"/><circle cx="55" cy="40" r="2" fill="#222"/><circle cx="67" cy="40" r="2" fill="#222"/>
+ ${fem?`<path d="M52 37l-3-2M70 37l3-2M54 38l-3-1M68 38l3-1" stroke="#222" stroke-width="1.2"/><path d="M57 49q4 3 8 0" stroke="#c0392b" stroke-width="2" fill="none"/>`:`<path d="M55 49q6 4 12 0" stroke="#7a4a2a" fill="none"/>`}`}
+ ${pl?`<path d="M61 25q-4-14 12-12q-8 4-4 12z" fill="${pl}"/>`:""}
+ ${ai&&AV[ai]?AV[ai](0):""}
+ ${limb("M85 66Q98 80 105 101",ac)}${arm?`<circle cx="96" cy="82" r="4.5" fill="${ac}" stroke="${ln}"/>`:""}
+ ${wi&&VIS[wi]?weaponSvg(wi):`<path d="M104 96V20L107.5 8L111 20V96Z" fill="${wc}" stroke="#0005"/><path d="M107.5 14V94" stroke="#fff7"/>`}
+ <path d="M96 94h23q2 3 0 6h-23q-2-3 0-6z" fill="#7a4a1c" stroke="#0004"/><rect x="105" y="100" width="5" height="12" fill="#5b3a1c"/><circle cx="107.5" cy="114" r="3" fill="#d4a017" stroke="#0005"/>
+ <circle cx="107.5" cy="105.5" r="6" fill="${arm?ac:sk}" stroke="#0006"/><path d="M102.5 103.5h10M102.5 107h10" stroke="#0003"/>
+ ${s>0?`<path d="M12 64h32v24q0 19-16 28q-16-9-16-28z" fill="${SC[s]}" stroke="#0006" stroke-width="2"/><path d="M16 68h24v20q0 15-12 22q-12-7-12-22z" fill="none" stroke="#fff4" stroke-width="1.5"/><path d="M28 70v40M16 84h24" stroke="#fff6" stroke-width="3"/><circle cx="28" cy="84" r="3.5" fill="#d4a017" stroke="#0004"/>`:""}
+ </g></svg>`}
+const castle=`<svg class="castle" viewBox="0 0 100 90"><g fill="#8d8473" stroke="#0003"><rect x="10" y="30" width="22" height="60"/><rect x="68" y="30" width="22" height="60"/><rect x="28" y="48" width="44" height="42"/><path d="M8 30h26v-8h-5v4h-4v-4h-4v4h-4v-4h-5zM66 30h26v-8h-5v4h-4v-4h-4v4h-4v-4h-5z"/></g><path d="M42 90v-18q8-12 16 0v18z" fill="#4a3a28"/><path d="M50 22v-14l12 4-12 4" fill="#c0221f"/><g fill="#ffcf6b" style="opacity:var(--star)"><rect x="18" y="40" width="5" height="8" rx="2"/><rect x="77" y="40" width="5" height="8" rx="2"/><rect x="47" y="56" width="6" height="7" rx="2"/></g></svg>`;
+const TREE=(x,y,k)=>`<path d="M${x} ${y-20*k}l${7*k} ${11*k}h${-3*k}l${6*k} ${9*k}h${-20*k}l${6*k} ${-9*k}h${-3*k}z" style="fill:var(--tree)"/>`;
+const BG=`<svg class="bg" viewBox="0 0 600 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+<defs><radialGradient id="bgl"><stop offset="0" style="stop-color:var(--glow);stop-opacity:.75"/><stop offset="1" style="stop-color:var(--glow);stop-opacity:0"/></radialGradient>
+<linearGradient id="bfg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".3"/></linearGradient></defs>
+<g style="opacity:var(--star)" fill="#fff">${[[40,20],[95,48],[150,14],[205,38],[260,18],[318,44],[372,12],[420,36],[530,22],[575,50],[20,70],[240,64],[345,72],[560,90]].map((p,i)=>`<circle class="tw" style="animation-delay:${(i*.37)%2}s" cx="${p[0]}" cy="${p[1]}" r="${i%3?1:1.6}"/>`).join("")}</g>
+<circle cx="470" cy="62" r="70" fill="url(#bgl)"/><circle cx="470" cy="62" r="17" style="fill:var(--sun)"/>
+<g style="opacity:var(--star)" fill="#0002"><circle cx="465" cy="57" r="3.5"/><circle cx="476" cy="68" r="2.5"/><circle cx="474" cy="55" r="1.5"/></g>
+${[[30,-10],[75,-45],[50,-75]].map((c,i)=>`<g class="cl" style="animation-delay:${c[1]}s;animation-duration:${80+i*25}s;opacity:var(--cop)"><g style="fill:var(--cloud)"><ellipse cx="0" cy="${c[0]}" rx="34" ry="9"/><ellipse cx="-12" cy="${c[0]-6}" rx="15" ry="9"/><ellipse cx="10" cy="${c[0]-8}" rx="18" ry="11"/></g></g>`).join("")}
+<g class="cl" style="animation-duration:55s;animation-delay:-30s;opacity:calc(1 - var(--star))" stroke="#3b3b3b" stroke-width="1.6" fill="none" stroke-linecap="round"><path d="M0 70q5-5 10 0q5-5 10 0"/><path d="M26 60q4-4 8 0q4-4 8 0"/></g>
+<path d="M0 150L40 120L80 134L130 96L175 128L220 110L270 138L320 100L360 122L410 90L455 124L500 106L550 130L600 112V220H0Z" style="fill:var(--mt1)"/>
+<g style="fill:var(--snow)" opacity=".85"><path d="M130 96l-10 11 6-2 4 4 4-4 6 2z"/><path d="M320 100l-9 10 5-2 4 4 4-4 5 2z"/><path d="M410 90l-11 12 6-2 5 4 5-4 6 2z"/></g>
+<path d="M0 172L60 142L110 160L170 130L230 162L290 138L350 164L420 132L480 160L540 142L600 158V220H0Z" style="fill:var(--mt2)"/>
+<rect y="140" width="600" height="48" fill="url(#bfg)"/>
+<path d="M0 188Q80 162 170 180T340 176T510 172T600 178V220H0Z" style="fill:var(--hill)"/>
+${[[24,184,1],[38,182,.8],[205,184,.9],[220,186,1.1],[372,180,1],[388,182,.8],[548,178,1.1],[564,180,.85]].map(t=>TREE(...t)).join("")}
+<path d="M0 194Q150 186 300 192T600 190V220H0Z" style="fill:var(--grass)"/>
+<path d="M0 194Q150 186 300 192T600 190" fill="none" stroke="#0002" stroke-width="2"/>
+<g stroke="#0003" stroke-width="1.2" stroke-linecap="round">${[60,140,250,330,445,520].map(x=>`<path d="M${x} 205l-2-6M${x+3} 205l1-7M${x+6} 205l3-5"/>`).join("")}</g>
+<g style="opacity:var(--star)" fill="#ffe680">${[[90,170],[180,182],[300,176],[420,184],[510,168]].map((p,i)=>`<circle class="ffy" style="animation-delay:${i*.7}s" cx="${p[0]}" cy="${p[1]}" r="1.8"/>`).join("")}</g>
+</svg>`;
 const bar=(v,m,c)=>`<div class="bar"><i style="width:${Math.max(0,Math.min(100,v/m*100))}%;background:${c}"></i></div>`;
 
 function home(){musicSet("home");
  app.innerHTML=`<div class="top">${editName?`<span style="display:flex;gap:6px;flex:1;margin-right:8px"><input id="nm" maxlength="20" value="${S.name}" onkeydown="if(event.key==='Enter')saveName()" style="flex:1;min-width:0;font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)"><button onclick="saveName()" style="min-height:36px;padding:4px 12px">✔</button></span>`:`<b>${S.name} <a href="#" onclick="editName=true;home();document.getElementById('nm').focus();return false" aria-label="Ritter umbenennen" style="text-decoration:none">✏️</a> <a href="#" onclick="toggleSex();return false" aria-label="Zwischen Ritter und Ritterin wechseln" title="Ritter/Ritterin wechseln" style="text-decoration:none">${S.sex==="f"?"♀️":"♂️"}</a></b>`}<span>${rank()}${S.star?" · 🌟×"+S.star:""} · Tag ${S.day}</span></div>
- <div class="scene">${castle}${pk()}</div>
+ <div class="scene">${BG}${castle}${pk()}</div>
  <div class="card"><div class="stats">
  <div>💪 Stärke <b>${S.st}</b></div>
  <div>❤️ Ausdauer <b>${S.au}</b></div>
@@ -377,7 +418,7 @@ function shop(){musicSet("home");
   const own=S[k]===i,can=i>S[k]&&S.gold>=x[1],lower=i<S[k];
   return `<div class="row"><span>${x[0]} <span class="mut">+${x[2]}</span></span>${own?'<b>✔ angelegt</b>':lower?'<span class="mut">besser vorhanden</span>':`<button ${can?"":"disabled"} onclick="buy('${k}',${i})">${x[1]} 🪙</button>`}</div>`}).join("");
  app.innerHTML=`<div class="top"><b>🔨 Schmiede</b><span>🪙 ${S.gold}</span></div>
- <div class="scene" style="height:170px">${pk()}</div>
+ <div class="scene" style="height:170px">${BG}${pk()}</div>
  <div class="card">${sec("Waffen",W,"w","🗡️")}${sec("Rüstungen",A,"a","🛡️")}${sec("Schilde",SH,"s","🔰")}${ench()}<h3>🧪 Tränke</h3>${IT.map(t=>`<div class="row"><span>${t.e} ${t.n} ×${S.it[t.k]} <span class="mut">${t.d}</span></span><button ${S.gold>=t.p?"":"disabled"} onclick="buyIt('${t.k}')">${t.p} 🪙</button></div>`).join("")}</div>
  <div class="grid"><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`;
 }
@@ -425,7 +466,7 @@ function fight(){
  else if(f.menu==="items")ui=IT.map(t=>`<button ${S.it[t.k]<1?"disabled":""} onclick="useItem('${t.k}')">${t.e} ${t.n} ×${S.it[t.k]}<small>${t.d}</small></button>`).join("")+`<button onclick="fmenu('main')">← Zurück</button>`;
  else ui=`<button class="p" onclick="fmenu('skills')">⚔️ Kämpfen</button><button onclick="fmenu('items')">🎒 Tränke</button>${f.tower?'<button onclick="leaveTower()" style="grid-column:1/-1">🏳️ Turm verlassen</button>':'<button onclick="flee()" style="grid-column:1/-1">🏃 Fliehen</button>'}`;
  const dm=(w)=>{const v=w==="e"?f.hE:f.hP;return v?`<span class="dmg ${w==="p"?"late":""}" style="left:30px">-${v}</span>`:""};
- app.innerHTML=`<div class="scene fs">
+ app.innerHTML=`<div class="scene fs">${BG}
  <div class="box eb"><b>${f.name}</b> <span class="mut">Lv${f.lvl}${f.tour?" · Turnier "+f.tour+"/3":""}${f.tower?" · Etage "+f.tower:""}${f.boss?" · BOSS":""}</span> ${ic(f.eb,{bleed:"🩸",burn:"🔥",poison:"☠️",stun:"💫",guard:"🛡️"})}${bar(f.ehp,f.emax,"#c0392b")}<span class="mut">${Math.max(0,f.ehp)}/${f.emax}</span></div>
  <div class="es ${f.boss?"big":""} ${f.hE?"hit":""}">${dm("e")}<div class="lg ${f.lE?"lungeE":""}">${knight(f.tier,f.tier,Math.min(3,Math.floor(f.lvl/3)),true,f.tint)}</div></div>
  <div class="ps ${f.hP?"hit late":""}">${dm("p")}<div class="lg ${f.lP?"lungeP":""}">${pk()}</div></div>
