@@ -155,7 +155,7 @@ const SH=[["Kein Schild",0,0],["Holzschild",30,1],["Eisenschild",100,2],["Turmsc
 const RANKF={"Knappe":"Knappin","Ritter":"Ritterin","Edelritter":"Edelritterin","Baron":"Baronin","Graf":"Gräfin","Herzog":"Herzogin","Held des Königreichs":"Heldin des Königreichs","Halbgott":"Halbgöttin"};
 const RANKS=[[0,"Knappe"],[50,"Ritter"],[150,"Edelritter"],[400,"Baron"],[900,"Graf"],[2000,"Herzog"],[5000,"Held des Königreichs"],[10000,"Unsterbliche Legende"],[25000,"Halbgott"]];
 const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
-const fresh=()=>({name:"Sir Kunibert",sex:"m",day:1,en:6,gold:20,ruhm:0,st:3,au:3,ge:3,w:0,a:0,s:0,exp:0,it:{h:2,H:0,k:0,e:0,g:0,x:0,a:0,A:0},own:[],ew:null,ea:null,boss:0,troph:0,tt:[],title:null,crits:0,flawless:0,close:0,bk:[],star:0,tbest:0,tunl:0,wins:0,losses:0});
+const fresh=()=>({name:"Sir Kunibert",sex:"m",tcur:1,day:1,en:6,gold:20,ruhm:0,st:3,au:3,ge:3,w:0,a:0,s:0,exp:0,it:{h:2,H:0,k:0,e:0,g:0,x:0,a:0,A:0},own:[],ew:null,ea:null,boss:0,troph:0,tt:[],title:null,crits:0,flawless:0,close:0,bk:[],star:0,tbest:0,tunl:0,wins:0,losses:0});
 const AU={ctx:null,mus:true,sfx:true,mode:null,want:null,timer:null,step:0,unlocked:false};
 try{const a=JSON.parse(localStorage.getItem("ritter_au")||"{}");if(a.m===false)AU.mus=false;if(a.s===false)AU.sfx=false}catch(e){}
 const auSave=()=>{try{localStorage.setItem("ritter_au",JSON.stringify({m:AU.mus,s:AU.sfx}))}catch(e){}};
@@ -333,7 +333,11 @@ const upl=k=>(S.up||{})[ikey(k)]||0;
 const fxv=k=>{let v=0;for(const s of["ew","ea"]){const i=EI.find(x=>x.id===S[s]);if(i&&i.fx[k])v+=i.fx[k]}for(const q of["w","a"])for(const r of((S.ru||{})[ikey(q)]||[])){const R=RU.find(x=>x.id===r);if(R&&R.fx[k])v+=R.fx[k]}return v};
 const wBon=()=>{const e=eq("w");return (e?e.b:W[S.w][2])+upl("w")*2};
 const aBon=()=>{const e=eq("a");return (e?e.b:A[S.a][2])+upl("a")};
-const iname=k=>{const e=eq(k),u=upl(k),r=((S.ru||{})[ikey(k)]||[]).length;return (e?(e.cr?"⚒️ ":"✨ ")+e.n:(k==="w"?W[S.w][0]:A[S.a][0]))+(u?" +"+u:"")+(r?" "+"✦".repeat(r):"")};
+const kinfo=key=>{const e=EI.find(x=>x.id===key);if(e)return {s:e.s,n:(e.cr?"⚒️ ":"✨ ")+e.n,b:e.b};const t=key[0],L=t==="w"?W:A,x=L[+key.slice(1)]||L[0];return {s:t,n:x[0],b:x[2]}};
+const knm=key=>{const u=(S.up||{})[key]||0,r=((S.ru||{})[key]||[]).length;return kinfo(key).n+(u?" +"+u:"")+(r?" "+"✦".repeat(r):"")};
+const iname=k=>knm(ikey(k));
+const invItems=()=>["w"+S.w,"a"+S.a,...S.own.filter(id=>EI.find(x=>x.id===id))].sort((a,b)=>(kinfo(a).s>kinfo(b).s)-(kinfo(a).s<kinfo(b).s));
+const isEq=key=>ikey("w")===key||ikey("a")===key;
 const pk=()=>knight(S.w,S.a,S.s,false,null,eq("w")?eq("w").c:null,eq("a")?eq("a").c:null,S.ew,S.ea,S.sex==="f");
 function giveE(id,l){const it=EI.find(x=>x.id===id);if(S.own.includes(id)){S.gold+=100;l.push(`Du besitzt ${it.n} schon: +100 Gold.`);return}S.own.push(id);const k=it.s==="w"?"ew":"ea",cur=it.s==="w"?wBon():aBon(),auto=it.b>cur;if(auto)S[k]=id;l.push(`✨ <b>Verzauberte Beute: ${it.n}</b> (${it.d})${auto?" – angelegt!":" – in der Schmiede anlegbar."}`)}
 function tourLoot(l){const p=["fl","fz","sb","mo","wp","wm"].filter(id=>!S.own.includes(id));if(p.length)giveE(p[rnd(0,p.length-1)],l);else{S.gold+=150;l.push("Alle Turnierschätze besitzt du schon: +150 Gold!")}}
@@ -488,7 +492,7 @@ function toggleSex(){const f=S.sex!=="f";if(S.name==="Sir Kunibert"||S.name==="D
 function saveName(){const v=document.getElementById("nm").value.replace(/[<>&"'`]/g,"").trim().slice(0,20);if(v)S.name=v;editName=false;save();msg=v?`Dein${S.sex==="f"?"e Ritterin":" Ritter"} heißt jetzt <b>${S.name}</b>!`:msg;home()}
 let S=fresh(),msg="Willkommen, edler Ritter! Verdiene Gold, bestehe Abenteuer und steige auf – dabei wirst du automatisch stärker.",F=null;
 try{const x=localStorage.getItem("ritter1");if(x)S=Object.assign(fresh(),JSON.parse(x));}catch(e){}
-S.it=Object.assign({h:0,H:0,k:0,e:0,g:0,x:0,a:0,A:0},S.it);S.sex=S.sex==="f"?"f":"m";S.mat=Object.assign(Object.fromEntries(MAT.map(m=>[m.k,0])),S.mat);S.pr=Object.assign({sm:{lv:1,xp:0},al:{lv:1,xp:0},ve:{lv:1,xp:0}},S.pr);S.up=S.up||{};S.ru=S.ru||{};S.star=S.star||0;S.tbest=S.tbest||0;S.tunl=S.tunl||((S.boss||0)>=3?1:0);S.own=S.own||[];S.ew=S.ew||null;S.ea=S.ea||null;S.boss=S.boss||0;S.troph=S.troph||0;
+S.it=Object.assign({h:0,H:0,k:0,e:0,g:0,x:0,a:0,A:0},S.it);S.sex=S.sex==="f"?"f":"m";S.tcur=S.tcur||1;S.mat=Object.assign(Object.fromEntries(MAT.map(m=>[m.k,0])),S.mat);S.pr=Object.assign({sm:{lv:1,xp:0},al:{lv:1,xp:0},ve:{lv:1,xp:0}},S.pr);S.up=S.up||{};S.ru=S.ru||{};S.star=S.star||0;S.tbest=S.tbest||0;S.tunl=S.tunl||((S.boss||0)>=3?1:0);S.own=S.own||[];S.ew=S.ew||null;S.ea=S.ea||null;S.boss=S.boss||0;S.troph=S.troph||0;
 S.name=String(S.name).replace(/[<>&"'`]/g,"").trim().slice(0,20)||"Sir Kunibert";S.tt=S.tt||[];S.title=S.title||null;S.crits=S.crits||0;S.flawless=S.flawless||0;S.close=S.close||0;S.bk=S.bk||Array.from({length:S.boss||0},(_,i)=>i);
 const save=()=>{try{localStorage.setItem("ritter1",JSON.stringify(S))}catch(e){}};
 const app=document.getElementById("app");
@@ -770,19 +774,19 @@ const SMI=[{id:"c1",lv:2,m:{ez:6,le:2},g:20},{id:"c2",lv:3,m:{le:6,ez:3},g:20},{
 const RU=[{id:"r1",n:"Glutrune",s:"w",lv:1,m:{fb:2,ak:1},fx:{burn:.1},d:"+10 % Brandchance"},{id:"r2",n:"Giftrune",s:"w",lv:2,m:{gp:3,ak:1},fx:{poison:.12},d:"+12 % Giftchance"},
  {id:"r3",n:"Schärferune",s:"w",lv:3,m:{ez:2,ak:2},fx:{crit:.06},d:"+6 % Krit-Chance"},{id:"r4",n:"Frostrune",s:"w",lv:5,m:{ak:3,mi:1},fx:{stun:.08},d:"+8 % Lähmung"},{id:"r5",n:"Blutrune",s:"w",lv:7,m:{ak:3,ds:1},fx:{life:.08},d:"+8 % Lebensraub"},
  {id:"r6",n:"Lebensrune",s:"a",lv:1,m:{hk:2,ak:1},fx:{hp:15},d:"+15 max. LP"},{id:"r7",n:"Windrune",s:"a",lv:3,m:{le:2,ak:2},fx:{dodge:4},d:"+4 % Ausweichen"},{id:"r8",n:"Mondrune",s:"a",lv:4,m:{hk:3,ak:2},fx:{regen:2},d:"Heilt 2 LP pro Runde"},{id:"r9",n:"Feuerschutzrune",s:"a",lv:6,m:{fb:3,ak:2},fx:{noburn:1},d:"Brandimmun"}];
-const upCost=(k,n)=>{const m=k==="w"?{ez:2*n}:{le:2*n,ez:n};if(n>=3)m.mi=n-2;if(n>=5)m.ds=1;return m};
+const upCost=(sd,n)=>{const m=sd==="w"?{ez:2*n}:{le:2*n,ez:n};if(n>=3)m.mi=n-2;if(n>=5)m.ds=1;return m};
 const maxUp=()=>Math.min(5,Math.ceil(S.pr.sm.lv/2));
 const slots=()=>S.pr.ve.lv>=6?2:1;
 const hasM=m=>Object.entries(m).every(([k,n])=>S.mat[k]>=n);
 const costH=(m,g)=>Object.entries(m).map(([k,n])=>`<span style="color:${S.mat[k]>=n?"inherit":"var(--acc)"}">${MT(k).e}${n}</span>`).join(" ")+(g?` <span style="color:${S.gold>=g?"inherit":"var(--acc)"}">🪙${g}</span>`:"");
-let wsTab="sm",wsMsg="";
+let wsTab="sm",wsMsg="",wsSel=null;
 function prXP(p,x,l){const P=S.pr[p];if(P.lv>=10)return;P.xp+=x;while(P.lv<10&&P.xp>=prNeed(P.lv)){P.xp-=prNeed(P.lv);P.lv++;sfx("level");l.push(`<b>${PR[p].e} ${PR[p].n} steigt auf Stufe ${P.lv}!</b>`)}}
 function work1(p,lv,m,g,act){if(S.en<1||S.pr[p].lv<lv||!hasM(m)||S.gold<(g||0))return;S.en--;S.gold-=g||0;for(const k in m)S.mat[k]-=m[k];const l=[act()];prXP(p,3+lv,l);wsMsg=l.join("<br>");sfx("buff");save();workshop()}
 function brew(id){const r=ALC.find(x=>x.id===id),t=IT.find(x=>x.k===id),n=S.pr.al.lv>=r.lv+3?2:1;work1("al",r.lv,r.m,0,()=>{S.it[id]+=n;return `Du braust ${n}× ${t.e} <b>${t.n}</b>.`})}
 function forge(id){const r=SMI.find(x=>x.id===id);if(S.own.includes(id))return;work1("sm",r.lv,r.m,r.g,()=>{const l=[];giveE(id,l);return "Du schmiedest: "+l.join(" ")})}
-function upgrade(k){const n=upl(k)+1;if(n>maxUp())return;work1("sm",1,upCost(k,n),10*n,()=>{S.up[ikey(k)]=n;return `Deine ${k==="w"?"Waffe":"Rüstung"} ist jetzt <b>${iname(k)}</b>.`})}
-function rune(id){const r=RU.find(x=>x.id===id),key=ikey(r.s),cur=S.ru[key]||[];if(cur.length>=slots()||cur.includes(id))return;work1("ve",r.lv,r.m,0,()=>{S.ru[key]=[...cur,id];return `Die <b>${r.n}</b> leuchtet auf deiner ${r.s==="w"?"Waffe":"Rüstung"}. ✦`})}
-function unrune(k,i){const key=ikey(k),cur=S.ru[key]||[],r=RU.find(x=>x.id===cur[i]);cur.splice(i,1);S.ru[key]=cur;wsMsg=`Die ${r?r.n:"Rune"} zerfällt zu Staub.`;save();workshop()}
+function upgrade(key){const n=(S.up[key]||0)+1;if(n>maxUp())return;work1("sm",1,upCost(kinfo(key).s,n),10*n,()=>{S.up[key]=n;return `<b>${knm(key)}</b> ist aufgewertet.`})}
+function rune(id,key){const r=RU.find(x=>x.id===id),cur=S.ru[key]||[];if(r.s!==kinfo(key).s||cur.length>=slots()||cur.includes(id))return;work1("ve",r.lv,r.m,0,()=>{S.ru[key]=[...cur,id];return `Die <b>${r.n}</b> leuchtet auf ${kinfo(key).n}. ✦`})}
+function unrune(key,i){const cur=S.ru[key]||[],r=RU.find(x=>x.id===cur[i]);cur.splice(i,1);S.ru[key]=cur;wsMsg=`Die ${r?r.n:"Rune"} zerfällt zu Staub.`;save();workshop()}
 function trade(k,n){const m=MT(k);if(n>0){if(S.gold<m.p)return;S.gold-=m.p;S.mat[k]++;sfx("coin")}else{if(S.mat[k]<1)return;S.mat[k]--;S.gold+=Math.floor(m.p*.4);sfx("coin")}save();trader()}
 const matRow=()=>`<div class="mut" style="display:flex;flex-wrap:wrap;gap:4px 12px">${MAT.map(m=>`<span title="${m.n}">${m.e} ${S.mat[m.k]}</span>`).join("")}</div>`;
 function trader(){musicSet("home");app.innerHTML=`<div class="top"><b>🛒 Händler</b><span>🪙 ${S.gold}</span></div>
@@ -791,10 +795,13 @@ function trader(){musicSet("home");app.innerHTML=`<div class="top"><b>🛒 Händ
  <div class="grid"><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`}
 function workshop(){musicSet("forge");const P=S.pr[wsTab],btn=(ok,js,lbl)=>`<button ${ok&&S.en>=1?"":"disabled"} onclick="${js}">${lbl||"Herstellen"}<small>1 ⚡</small></button>`;let body="";
  if(wsTab==="al")body=`<h3>🧪 Tränke brauen</h3>`+ALC.map(r=>{const t=IT.find(x=>x.k===r.id),lk=P.lv<r.lv;return `<div class="row"><span>${lk?"🔒 ":""}${t.e} ${t.n}${P.lv>=r.lv+3?" <b>×2</b>":""}<br><span class="mut">${lk?"ab Stufe "+r.lv:costH(r.m)}</span></span>${lk?"":btn(hasM(r.m),`brew('${r.id}')`,"Brauen")}</div>`}).join("")+`<div class="mut" style="margin-top:6px">Ab 3 Stufen über dem Rezept braust du doppelt.</div>`;
- if(wsTab==="sm")body=`<h3>⬆️ Aufwerten</h3>`+["w","a"].map(k=>{const n=upl(k)+1,mx=n>maxUp();return `<div class="row"><span>${k==="w"?"🗡️":"🛡️"} ${iname(k)}<br><span class="mut">${n>5?"Maximal aufgewertet":mx?`+${n} ab Schmied-Stufe ${n*2-1}`:`→ +${n} (${k==="w"?"+2 Schaden":"+1 Schutz"}): `+costH(upCost(k,n),10*n)}</span></span>${n>5||mx?"":btn(hasM(upCost(k,n))&&S.gold>=10*n,`upgrade('${k}')`,"Aufwerten")}</div>`}).join("")
+ const tag=key=>`${kinfo(key).s==="w"?"🗡️":"🛡️"} ${knm(key)}${isEq(key)?' <span class="mut">(angelegt)</span>':""}`;
+ if(wsTab==="sm")body=`<h3>⬆️ Aufwerten</h3><div class="mut">Alle Gegenstände in deinem Inventar – anlegen ist nicht nötig.</div>`+invItems().map(key=>{const sd=kinfo(key).s,n=(S.up[key]||0)+1,mx=n>maxUp(),c=upCost(sd,n);return `<div class="row"><span>${tag(key)}<br><span class="mut">${n>5?"Maximal aufgewertet":mx?`+${n} ab Schmied-Stufe ${n*2-1}`:`→ +${n} (${sd==="w"?"+2 Schaden":"+1 Schutz"}): `+costH(c,10*n)}</span></span>${n>5||mx?"":btn(hasM(c)&&S.gold>=10*n,`upgrade('${key}')`,"Aufwerten")}</div>`}).join("")
   +`<h3>⚒️ Schmieden</h3>`+SMI.map(r=>{const it=EI.find(x=>x.id===r.id),lk=P.lv<r.lv,own=S.own.includes(r.id);return `<div class="row"><span>${lk?"🔒 ":""}${it.s==="w"?"🗡️":"🛡️"} ${it.n} <span class="mut">+${it.b}</span><br><span class="mut">${it.d}${lk?" · ab Stufe "+r.lv:own?"":" · "+costH(r.m,r.g)}</span></span>${lk?"":own?'<span class="mut">✔ besitzt du</span>':btn(hasM(r.m)&&S.gold>=r.g,`forge('${r.id}')`,"Schmieden")}</div>`}).join("");
- if(wsTab==="ve")body=`<h3>✦ Ausrüstung (${slots()} ${slots()>1?"Plätze":"Platz"} je Teil)</h3>`+["w","a"].map(k=>{const cur=S.ru[ikey(k)]||[];return `<div class="row"><span>${k==="w"?"🗡️":"🛡️"} ${iname(k)}<br><span class="mut">${cur.length?cur.map((id,i)=>{const r=RU.find(x=>x.id===id);return `${r.n} (${r.d}) <a href="#" onclick="unrune('${k}',${i});return false" style="color:var(--acc)" aria-label="Rune entfernen">✖</a>`}).join(" · "):"keine Runen"}</span></span></div>`}).join("")
-  +`<h3>🔮 Runen</h3>`+RU.map(r=>{const lk=P.lv<r.lv,cur=S.ru[ikey(r.s)]||[],has=cur.includes(r.id),full=cur.length>=slots();return `<div class="row"><span>${lk?"🔒 ":""}${r.s==="w"?"🗡️":"🛡️"} ${r.n}<br><span class="mut">${r.d}${lk?" · ab Stufe "+r.lv:" · "+costH(r.m)}</span></span>${lk?"":has?'<span class="mut">✔ aktiv</span>':full?'<span class="mut">kein Platz frei</span>':btn(hasM(r.m),`rune('${r.id}')`,"Einsetzen")}</div>`}).join("")+`<div class="mut" style="margin-top:6px">Runen bleiben auf dem Gegenstand. Entfernte Runen gehen verloren. Ab Stufe 6 hat jedes Teil 2 Plätze.</div>`;
+ if(wsTab==="ve"){const items=invItems();if(!items.includes(wsSel))wsSel=ikey("w");const sd=kinfo(wsSel).s,cur=S.ru[wsSel]||[],full=cur.length>=slots();
+  body=`<h3>🎯 Gegenstand wählen</h3><div style="display:flex;flex-wrap:wrap;gap:6px">${items.map(key=>`<button ${key===wsSel?'class="p"':""} style="min-height:36px;padding:6px 10px;font-size:13px" onclick="wsSel='${key}';wsMsg='';workshop()">${kinfo(key).s==="w"?"🗡️":"🛡️"} ${knm(key)}</button>`).join("")}</div>
+  <h3>✦ Runen auf ${knm(wsSel)} (${cur.length}/${slots()})</h3><div class="mut">${cur.length?cur.map((id,i)=>{const r=RU.find(x=>x.id===id);return `${r.n} (${r.d}) <a href="#" onclick="unrune('${wsSel}',${i});return false" style="color:var(--acc)" aria-label="Rune entfernen">✖</a>`}).join(" · "):"keine Runen"}</div>
+  <h3>🔮 Passende Runen</h3>`+RU.filter(r=>r.s===sd).map(r=>{const lk=P.lv<r.lv,has=cur.includes(r.id);return `<div class="row"><span>${lk?"🔒 ":""}${r.n}<br><span class="mut">${r.d}${lk?" · ab Stufe "+r.lv:" · "+costH(r.m)}</span></span>${lk?"":has?'<span class="mut">✔ aktiv</span>':full?'<span class="mut">kein Platz frei</span>':btn(hasM(r.m),`rune('${r.id}','${wsSel}')`,"Einsetzen")}</div>`}).join("")+`<div class="mut" style="margin-top:6px">Runen bleiben auf dem Gegenstand, auch wenn du ihn ablegst. Entfernte Runen gehen verloren. Ab Stufe 6 hat jedes Teil 2 Plätze.</div>`}
  app.innerHTML=`<div class="top"><b>🧰 Werkstatt</b><span>⚡ ${S.en}/6 · 🪙 ${S.gold}</span></div>
  <div class="grid" style="grid-template-columns:repeat(3,1fr);margin-top:0">${Object.keys(PR).map(p=>`<button ${p===wsTab?'class="p"':""} onclick="wsTab='${p}';wsMsg='';workshop()">${PR[p].e} ${PR[p].n}<small>Stufe ${S.pr[p].lv}</small></button>`).join("")}</div>
  <div class="card"><b>${PR[wsTab].e} ${PR[wsTab].n} · Stufe ${P.lv}</b>${P.lv<10?` <span class="mut">(${P.xp}/${prNeed(P.lv)} Berufs-EP)</span>${bar(P.xp,prNeed(P.lv),"#d4a017")}`:' <span class="mut">Meister!</span>'}<div style="margin-top:6px">${matRow()}</div></div>
@@ -845,7 +852,7 @@ function home(){musicSet("home");
  <button onclick="workshop()">🧰 Werkstatt<small>Berufe · 1 Energie</small></button>
  <button onclick="inv()">🎒 Inventar<small>Ausrüstung & Beutel</small></button>
  <button onclick="startTour()" ${S.en<4||S.gold<20?"disabled":""}>🏟️ Turnier<small>4 Energie · 20 🪙 · 3 Kämpfe</small></button>
- <button onclick="startTower()" ${!S.tunl||S.en<4?"disabled":""}>🗼 Endloser Turm<small>${!S.tunl?"ab Boss 3":"4 Energie · Rekord "+S.tbest}</small></button>
+ <button onclick="startTower()" ${!S.tunl||S.en<4?"disabled":""}>🗼 Endloser Turm<small>${!S.tunl?"ab Boss 3":"4 Energie · "+(S.tcur>1?"weiter ab Etage "+S.tcur:"Rekord "+S.tbest)}</small></button>
  ${BOSS[S.boss]?`<button class="p" style="grid-column:1/-1" onclick="startBoss()" ${S.en<3||S.ruhm<BOSS[S.boss].req?"disabled":""}>👑 Bosskampf<small>${S.ruhm<BOSS[S.boss].req?"ab "+BOSS[S.boss].req+" Ruhm":BOSS[S.boss].n}</small></button>`:`<button disabled style="grid-column:1/-1">👑 Alle Bosse besiegt</button>`}
  <button onclick="rebirth()" ${S.boss<BOSS.length?"disabled":""}>🌟 Wiedergeburt<small>${S.boss<BOSS.length?"nach allen Bossen":"Neustart mit Bonus"}</small></button>
  <button onclick="newDay()">🌙 Schlafen<small>Neuer Tag</small></button></div>
@@ -916,12 +923,12 @@ function setup(e,tour,keep){
 }
 function startFight(){if(S.en<2)return;S.en-=2;setup(mk(Math.max(1,lvl()+rnd(-1,1)),ET[rnd(0,4)]))}
 function startTour(){if(S.en<4||S.gold<20)return;S.en-=4;S.gold-=20;setup(mk(Math.max(1,lvl()),ET[rnd(0,4)]),1)}
-function startTower(){if(!S.tunl||S.en<4)return;S.en-=4;towerFloor(1)}
+function startTower(){if(!S.tunl||S.en<4)return;S.en-=4;towerFloor(S.tcur||1)}
 function towerFloor(n,keep){if(n>1&&(n-1)%5===0)setTimeout(()=>sfx("gong"),300);const b=n%5===0,bs=BOSS[(n/5-1)%BOSS.length],e=b?mk(bs.L+Math.floor(n/3),bs,true):mk(lvl()+Math.floor(n/2),ET[rnd(0,4)]);e.tower=n;setup(e,0,keep)}
-function rebirth(){if(S.boss<BOSS.length)return;if(!confirm("Wiedergeburt: Stufe, Gold, Ruhm, Ausrüstung und Bossfortschritt werden zurückgesetzt. Du behältst verzauberte und geschmiedete Gegenstände, Tränke, Materialien, Berufsstufen, Pokale und Turmrekord und erhältst +10 % Schaden, Gold und EP – die Gegner werden aber 8 % stärker. Fortfahren?"))return;S.star++;for(const o of[S.up,S.ru])for(const k of Object.keys(o))if(/^[wa]\d$/.test(k))delete o[k];Object.assign(S,{exp:0,ruhm:0,gold:50,st:3,au:3,ge:3,w:0,a:0,s:0,boss:0});msg=`Du wirst wiedergeboren! Wiedergeburt ${S.star} 🌟`;sfx("level");save();home()}
+function rebirth(){if(S.boss<BOSS.length)return;if(!confirm("Wiedergeburt: Stufe, Gold, Ruhm, Ausrüstung und Bossfortschritt werden zurückgesetzt. Du behältst verzauberte und geschmiedete Gegenstände, Tränke, Materialien, Berufsstufen, Pokale und Turmrekord und erhältst +10 % Schaden, Gold und EP – die Gegner werden aber 8 % stärker. Fortfahren?"))return;S.star++;S.tcur=1;for(const o of[S.up,S.ru])for(const k of Object.keys(o))if(/^[wa]\d$/.test(k))delete o[k];Object.assign(S,{exp:0,ruhm:0,gold:50,st:3,au:3,ge:3,w:0,a:0,s:0,boss:0});msg=`Du wirst wiedergeboren! Wiedergeburt ${S.star} 🌟`;sfx("level");save();home()}
 function nextTour(){if(F.tower)return towerFloor(F.tower+1,{php:Math.min(F.pmax,F.php+Math.round(F.pmax*.2)),pp:F.pp});const k={php:Math.min(F.pmax,F.php+Math.round(F.pmax*.3)),pp:F.pp},r=F.tour+1;setup(mk(Math.max(1,lvl()+r-1),ET[rnd(0,4)]),r,k)}
 function startBoss(){const b=BOSS[S.boss];if(!b||S.en<3||S.ruhm<b.req)return;S.en-=3;setup(mk(b.L,b,true))}
-function leaveTower(){const d=F.over?F.tower:F.tower-1;F.over=true;msg=`Du verlässt den Turm nach ${d} geschafften Etagen. Rekord: Etage ${S.tbest}.`;save();home()}
+function leaveTower(){F.over=true;msg=`Du verlässt den Turm. Beim nächsten Besuch geht es auf <b>Etage ${S.tcur}</b> weiter. Rekord: Etage ${S.tbest}.`;save();home()}
 function fmenu(m){F.menu=m;Object.assign(F,{anim:"",dmg:"",hE:0,hP:0,lP:0,lE:0,vfx:[]});fight()}
 function fight(){
  const f=F;if(!f.over)musicSet(f.boss?"boss":f.tour?"tour":f.tower?"tower":"battle");const ic=(o,m)=>Object.keys(m).filter(k=>o[k]>0).map(k=>m[k]).join("");
@@ -1007,9 +1014,9 @@ function endFight(win,l){
   if(f.boss&&!f.tower){S.boss++;if(!S.bk.includes(S.boss-1))S.bk.push(S.boss-1);if(S.boss>=3)S.tunl=1;(BREW[S.boss-1]||[]).forEach(id=>giveE(id,l));S.it.H++;S.it.g++;l.push("Beute: Großer Heiltrank ⚗️ und Gegengift 💊!");msg=`Boss ${f.name} besiegt!`}
   else{if(Math.random()<.3){S.it.h++;l.push("Du findest einen Heiltrank! 🧪")}msg=`Du hast ${f.name} besiegt!`}
   dropMat(f,l);
-  if(f.tower){S.tbest=Math.max(S.tbest,f.tower);f.next=true;l.push(`Etage ${f.tower} geschafft! Du verschnaufst kurz (+20 % LP).`);if(Math.random()<.25){S.it.a++;l.push("Du findest einen Äthertrank! 🔷")}if(f.tower%10===0){towerLoot(l);S.it.A++;l.push("Dazu ein Großer Äthertrank! 💠")}}
+  if(f.tower){S.tbest=Math.max(S.tbest,f.tower);S.tcur=f.tower+1;f.next=true;l.push(`Etage ${f.tower} geschafft! Du verschnaufst kurz (+20 % LP).`);if(Math.random()<.25){S.it.a++;l.push("Du findest einen Äthertrank! 🔷")}if(f.tower%10===0){towerLoot(l);S.it.A++;l.push("Dazu ein Großer Äthertrank! 💠")}}
   if(f.tour){if(f.tour<3){f.next=true;l.push(`Turnierrunde ${f.tour}/3 geschafft – du verschnaufst kurz.`)}else{S.troph++;tourLoot(l);S.gold+=100;S.exp+=50;S.ruhm+=30;l.push("<b>🏟️ Turniersieger!</b> Pokal, +100 Gold, +30 Ruhm, +50 EP.");msg="Du hast das Turnier gewonnen!"}}
- }else{const x=Math.floor(S.gold*.1);S.gold-=x;S.ruhm=Math.max(0,S.ruhm-5);S.exp+=5;S.losses++;l.push(`<b>💀 Niederlage.</b> −${x} Gold, −5 Ruhm, +5 EP.`);msg=f.tower?`Der Turm hat dich bezwungen – Rekord: Etage ${S.tbest}.`:f.tour?"Du bist im Turnier ausgeschieden.":"Du wurdest besiegt – trainiere und kehre stärker zurück!"}
+ }else{const x=Math.floor(S.gold*.1);S.gold-=x;S.ruhm=Math.max(0,S.ruhm-5);S.exp+=5;S.losses++;if(f.tower)S.tcur=1;l.push(`<b>💀 Niederlage.</b> −${x} Gold, −5 Ruhm, +5 EP.`);msg=f.tower?`Der Turm hat dich bezwungen – du musst wieder auf Etage 1 beginnen. Rekord: Etage ${S.tbest}.`:f.tour?"Du bist im Turnier ausgeschieden.":"Du wurdest besiegt – trainiere und kehre stärker zurück!"}
  const nl=lvl();if(nl>old){setTimeout(()=>sfx("level"),1500);l.push(`<b>⭐ Stufe ${nl} erreicht!</b>`);const n=nl-old;S.st+=n;S.au+=n;S.ge+=n;l.push(`Stärke, Ausdauer und Geschick steigen um je ${n}! 💪`);SK.filter(s=>s.lv>old&&s.lv<=nl).forEach(s=>l.push(`Neue Fähigkeit: <b>${s.n}</b>!`))}
  checkTitles(l);save();fin(l);
 }

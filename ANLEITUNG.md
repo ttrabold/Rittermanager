@@ -378,7 +378,7 @@ In der **🧰 Werkstatt** übst du drei Berufe aus. Du kannst alle drei gleichze
 
 ### 🔨 Schmied
 
-**Aufwerten:** Deine angelegte Waffe und Rüstung kannst du um bis zu **+5** verstärken. Das gilt auch für verzauberte und geschmiedete Gegenstände.
+**Aufwerten:** Jede Waffe und Rüstung in deinem Inventar kannst du um bis zu **+5** verstärken, auch verzauberte und geschmiedete. Du musst sie dafür **nicht anlegen**. Die Werkstatt listet alles auf, was du besitzt, und markiert, was du gerade trägst.
 - Jede Stufe auf der Waffe bringt **+2 Schaden**, jede Stufe auf der Rüstung **+1 Schutz**.
 - Wie weit du aufwerten kannst, hängt von deiner Schmied-Stufe ab: +1 ab Stufe 1, +2 ab Stufe 3, +3 ab Stufe 5, +4 ab Stufe 7, +5 ab Stufe 9.
 - Höhere Aufwertungen brauchen Mithrilerz, die +5 auch eine Drachenschuppe.
@@ -416,7 +416,7 @@ Du braust Tränke selbst, statt sie zu kaufen:
 
 ### 🔮 Verzauberer
 
-Du setzt **Runen** in deine angelegte Waffe oder Rüstung ein. Sie wirken zusätzlich zu allen anderen Kräften, auch auf verzauberten Gegenständen.
+Du setzt **Runen** in jede Waffe oder Rüstung aus deinem Inventar ein. Anlegen musst du sie dafür nicht: Wähle oben einen Gegenstand aus, dann siehst du seine Runenplätze und alle passenden Runen. Runen wirken zusätzlich zu allen anderen Kräften, auch auf verzauberten Gegenständen, sobald du den Gegenstand trägst.
 
 | Stufe | Rune | Für | Wirkung | Materialien |
 |---|---|---|---|---|
@@ -446,7 +446,8 @@ Ab dem dritten besiegten Boss steht dir der Endlose Turm offen. Ein Besuch koste
 - Mit etwas Glück (25 %) findest du nach einer Etage einen **Äthertrank**.
 - **Jede 5. Etage** bewacht ein Boss.
 - **Jede 10. Etage** wartet ein verzauberter Turmschatz und ein **Großer Äthertrank**.
-- Du kannst den Turm nach jeder Etage **verlassen**. Verlierst du, endet der Lauf.
+- Du kannst den Turm jederzeit **verlassen**. Beim nächsten Besuch geht es auf der Etage weiter, auf der du aufgehört hast. Du startest dann mit vollen LP und voll aufgeladenen Fähigkeiten, ein Besuch kostet aber wieder 4 Energie.
+- **Wirst du besiegt**, beginnst du beim nächsten Mal wieder auf **Etage 1**.
 - Deine höchste Etage wird als **Turm-Rekord** gespeichert.
 
 ### Die Ebenen des Turms
