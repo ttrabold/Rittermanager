@@ -714,7 +714,7 @@ Für besondere Leistungen bekommst du **Titel**. Einen davon kannst du tragen. E
 - **🗣️ Stimme**: Der dritte Knopf unten rechts schaltet die **Sprachausgabe** ein oder aus. Ist sie an, werden neue Meldungen vorgelesen: Nachrichten auf der Burg, der Kampfverlauf, die Gerüchte des Wirts, Würfelergebnisse und der Nachtbericht. Welche Stimme spricht, hängt von deinem Gerät und Browser ab. Die Sprachausgabe startet erst, nachdem du einmal irgendwo geklickt hast.
 - **Hell / Dunkel**: Das Spiel folgt der Einstellung deines Geräts. Im dunklen Modus spielt es nachts unter Sternen und Mond.
 - **Speichern**: Dein Fortschritt wird automatisch in deinem Browser gespeichert. Auf einem anderen Gerät oder in einem anderen Browser beginnst du von vorn. Wenn du die Browserdaten löschst, ist der Spielstand weg.
-- **Neu starten**: Ganz unten auf dem Burgbildschirm kannst du deinen Spielstand zurücksetzen. Das kann nicht rückgängig gemacht werden.
+- **💾 Spielstände**: Ganz unten auf dem Burgbildschirm verwaltest du bis zu **3 Spielstände**, zum Beispiel für verschiedene Ritter oder Ritterinnen. Zu jedem Platz siehst du Name, Rang, Stufe, Tag, Gold und wann du zuletzt gespielt hast. Du kannst einen Platz **laden**, auf einem leeren Platz **neu beginnen** oder einen Platz **löschen**. Löschen musst du ein zweites Mal bestätigen, und es lässt sich nicht rückgängig machen. Gespeichert wird immer automatisch im aktiven Platz. Musik-, Sound- und Stimmeinstellungen gelten für alle Plätze.
 
 > 💡 Verlässt du einen laufenden Kampf, etwa durch Neuladen der Seite, ist der Kampf verloren. Die eingesetzte Energie und getrunkene Tränke sind dann weg.
 

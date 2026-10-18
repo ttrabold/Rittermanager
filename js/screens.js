@@ -69,7 +69,7 @@ function home(){musicSet("home");if(QN.length){msg+="<br>"+QN.join("<br>");QN=[]
  ${has("quests")?questCard():""}
  ${homeGrid()}
  ${has("skills")?"":"<!--"}<div class="card"><h3>📜 Fähigkeiten <span class="mut">(${(S.sk||[]).filter(knowSk).length}/${SK_MAX} angelegt)</span></h3><div class="mut">${eqSk().map(id=>SKD(id).n).join(" · ")}</div>${SK.some(x=>x.id!=="hieb"&&knowSk(x.id)&&!(S.sk||[]).includes(x.id))&&(S.sk||[]).length<SK_MAX?'<div style="margin-top:4px">⚠️ Du hast freie Plätze!</div>':""}<div class="grid"><button style="grid-column:1/-1" onclick="seen('skills');skillsScr()">📜 Fähigkeiten verwalten${newTag("skills")}<small>${SK.filter(x=>knowSk(x.id)).length}/${SK.length} gelernt</small></button></div><div class="mut" style="margin-top:6px">Tränke: ${IT.map(t=>t.e+" "+S.it[t.k]).join("  ")}</div></div>${has("skills")?"":"-->"}
- <p class="mut" style="text-align:center"><a href="#" onclick="if(confirm('Spiel wirklich zurücksetzen?')){S=fresh();unlCheck();S.lvl0=1;S.sk=[];qGen();save();msg='Ein neues Abenteuer beginnt!';home()}return false" style="color:var(--mut)">Neu starten</a></p>`;
+ <p class="mut" style="text-align:center"><a href="#" onclick="saveScr();return false" style="color:var(--acc)">💾 Spielstände (Platz ${SLOT})</a></p>`;
 }
 function work(){
  if(S.en<1)return;S.en--;const g=rnd(8,14)+lvl()*2;S.gold+=g;sfx("coin");
@@ -116,3 +116,17 @@ function homeGrid(){const b=(id,js,lbl,sub,dis,cls)=>`<button ${cls?`class="${cl
  if(half.length%2)half[half.length-1]=span(half[half.length-1]);
  const end=has("rebirth")?[b("rebirth","rebirth()","🌟 Wiedergeburt",S.boss<BOSS.length?"nach allen Bossen":"Neustart mit Bonus",S.boss<BOSS.length),b("","newDay()","🌙 Schlafen","Erträge · neuer Tag")]:[span(b("","newDay()","🌙 Schlafen",has("burg")?"Erträge · neuer Tag":"Neuer Tag"))];
  return `<div class="grid">${half.join("")}${full.map(span).join("")}${end.join("")}</div>`}
+
+// ---- Spielstände: bis zu 3 Plätze ----
+let slotDel=0;
+function slotInfo(n){try{const x=localStorage.getItem(slotKey(n));if(!x)return null;const d=JSON.parse(x),L=1+Math.floor(Math.sqrt((d.exp||0)/20));let r=RANKS[0][1];for(const k of RANKS)if((d.ruhm||0)>=k[0])r=k[1];if(d.sex==="f")r=RANKF[r]||r;return {d,L,r}}catch(e){return null}}
+const agoTxt=ts=>{if(!ts)return "";const m=Math.round((Date.now()-ts)/60000);return m<1?"gerade eben":m<60?`vor ${m} Min.`:m<1440?`vor ${Math.round(m/60)} Std.`:`vor ${Math.round(m/1440)} Tagen`};
+function saveScr(){musicSet("hall");save();
+ app.innerHTML=`<div class="top"><b>💾 Spielstände</b><span>Platz ${SLOT} aktiv</span></div>
+ <div class="msg" data-quiet>Du hast ${SLOTS} Plätze für verschiedene Ritter. Dein Fortschritt wird automatisch im aktiven Platz gespeichert. Musik-, Sound- und Stimmeinstellungen gelten für alle Plätze.</div>
+ <div class="card">${Array.from({length:SLOTS},(_,k)=>{const n=k+1,i=slotInfo(n),act=n===SLOT;
+  return `<div class="row"><span>${act?"▶️":"💾"} <b>Platz ${n}</b>${act?' <span class="mut">(aktiv)</span>':""}<br>${i?`${i.d.sex==="f"?"♀️":"♂️"} <b>${i.d.name}</b> · ${i.r} · Stufe ${i.L}${i.d.star?" · 🌟×"+i.d.star:""}<br><span class="mut">Tag ${i.d.day||1} · <i class=coin></i>${i.d.gold||0} · Bosse ${(i.d.bk||[]).length}/${BOSS.length}${i.d.ts?" · "+agoTxt(i.d.ts):""}</span>`:'<span class="mut">— leer —</span>'}</span>
+  <span style="display:flex;flex-direction:column;gap:6px">${act?"":`<button class="p" onclick="slotLoad(${n})">${i?"Laden":"Neu beginnen"}</button>`}${i?(slotDel===n?`<button onclick="slotWipe(${n})" style="border-color:var(--acc);color:var(--acc)">Wirklich löschen?</button>`:`<button onclick="slotDel=${n};saveScr()">${act?"Neu beginnen":"Löschen"}</button>`):""}</span></div>`}).join("")}</div>
+ <div class="grid"><button style="grid-column:1/-1" onclick="slotDel=0;home()">← Zurück zur Burg</button></div>`}
+function slotLoad(n){save();try{localStorage.setItem("ritter_slot",String(n))}catch(e){}location.reload()}
+function slotWipe(n){slotDel=0;try{localStorage.removeItem(slotKey(n))}catch(e){}if(n===SLOT){S=fresh();unlCheck();S.lvl0=1;S.sk=[];qGen();msg="Ein neues Abenteuer beginnt!";save()}saveScr()}
