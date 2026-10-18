@@ -219,6 +219,8 @@ const SK=[
 {n:"Weltenspalter",lv:18,pp:2,pw:5,acc:85,d:"Zerschmettert alles"}];
 const IT=[{k:"h",n:"Heiltrank",p:15,d:"+40 LP",e:"🧪"},{k:"H",n:"Großer Heiltrank",p:40,d:"+100 LP",e:"⚗️"},{k:"x",n:"Elixier des Lebens",p:90,d:"+200 LP",e:"🍶"},{k:"k",n:"Kraft-Elixier",p:25,d:"Schaden +50 % (3 Runden)",e:"💥"},{k:"g",n:"Gegengift",p:20,d:"Heilt Gift und Brand",e:"💊"},{k:"e",n:"Eisenhaut-Trank",p:25,d:"Schaden −50 % (3 Runden)",e:"🛡️"}];
 const lvl=()=>1+Math.floor(Math.sqrt(S.exp/20)),expFor=l=>(l-1)*(l-1)*20;
+let editName=false;
+function saveName(){const v=document.getElementById("nm").value.replace(/[<>&"'`]/g,"").trim().slice(0,20);if(v)S.name=v;editName=false;save();msg=v?`Dein Ritter heißt jetzt <b>${S.name}</b>!`:msg;home()}
 let S=fresh(),msg="Willkommen, edler Ritter! Verdiene Gold, bestehe Abenteuer und steige auf – dabei wirst du automatisch stärker.",F=null;
 try{const x=localStorage.getItem("ritter1");if(x)S=Object.assign(fresh(),JSON.parse(x));}catch(e){}
 S.it=Object.assign({h:0,H:0,k:0,e:0,g:0,x:0},S.it);S.star=S.star||0;S.tbest=S.tbest||0;S.tunl=S.tunl||((S.boss||0)>=3?1:0);S.own=S.own||[];S.ew=S.ew||null;S.ea=S.ea||null;S.boss=S.boss||0;S.troph=S.troph||0;
@@ -248,7 +250,7 @@ const bar=(v,m,c)=>`<div class="bar"><i style="width:${Math.max(0,Math.min(100,v
 
 function home(){musicSet("home");
  const need=k=>Math.ceil(S[k]/2)+1;
- app.innerHTML=`<div class="top"><b>${S.name}</b><span>${rank()}${S.star?" · 🌟×"+S.star:""} · Tag ${S.day}</span></div>
+ app.innerHTML=`<div class="top">${editName?`<span style="display:flex;gap:6px;flex:1;margin-right:8px"><input id="nm" maxlength="20" value="${S.name}" onkeydown="if(event.key==='Enter')saveName()" style="flex:1;min-width:0;font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)"><button onclick="saveName()" style="min-height:36px;padding:4px 12px">✔</button></span>`:`<b>${S.name} <a href="#" onclick="editName=true;home();document.getElementById('nm').focus();return false" aria-label="Ritter umbenennen" style="text-decoration:none">✏️</a></b>`}<span>${rank()}${S.star?" · 🌟×"+S.star:""} · Tag ${S.day}</span></div>
  <div class="scene">${castle}${pk()}</div>
  <div class="card"><div class="stats">
  <div>💪 Stärke <b>${S.st}</b></div>
