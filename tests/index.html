@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><title>Rittermanager – Tests</title>
+<link rel="stylesheet" href="../css/style.css">
+<script>
+// Echte Spielstände nie anfassen: localStorage durch einen Speicher im Arbeitsspeicher ersetzen
+(()=>{const m={};const mem={getItem:k=>k in m?m[k]:null,setItem:(k,v)=>{m[k]=String(v)},removeItem:k=>{delete m[k]},clear:()=>{for(const k in m)delete m[k]},key:i=>Object.keys(m)[i]||null,get length(){return Object.keys(m).length}};
+ Object.defineProperty(window,"localStorage",{value:mem,configurable:true})})();
+// Keine Seitenreloads und keine echten Downloads im Test
+window.__reloads=0;
+</script></head>
+<body><div id="app"></div>
+<script src="../js/util.js"></script><script src="../js/data.js"></script><script src="../js/state.js"></script><script src="../js/audio.js"></script><script src="../js/speech.js"></script><script src="../js/unlock.js"></script><script src="../js/art.js"></script><script src="../js/professions.js"></script><script src="../js/day.js"></script><script src="../js/tavern.js"></script><script src="../js/screens.js"></script><script src="../js/combat.js"></script><script src="../js/help.js"></script><script src="../js/companions.js"></script><script src="../js/events.js"></script><script src="../js/story.js"></script><script src="../js/endgame.js"></script><script src="../js/bestiary.js"></script><script src="../js/main.js"></script>
+<pre id="out" style="position:fixed;inset:0;overflow:auto;margin:0;padding:12px;background:#111;color:#eee;font:13px monospace;z-index:999"></pre>
+<script>
+const R=[];let fails=0;
+function t(name,fn){try{fn();R.push("✅ "+name)}catch(e){fails++;R.push("❌ "+name+" – "+(e&&e.message||e))}}
+const ok=(c,m)=>{if(!c)throw new Error(m||"Bedingung nicht erfüllt")};
+AU.mus=false;AU.sfx=false;TTS.on=false;speechSynthesis&&speechSynthesis.cancel&&(speechSynthesis.speak=()=>{});
+const newGame=()=>{S=fresh();unlCheck();S.lvl0=1;S.sk=[];qGen();F=null};
+const hero=L=>{newGame();S.exp=expFor(L);S.st=S.au=S.ge=3+L-1;S.lvl0=L;S.unl=FEAT.map(f=>f.id);S.tunl=1;S.sk=SK.filter(s=>s.id!=="hieb"&&s.lv<=L).slice(-6).map(s=>s.id);S.gold=99999;S.en=99;Object.keys(S.mat).forEach(k=>S.mat[k]=50);S.pr={sm:{lv:10,xp:0},al:{lv:10,xp:0},ve:{lv:10,xp:0}}};
+const win=()=>{let n=0;while(!F.over&&n++<300){F.ehp=0;enemyTurn([])}ok(F.over,"Kampf endet nicht")};
+
+t("Neues Spiel: nur Grundknöpfe",()=>{newGame();home();const b=[...document.querySelectorAll(".grid button")].map(x=>x.textContent);ok(b.length===4,"erwartet 4 Knöpfe, gefunden "+b.length)});
+t("Freischaltungen in Reihenfolge",()=>{newGame();const got=[];for(let L=2;L<=20;L++){S.exp=expFor(L);const l=[];levelCheck(l);unlCheck(l);l.filter(x=>x.includes("🔓")).forEach(()=>got.push(L))}ok(got.length>=11,"nur "+got.length+" Freischaltungen")});
+t("Alle Bildschirme rendern",()=>{hero(30);for(const f of[home,shop,inv,trader,castleScr,titles,skillsScr,saveScr,compScr,bestScr,()=>{TV.ph="bet";tavern()}])f();for(const w of["sm","al","ve"]){wsTab=w;workshop()}});
+t("Abenteuer gewinnen",()=>{hero(10);startFight();if(EVN){EVN=null;setup(mk(10,ET[0]))}win();ok(F.ko==="e")});
+t("Schnellkampf",()=>{hero(15);EVN=null;setup(mk(12,ET[2]));quickFight();ok(F.over||F.log.includes("stoppt"),"Schnellkampf endet nicht")});
+t("Tastenkürzel",()=>{hero(15);setup(mk(12,ET[0]));const o=F.ehp;document.dispatchEvent(new KeyboardEvent("keydown",{key:"1"}));ok(F.ehp<o||F.log.includes("daneben")||F.log.includes("weicht"),"Taste 1 ohne Wirkung")});
+t("Alle Fähigkeiten einsetzbar",()=>{hero(30);for(const s of SK){S.sk=s.id==="hieb"?[]:[s.id];setup(mk(30,ET[0]));F.ehp=F.emax=1e6;useSkill(s.id);ok(!F.log.includes("undefined"),s.id)}});
+t("Alle Bosse besiegbar (Ablauf)",()=>{hero(50);for(let i=0;i<BOSS.length;i++){S.boss=i;S.ruhm=1e6;S.en=9;startBoss();win()}ok(S.boss===BOSS.length,"Bossfortschritt "+S.boss);ok(F.epi===1,"Epilog-Knopf fehlt");epilogScr()});
+t("Turnier mit 3 Runden",()=>{hero(20);startTour();win();nextTour();win();nextTour();win();ok(S.troph===1,"kein Pokal")});
+t("Turm: Etagen, Verlassen, Niederlage",()=>{hero(30);startTower();win();nextTour();win();leaveTower();ok(S.tcur===3,"tcur "+S.tcur);S.en=9;startTower();F.php=0;F.php=1;F.pb.burn=5;F.eb.stun=1;useSkill("hieb");let n=0;while(!F.over&&n++<50){F.php=1;F.pb.burn=5;F.eb.stun=1;useSkill("hieb")}ok(S.tcur===1,"Reset nach Niederlage");ok((S.hall||[]).length===1,"Ruhmeshalle leer")});
+t("Vollmond-Werwolf",()=>{hero(20);S.day=5;startMoon();win();ok(S.own.includes("mw"))});
+t("Rivale: alle 7 Duelle",()=>{hero(45);for(let k=0;k<7;k++){S.en=9;startRival();win()}ok(S.rv===7,"rv "+S.rv);ok(S.own.includes("nk"),"Neidklinge fehlt")});
+t("Alle Ereignisse und Entscheidungen",()=>{hero(20);for(const ev of EVTS)for(let i=0;i<ev.ch.length;i++){S.it.h=5;S.gold=9999;EVN={ev,res:null};F=null;evScr();evPick(i);if(F&&!F.over)win()}});
+t("Begleiter kaufen und wirken",()=>{hero(20);S.bk=[0,1,2,3];for(const c of COMP)compBuy(c.id);ok(S.comp.length===4);S.cmp=null;compSet("ross");ok(enMax()===7);S.cmp="falke";setup(mk(20,ET[0]));F.ehp=F.emax=1e6;for(let k=0;k<30;k++)useSkill("hieb");S.cmp="knappe";setup(mk(20,ET[0]));F.ehp=F.emax=1e6;F.atk=0;F.fx={};F.php=Math.round(F.pmax*.2);enemyTurn([]);ok(F.knUsed===1,"Knappe hilft nicht")});
+t("Bestiarium füllt sich",()=>{hero(20);S.bst={};setup(mk(10,ET[3]));win();ok((S.bst.et3||{}).w===1);bestScr()});
+t("Legendäre Aufwertung bis +10",()=>{hero(30);for(let n=0;n<10;n++){S.en=9;upgrade("w"+S.w)}ok(S.up["w"+S.w]===10,"Stufe "+S.up["w"+S.w])});
+t("Verzierungen, Söldner, Tavernenrunde",()=>{hero(30);S.bk=[0,1,2];for(const d of DECO)decoBuy(d.id);ok(S.deco.length===DECO.length);home();castleScr();mercHire();ok(S.merc===1);S.boss=2;S.ruhm=1e6;startBoss();ok(F.merc===1&&!S.merc);tavRound();ok(S.round===S.day)});
+t("Wiedergeburt mit Segen",()=>{hero(50);S.boss=12;rebirth();doRebirth("slot");ok(skMax()===7&&S.star===1&&lvl()===1);S.boss=12;doRebirth("gold");ok(blessV("gold")===1)});
+t("Nacht: Erträge, Aufträge, Animation",()=>{hero(20);S.bld={kaserne:1,garten:2,mine:2,arkan:1,schatz:1};S.en=S.enStart-5;const g=S.gold;newDay();ok(S.gold>g,"keine Schatzkammer-Erträge");nightClose(home)});
+t("Export / Import",()=>{hero(12);S.name="Exporttest";const str=expStr(),d=impParse(str);ok(d.name==="Exporttest");let bad=false;try{impParse("Quatsch")}catch(e){bad=true}ok(bad,"ungültiger Text akzeptiert")});
+t("Taverne: Partie spielen",()=>{hero(20);S.tav=null;TV.o="gustl";TV.bet=10;tvStart();tvSel(0);tvRoll();ok(TV.ph==="done")});
+t("Werkstatt: brauen, schmieden, Rune",()=>{hero(20);brew("h");forge("c1");rune("r1","w"+S.w);ok((S.ru["w"+S.w]||[]).includes("r1"))});
+t("Hinweiskarten",()=>{hero(20);S.hints={};inv();ok(document.querySelector(".hint"));hintOk("inv",document.querySelector(".hint button"));inv();ok(!document.querySelector(".hint"))});
+t("Keine 'undefined'/'NaN' im Burgbildschirm",()=>{hero(25);home();const tx=document.body.innerText;ok(!/undefined|NaN/.test(tx),"gefunden")});
+document.getElementById("out").textContent=`Rittermanager – automatische Tests\n${R.length-fails}/${R.length} bestanden\n\n`+R.join("\n");
+window.__testResult={total:R.length,fails,lines:R};
+</script></body></html>

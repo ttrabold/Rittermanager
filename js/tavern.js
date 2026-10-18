@@ -50,10 +50,11 @@ function tavern(){musicSet("tavern");const o=TAVO.find(x=>x.id===TV.o),left=tavL
   :`<div class="mut" style="margin-top:4px">Tippe die Würfel an, die du <b>neu werfen</b> willst.</div><div class="grid"><button class="p" onclick="tvRoll()">${TV.sel.some(Boolean)?`🎲 ${TV.sel.filter(Boolean).length} Würfel neu werfen`:"✋ Alle behalten"}</button><button onclick="TV.sel=TV.sel.map(()=>false);tavern()">Auswahl löschen</button></div>`}`}
  app.innerHTML=`<div class="top"><b>🍺 Zum Goldenen Humpen</b><span><i class=coin></i> ${S.gold}</span></div>
  <div class="scene tav">${TAVBG}<div class="tvk">${pk()}</div><div class="tvk">${opp}</div></div>
- <div class="msg">🧔 Der Wirt raunt: <i>${RUMORS[TV.rum%RUMORS.length]}</i></div>
+ ${hintBox("tavern")}
+ <div class="msg">🧔 Der Wirt raunt: <i>${RUMORS[TV.rum%RUMORS.length]}</i>${TV.note?`<br>${TV.note}<br><i>${RUMORS[(TV.rum+1)%RUMORS.length]}</i>`:""}</div>
  <div class="card">${body}</div>
  <div class="mut" style="text-align:center;margin-top:6px">Würfelsiege: ${S.tavW||0} · Gewinn/Verlust gesamt: ${(S.tavG||0)>=0?"+":""}${S.tavG||0} <i class=coin></i></div>
- <div class="grid"><button style="grid-column:1/-1" onclick="TV.ph='bet';home()">← Zurück zur Burg</button></div>`;TV.rollP=TV.rollE=false}
+ <div class="grid"><button ${S.round===S.day||S.gold<roundCost()?"disabled":""} style="grid-column:1/-1" onclick="tavRound()">🍻 Eine Runde für alle ausgeben<small>${S.round===S.day?"heute schon spendiert":roundCost()+" Gold · bringt Ruhm"}</small></button><button style="grid-column:1/-1" onclick="TV.ph='bet';TV.note='';home()">← Zurück zur Burg</button></div>`;TV.rollP=TV.rollE=false}
 function tvStart(){const o=TAVO.find(x=>x.id===TV.o);if(!o.ok()||tavLeft()<1||S.gold<TV.bet)return;
  S.gold-=TV.bet;S.tav=S.tav&&S.tav.day===S.day?S.tav:{day:S.day,n:0};S.tav.n++;save();
  TV.p=Array.from({length:5},d6);TV.e=Array.from({length:5},d6);TV.sel=[0,0,0,0,0].map(()=>false);TV.ph="pick";TV.rollP=TV.rollE=true;sfx("dice");tavern()}

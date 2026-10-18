@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2a1c"/><stop offset="1" stop-color="#1b1610"/></linearGradient><linearGradient id="s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d84a3a"/><stop offset="1" stop-color="#8b1e1e"/></linearGradient><linearGradient id="h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eef2f5"/><stop offset="1" stop-color="#9aa3ab"/></linearGradient></defs>
+<rect width="512" height="512" rx="96" fill="url(#g)"/>
+<path d="M116 108h280v150q0 120-140 196Q116 378 116 258Z" fill="url(#s)" stroke="#d4a017" stroke-width="16"/>
+<path d="M176 200Q176 118 256 118Q336 118 336 200L332 236Q256 262 180 236Z" fill="url(#h)" stroke="#2d2417" stroke-width="8"/>
+<rect x="196" y="184" width="120" height="22" rx="10" fill="#1b1b1b"/><path d="M286 222h28M286 234h22" stroke="#1b1b1b" stroke-width="6"/>
+<path d="M256 118q-10-58 54-56q-34 16-18 58z" fill="#d4a017"/>
+<path d="M190 290h132M256 262v150" stroke="#d4a017" stroke-width="14" stroke-linecap="round"/>
+</svg>

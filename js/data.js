@@ -74,6 +74,8 @@ const TT=[
 {id:"b11",n:"der Weltenretter",d:"Den Weltenfresser besiegen",t:()=>S.bk.includes(11),p:()=>""},
 {id:"au",n:"der Auserwählte",d:"Die ersten sechs Bosse besiegen",t:()=>[0,1,2,3,4,5].every(i=>S.bk.includes(i)),p:()=>`${[0,1,2,3,4,5].filter(i=>S.bk.includes(i)).length}/6`},
 {id:"gl",n:"der Glücksritter",d:"10 Würfelpartien in der Taverne gewinnen",t:()=>(S.tavW||0)>=10,p:()=>`${Math.min(S.tavW||0,10)}/10`},
+{id:"mk",n:"der Monsterkundler",d:"Jeden Eintrag im Bestiarium mindestens einmal besiegen",t:()=>typeof BST!=="undefined"&&BST.every(x=>((S.bst||{})[x.k]||{}).w>0),p:()=>typeof BST!=="undefined"?`${BST.filter(x=>((S.bst||{})[x.k]||{}).w>0).length}/${BST.length}`:""},
+{id:"rv",n:"der Gregorbezwinger",d:"Sir Gregor in allen sieben Duellen besiegen",t:()=>(S.rv||0)>=7,p:()=>`${S.rv||0}/7`},
 {id:"lg",n:"der Legendäre",d:"Alle zwölf Bosse besiegen",t:()=>S.bk.length>=12,p:()=>`${S.bk.length}/12`}];
 // Fähigkeiten: id, Name, Stufe, Einsätze (99 = unbegrenzt), Stärke, Treffsicherheit, Effekt, Animation (vx), self = Animation beim Spieler
 const SK=[
@@ -101,7 +103,11 @@ const SK=[
 {id:"donner",n:"Donnerschlag",lv:26,pp:3,pw:2.4,acc:90,fx:"stun",ch:.5,vx:"star",d:"Stark, 50 % Betäubung"},
 {id:"phoenix",n:"Phönixflamme",lv:28,pp:2,pw:3,acc:90,fx:"burn",life:.25,vx:"fire",d:"Brand und 25 % Lebensraub"},
 {id:"zorn",n:"Götterzorn",lv:30,pp:1,pw:7,acc:90,crit:1,vx:"world",d:"Immer kritisch – der stärkste Hieb"}];
-const SK_MAX=6;
+const skMax=()=>6+((S.bl||{}).slot||0);
+// Zeitlich begrenzte Segen (z. B. vom Schrein): {k:"dmg"|"crit"|"gold",v,n:Kämpfe,name}
+const buffV=k=>(S.buffs||[]).filter(b=>b.k===k&&b.n>0).reduce((a,b)=>a+b.v,0);
+function buffTick(){if(!S.buffs)return;S.buffs.forEach(b=>b.n--);S.buffs=S.buffs.filter(b=>b.n>0)}
+const blessV=k=>((S.bl||{})[k]||0);
 const SKD=id=>SK.find(s=>s.id===id);
 const knowSk=id=>{const s=SKD(id);return !!s&&s.lv<=lvl()};
 const eqSk=()=>["hieb",...(S.sk||[]).filter(knowSk)];

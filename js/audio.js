@@ -5,7 +5,7 @@ const auSave=()=>{try{localStorage.setItem("ritter_au",JSON.stringify({m:AU.mus,
 function ac(){if(!AU.ctx){try{AU.ctx=new(window.AudioContext||window.webkitAudioContext)();musGraph()}catch(e){return null}}if(AU.ctx.state==="suspended")AU.ctx.resume();return AU.ctx}
 function tone(f,t0,d,type,vol,dest,f2){const c=AU.ctx,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f,t0);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+d);g.gain.setValueAtTime(vol,t0);g.gain.exponentialRampToValueAtTime(.001,t0+d);o.connect(g);g.connect(dest||c.destination);o.start(t0);o.stop(t0+d+.02)}
 function noise(t0,d,vol){const c=AU.ctx,n=Math.floor(c.sampleRate*d),b=c.createBuffer(1,n,c.sampleRate),a=b.getChannelData(0);for(let i=0;i<n;i++)a[i]=(Math.random()*2-1)*(1-i/n);const s=c.createBufferSource(),g=c.createGain();g.gain.value=vol;s.buffer=b;s.connect(g);g.connect(c.destination);s.start(t0)}
-function sfx(n){if(!AU.sfx)return;const c=ac();if(!c)return;const t=c.currentTime,D=c.destination,arp=(a,g,ty)=>a.forEach((f,i)=>tone(f,t+i*g,g*1.6,ty||"triangle",.12));
+function sfx(n){if(!AU.sfx||(typeof QUICK!=="undefined"&&QUICK))return;const c=ac();if(!c)return;const t=c.currentTime,D=c.destination,arp=(a,g,ty)=>a.forEach((f,i)=>tone(f,t+i*g,g*1.6,ty||"triangle",.12));
  switch(n){
  case"click":tone(660,t,.05,"square",.05);break;
  case"hit":noise(t,.18,.25);tone(220,t,.15,"sawtooth",.15,D,70);break;

@@ -22,12 +22,16 @@ Willkommen, edler Ritter (oder edle Ritterin)! Hier erfährst du alles, was du �
 16. [Materialien und Händler](#materialien-und-händler)
 17. [Berufe – die Werkstatt](#berufe--die-werkstatt)
 18. [Die Taverne](#die-taverne)
-19. [Der Endlose Turm](#der-endlose-turm)
-20. [Wiedergeburt](#wiedergeburt)
-21. [Ränge](#ränge)
-22. [Titel](#titel)
-23. [Einstellungen und Spielstand](#einstellungen-und-spielstand)
-24. [Tipps für Einsteiger](#tipps-für-einsteiger)
+19. [Ereignisse auf Abenteuern](#ereignisse-auf-abenteuern)
+20. [Der Rivale Sir Gregor](#der-rivale-sir-gregor)
+21. [Begleiter](#begleiter)
+22. [Bestiarium](#bestiarium)
+23. [Der Endlose Turm](#der-endlose-turm)
+24. [Wiedergeburt](#wiedergeburt)
+25. [Ränge](#ränge)
+26. [Titel](#titel)
+27. [Einstellungen und Spielstand](#einstellungen-und-spielstand)
+28. [Tipps für Einsteiger](#tipps-für-einsteiger)
 
 ---
 
@@ -44,8 +48,10 @@ Damit der Anfang nicht überfordert, stehen dir zu Beginn nur **Arbeiten, Abente
 | Stufe 2 | 📜 Fähigkeiten |
 | Stufe 3 | 🎒 Inventar |
 | Stufe 4 | 👑 Bosskampf |
+| Stufe 5 | ⚔️ Rivale Sir Gregor |
 | Stufe 6 | 📜 Tagesaufträge |
 | Stufe 8 | 🏟️ Turnier |
+| Stufe 9 | 🐾 Begleiter |
 | Stufe 10 | 🍺 Taverne |
 | Stufe 12 | 🧰 Werkstatt und 🛒 Händler |
 | Stufe 15 | 📅 Kalender (Markttag, Turniertag) und 🌕 Vollmond-Jagd |
@@ -162,6 +168,18 @@ Jedes Gebäude verändert mit jeder Stufe sein Aussehen, in der Burgszene und al
 - **🔮 Arkanturm:** vom Kristall auf dem Sockel bis zum hohen Turm mit Runenbändern, kreisendem Ring und Lichtstrahl in den Himmel
 - **💰 Schatzkammer:** von der Truhe über das Steinhaus bis zur goldenen Kuppel mit Säulen und Münzbergen
 
+### Verzierungen
+
+Im Burgausbau kannst du deine Burg für Gold schmücken. Jede Verzierung bringt einmalig **Ruhm** und ist in der Burgszene zu sehen:
+
+| Verzierung | Preis | Ruhm |
+|---|---|---|
+| 🚩 Prunkbanner | 600 | +60 |
+| 🏮 Laternenweg | 900 | +90 |
+| ⛲ Marmorbrunnen | 1500 | +150 |
+| 🗿 Heldenstatue (von dir!) | 3000 | +300 |
+| 💀 Drachenschädel über dem Tor (nach Vulkanus) | 5000 | +500 |
+
 ### Deine Burg wächst mit
 
 Auch die Burg selbst wird mit jedem Ausbau prächtiger. Entscheidend ist die **Summe aller Gebäudestufen**:
@@ -237,6 +255,19 @@ Gekämpft wird abwechselnd in Runden. Zuerst bist du am Zug, dann der Gegner. Du
 - **Deckung**: Manche Gegner gehen in Deckung. Dein nächster Angriff macht dann nur halben Schaden.
 - **Rüstung und Schild** verringern jeden Treffer, den du einsteckst.
 - **Begrenzte Fähigkeiten**: Starke Fähigkeiten kannst du nur wenige Male pro Kampf einsetzen (z. B. „2/2×“). Den Schwerthieb kannst du dagegen beliebig oft einsetzen.
+
+### ⚡ Schnellkampf und Tastenkürzel
+
+Gegen normale Gegner kannst du den **Schnellkampf** nutzen. Der Kampf läuft dann automatisch mit dem Schwerthieb, und bei wenig LP trinkst du Heiltränke. Wird es zu knapp, hält der Schnellkampf an, und du entscheidest selbst weiter. Gegen Bosse, den Rivalen und Mimiks gibt es keinen Schnellkampf.
+
+| Taste | Wirkung |
+|---|---|
+| 1–7 | Fähigkeit 1–7 einsetzen (der Schwerthieb ist die 1) |
+| K | Fähigkeiten-Menü |
+| T | Tränke-Menü |
+| S | Schnellkampf |
+| Esc | zurück |
+| Enter | nach dem Kampf: weiter |
 
 ### Sieg und Niederlage
 
@@ -375,6 +406,10 @@ Es gibt zwölf Bosse, die du nacheinander besiegen musst. Jeder Boss braucht ein
 
 > ⚠️ **Achtung:** Fällt ein Boss unter die Hälfte seiner LP, **gerät er in Rage** und schlägt deutlich härter zu.
 
+> 🗡️ **Söldner:** Hast du genug Ruhm für den nächsten Boss, kannst du auf dem Burgbildschirm einen **Söldner anheuern**. Er kämpft im nächsten Bosskampf an deiner Seite und schlägt jede Runde zu.
+
+> 📜 Jeder Boss hat seine eigene Geschichte. Sie wird vor dem Kampf erzählt, und nach dem Sieg erfährst du, wie sie endet. Nach dem Weltenfresser wartet ein **Epilog**.
+
 **Belohnung für jeden Boss:**
 - dreifache Kampfbelohnung
 - **zwei verzauberte Gegenstände** (eine Waffe und eine Rüstung)
@@ -510,6 +545,7 @@ In der **🧰 Werkstatt** übst du drei Berufe aus. Du kannst alle drei gleichze
 - Wie weit du aufwerten kannst, hängt von deiner Schmied-Stufe ab: +1 ab Stufe 1, +2 ab Stufe 3, +3 ab Stufe 5, +4 ab Stufe 7, +5 ab Stufe 9.
 - Höhere Aufwertungen brauchen Mithrilerz, die +5 auch eine Drachenschuppe.
 - Aufwertungen bleiben am Gegenstand. Kaufst du eine neue Waffe, beginnt sie wieder bei +0.
+- **Legendäre Schmiedekunst:** Ab Schmied-Stufe 10 kannst du bis **+10** aufwerten. Das kostet viel Gold, Mithrilerz und Drachenschuppen.
 
 **Schmieden:** Du stellst eigene Ausrüstung her, die es nirgends zu kaufen gibt:
 
@@ -599,9 +635,61 @@ Bei gleicher Kombination entscheiden die höheren Augen, etwa ein Paar Sechsen g
 | 🗡️ Söldner Brakk | 50 / 100 / 250 | gierig, jagt immer die ganz große Kombination | ab Stufe 6 |
 | 🎩 Graf von Würfelstein | 100 / 250 / 500 | rechnet genau aus, was er braucht, um dich zu schlagen | ab Rang Baron |
 
-Du kannst **höchstens 5 Partien pro Tag** spielen. Gegen Gustl lohnt sich das Würfeln fast immer. Gegen die anderen hält es sich mit gutem Nachwerfen etwa die Waage, es ist eher Nervenkitzel als Goldesel.
+Du kannst **höchstens 5 Partien pro Tag** spielen.
+
+🍻 **Eine Runde für alle:** Einmal am Tag kannst du der ganzen Taverne eine Runde ausgeben. Das kostet Gold, bringt aber Ruhm, und der Wirt verrät dir gleich zwei Gerüchte. Gegen Gustl lohnt sich das Würfeln fast immer. Gegen die anderen hält es sich mit gutem Nachwerfen etwa die Waage, es ist eher Nervenkitzel als Goldesel.
 
 > 💡 Behalte Paare und Drillinge, wirf den Rest neu. Mit vier Würfeln einer Straße (z. B. 2-3-4-5) lohnt es sich, nur den fünften neu zu werfen.
+
+---
+
+## Ereignisse auf Abenteuern
+
+Etwa jedes vierte Abenteuer führt dich in eine **Begegnung**, bei der du dich entscheiden musst:
+
+| Begegnung | Was dich erwartet |
+|---|---|
+| 🧙 Verwundeter Wanderer | Hilfst du mit einem Heiltrank oder Gold, gibt es Ruhm, Erfahrung und manchmal eine Belohnung |
+| ⛩️ Schrein der Kriegsgöttin | Ein Goldopfer bringt den **Segen der Kriegsgöttin** (+20 % Schaden für 3 Kämpfe) |
+| 🕳️ Fallgrube | Ein Sprung hinein bringt mit Geschick einen Schatz, ohne Geschick verlierst du Gold |
+| 🧳 Fahrender Händler | Seltene Ware, z. B. eine Drachenschuppe |
+| 🧰 Einsame Truhe | Meist voller Schätze, aber manchmal ein **Mimik** |
+| 🦹 Hinterhalt | Kämpfen (mit fetter Beute) oder Wegzoll zahlen |
+| 🏚️ Alte Ruine | Ein Versteck oder ein uralter Wächter |
+| 🔮 Wahrsagerin | Ein Gerücht und der **Glücksstern** (+25 % Gold für 3 Kämpfe) |
+| 🤺 Ehrenduell | Ein Sieg bringt doppelten Ruhm |
+| 🐑 Verzweifelter Hirte | Helfen bringt Ruhm |
+| 🌿 Kräuterwiese | Kräuter für die Alchemie |
+
+Aktive Segen siehst du auf dem Burgbildschirm und zu Beginn jedes Kampfes.
+
+---
+
+## Der Rivale Sir Gregor
+
+Ab Stufe 5 fordert dich **Sir Gregor der Neider** heraus, ein eifersüchtiger Ritter, der dir den Ruhm nicht gönnt. Es gibt **7 Duelle** auf den Stufen 5, 10, 15, 20, 25, 32 und 40. Gregor wird jedes Mal stärker und besser ausgerüstet. Vor und nach jedem Duell erzählt er dir, was ihn antreibt.
+
+- Ein Duell kostet 3 Energie. Verlierst du, kannst du es erneut versuchen.
+- Jeder Sieg bringt Gold und Ruhm. Nach dem letzten Duell schenkt dir Gregor seine **Neidklinge**.
+
+---
+
+## Begleiter
+
+Ab Stufe 9 kannst du unter **🐾 Begleiter** treue Helfer erwerben. Du kannst alle besitzen, aber immer nur **einen** mitnehmen. Er steht dann neben deinem Ritter.
+
+| Begleiter | Preis | Wirkung |
+|---|---|---|
+| 🧒 Knappe Lukas | 250 Gold | Reicht dir einmal pro Kampf einen Trank, wenn du unter 30 % LP fällst (+25 % LP) |
+| 🐕 Jagdhund Bello | 400 Gold | Findet nach Siegen zusätzliche Materialien und manchmal Gold |
+| 🦅 Falke Sturmfeder | 900 Gold (nach Boss 2) | +5 % Krit-Chance und greift manchmal selbst an |
+| 🐎 Schlachtross Donner | 2000 Gold (nach Boss 4) | +1 Energie jeden Morgen |
+
+---
+
+## Bestiarium
+
+Im **Inventar** findest du das **📖 Bestiarium**. Jeder Gegnertyp, jeder Boss und jeder Sondergegner, dem du begegnest, wird dort eingetragen, mit Bild, Beschreibung, Angriffen und deinen Siegen. Noch unbekannte Gegner erscheinen als Schatten. Besiegst du alle mindestens einmal, wirst du zum **Monsterkundler**.
 
 ---
 
@@ -616,7 +704,7 @@ Ab dem dritten besiegten Boss steht dir der Endlose Turm offen. Ein Besuch koste
 - **Jede 10. Etage** wartet ein verzauberter Turmschatz und ein **Großer Äthertrank**.
 - Du kannst den Turm jederzeit **verlassen**. Beim nächsten Besuch geht es auf der Etage weiter, auf der du aufgehört hast. Du startest dann mit vollen LP und voll aufgeladenen Fähigkeiten, ein Besuch kostet aber wieder 4 Energie.
 - **Wirst du besiegt**, beginnst du beim nächsten Mal wieder auf **Etage 1**.
-- Deine höchste Etage wird als **Turm-Rekord** gespeichert.
+- Deine höchste Etage wird als **Turm-Rekord** gespeichert. Endet ein Turmlauf mit einer Niederlage, kommt er in die **🗼 Ruhmeshalle** im Inventar, die deine fünf besten Läufe zeigt.
 
 ### Die Ebenen des Turms
 
@@ -641,15 +729,22 @@ Jede Ebene hat ihre **eigene Musik und Geräuschkulisse**: knisternde Fackeln, t
 
 Hast du alle zwölf Bosse besiegt, kannst du **wiedergeboren** werden.
 
-**Du verlierst:** Stufe, Gold (du startest mit 50), Ruhm, gekaufte Ausrüstung (samt ihren Aufwertungen und Runen) und den Fortschritt bei den Bossen.
+**Du verlierst:** Stufe, Gold (du startest mit 50), Ruhm, gekaufte Ausrüstung (samt ihren Aufwertungen und Runen), den Fortschritt bei den Bossen und beim Rivalen.
 
-**Du behältst:** verzauberte und geschmiedete Gegenstände (samt Aufwertungen und Runen), Tränke, Materialien, Berufsstufen, Pokale, Turm-Rekord und alle Titel.
+**Du behältst:** verzauberte und geschmiedete Gegenstände (samt Aufwertungen und Runen), Tränke, Materialien, Berufsstufen, Burg und Verzierungen, Begleiter, Pokale, Turm-Rekord, Titel und alles Freigeschaltete.
 
-**Du erhältst dauerhaft:** +10 % Schaden, +10 % Gold und +10 % Erfahrung.
+**Du erhältst dauerhaft:** +10 % Schaden, +10 % Gold und +10 % Erfahrung. Alle Gegner werden aber 8 % stärker.
 
-**Aber:** Alle Gegner werden 8 % stärker.
+**Dazu wählst du jedes Mal einen Segen:**
+| Segen | Wirkung |
+|---|---|
+| 💰 Segen des Reichtums | +15 % Gold aus Kämpfen (stapelbar) |
+| ⚔️ Segen der Kraft | +10 % Schaden (stapelbar) |
+| ❤️ Segen des Lebens | +10 % maximale LP (stapelbar) |
+| 📜 Segen der Meisterschaft | ein 7. Fähigkeitsplatz (nur einmal) |
+| 🎒 Segen des Wohlstands | jede Wiedergeburt startet mit 500 Gold und Tränken (stapelbar) |
 
-Jede Wiedergeburt wird mit einem 🌟 neben deinem Rang angezeigt, und die Boni wachsen mit jeder weiteren Wiedergeburt.
+Jede Wiedergeburt wird mit einem 🌟 neben deinem Rang angezeigt.
 
 ---
 
@@ -702,6 +797,8 @@ Für besondere Leistungen bekommst du **Titel**. Einen davon kannst du tragen. E
 | der Weltenretter / die Weltenretterin | Den Weltenfresser besiegen |
 | der/die Auserwählte | Die ersten sechs Bosse besiegen |
 | der Glücksritter / die Glücksritterin | 10 Würfelpartien in der Taverne gewinnen |
+| der Monsterkundler / die Monsterkundlerin | Jeden Eintrag im Bestiarium mindestens einmal besiegen |
+| der Gregorbezwinger / die Gregorbezwingerin | Sir Gregor in allen sieben Duellen besiegen |
 | der/die Legendäre | Alle zwölf Bosse besiegen |
 
 ---
@@ -714,7 +811,11 @@ Für besondere Leistungen bekommst du **Titel**. Einen davon kannst du tragen. E
 - **🗣️ Stimme**: Der dritte Knopf unten rechts schaltet die **Sprachausgabe** ein oder aus. Ist sie an, werden neue Meldungen vorgelesen: Nachrichten auf der Burg, der Kampfverlauf, die Gerüchte des Wirts, Würfelergebnisse und der Nachtbericht. Welche Stimme spricht, hängt von deinem Gerät und Browser ab. Die Sprachausgabe startet erst, nachdem du einmal irgendwo geklickt hast.
 - **Hell / Dunkel**: Das Spiel folgt der Einstellung deines Geräts. Im dunklen Modus spielt es nachts unter Sternen und Mond.
 - **Speichern**: Dein Fortschritt wird automatisch in deinem Browser gespeichert. Auf einem anderen Gerät oder in einem anderen Browser beginnst du von vorn. Wenn du die Browserdaten löschst, ist der Spielstand weg.
-- **💾 Spielstände**: Ganz unten auf dem Burgbildschirm verwaltest du bis zu **3 Spielstände**, zum Beispiel für verschiedene Ritter oder Ritterinnen. Zu jedem Platz siehst du Name, Rang, Stufe, Tag, Gold und wann du zuletzt gespielt hast. Du kannst einen Platz **laden**, auf einem leeren Platz **neu beginnen** oder einen Platz **löschen**. Löschen musst du ein zweites Mal bestätigen, und es lässt sich nicht rückgängig machen. Gespeichert wird immer automatisch im aktiven Platz. Musik-, Sound- und Stimmeinstellungen gelten für alle Plätze.
+- **💾 Spielstände**: Ganz unten auf dem Burgbildschirm verwaltest du bis zu **3 Spielstände**, zum Beispiel für verschiedene Ritter oder Ritterinnen. Zu jedem Platz siehst du Name, Rang, Stufe, Tag, Gold und wann du zuletzt gespielt hast. Du kannst einen Platz **laden**, auf einem leeren Platz **neu beginnen** oder einen Platz **löschen**. Löschen musst du ein zweites Mal bestätigen, und es lässt sich nicht rückgängig machen. Gespeichert wird immer automatisch im aktiven Platz.
+- **📤 Sichern & übertragen**: Im Spielstand-Bildschirm kannst du den aktiven Spielstand **als Datei speichern** oder **als Text kopieren** und später wieder **importieren**, zum Beispiel auf einem anderen Gerät. So geht dein Ritter auch nicht verloren, wenn du die Browserdaten löschst.
+- **📱 Als App installieren**: Über das Browsermenü (z. B. „Zum Startbildschirm hinzufügen“ oder „App installieren“) wird das Spiel zur App mit eigenem Icon. Einmal geladen, lässt es sich auch **ohne Internet** spielen.
+- **💡 Tipps**: Beim ersten Öffnen einer neuen Funktion erklärt dir eine kurze Tippkarte das Wichtigste.
+- **Werte ein- und ausklappen**: Tippe auf die Kurzzeile mit Stufe, Energie, Gold und Ruhm, um alle Werte zu sehen. Musik-, Sound- und Stimmeinstellungen gelten für alle Plätze.
 
 > 💡 Verlässt du einen laufenden Kampf, etwa durch Neuladen der Seite, ist der Kampf verloren. Die eingesetzte Energie und getrunkene Tränke sind dann weg.
 

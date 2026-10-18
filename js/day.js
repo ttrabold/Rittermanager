@@ -25,17 +25,19 @@ const BLD=[
  {id:"arkan",n:"Arkanturm",e:"🔮",max:5,g:120,d:"Arkankristalle, später Feuerblüten",y:lv=>({ak:lv,fb:Math.max(0,lv-3)})},
  {id:"schatz",n:"Schatzkammer",e:"💰",max:5,g:100,d:"Gold",y:lv=>({g:30*lv})}];
 const bCost=(b,n)=>{const m=b.id==="kaserne"?{ez:6*n,le:6*n,mi:2*n}:{ez:3*n,le:2*n};if(b.id!=="kaserne"&&n>=3)m.mi=n-2;if(b.id!=="kaserne"&&n>=5)m.ds=1;return {m,g:b.g*n*n}};
-const enMax=()=>6+((S.bld||{}).kaserne||0);
+const enMax=()=>6+((S.bld||{}).kaserne||0)+(S.cmp==="ross"?1:0);
 const yTxt=y=>Object.entries(y).filter(([k,v])=>v>0).map(([k,v])=>k==="g"?`<i class=coin></i>${v}`:k==="en"?`⚡+${v}`:`${MT(k).e}${v}`).join(" ")||"–";
 function build(id){const b=BLD.find(x=>x.id===id),lv=S.bld[id];if(lv>=b.max)return;const c=bCost(b,lv+1);if(!hasM(c.m)||S.gold<c.g)return;
  const k0=cStage();S.gold-=c.g;for(const k in c.m)S.mat[k]-=c.m[k];S.bld[id]++;sfx("level");cNote=`${b.e} <b>${b.n}</b> ist jetzt auf Stufe ${S.bld[id]}!`+(cStage()>k0?`<br>🏰 <b>Deine Burg wächst zur ${CSTAGE[cStage()][1]}!</b>`:"");msg=cNote;save();castleScr()}
 let cNote="";
 function castleScr(){musicSet("home");
  app.innerHTML=`<div class="top"><b>🏗️ Burgausbau</b><span><i class=coin></i> ${S.gold}</span></div>
- <div class="scene">${BG}${bldSvg()}${castleSvg()}${pk()}</div>
+ <div class="scene">${BG}${bldSvg()}${decoSvg()}${castleSvg()}${pk()}</div>
+ ${hintBox("burg")}
  <div class="msg" data-quiet>🏰 Deine Burg: <b>${CSTAGE[cStage()][1]}</b> (Stufe ${cStage()}/5)${cStage()<5?` – nächste Stufe „${CSTAGE[cStage()+1][1]}“ ab ${CSTAGE[cStage()+1][0]} Ausbaustufen (du hast ${bldSum()}).`:" – prächtiger geht es nicht!"}<br>Gebäude liefern <b>jede Nacht</b> Erträge. Volle Erträge gibt es, wenn du am Tag mindestens <b>4 Energie</b> genutzt hast, halbe ab 2. Wer nur faulenzt, bekommt nichts.</div>
  <div class="card"><div style="margin-bottom:6px">${matRow()}</div>${BLD.map(b=>{const lv=S.bld[b.id],c=lv<b.max?bCost(b,lv+1):null;
   return `<div class="row"><span style="display:flex;gap:10px;align-items:center">${bThumb(b.id,lv)}<span>${b.e} <b>${b.n}</b> <span class="mut">Stufe ${lv}/${b.max}</span><br><span class="mut">${b.d} · jetzt: ${lv?yTxt(b.y(lv)):"–"}${c?` → ${yTxt(b.y(lv+1))}<br>Kosten: ${costH(c.m,c.g)}`:" · voll ausgebaut"}</span></span></span>${c?`<button ${hasM(c.m)&&S.gold>=c.g?"":"disabled"} onclick="build('${b.id}')">${lv?"Ausbauen":"Bauen"}</button>`:'<span class="mut">✔</span>'}</div>`}).join("")}</div>
+ <div class="card"><h3>✨ Verzierungen</h3><div class="mut">Schmücke deine Burg – jede Verzierung bringt einmalig Ruhm.</div>${DECO.map(d=>`<div class="row"><span>${d.e} <b>${d.n}</b> <span class="mut">+${d.r} Ruhm</span><br><span class="mut">${d.d}${d.ok&&!d.ok()?" · 🔒 "+d.lk:""}</span></span>${hasDeco(d.id)?'<span class="mut">✔</span>':d.ok&&!d.ok()?"":`<button ${S.gold<d.g?"disabled":""} onclick="decoBuy('${d.id}')">${d.g} <i class=coin></i></button>`}</div>`).join("")}</div>
  ${cNote?`<div class="msg">${cNote}</div>`:""}
  <div class="grid"><button onclick="trader()">🛒 Händler</button><button onclick="home()">← Zurück zur Burg</button></div>`;cNote=""}
 // Gebäude in der Burgszene – jedes entwickelt sich mit seiner Stufe
