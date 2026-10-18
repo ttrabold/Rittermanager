@@ -536,7 +536,7 @@ Was du nicht brauchst, **zerlegst** du in Materialien, einzeln oder mit **Alles 
 | 🟣 Episch | 2 Mithrilerz und 2 Arkankristalle |
 | 🟠 Legendär | 1 Drachenschuppe und 2 Mithrilerz |
 
-Steckt in einem Stück eine Aufwertung, bekommst du die Hälfte der dafür eingesetzten Materialien zurück. Runen gehen beim Zerlegen verloren. Angelegte Ausrüstung kannst du nicht zerlegen.
+Steckt in einem Stück eine Aufwertung, bekommst du die Hälfte der dafür eingesetzten Materialien zurück. Runen gehen beim Zerlegen verloren. Angelegte Ausrüstung kannst du nicht zerlegen. Aufgewertete Teile und Teile mit Runen lassen die Sammelknöpfe aus, die zerlegst du nur einzeln.
 
 > 💡 Frühere feste Beutestücke wie die Flammenklinge, der Drachenzahn oder die Weltenklinge fallen nicht mehr. Wer sie schon besitzt, behält sie samt Aufwertungen und Runen.
 

@@ -53,16 +53,26 @@ function salvage(id){const it=(S.gear||[]).find(x=>x.id===id);if(!it||isWorn(id)
  const ref={};for(let u=1;u<=(S.up[id]||0);u++)for(const[k,v]of Object.entries(upCost(it.s,u)))ref[k]=(ref[k]||0)+v;for(const k in ref)if(Math.floor(ref[k]/2))add(k,Math.floor(ref[k]/2));
  delete S.up[id];delete S.ru[id];S.gear=S.gear.filter(x=>x.id!==id);
  salvMsg=`🔨 ${it.n} zerlegt: `+Object.entries(got).map(([k,n])=>`${MT(k).e} ${MT(k).n} ×${n}`).join(", ");return true}
-function salvageAll(r){let n=0;for(const it of bagItems().filter(x=>x.r===r))if(salvage(it.id))n++;if(n)salvMsg=`🔨 ${n} ${RAR[r].e} ${RAR[r].n}e Gegenstände zerlegt.`;return n}
+const bulkable=r=>bagItems().filter(x=>x.r===r&&!S.up[x.id]&&!(S.ru[x.id]||[]).length);
+function salvageAll(r){let n=0;for(const it of bulkable(r))if(salvage(it.id))n++;if(n)salvMsg=`🔨 ${n} ${RAR[r].e} ${RAR[r].n}e Gegenstände zerlegt.`;return n}
 
 // ---- Beutel-Ansicht im Inventar ----
-function invSalv(id){if(salvage(id)){sfx("coin");save()}inv()}
-function invSalvAll(r){if(salvageAll(r)){sfx("coin");save()}inv()}
+function invSalv(id){if(salvage(id)){sfx("coin");save()}inv(true)}
+function invSalvAll(r){if(salvageAll(r)){sfx("coin");save()}inv(true)}
 function bagHtml(){const row=it=>{const R=RAR[it.r],worn=isWorn(it.id),u=S.up[it.id]||0,ru=(S.ru[it.id]||[]).length,sl=it.s==="w"?`${WCAT[it.cat].e} ${WCAT[it.cat].n}`:it.s==="a"?"🛡️ Rüstung":"🔰 Schild";
   return `<div class="row"><span><b style="color:${R.c}">${R.e} ${it.n}${u?" +"+u:""}${ru?" "+"✦".repeat(ru):""}</b>${worn?' <span class="mut">(angelegt)</span>':""}<br><span class="mut">${sl} · +${it.b+(it.s==="w"?u*2:u)} ${it.s==="w"?"⚔️":"🛡️"} · ${R.n} · Stufe ${it.il}<br>${it.d}</span>${worn?"":"<br>"+cmpHtml(it)}</span>
   <span style="display:flex;flex-direction:column;gap:4px">${worn?`<button class="p" onclick="equipE('${it.id}')">Ablegen</button>`:`<button onclick="equipE('${it.id}')">Anlegen</button><button onclick="invSalv('${it.id}')">Zerlegen</button>`}</span></div>`};
- const all=(S.gear||[]).slice().sort((a,b)=>isWorn(b.id)-isWorn(a.id)||b.r-a.r||b.b-a.b),n=bagItems().length,cnt=r=>bagItems().filter(x=>x.r===r).length,m=salvMsg;salvMsg="";
+ const all=(S.gear||[]).slice().sort((a,b)=>isWorn(b.id)-isWorn(a.id)||b.r-a.r||b.b-a.b),n=bagItems().length,cnt=r=>bulkable(r).length,m=salvMsg;salvMsg="";
  return `<h3>🎒 Beutel (${n}/${BAG})</h3>${bagFull()?'<div class="mut" style="color:var(--acc)">Dein Beutel ist übervoll. Turm, Turnier und Bosskampf sind gesperrt, bis du aufräumst.</div>':""}${m?`<div class="mut">${m}</div>`:""}
  ${all.map(row).join("")||'<div class="mut">Noch keine Beute. Gewinne Turniere, Turm-Bosse und Bosse.</div>'}
  <div class="grid" style="margin-top:8px"><button ${cnt(0)?"":"disabled"} onclick="invSalvAll(0)">Alles 🟢 zerlegen<small>${cnt(0)} Stück</small></button><button ${cnt(1)?"":"disabled"} onclick="invSalvAll(1)">Alles 🔵 zerlegen<small>${cnt(1)} Stück</small></button></div>
- <div class="mut" style="margin-top:6px">Zerlegen ergibt Materialien: 🟢 Eisenerz oder Leder · 🔵 Arkankristalle · 🟣 Mithrilerz und Kristalle · 🟠 eine Drachenschuppe. Aufwertungen zahlen sich zur Hälfte zurück, Runen gehen verloren.</div>`}
+ <div class="mut" style="margin-top:6px">Zerlegen ergibt Materialien: 🟢 Eisenerz oder Leder · 🔵 Arkankristalle · 🟣 Mithrilerz und Kristalle · 🟠 eine Drachenschuppe. Aufwertungen zahlen sich zur Hälfte zurück, Runen gehen verloren. Aufgewertete Teile und Teile mit Runen zerlegst du nur einzeln.</div>`}
+
+// ---- Spielstand-Beute prüfen (alte, importierte oder beschädigte Stände): nur gültige Teile behalten, Texte neu bilden ----
+function gearClean(){const ok=[];for(const g of Array.isArray(S.gear)?S.gear:[]){
+  if(!g||typeof g!=="object"||!/^g\d+$/.test(g.id)||!["w","a","sh"].includes(g.s)||![0,1,2,3].includes(g.r)||g.s==="w"&&!(g.cat in WCAT)||ok.some(x=>x.id===g.id))continue;
+  const fx={};for(const[k,v]of Object.entries(g.fx||{}))if(LFX[k]&&LFX[k].s===(g.s==="w"?"w":"a")&&+v>0)fx[k]=+v;if(!Object.keys(fx).length)continue;
+  const it={id:g.id,n:String(g.n||"Beute").replace(/[<>&"'`]/g,"").slice(0,40),s:g.s,b:Math.max(1,Math.round(+g.b||1)),c:/^#[0-9a-f]{3,8}$/i.test(g.c)?g.c:LFX[Object.keys(fx)[0]].c,fx,d:fxDesc(fx),r:g.r,il:Math.max(1,Math.round(+g.il||1)),gen:1};
+  if(g.s==="w")it.cat=g.cat;ok.push(it)}
+ S.gear=ok;for(const k of["ew","ea","es"])if(S[k]&&!itm(S[k]))S[k]=null;S.gid=Math.max(+S.gid||0,...ok.map(x=>+x.id.slice(1)))}
+gearClean();

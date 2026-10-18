@@ -1,7 +1,7 @@
 // Ritter Manager – Kampf: Abenteuer, Turnier, Bosse, Turm, Züge, Sieg und Niederlage
 function giveE(id,l){const it=EI.find(x=>x.id===id);if(S.own.includes(id)){S.gold+=100;l.push(`Du besitzt ${it.n} schon: +100 Gold.`);return}S.own.push(id);const k=it.s==="w"?"ew":"ea",cur=it.s==="w"?wBon():aBon(),auto=it.b>cur;if(auto)S[k]=id;l.push(`✨ <b>Verzauberte Beute: ${it.n}</b> (${it.d})${auto?" – angelegt!":" – in der Schmiede anlegbar."}`)}
 function tourLoot(l){lootGive("tour",lvl(),l)}
-function equipE(id){const it=itm(id);if(!it)return;const k=it.s==="w"?"ew":it.s==="a"?"ea":"es";S[k]=S[k]===id?null:id;save();sfx("buff");inv()}
+function equipE(id){const it=itm(id);if(!it)return;const k=it.s==="w"?"ew":it.s==="a"?"ea":"es";S[k]=S[k]===id?null:id;save();sfx("buff");inv(true)}
 function encHit(d,l){const f=F,r=Math.random(),b=fxv("burn");
  if(r<b&&!(f.fx&&f.fx.noburn)){f.eb.burn=2;l.push("Der Gegner geht in Flammen auf! 🔥")}
  else if(r<b+fxv("poison")){f.eb.ps=f.eb.poison>0?Math.min(2,f.eb.ps+1):1;f.eb.poison=3;l.push("Der Gegner ist vergiftet! ☠️")}

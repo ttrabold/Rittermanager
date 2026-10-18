@@ -29,7 +29,7 @@ let editName=false;
 function toggleSex(){const f=S.sex!=="f";if(S.name==="Sir Kunibert"||S.name==="Dame Kunigunde")S.name=f?"Dame Kunigunde":"Sir Kunibert";S.sex=f?"f":"m";save();sfx("buff");msg=f?"Aus dem Ritter wird eine <b>Ritterin</b>!":"Aus der Ritterin wird ein <b>Ritter</b>!";home()}
 function saveName(){const v=document.getElementById("nm").value.replace(/[<>&"'`]/g,"").trim().slice(0,20);if(v)S.name=v;editName=false;save();msg=v?`Dein${S.sex==="f"?"e Ritterin":" Ritter"} heißt jetzt <b>${S.name}</b>!`:msg;home()}
 // ---- Inventar ----
-function inv(){musicSet("home");const hb=hintBox("inv");
+function inv(keep){musicSet("home");const hb=hintBox("inv");
  const p=v=>Math.round(v*100)+" %",eff=[],R=k=>fxv(k);
  if(R("burn"))eff.push("🔥 "+p(R("burn"))+" Brand");if(R("poison"))eff.push("☠️ "+p(R("poison"))+" Gift");if(R("stun"))eff.push("❄️ "+p(R("stun"))+" Lähmung");
  if(R("life"))eff.push("💚 "+p(R("life"))+" Lebensraub");if(R("regen"))eff.push("🌙 "+R("regen")+" LP pro Runde");if(R("noburn"))eff.push("🧯 Brandimmun");
@@ -55,7 +55,7 @@ function inv(){musicSet("home");const hb=hintBox("inv");
  <div class="card"><button style="width:100%" onclick="bestScr()">📖 Bestiarium<small>${BST.filter(x=>(S.bst||{})[x.k]).length}/${BST.length} Gegner entdeckt</small></button></div>
  ${has("tower")?`<div class="card">${hallHtml()}</div>`:""}
  <div class="card"><h3>🏆 Trophäen</h3><div class="stats"><div>🏆 Pokale <b>${S.troph}</b></div><div>👑 Bosse <b>${S.bk.length}/${BOSS.length}</b></div><div>🎖️ Titel <b>${S.tt.length}/${TT.length}</b></div><div>🗼 Turm-Rekord <b>${S.tbest}</b></div></div></div>
- <div class="grid"><button onclick="shop()">🏪 Markt</button><button onclick="workshop()">🧰 Werkstatt</button><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`;window.scrollTo(0,0)}
+ <div class="grid"><button onclick="shop()">🏪 Markt</button><button onclick="workshop()">🧰 Werkstatt</button><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`;if(!keep)window.scrollTo(0,0)}
 function home(){musicSet("home");if(QN.length){msg+="<br>"+QN.join("<br>");QN=[]}
  app.innerHTML=`<div class="top">${editName?`<span style="display:flex;gap:6px;flex:1;margin-right:8px"><input id="nm" maxlength="20" value="${S.name}" onkeydown="if(event.key==='Enter')saveName()" style="flex:1;min-width:0;font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)"><button onclick="saveName()" style="min-height:36px;padding:4px 12px">✔</button></span>`:`<b>${S.name} <a href="#" onclick="editName=true;home();document.getElementById('nm').focus();return false" aria-label="Ritter umbenennen" style="text-decoration:none">✏️</a> <a href="#" onclick="toggleSex();return false" aria-label="Zwischen Ritter und Ritterin wechseln" title="Ritter/Ritterin wechseln" style="text-decoration:none">${S.sex==="f"?"♀️":"♂️"}</a></b>`}<span>${rank()}${S.star?" · 🌟×"+S.star:""}</span></div>
  ${has("cal")?calLine():""}
