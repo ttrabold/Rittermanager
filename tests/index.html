@@ -9,7 +9,7 @@
 window.__reloads=0;
 </script></head>
 <body><div id="app"></div>
-<script src="../js/util.js"></script><script src="../js/data.js"></script><script src="../js/state.js"></script><script src="../js/audio.js"></script><script src="../js/speech.js"></script><script src="../js/unlock.js"></script><script src="../js/art.js"></script><script src="../js/professions.js"></script><script src="../js/weapons.js"></script><script src="../js/day.js"></script><script src="../js/tavern.js"></script><script src="../js/screens.js"></script><script src="../js/combat.js"></script><script src="../js/help.js"></script><script src="../js/companions.js"></script><script src="../js/events.js"></script><script src="../js/story.js"></script><script src="../js/endgame.js"></script><script src="../js/bestiary.js"></script><script src="../js/main.js"></script>
+<script src="../js/util.js"></script><script src="../js/data.js"></script><script src="../js/state.js"></script><script src="../js/audio.js"></script><script src="../js/speech.js"></script><script src="../js/unlock.js"></script><script src="../js/art.js"></script><script src="../js/professions.js"></script><script src="../js/weapons.js"></script><script src="../js/loot.js"></script><script src="../js/day.js"></script><script src="../js/tavern.js"></script><script src="../js/screens.js"></script><script src="../js/combat.js"></script><script src="../js/help.js"></script><script src="../js/companions.js"></script><script src="../js/events.js"></script><script src="../js/story.js"></script><script src="../js/endgame.js"></script><script src="../js/bestiary.js"></script><script src="../js/main.js"></script>
 <pre id="out" style="position:fixed;inset:0;overflow:auto;margin:0;padding:12px;background:#111;color:#eee;font:13px monospace;z-index:999"></pre>
 <script>
 const R=[];let fails=0;
@@ -36,6 +36,14 @@ t("Alle Ereignisse und Entscheidungen",()=>{hero(20);for(const ev of EVTS)for(le
 t("Begleiter kaufen und wirken",()=>{hero(20);S.bk=[0,1,2,3];for(const c of COMP)compBuy(c.id);ok(S.comp.length===4);S.cmp=null;compSet("ross");ok(enMax()===7);S.cmp="falke";setup(mk(20,ET[0]));F.ehp=F.emax=1e6;for(let k=0;k<30;k++)useSkill("hieb");S.cmp="knappe";setup(mk(20,ET[0]));F.ehp=F.emax=1e6;F.atk=0;F.fx={};F.php=Math.round(F.pmax*.2);enemyTurn([]);ok(F.knUsed===1,"Knappe hilft nicht")});
 t("Bestiarium füllt sich",()=>{hero(20);S.bst={};setup(mk(10,ET[3]));win();ok((S.bst.et3||{}).w===1);bestScr()});
 t("Legendäre Aufwertung bis +10",()=>{hero(30);for(let n=0;n<10;n++){S.en=9;upgrade("w"+S.w)}ok(S.up["w"+S.w]===10,"Stufe "+S.up["w"+S.w])});
+const WFX=["burn","poison","stun","crit","life"],AFX=["hp","regen","dodge","noburn"];
+t("Zufallsbeute: Generator",()=>{newGame();for(const il of[8,50])for(let r=0;r<4;r++)for(let i=0;i<30;i++){const it=genItem(il,r);
+  ok(Object.keys(it.fx).length===r+1,`r${r}: ${Object.keys(it.fx).length} Effekte`);ok(["w","a","sh"].includes(it.s),"Slot "+it.s);
+  ok((it.s==="w"?WFX:AFX).length&&Object.keys(it.fx).every(k=>(it.s==="w"?WFX:AFX).includes(k)),"falscher Effekt "+Object.keys(it.fx));
+  if(it.s==="w")ok(it.cat in WCAT,"Waffenart "+it.cat);ok(it.b>=1,"Grundwert "+it.b);ok(Object.values(it.fx).every(v=>v>0&&!isNaN(v)),"Effektwert "+JSON.stringify(it.fx));
+  ok(it.d===fxDesc(it.fx),"Beschreibung");ok(it.r===r&&it.gen===1&&/^g\d+$/.test(it.id),"Felder")}
+ ok(genItem(30,3,"w","axt").cat==="axt","Waffenart vorgegeben");ok(genItem(30,0,"sh").s==="sh","Slot vorgegeben");ok(itm("fl").n==="Flammenklinge","itm EI");
+ const g=genItem(20,1);S.gear.push(g);ok(itm(g.id)===g,"itm gear");ok(rarRoll([0,0,0,1])===3&&rarRoll([1,0,0,0])===0,"rarRoll")});
 t("Kriegskasse: ab Boss 6, einmal am Tag",()=>{newGame();S.exp=expFor(30);S.lvl0=30;S.gold=99999;unlCheck();ok(!has("kasse"),"zu früh frei");S.boss=6;unlCheck();ok(has("kasse"),"nicht frei");home();ok(document.body.innerHTML.includes("Kriegskasse"),"Knopf fehlt");
  const g=S.gold,r=S.ruhm;kasseGive();ok(S.gold===g-kasseCost()&&S.ruhm===r+kasseRuhm(),"Tausch falsch");kasseGive();ok(S.gold===g-kasseCost(),"zweimal am Tag");S.day++;kasseGive();ok(S.gold===g-2*kasseCost(),"neuer Tag geht nicht");
  S.day++;S.gold=kasseCost()-1;kasseGive();ok(S.kasse!==S.day,"ohne genug Gold")});

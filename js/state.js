@@ -1,5 +1,5 @@
 // Ritter Manager – Spielstand: anlegen, laden, migrieren, speichern und abgeleitete Werte
-const fresh=()=>({mat:Object.fromEntries(MAT.map(m=>[m.k,0])),pr:{sm:{lv:1,xp:0},al:{lv:1,xp:0},ve:{lv:1,xp:0}},up:{},ru:{},bld:{kaserne:0,garten:0,mine:0,arkan:0,schatz:0},enStart:6,name:"Sir Kunibert",sex:"m",tcur:1,day:1,en:6,gold:20,ruhm:0,st:3,au:3,ge:3,w:0,a:0,s:0,exp:0,it:{h:2,H:0,k:0,e:0,g:0,x:0,a:0,A:0},own:[],ew:null,ea:null,boss:0,troph:0,tt:[],title:null,crits:0,flawless:0,close:0,bk:[],star:0,tbest:0,tunl:0,wins:0,losses:0});
+const fresh=()=>({mat:Object.fromEntries(MAT.map(m=>[m.k,0])),pr:{sm:{lv:1,xp:0},al:{lv:1,xp:0},ve:{lv:1,xp:0}},up:{},ru:{},bld:{kaserne:0,garten:0,mine:0,arkan:0,schatz:0},enStart:6,name:"Sir Kunibert",sex:"m",tcur:1,day:1,en:6,gold:20,ruhm:0,st:3,au:3,ge:3,w:0,a:0,s:0,exp:0,it:{h:2,H:0,k:0,e:0,g:0,x:0,a:0,A:0},own:[],gear:[],ew:null,ea:null,es:null,boss:0,troph:0,tt:[],title:null,crits:0,flawless:0,close:0,bk:[],star:0,tbest:0,tunl:0,wins:0,losses:0});
 const eq=k=>EI.find(x=>x.id===S[k==="w"?"ew":"ea"]);
 const ikey=k=>k==="w"?(S.ew||wKey()):(S.ea||"a"+S.a);
 const upl=k=>(S.up||{})[ikey(k)]||0;
