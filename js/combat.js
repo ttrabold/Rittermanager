@@ -1,7 +1,6 @@
 // Ritter Manager – Kampf: Abenteuer, Turnier, Bosse, Turm, Züge, Sieg und Niederlage
 function giveE(id,l){const it=EI.find(x=>x.id===id);if(S.own.includes(id)){S.gold+=100;l.push(`Du besitzt ${it.n} schon: +100 Gold.`);return}S.own.push(id);const k=it.s==="w"?"ew":"ea",cur=it.s==="w"?wBon():aBon(),auto=it.b>cur;if(auto)S[k]=id;l.push(`✨ <b>Verzauberte Beute: ${it.n}</b> (${it.d})${auto?" – angelegt!":" – in der Schmiede anlegbar."}`)}
-function tourLoot(l){const p=["fl","fz","sb","mo","wp","wm"].filter(id=>!S.own.includes(id));if(p.length)giveE(p[rnd(0,p.length-1)],l);else{S.gold+=150;l.push("Alle Turnierschätze besitzt du schon: +150 Gold!")}}
-function towerLoot(l){const p=["t1","t2","t3","t4"].filter(id=>!S.own.includes(id));if(p.length)giveE(p[rnd(0,p.length-1)],l);else{S.gold+=300;l.push("Alle Turmschätze besitzt du schon: +300 Gold!")}}
+function tourLoot(l){lootGive("tour",lvl(),l)}
 function equipE(id){const it=itm(id);if(!it)return;const k=it.s==="w"?"ew":it.s==="a"?"ea":"es";S[k]=S[k]===id?null:id;save();sfx("buff");inv()}
 function encHit(d,l){const f=F,r=Math.random(),b=fxv("burn");
  if(r<b&&!(f.fx&&f.fx.noburn)){f.eb.burn=2;l.push("Der Gegner geht in Flammen auf! 🔥")}
@@ -34,11 +33,11 @@ function setup(e,tour,keep){
  bSeen(F);save();fight();
 }
 function startFight(){if(S.en<2)return;S.en-=2;if(evMaybe())return;setup(mk(Math.max(1,lvl()+rnd(-1,1)),ET[rnd(0,ET.length-1)]))}
-function startTour(){const fee=tourFee();if(S.en<4||S.gold<fee)return;S.en-=4;S.gold-=fee;setup(mk(Math.max(1,lvl()),ET[rnd(0,ET.length-1)]),1)}
-function startTower(){if(!S.tunl||S.en<4)return;S.en-=4;towerFloor(S.tcur||1)}
+function startTour(){const fee=tourFee();if(bagFull()||S.en<4||S.gold<fee)return;S.en-=4;S.gold-=fee;setup(mk(Math.max(1,lvl()),ET[rnd(0,ET.length-1)]),1)}
+function startTower(){if(bagFull()||!S.tunl||S.en<4)return;S.en-=4;towerFloor(S.tcur||1)}
 function towerFloor(n,keep){if(n>1&&(n-1)%5===0)setTimeout(()=>sfx("gong"),300);const b=n%5===0,bs=BOSS[(n/5-1)%BOSS.length],e=b?mk(bs.L+Math.floor(n/3),bs,true):mk(lvl()+Math.floor(n/2),ET[rnd(0,ET.length-1)]);e.tower=n;setup(e,0,keep)}
 function nextTour(){if(F.tower)return towerFloor(F.tower+1,{php:Math.min(F.pmax,F.php+Math.round(F.pmax*.2)),pp:F.pp});const k={php:Math.min(F.pmax,F.php+Math.round(F.pmax*.3)),pp:F.pp},r=F.tour+1;setup(mk(Math.max(1,lvl()+r-1),ET[rnd(0,ET.length-1)]),r,k)}
-function startBoss(){const b=BOSS[S.boss];if(!b||S.en<3||S.ruhm<b.req)return;S.en-=3;setup(mk(b.L,b,true))}
+function startBoss(){const b=BOSS[S.boss];if(bagFull()||!b||S.en<3||S.ruhm<b.req)return;S.en-=3;setup(mk(b.L,b,true))}
 function leaveTower(){F.over=true;msg=`Du verlässt den Turm. Beim nächsten Besuch geht es auf <b>Etage ${S.tcur}</b> weiter. Rekord: Etage ${S.tbest}.`;save();home()}
 function fmenu(m){F.menu=m;Object.assign(F,{anim:"",dmg:"",hE:0,hP:0,lP:0,lE:0,vfx:[]});fight()}
 function fight(){if(QUICK)return;
@@ -151,10 +150,10 @@ function endFight(win,l){
   if(f.moon){moonLoot(l);msg="Du hast den Vollmond-Werwolf erlegt!"}
   else if(f.mimic){S.it.h+=2;S.mat.ak+=1;l.push("Im Bauch des Mimiks: 🧪 Heiltrank ×2 und 💎 Arkankristall.");msg="Du hast den Mimik besiegt!"}
   else if(f.rival){}
-  else if(f.boss&&!f.tower){S.boss++;if(!S.bk.includes(S.boss-1))S.bk.push(S.boss-1);if(S.boss>=3)S.tunl=1;(BREW[S.boss-1]||[]).forEach(id=>giveE(id,l));S.it.H++;S.it.g++;l.push("Beute: Großer Heiltrank ⚗️ und Gegengift 💊!");if(LORE[S.boss-1])l.push(`📜 <i>${LORE[S.boss-1][1]}</i>`);msg=`Boss ${f.name} besiegt!`;if(S.boss>=BOSS.length&&!S.epi)f.epi=1}
+  else if(f.boss&&!f.tower){S.boss++;if(!S.bk.includes(S.boss-1))S.bk.push(S.boss-1);if(S.boss>=3)S.tunl=1;for(let i=0;i<2;i++)lootGive("boss",BOSS[S.boss-1].L,l);S.it.H++;S.it.g++;l.push("Beute: Großer Heiltrank ⚗️ und Gegengift 💊!");if(LORE[S.boss-1])l.push(`📜 <i>${LORE[S.boss-1][1]}</i>`);msg=`Boss ${f.name} besiegt!`;if(S.boss>=BOSS.length&&!S.epi)f.epi=1}
   else{if(Math.random()<.3){S.it.h++;l.push("Du findest einen Heiltrank! 🧪")}msg=`Du hast ${f.name} besiegt!`}
   dropMat(f,l);qProg("win",1,l);if(f.tower)qProg("tower",1,l);if(f.tour)qProg("tour",1,l);
-  if(f.tower){S.tbest=Math.max(S.tbest,f.tower);S.tcur=f.tower+1;f.next=true;l.push(`Etage ${f.tower} geschafft! Du verschnaufst kurz (+20 % LP).`);if(Math.random()<.25){S.it.a++;l.push("Du findest einen Äthertrank! 🔷")}if(f.tower%10===0){towerLoot(l);S.it.A++;l.push("Dazu ein Großer Äthertrank! 💠")}}
+  if(f.tower){S.tbest=Math.max(S.tbest,f.tower);S.tcur=f.tower+1;f.next=true;l.push(`Etage ${f.tower} geschafft! Du verschnaufst kurz (+20 % LP).`);if(Math.random()<.25){S.it.a++;l.push("Du findest einen Äthertrank! 🔷")}if(f.tower%5===0)lootGive(f.tower%10===0?"tower10":"tower",lvl()+Math.floor(f.tower/3),l,f.tower);if(f.tower%10===0){S.it.A++;l.push("Dazu ein Großer Äthertrank! 💠")}}
   if(f.tour){if(f.tour<3){f.next=true;l.push(`Turnierrunde ${f.tour}/3 geschafft – du verschnaufst kurz.`)}else{S.troph++;tourLoot(l);S.gold+=100;S.exp+=50;S.ruhm+=30;l.push("<b>🏟️ Turniersieger!</b> Pokal, +100 Gold, +30 Ruhm, +50 EP.");if(isTourDay(S.day)){S.gold+=100;S.exp+=50;S.ruhm+=30;tourLoot(l);l.push("🏟️ <b>Turniertag:</b> doppelte Siegprämie!")}msg="Du hast das Turnier gewonnen!"}}
  }else{const x=Math.floor(S.gold*.1);S.gold-=x;S.ruhm=Math.max(0,S.ruhm-5);S.exp+=5;S.losses++;if(f.tower){hallAdd(f.tower-1);S.tcur=1}l.push(`<b>💀 Niederlage.</b> −${x} Gold, −5 Ruhm, +5 EP.`);msg=f.tower?`Der Turm hat dich bezwungen – du musst wieder auf Etage 1 beginnen. Rekord: Etage ${S.tbest}.`:f.tour?"Du bist im Turnier ausgeschieden.":"Du wurdest besiegt – trainiere und kehre stärker zurück!"}
  if(f.rival)rivalEnd(f,win,l);buffTick();

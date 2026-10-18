@@ -126,7 +126,7 @@ EI.push({id:"mw",n:"Mondsichel",s:"w",b:15,c:"#cfd8e6",fx:{crit:.12,life:.08},d:
 VIS.mw={b:"curved",f:"#e3e9f2",e:"#fff",g:"#9fb4d8",fx:()=>SPARK};
 AV.wf=b=>b?`<path class="wv" d="M40 62Q12 96 18 144L50 120Z" fill="#6d5a4a" stroke="#0004"/>`:`<path d="M42 60q5-9 9-1q5-9 10-1q5-9 10-1q5-9 9 1l-4 7H46Z" fill="#8d7b68" stroke="#0004"/>`;
 function startMoon(){if(!has("cal")||!isFull(S.day)||S.moonDone===S.day||S.en<3)return;S.en-=3;S.moonDone=S.day;const e=mk(Math.max(2,lvl()),WOLF,true);e.moon=true;setup(e)}
-function moonLoot(l){const p=["mw","wf"].filter(id=>!S.own.includes(id));if(p.length)giveE(p[0],l);else{S.gold+=150;l.push("Mondbeute: +150 Gold!")}S.it.a++;S.mat.ak+=2;l.push("Dazu: 🔷 Äthertrank und 💎 Arkankristall ×2.")}
+function moonLoot(l){lootGive("moon",lvl(),l);S.it.a++;S.mat.ak+=2;l.push("Dazu: 🔷 Äthertrank und 💎 Arkankristall ×2.")}
 const wolfSvg=()=>BSV(`<circle class="pl" cx="62" cy="70" r="58" fill="#cfd8e6"/>
  <path class="sway" d="M44 112Q20 120 14 100" stroke="#5d4037" stroke-width="9" fill="none" stroke-linecap="round"/>
  <path d="M44 104Q36 124 42 146h14l2-26ZM74 106Q86 126 80 146H66l-2-26Z" fill="#6d4c41" stroke="#0005"/><path d="M40 146l3 6 3-6 3 6 3-6M64 146l3 6 3-6 3 6 3-6" stroke="#eee" stroke-width="2" fill="none"/>

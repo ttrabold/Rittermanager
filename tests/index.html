@@ -30,7 +30,7 @@ t("Alle Fähigkeiten einsetzbar",()=>{hero(30);for(const s of SK){S.sk=s.id==="h
 t("Alle Bosse besiegbar (Ablauf)",()=>{hero(50);for(let i=0;i<BOSS.length;i++){S.boss=i;S.ruhm=1e6;S.en=9;startBoss();win()}ok(S.boss===BOSS.length,"Bossfortschritt "+S.boss);ok(F.epi===1,"Epilog-Knopf fehlt");epilogScr()});
 t("Turnier mit 3 Runden",()=>{hero(20);startTour();win();nextTour();win();nextTour();win();ok(S.troph===1,"kein Pokal")});
 t("Turm: Etagen, Verlassen, Niederlage",()=>{hero(30);startTower();win();nextTour();win();leaveTower();ok(S.tcur===3,"tcur "+S.tcur);S.en=9;startTower();F.php=0;F.php=1;F.pb.burn=5;F.eb.stun=1;useSkill("hieb");let n=0;while(!F.over&&n++<50){F.php=1;F.pb.burn=5;F.eb.stun=1;useSkill("hieb")}ok(S.tcur===1,"Reset nach Niederlage");ok((S.hall||[]).length===1,"Ruhmeshalle leer")});
-t("Vollmond-Werwolf",()=>{hero(20);S.day=5;startMoon();win();ok(S.own.includes("mw"))});
+t("Vollmond-Werwolf",()=>{hero(20);S.day=5;const n=S.gear.length;startMoon();win();ok(S.gear.length===n+1&&!S.own.includes("mw"),"Mondbeute")});
 t("Rivale: alle 7 Duelle",()=>{hero(45);for(let k=0;k<7;k++){S.en=9;startRival();win()}ok(S.rv===7,"rv "+S.rv);ok(S.own.includes("nk"),"Neidklinge fehlt")});
 t("Alle Ereignisse und Entscheidungen",()=>{hero(20);for(const ev of EVTS)for(let i=0;i<ev.ch.length;i++){S.it.h=5;S.gold=9999;EVN={ev,res:null};F=null;evScr();evPick(i);if(F&&!F.over)win()}});
 t("Begleiter kaufen und wirken",()=>{hero(20);S.bk=[0,1,2,3];for(const c of COMP)compBuy(c.id);ok(S.comp.length===4);S.cmp=null;compSet("ross");ok(enMax()===7);S.cmp="falke";setup(mk(20,ET[0]));F.ehp=F.emax=1e6;for(let k=0;k<30;k++)useSkill("hieb");S.cmp="knappe";setup(mk(20,ET[0]));F.ehp=F.emax=1e6;F.atk=0;F.fx={};F.php=Math.round(F.pmax*.2);enemyTurn([]);ok(F.knUsed===1,"Knappe hilft nicht")});
@@ -54,6 +54,18 @@ t("Alter Spielstand ohne gear/es",()=>{S=Object.assign(fresh(),{own:["fl"],ew:"f
  ok(eq("w").id==="fl","alte Waffe");inv();ok(!/undefined|NaN/.test(document.getElementById("app").innerHTML),"undefined/NaN im Inventar")});
 t("Wiedergeburt behält Zufallsbeute",()=>{hero(50);S.s=3;const it=gearAdd(40,2,"sh");equipE(it.id);S.up.s3=2;S.up[it.id]=1;const n=S.gear.length;S.boss=BOSS.length;doRebirth("gold");
  ok(S.gear.length===n&&S.es===it.id,"Beute weg");ok(S.up.s3===undefined,"Marktschild-Aufwertung bleibt");ok(S.up[it.id]===1,"Aufwertung der Beute weg")});
+t("Zufallsbeute: Quellen",()=>{hero(30);S.ruhm=1e6;const own=S.own.length;let n=S.gear.length;startBoss();win();ok(S.gear.length===n+2,"Story-Boss: "+(S.gear.length-n));ok(S.own.length===own,"feste Beute vergeben");
+ n=S.gear.length;tourLoot([]);ok(S.gear.length===n+1,"Turnier");n=S.gear.length;moonLoot([]);ok(S.gear.length===n+1&&S.gear[n].r>=1,"Mond");
+ n=S.gear.length;S.tunl=1;S.tcur=10;startTower();win();ok(S.gear.length===n+1&&S.gear[n].r>=1,"Turm Etage 10");n=S.gear.length;F=null;S.tcur=7;startTower();win();ok(S.gear.length===n,"Turm Etage 7 ohne Beute")});
+t("Zufallsbeute: Auto-Anlegen",()=>{hero(30);S.ew=null;const l=[];const a=lootGive("boss",60,l);if(a.s==="w")ok(S.ew===a.id,"leerer Slot nicht belegt");
+ const w=gearAdd(30,0,"w");equipE(w.id);for(let i=0;i<10;i++)lootGive("boss",60,[]);ok(S.ew===w.id,"angelegte Beute ersetzt");ok(l.join("").includes(a.n),"Meldung")});
+t("Zufallsbeute: Zerlegen",()=>{hero(30);const it=gearAdd(30,3,"a");S.up[it.id]=2;const m={...S.mat};ok(salvage(it.id),"zerlegen fehlgeschlagen");
+ ok(S.mat.ds===m.ds+1&&S.mat.mi===m.mi+2,"Ertrag 🟠");ok(S.mat.le===m.le+3&&S.mat.ez===m.ez+1,"Rückgabe Aufwertung "+(S.mat.le-m.le)+"/"+(S.mat.ez-m.ez));ok(!itm(it.id)&&S.up[it.id]===undefined,"noch da");
+ const e=gearAdd(30,0,"w");equipE(e.id);ok(!salvage(e.id)&&itm(e.id),"angelegtes zerlegt");const g1=gearAdd(30,0,"a"),b1=gearAdd(30,1,"a");const k=salvageAll(0);ok(k===1&&!itm(g1.id)&&itm(b1.id)&&itm(e.id),"salvageAll")});
+t("Zufallsbeute: Beutel voll",()=>{hero(30);S.tunl=1;F=null;for(let i=0;i<=BAG;i++)gearAdd(30,0);ok(bagFull(),"nicht voll");const en=S.en;startTower();startTour();ok(S.en===en,"trotz vollem Beutel gestartet");
+ home();ok(document.getElementById("app").innerHTML.includes("Beutel voll"),"Hinweis fehlt");salvageAll(0);ok(!bagFull(),"aufräumen")});
+t("Zufallsbeute: Vergleich",()=>{hero(30);const a=gearAdd(30,1,"w"),b=gearAdd(60,1,"w");equipE(a.id);const h=cmpHtml(b);ok(/[▲▼]/.test(h),"kein Vergleich: "+h)});
+t("Zufallsbeute: Export behält Beute",()=>{hero(20);gearAdd(20,2,"sh");const d=impParse(expStr());ok(d.gear.length===S.gear.length&&d.gear[0].id===S.gear[0].id,"Beute fehlt im Export")});
 t("Kriegskasse: ab Boss 6, einmal am Tag",()=>{newGame();S.exp=expFor(30);S.lvl0=30;S.gold=99999;unlCheck();ok(!has("kasse"),"zu früh frei");S.boss=6;unlCheck();ok(has("kasse"),"nicht frei");home();ok(document.body.innerHTML.includes("Kriegskasse"),"Knopf fehlt");
  const g=S.gold,r=S.ruhm;kasseGive();ok(S.gold===g-kasseCost()&&S.ruhm===r+kasseRuhm(),"Tausch falsch");kasseGive();ok(S.gold===g-kasseCost(),"zweimal am Tag");S.day++;kasseGive();ok(S.gold===g-2*kasseCost(),"neuer Tag geht nicht");
  S.day++;S.gold=kasseCost()-1;kasseGive();ok(S.kasse!==S.day,"ohne genug Gold")});

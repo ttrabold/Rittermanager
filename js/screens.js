@@ -108,12 +108,12 @@ function homeGrid(){const b=(id,js,lbl,sub,dis,cls)=>`<button ${cls?`class="${cl
  half.push(b("","work()","⚒️ Arbeiten","1 Energie · Gold",S.en<1),b("","startFight()","⚔️ Abenteuer","2 Energie",S.en<2,"p"),b("","shop()","🏪 Markt","Ausrüstung & Tränke"));
  if(has("inv"))half.push(b("inv","inv()","🎒 Inventar","Ausrüstung & Beutel"));
  if(has("craft"))half.push(b("craft","workshop()","🧰 Werkstatt","Berufe · 1 Energie"),b("craft","trader()","🛒 Händler","Materialien"));
- if(has("tour"))half.push(b("tour","startTour()","🏟️ Turnier",`4 Energie · ${tourFee()?tourFee()+" <i class=coin></i>":"heute gratis!"} · 3 Kämpfe`,S.en<4||S.gold<tourFee()));
- if(has("tower"))half.push(b("tower","startTower()","🗼 Endloser Turm","4 Energie · "+(S.tcur>1?"weiter ab Etage "+S.tcur:"Rekord "+S.tbest),S.en<4));
+ if(has("tour"))half.push(b("tour","startTour()","🏟️ Turnier",(bagFull()?"🎒 Beutel voll – erst aufräumen":`4 Energie · ${tourFee()?tourFee()+" <i class=coin></i>":"heute gratis!"} · 3 Kämpfe`),bagFull()||S.en<4||S.gold<tourFee()));
+ if(has("tower"))half.push(b("tower","startTower()","🗼 Endloser Turm",bagFull()?"🎒 Beutel voll – erst aufräumen":"4 Energie · "+(S.tcur>1?"weiter ab Etage "+S.tcur:"Rekord "+S.tbest),bagFull()||S.en<4));
  if(has("tavern"))half.push(b("tavern","TV.rum=rnd(0,99);tavern()","🍺 Taverne",`Würfelpoker · noch ${tavLeft()} heute`));
  if(has("burg"))half.push(b("burg","castleScr()","🏗️ Burgausbau","Gebäude & Erträge"));
  if(has("comp"))half.push(b("comp","compScr()","🐾 Begleiter",S.cmp?COMP.find(c=>c.id===S.cmp).n:"niemand dabei"));
- if(has("boss"))full.push(BOSS[S.boss]?b("boss","startBoss()","👑 Bosskampf",S.ruhm<BOSS[S.boss].req?"ab "+BOSS[S.boss].req+" Ruhm":BOSS[S.boss].n,S.en<3||S.ruhm<BOSS[S.boss].req,"p"):'<button disabled>👑 Alle Bosse besiegt</button>');
+ if(has("boss"))full.push(BOSS[S.boss]?b("boss","startBoss()","👑 Bosskampf",bagFull()?"🎒 Beutel voll – erst aufräumen":S.ruhm<BOSS[S.boss].req?"ab "+BOSS[S.boss].req+" Ruhm":BOSS[S.boss].n,bagFull()||S.en<3||S.ruhm<BOSS[S.boss].req,"p"):'<button disabled>👑 Alle Bosse besiegt</button>');
  if(rivalReady())full.push(b("rival","startRival()",`⚔️ Herausforderung: Sir Gregor`,`Duell ${(S.rv||0)+1}/${RIVAL.length} · 3 Energie`,S.en<3,"p"));
  if(has("boss")&&BOSS[S.boss]&&S.ruhm>=BOSS[S.boss].req)full.push(S.merc?'<button disabled>🗡️ Söldner angeheuert – er kämpft im nächsten Bosskampf</button>':b("","mercHire()","🗡️ Söldner anheuern",`${mercCost()} Gold · hilft im nächsten Bosskampf`,S.gold<mercCost()));
  if(has("kasse"))full.push(S.kasse===S.day?'<button disabled>👑 Kriegskasse – heute schon gespendet</button>':b("kasse","kasseGive()","👑 Kriegskasse des Königs",`${kasseCost()} <i class=coin></i> → +${kasseRuhm()} Ruhm · einmal am Tag`,S.gold<kasseCost()));
