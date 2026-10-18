@@ -179,6 +179,10 @@ Tränke kaufst du auf dem Markt oder braust sie selbst (siehe [Berufe](#berufe--
 | 💥 Kraft-Elixier | 25 🪙 | Schaden +50 % für 3 Runden |
 | 💊 Gegengift | 20 🪙 | Heilt Gift und Brand |
 | 🛡️ Eisenhaut-Trank | 25 🪙 | Du nimmst 3 Runden lang nur halben Schaden |
+| 🔷 Äthertrank | 35 🪙 | +3 Einsätze für jede Fähigkeit |
+| 💠 Großer Äthertrank | 90 🪙 | Füllt alle Fähigkeiten ganz auf |
+
+> 💡 Äthertränke laden deine begrenzten Fähigkeiten wieder auf, etwa Drachenschlag oder Heiliges Licht. Sie sind vor allem im **Endlosen Turm** und in Turnieren wertvoll, wo die Einsätze von Kampf zu Kampf nicht zurückkommen. Sind alle Fähigkeiten voll, lässt sich der Trank nicht benutzen.
 
 ---
 
@@ -404,6 +408,8 @@ Du braust Tränke selbst, statt sie zu kaufen:
 | 3 | 💥 Kraft-Elixier | 🌺1 🌿1 |
 | 4 | 🛡️ Eisenhaut-Trank | ⛏️1 🌿2 |
 | 5 | ⚗️ Großer Heiltrank | 🌿4 🌺1 |
+| 3 | 🔷 Äthertrank | 💎1 🌿2 |
+| 6 | 💠 Großer Äthertrank | 💎2 🌺1 🌿2 |
 | 8 | 🍶 Elixier des Lebens | 🌿4 💎1 🐉1 |
 
 > 💡 Liegt deine Alchemie-Stufe **3 oder mehr Stufen über dem Rezept**, braust du jedes Mal **zwei** Tränke.
@@ -436,9 +442,10 @@ Du setzt **Runen** in deine angelegte Waffe oder Rüstung ein. Sie wirken zusät
 Ab dem dritten besiegten Boss steht dir der Endlose Turm offen. Ein Besuch kostet 4 Energie.
 
 - Du kämpfst dich **Etage für Etage** nach oben, und die Gegner werden immer stärker.
-- Nach jeder Etage erholst du dich um **20 % deiner LP**. Begrenzte Fähigkeiten füllen sich nicht wieder auf.
+- Nach jeder Etage erholst du dich um **20 % deiner LP**. Begrenzte Fähigkeiten füllen sich nicht von selbst wieder auf. Dafür brauchst du **🔷 Äthertränke**.
+- Mit etwas Glück (25 %) findest du nach einer Etage einen **Äthertrank**.
 - **Jede 5. Etage** bewacht ein Boss.
-- **Jede 10. Etage** wartet ein verzauberter Turmschatz.
+- **Jede 10. Etage** wartet ein verzauberter Turmschatz und ein **Großer Äthertrank**.
 - Du kannst den Turm nach jeder Etage **verlassen**. Verlierst du, endet der Lauf.
 - Deine höchste Etage wird als **Turm-Rekord** gespeichert.
 
@@ -554,5 +561,6 @@ Für besondere Leistungen bekommst du **Titel**. Einen davon kannst du tragen. E
 8. **Verkaufe keine Drachenschuppen.** Du brauchst sie für die besten Rezepte, und beim Händler kosten sie 150 Gold.
 9. **Alchemie lohnt sich früh.** Heilkraut ist billig, und Heiltränke sind die wichtigste Zutat für schwere Kämpfe.
 10. **Im Turm** solltest du rechtzeitig aussteigen, wenn deine LP knapp werden. Dein Rekord bleibt erhalten.
+11. **Nimm Äthertränke mit in den Turm.** Ohne sie bleibt dir nach ein paar Etagen nur noch der Schwerthieb.
 
 Viel Glück, edler Ritter! 🛡️⚔️
