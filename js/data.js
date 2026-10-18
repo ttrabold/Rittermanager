@@ -103,7 +103,7 @@ const EVT=[
  [2,()=>{S.it.h++;return "Ein fahrender Händler schenkt dir einen <b>Heiltrank</b>. 🧪"}],
  [2,()=>{const x=10+lvl()*5;S.exp+=x;return `Ein alter Veteran übt mit dir Schwertkampf: <b>+${x} EP</b>. 🤺`}],
  [2,()=>{S.ruhm+=5+lvl();return "Auf dem Marktplatz feiert man dein Können: <b>+"+(5+lvl())+" Ruhm</b>. 🎉"}],
- [1,()=>{S.en=5;return "Du hast schlecht geschlafen und startest mit <b>nur 5 Energie</b>. 😴"}],
+ [1,()=>{S.en=Math.max(1,S.en-1);return `Du hast schlecht geschlafen und startest mit <b>nur ${S.en} Energie</b>. 😴`}],
  [1,()=>{const x=Math.min(S.gold,Math.max(1,Math.floor(S.gold*.1)));S.gold-=x;return x?`Taschendiebe haben dir nachts <b>${x} Gold</b> gestohlen! 🦹`:"Taschendiebe schleichen durch die Gassen – aber bei dir ist nichts zu holen."}]];
 const ENS=["Eisenhart","Grimmwald","Schwarzdorn","Bertram","Blutfels","Hagen","Donnerhelm","Wolfram"];
 const ET=[

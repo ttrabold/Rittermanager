@@ -53,18 +53,20 @@ function inv(){musicSet("home");
  <div class="card"><h3>📦 Materialien</h3>${MAT.map(m=>`<div class="row"><span>${m.e} ${m.n}</span><b>×${S.mat[m.k]}</b></div>`).join("")}</div>
  <div class="card"><h3>🏆 Trophäen</h3><div class="stats"><div>🏆 Pokale <b>${S.troph}</b></div><div>👑 Bosse <b>${S.bk.length}/${BOSS.length}</b></div><div>🎖️ Titel <b>${S.tt.length}/${TT.length}</b></div><div>🗼 Turm-Rekord <b>${S.tbest}</b></div></div></div>
  <div class="grid"><button onclick="shop()">🏪 Markt</button><button onclick="workshop()">🧰 Werkstatt</button><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`;window.scrollTo(0,0)}
-function home(){musicSet("home");
- app.innerHTML=`<div class="top">${editName?`<span style="display:flex;gap:6px;flex:1;margin-right:8px"><input id="nm" maxlength="20" value="${S.name}" onkeydown="if(event.key==='Enter')saveName()" style="flex:1;min-width:0;font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)"><button onclick="saveName()" style="min-height:36px;padding:4px 12px">✔</button></span>`:`<b>${S.name} <a href="#" onclick="editName=true;home();document.getElementById('nm').focus();return false" aria-label="Ritter umbenennen" style="text-decoration:none">✏️</a> <a href="#" onclick="toggleSex();return false" aria-label="Zwischen Ritter und Ritterin wechseln" title="Ritter/Ritterin wechseln" style="text-decoration:none">${S.sex==="f"?"♀️":"♂️"}</a></b>`}<span>${rank()}${S.star?" · 🌟×"+S.star:""} · Tag ${S.day}</span></div>
- <div class="scene">${BG}${castle}${pk()}</div>
+function home(){musicSet("home");if(QN.length){msg+="<br>"+QN.join("<br>");QN=[]}
+ app.innerHTML=`<div class="top">${editName?`<span style="display:flex;gap:6px;flex:1;margin-right:8px"><input id="nm" maxlength="20" value="${S.name}" onkeydown="if(event.key==='Enter')saveName()" style="flex:1;min-width:0;font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)"><button onclick="saveName()" style="min-height:36px;padding:4px 12px">✔</button></span>`:`<b>${S.name} <a href="#" onclick="editName=true;home();document.getElementById('nm').focus();return false" aria-label="Ritter umbenennen" style="text-decoration:none">✏️</a> <a href="#" onclick="toggleSex();return false" aria-label="Zwischen Ritter und Ritterin wechseln" title="Ritter/Ritterin wechseln" style="text-decoration:none">${S.sex==="f"?"♀️":"♂️"}</a></b>`}<span>${rank()}${S.star?" · 🌟×"+S.star:""}</span></div>
+ ${calLine()}
+ <div class="scene">${BG}${bldSvg()}${castle}${pk()}</div>
  <div class="card"><div class="stats">
  <div>💪 Stärke <b>${S.st}</b></div>
  <div>❤️ Ausdauer <b>${S.au}</b></div>
  <div>🎯 Geschick <b>${S.ge}</b></div>
- <div>⚡ Energie <b>${S.en}/6</b>${bar(S.en,6,"#e0a800")}</div>
+ <div>⚡ Energie <b>${S.en}/${enMax()}</b>${bar(S.en,enMax(),"#e0a800")}</div>
  <div>🪙 Gold <b>${S.gold}</b></div><div>🏆 Ruhm <b>${S.ruhm}</b></div><div style="grid-column:1/-1">🎖️ ${ttn()?"<b>"+ttn()+"</b>":'<span class="mut">kein Titel</span>'} · <a href="#" onclick="titles();return false" style="color:var(--acc)">Titel (${S.tt.length}/${TT.length})</a> · <a href="#" onclick="guide();return false" style="color:var(--acc)">📖 Anleitung</a></div>
  <div style="grid-column:1/-1">⭐ Stufe <b>${lvl()}</b> <span class="mut">(${S.exp} EP)</span>${bar(S.exp-expFor(lvl()),expFor(lvl()+1)-expFor(lvl()),"#8e44ad")}</div></div>
  <div class="mut" style="margin-top:6px">Waffe: ${iname("w")} · Rüstung: ${iname("a")} · ${SH[S.s][0]}<br>Siege ${S.wins} · Niederlagen ${S.losses} · Pokale ${S.troph} · Bosse ${S.boss}/${BOSS.length} · Turm-Rekord ${S.tbest}</div></div>
  <div class="msg">${msg}</div>
+ ${questCard()}
  <div class="grid">
  <button onclick="work()" ${S.en<1?"disabled":""}>⚒️ Arbeiten<small>1 Energie · Gold</small></button>
  <button class="p" onclick="startFight()" ${S.en<2?"disabled":""}>⚔️ Abenteuer<small>2 Energie</small></button>
@@ -72,23 +74,20 @@ function home(){musicSet("home");
  <button onclick="trader()">🛒 Händler<small>Materialien</small></button>
  <button onclick="workshop()">🧰 Werkstatt<small>Berufe · 1 Energie</small></button>
  <button onclick="inv()">🎒 Inventar<small>Ausrüstung & Beutel</small></button>
- <button onclick="startTour()" ${S.en<4||S.gold<20?"disabled":""}>🏟️ Turnier<small>4 Energie · 20 🪙 · 3 Kämpfe</small></button>
+ <button onclick="startTour()" ${S.en<4||S.gold<tourFee()?"disabled":""}>🏟️ Turnier<small>4 Energie · ${tourFee()?tourFee()+" 🪙":"heute gratis!"} · 3 Kämpfe</small></button>
  <button onclick="startTower()" ${!S.tunl||S.en<4?"disabled":""}>🗼 Endloser Turm<small>${!S.tunl?"ab Boss 3":"4 Energie · "+(S.tcur>1?"weiter ab Etage "+S.tcur:"Rekord "+S.tbest)}</small></button>
  ${BOSS[S.boss]?`<button class="p" style="grid-column:1/-1" onclick="startBoss()" ${S.en<3||S.ruhm<BOSS[S.boss].req?"disabled":""}>👑 Bosskampf<small>${S.ruhm<BOSS[S.boss].req?"ab "+BOSS[S.boss].req+" Ruhm":BOSS[S.boss].n}</small></button>`:`<button disabled style="grid-column:1/-1">👑 Alle Bosse besiegt</button>`}
+ ${isFull(S.day)&&S.moonDone!==S.day?`<button class="p" style="grid-column:1/-1;background:#3949ab;border-color:#3949ab" onclick="startMoon()" ${S.en<3?"disabled":""}>🌕 Vollmond-Jagd<small>3 Energie · nur heute Nacht · ein Versuch</small></button>`:""}
+ <button onclick="castleScr()">🏗️ Burgausbau<small>Gebäude & Erträge</small></button>
  <button onclick="rebirth()" ${S.boss<BOSS.length?"disabled":""}>🌟 Wiedergeburt<small>${S.boss<BOSS.length?"nach allen Bossen":"Neustart mit Bonus"}</small></button>
- <button onclick="newDay()">🌙 Schlafen<small>Neuer Tag</small></button></div>
+ <button onclick="newDay()" style="grid-column:1/-1">🌙 Schlafen<small>Erträge einsammeln · neuer Tag</small></button></div>
  <div class="card"><h3>📜 Fähigkeiten</h3>${SK.map(s=>`<div class="row"><span>${s.lv<=lvl()?"":"🔒 "}${s.n}</span><span class="mut">${s.lv<=lvl()?s.d:"ab Stufe "+s.lv}</span></div>`).join("")}<div class="mut" style="margin-top:6px">Tränke: ${IT.map(t=>t.e+" "+S.it[t.k]).join("  ")}</div></div>
  <p class="mut" style="text-align:center"><a href="#" onclick="if(confirm('Spiel wirklich zurücksetzen?')){S=fresh();save();msg='Ein neues Abenteuer beginnt!';home()}return false" style="color:var(--mut)">Neu starten</a></p>`;
 }
 function work(){
  if(S.en<1)return;S.en--;const g=rnd(8,14)+lvl()*2;S.gold+=g;sfx("coin");
  const t=["Du hilfst dem Schmied","Du bewachst die Stadttore","Du hackst Holz für den Burgvogt","Du eskortierst einen Händler"];
- msg=`${t[rnd(0,3)]} und verdienst <b>${g} Gold</b>.`;save();home();
-}
-function newDay(){
- S.day++;S.en=6;let r=Math.random()*EVT.reduce((a,e)=>a+e[0],0),ev=EVT[0];
- for(const e of EVT){if(r<e[0]){ev=e;break}r-=e[0]}
- msg=ev[1]();save();home();
+ msg=`${t[rnd(0,3)]} und verdienst <b>${g} Gold</b>.`;qProg("work");save();home();
 }
 function shop(){musicSet("home");
  const sec=(t,L,k,ic)=>`<h3>${ic} ${t}</h3>`+L.map((x,i)=>{
@@ -96,9 +95,9 @@ function shop(){musicSet("home");
   return `<div class="row"><span>${x[0]} <span class="mut">+${x[2]}</span></span>${own?'<b>✔ angelegt</b>':lower?'<span class="mut">besser vorhanden</span>':`<button ${can?"":"disabled"} onclick="buy('${k}',${i})">${x[1]} 🪙</button>`}</div>`}).join("");
  app.innerHTML=`<div class="top"><b>🏪 Markt</b><span>🪙 ${S.gold}</span></div>
  <div class="scene" style="height:170px">${BG}${pk()}</div>
- <div class="card">${sec("Waffen",W,"w","🗡️")}${sec("Rüstungen",A,"a","🛡️")}${sec("Schilde",SH,"s","🔰")}<div class="row"><span class="mut">✨ Verzauberte und geschmiedete Ausrüstung legst du im Inventar an.</span><button onclick="inv()">🎒 Inventar</button></div><h3>🧪 Tränke</h3>${IT.map(t=>`<div class="row"><span>${t.e} ${t.n} ×${S.it[t.k]} <span class="mut">${t.d}</span></span><button ${S.gold>=t.p?"":"disabled"} onclick="buyIt('${t.k}')">${t.p} 🪙</button></div>`).join("")}</div>
+ <div class="card">${sec("Waffen",W,"w","🗡️")}${sec("Rüstungen",A,"a","🛡️")}${sec("Schilde",SH,"s","🔰")}<div class="row"><span class="mut">✨ Verzauberte und geschmiedete Ausrüstung legst du im Inventar an.</span><button onclick="inv()">🎒 Inventar</button></div><h3>🧪 Tränke${isMarket(S.day)?' <span class="mut">· 🛒 Markttag −25 %</span>':""}</h3>${IT.map(t=>`<div class="row"><span>${t.e} ${t.n} ×${S.it[t.k]} <span class="mut">${t.d}</span></span><button ${S.gold>=ip(t.p)?"":"disabled"} onclick="buyIt('${t.k}')">${ip(t.p)} 🪙</button></div>`).join("")}</div>
  <div class="grid"><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`;
 }
 function buy(k,i){const L={w:W,a:A,s:SH}[k];if(S.gold<L[i][1])return;S.gold-=L[i][1];S[k]=i;sfx("coin");msg=`Gekauft: <b>${L[i][0]}</b>!`;save();shop();}
 
-function buyIt(k){const t=IT.find(x=>x.k===k);if(S.gold<t.p)return;S.gold-=t.p;S.it[k]++;sfx("coin");save();shop()}
+function buyIt(k){const t=IT.find(x=>x.k===k),p=ip(t.p);if(S.gold<p)return;S.gold-=p;S.it[k]++;sfx("coin");save();shop()}

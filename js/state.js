@@ -17,7 +17,7 @@ const tl=()=>ttn()?`<div class="tl">🎖️ ${ttn()}</div>`:"";
 const lvl=()=>1+Math.floor(Math.sqrt(S.exp/20)),expFor=l=>(l-1)*(l-1)*20;
 let S=fresh(),msg="Willkommen, edler Ritter! Verdiene Gold, bestehe Abenteuer und steige auf – dabei wirst du automatisch stärker.",F=null;
 try{const x=localStorage.getItem("ritter1");if(x)S=Object.assign(fresh(),JSON.parse(x));}catch(e){}
-S.it=Object.assign({h:0,H:0,k:0,e:0,g:0,x:0,a:0,A:0},S.it);S.sex=S.sex==="f"?"f":"m";S.tcur=S.tcur||1;S.mat=Object.assign(Object.fromEntries(MAT.map(m=>[m.k,0])),S.mat);S.pr=Object.assign({sm:{lv:1,xp:0},al:{lv:1,xp:0},ve:{lv:1,xp:0}},S.pr);S.up=S.up||{};S.ru=S.ru||{};S.star=S.star||0;S.tbest=S.tbest||0;S.tunl=S.tunl||((S.boss||0)>=3?1:0);S.own=S.own||[];S.ew=S.ew||null;S.ea=S.ea||null;S.boss=S.boss||0;S.troph=S.troph||0;
+S.it=Object.assign({h:0,H:0,k:0,e:0,g:0,x:0,a:0,A:0},S.it);S.sex=S.sex==="f"?"f":"m";S.bld=Object.assign({kaserne:0,garten:0,mine:0,arkan:0,schatz:0},S.bld);S.enStart=S.enStart||6;S.tcur=S.tcur||1;S.mat=Object.assign(Object.fromEntries(MAT.map(m=>[m.k,0])),S.mat);S.pr=Object.assign({sm:{lv:1,xp:0},al:{lv:1,xp:0},ve:{lv:1,xp:0}},S.pr);S.up=S.up||{};S.ru=S.ru||{};S.star=S.star||0;S.tbest=S.tbest||0;S.tunl=S.tunl||((S.boss||0)>=3?1:0);S.own=S.own||[];S.ew=S.ew||null;S.ea=S.ea||null;S.boss=S.boss||0;S.troph=S.troph||0;
 S.name=String(S.name).replace(/[<>&"'`]/g,"").trim().slice(0,20)||"Sir Kunibert";S.tt=S.tt||[];S.title=S.title||null;S.crits=S.crits||0;S.flawless=S.flawless||0;S.close=S.close||0;S.bk=S.bk||Array.from({length:S.boss||0},(_,i)=>i);
 const save=()=>{try{localStorage.setItem("ritter1",JSON.stringify(S))}catch(e){}};
 const app=document.getElementById("app");

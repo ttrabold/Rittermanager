@@ -7,25 +7,26 @@ Willkommen, edler Ritter (oder edle Ritterin)! Hier erfährst du alles, was du �
 1. [Worum geht es?](#worum-geht-es)
 2. [Die Burg – dein Hauptbildschirm](#die-burg--dein-hauptbildschirm)
 3. [Energie und Tage](#energie-und-tage)
-4. [Deine Werte](#deine-werte)
-5. [Aktivitäten](#aktivitäten)
-6. [Der Kampf](#der-kampf)
-7. [Fähigkeiten](#fähigkeiten)
-8. [Tränke](#tränke)
-9. [Zustände](#zustände)
-10. [Gegner](#gegner)
-11. [Bosse](#bosse)
-12. [Der Markt](#der-markt)
-13. [Das Inventar](#das-inventar)
-14. [Verzauberte Ausrüstung](#verzauberte-ausrüstung)
-15. [Materialien und Händler](#materialien-und-händler)
-16. [Berufe – die Werkstatt](#berufe--die-werkstatt)
-17. [Der Endlose Turm](#der-endlose-turm)
-18. [Wiedergeburt](#wiedergeburt)
-19. [Ränge](#ränge)
-20. [Titel](#titel)
-21. [Einstellungen und Spielstand](#einstellungen-und-spielstand)
-22. [Tipps für Einsteiger](#tipps-für-einsteiger)
+4. [Burgausbau](#burgausbau)
+5. [Deine Werte](#deine-werte)
+6. [Aktivitäten](#aktivitäten)
+7. [Der Kampf](#der-kampf)
+8. [Fähigkeiten](#fähigkeiten)
+9. [Tränke](#tränke)
+10. [Zustände](#zustände)
+11. [Gegner](#gegner)
+12. [Bosse](#bosse)
+13. [Der Markt](#der-markt)
+14. [Das Inventar](#das-inventar)
+15. [Verzauberte Ausrüstung](#verzauberte-ausrüstung)
+16. [Materialien und Händler](#materialien-und-händler)
+17. [Berufe – die Werkstatt](#berufe--die-werkstatt)
+18. [Der Endlose Turm](#der-endlose-turm)
+19. [Wiedergeburt](#wiedergeburt)
+20. [Ränge](#ränge)
+21. [Titel](#titel)
+22. [Einstellungen und Spielstand](#einstellungen-und-spielstand)
+23. [Tipps für Einsteiger](#tipps-für-einsteiger)
 
 ---
 
@@ -43,14 +44,15 @@ Auf dem Burgbildschirm siehst du:
 - **Dein Ritter** vor der Burg, mit der Ausrüstung, die er gerade trägt
 - **Deine Werte**: Stärke, Ausdauer, Geschick, Energie, Gold, Ruhm, Titel und Stufe
 - **Die Nachrichtenzeile**: Sie sagt dir, was zuletzt passiert ist.
-- **Die Aktionsknöpfe**: Arbeiten, Abenteuer, Markt, Händler, Werkstatt, Inventar, Turnier, Turm, Wiedergeburt, Bosskampf und Schlafen
+- **Die Aktionsknöpfe**: Arbeiten, Abenteuer, Markt, Händler, Werkstatt, Inventar, Turnier, Turm, Bosskampf, Vollmond-Jagd, Burgausbau, Wiedergeburt und Schlafen
+- **Kalender und Tagesaufträge** oberhalb der Szene und unter der Nachrichtenzeile
 - **Deine Fähigkeiten und Tränke** ganz unten
 
 ---
 
 ## Energie und Tage
 
-Jeder Tag beginnt mit **6 Energie**. Fast jede Aktivität kostet Energie:
+Jeder Tag beginnt mit **6 Energie**. Mit einer Kaserne sind es bis zu 8. Fast jede Aktivität kostet Energie:
 
 | Aktivität | Kosten |
 |---|---|
@@ -58,10 +60,19 @@ Jeder Tag beginnt mit **6 Energie**. Fast jede Aktivität kostet Energie:
 | 🧰 Herstellen in der Werkstatt | 1 Energie |
 | ⚔️ Abenteuer | 2 Energie |
 | 👑 Bosskampf | 3 Energie |
-| 🏟️ Turnier | 4 Energie + 20 Gold |
+| 🌕 Vollmond-Jagd | 3 Energie |
+| 🏟️ Turnier | 4 Energie + 20 Gold (am Turniertag gratis) |
 | 🗼 Endloser Turm | 4 Energie |
 
-Ist die Energie aufgebraucht, klicke auf **🌙 Schlafen · Neuer Tag**. Deine Energie ist dann wieder voll.
+Ist die Energie aufgebraucht, klicke auf **🌙 Schlafen**. Über Nacht passiert einiges:
+
+1. **Deine Burg wirft Erträge ab** (siehe [Burgausbau](#burgausbau)). Wie viel, hängt davon ab, wie fleißig du am Tag warst:
+   - **mindestens 4 Energie genutzt** → volle Erträge
+   - **2–3 Energie genutzt** → halbe Erträge
+   - **weniger** → nichts. Wer nur schläft, bekommt nichts.
+2. **Am Morgen** passiert ein zufälliges Ereignis.
+3. **Neue Tagesaufträge** warten auf dich.
+4. Ein **Nachtbericht** fasst alles zusammen, bevor der neue Tag beginnt.
 
 ### Tagesereignisse
 
@@ -72,10 +83,55 @@ Jeder neue Morgen bringt ein zufälliges Ereignis:
 - 🧪 **Ein fahrender Händler** schenkt dir einen Heiltrank.
 - 🤺 **Ein alter Veteran** trainiert mit dir, und du bekommst Erfahrung.
 - 🎉 **Auf dem Marktplatz** wird dein Können gefeiert, und du bekommst Ruhm.
-- 😴 **Schlecht geschlafen**: Du startest mit nur 5 Energie.
+- 😴 **Schlecht geschlafen**: Du startest mit 1 Energie weniger.
 - 🦹 **Taschendiebe** stehlen dir nachts 10 % deines Goldes.
 
 Gute Ereignisse sind häufiger als schlechte. Je höher deine Stufe, desto größer fallen die Belohnungen aus.
+
+### Tagesaufträge
+
+Jeden Morgen bekommst du **drei Aufträge**, zum Beispiel „Gewinne 2 Kämpfe“, „Braue einen Trank“, „Lande 3 kritische Treffer“ oder „Schaffe 2 Turm-Etagen“. Du siehst sie auf dem Burgbildschirm.
+
+- Alle drei Aufträge lassen sich mit der Energie eines Tages schaffen.
+- Jeder erfüllte Auftrag bringt sofort seine Belohnung: Gold, Materialien oder Tränke.
+- Schaffst du **alle drei**, öffnet sich zusätzlich eine **🎁 Bonus-Truhe** mit Gold, einem Äthertrank und Materialien.
+- Unerledigte Aufträge verfallen, wenn du schlafen gehst.
+
+### Kalender
+
+Oben auf dem Burgbildschirm siehst du Wochentag, Mondphase und die nächsten besonderen Tage:
+
+| Wann | Ereignis | Was passiert |
+|---|---|---|
+| Jeden **Samstag** | 🛒 **Markttag** | Beim Händler ist alles 30 % günstiger, Tränke auf dem Markt 25 % |
+| Jeden **Sonntag** | 🏟️ **Turniertag** | Das Turnier kostet keine Gebühr, und der Turniersieg bringt die doppelte Prämie samt zweitem Turnierschatz |
+| Alle **8 Tage** | 🌕 **Vollmond** | Der **Vollmond-Werwolf** jagt. Du hast einen Versuch. |
+
+### 🌕 Vollmond-Jagd
+
+Bei Vollmond erscheint auf dem Burgbildschirm der Knopf **Vollmond-Jagd**. Der Werwolf ist ein Wanderboss auf deiner Stufe. Er beißt giftig, springt dich betäubend an und geht mit seinem Heulen in Deckung. Du hast pro Vollmond **einen Versuch**.
+
+**Beute:**
+- beim ersten Sieg die **Mondsichel** (Waffe: +12 % Krit, 8 % Lebensraub)
+- beim zweiten Sieg den **Wolfspelz** (Rüstung: +8 % Ausweichen, heilt 3 LP pro Runde)
+- danach Gold
+- jedes Mal dazu ein Äthertrank und Arkankristalle
+
+---
+
+## Burgausbau
+
+Unter **🏗️ Burgausbau** errichtest du Gebäude mit Gold und Materialien. Bauen kostet keine Energie. Jedes Gebäude lässt sich mehrfach ausbauen. Du siehst es danach in der Burgszene, und es liefert jede Nacht Erträge.
+
+| Gebäude | Stufen | Ertrag pro Nacht (bei vollem Fleiß) |
+|---|---|---|
+| ⛺ Kaserne | 2 | +1 Energie pro Stufe, jeden Morgen |
+| 🌿 Kräutergarten | 5 | 2 Heilkraut pro Stufe, ab Stufe 3 auch Giftpilze |
+| ⛏️ Mine | 5 | 2 Eisenerz pro Stufe, ab Stufe 3 auch Mithrilerz |
+| 🔮 Arkanturm | 5 | 1 Arkankristall pro Stufe, ab Stufe 4 auch Feuerblüten |
+| 💰 Schatzkammer | 5 | 30 Gold pro Stufe |
+
+Die Baukosten steigen mit jeder Stufe. Hohe Stufen brauchen Mithrilerz, die letzte auch eine Drachenschuppe. Die Kaserne wirkt unabhängig davon, wie fleißig du warst.
 
 ---
 

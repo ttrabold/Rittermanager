@@ -20,6 +20,8 @@ function sfx(n){if(!AU.sfx)return;const c=ac();if(!c)return;const t=c.currentTim
  case"lose":arp([392,330,262,196],.2,"sawtooth");break;
  case"level":arp([523,659,784,1047,1319],.09);break;
  case"fall":noise(t,.35,.3);tone(110,t,.4,"sine",.35,D,40);break;
+ case"night":[784,659,523,392].forEach((f,i)=>tone(f,t+i*.28,.9,"sine",.07));break;
+ case"morning":tone(620,t,.18,"triangle",.08,D,980);tone(980,t+.18,.25,"triangle",.07,D,760);arp([523,659,784,1047],.14);break;
  case"gong":tone(98,t,3,"sine",.28);tone(147,t,2.5,"sine",.12);tone(196,t,2,"triangle",.06);tone(49,t,3.5,"sine",.2);noise(t,.5,.06);break;
  case"boom":noise(t,.8,.35);tone(80,t,.9,"sawtooth",.2,D,30);tone(660,t+.05,.6,"triangle",.08,D,1320);break;}}
 // ---- Musik-Engine: Synth mit Hall, Instrumenten und Stücken je Situation ----

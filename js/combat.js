@@ -15,12 +15,12 @@ function mk(L,t,boss){
  return {lvl:L,name:boss?t.n:`${t.t} ${ENS[rnd(0,ENS.length-1)]}`,ehp:hp,emax:hp,atk:(3+L*2)*t.atk*sc,def:Math.floor(L*.8*t.def),tier:Math.min(4,Math.floor(L/2)),tint:t.tint||"#6b2d8f",mv:t.mv,boss:!!boss,enr:false,et:t.t||"Boss",bi:boss?BOSS.indexOf(t):-1};
 }
 function setup(e,tour,keep){
- F=Object.assign({php:keep?keep.php:maxhp(),pmax:maxhp(),menu:"main",anim:"",dmg:"",hE:0,hP:0,lP:0,lE:0,vfx:[],over:false,next:false,tour:tour||0,pp:keep?keep.pp:null,pb:{buff:0,guard:0,poison:0,burn:0,stun:0},eb:{bleed:0,burn:0,poison:0,ps:0,stun:0,guard:0},log:(e.tower?towerIntro(e.tower):"")+(ttn()?`<b>${S.name} ${ttn()}</b> tritt an!<br>`:"")+(e.boss?`${e.name} versperrt dir den Weg! Das wird ein harter Kampf.`:"Ein fremder Gegner fordert dich heraus! Was tust du?")},e);
+ F=Object.assign({php:keep?keep.php:maxhp(),pmax:maxhp(),menu:"main",anim:"",dmg:"",hE:0,hP:0,lP:0,lE:0,vfx:[],over:false,next:false,tour:tour||0,pp:keep?keep.pp:null,pb:{buff:0,guard:0,poison:0,burn:0,stun:0},eb:{bleed:0,burn:0,poison:0,ps:0,stun:0,guard:0},log:(e.tower?towerIntro(e.tower):"")+(e.moon?"🌕 <i>Ein Heulen zerreißt die Nacht …</i><br>":"")+(ttn()?`<b>${S.name} ${ttn()}</b> tritt an!<br>`:"")+(e.boss?`${e.name} versperrt dir den Weg! Das wird ein harter Kampf.`:"Ein fremder Gegner fordert dich heraus! Was tust du?")},e);
  if(!F.pp){F.pp={};SK.forEach((s,i)=>F.pp[i]=s.pp)}
  save();fight();
 }
 function startFight(){if(S.en<2)return;S.en-=2;setup(mk(Math.max(1,lvl()+rnd(-1,1)),ET[rnd(0,4)]))}
-function startTour(){if(S.en<4||S.gold<20)return;S.en-=4;S.gold-=20;setup(mk(Math.max(1,lvl()),ET[rnd(0,4)]),1)}
+function startTour(){const fee=tourFee();if(S.en<4||S.gold<fee)return;S.en-=4;S.gold-=fee;setup(mk(Math.max(1,lvl()),ET[rnd(0,4)]),1)}
 function startTower(){if(!S.tunl||S.en<4)return;S.en-=4;towerFloor(S.tcur||1)}
 function towerFloor(n,keep){if(n>1&&(n-1)%5===0)setTimeout(()=>sfx("gong"),300);const b=n%5===0,bs=BOSS[(n/5-1)%BOSS.length],e=b?mk(bs.L+Math.floor(n/3),bs,true):mk(lvl()+Math.floor(n/2),ET[rnd(0,4)]);e.tower=n;setup(e,0,keep)}
 function rebirth(){if(S.boss<BOSS.length)return;if(!confirm("Wiedergeburt: Stufe, Gold, Ruhm, Ausrüstung und Bossfortschritt werden zurückgesetzt. Du behältst verzauberte und geschmiedete Gegenstände, Tränke, Materialien, Berufsstufen, Pokale und Turmrekord und erhältst +10 % Schaden, Gold und EP – die Gegner werden aber 8 % stärker. Fortfahren?"))return;S.star++;S.tcur=1;for(const o of[S.up,S.ru])for(const k of Object.keys(o))if(/^[wa]\d$/.test(k))delete o[k];Object.assign(S,{exp:0,ruhm:0,gold:50,st:3,au:3,ge:3,w:0,a:0,s:0,boss:0});msg=`Du wirst wiedergeboren! Wiedergeburt ${S.star} 🌟`;sfx("level");save();home()}
@@ -38,7 +38,7 @@ function fight(){
  const dm=(w)=>{const v=w==="e"?f.hE:f.hP;return v?`<span class="dmg ${w==="p"?"late":""}" style="left:30px">-${v}</span>`:""};
  app.innerHTML=`<div class="scene fs">${f.tower?TBG(ttier(f.tower)):BG}
  <div class="box eb"><b>${f.name}</b> <span class="mut">Lv${f.lvl}${f.tour?" · Turnier "+f.tour+"/3":""}${f.tower?" · Etage "+f.tower:""}${f.boss?" · BOSS":""}</span> ${ic(f.eb,{bleed:"🩸",burn:"🔥",poison:"☠️",stun:"💫",guard:"🛡️"})}${bar(f.ehp,f.emax,"#c0392b")}<span class="mut">${Math.max(0,f.ehp)}/${f.emax}</span></div>
- <div class="es ${f.boss?"big":""} ${f.hE?"hit":""}">${dm("e")}<div class="lg ${f.lE?"lungeE":""}"><div class="kw ${f.ko==="e"?(f.boss?"koB":"koE"):f.ko==="p"?"cheerE":""}">${f.boss&&f.bi>=0?bossSvg(f.bi):knight(f.tier,f.tier,Math.min(3,Math.floor(f.lvl/3)),true,f.tint)}</div></div></div>
+ <div class="es ${f.boss?"big":""} ${f.hE?"hit":""}">${dm("e")}<div class="lg ${f.lE?"lungeE":""}"><div class="kw ${f.ko==="e"?(f.boss?"koB":"koE"):f.ko==="p"?"cheerE":""}">${f.moon?wolfSvg():f.boss&&f.bi>=0?bossSvg(f.bi):knight(f.tier,f.tier,Math.min(3,Math.floor(f.lvl/3)),true,f.tint)}</div></div></div>
  <div class="ps ${f.hP?"hit late":""}">${dm("p")}<div class="lg ${f.lP?"lungeP":""}"><div class="kw ${f.ko==="p"?"koP":f.ko==="e"?"cheer":""}">${pk()}</div></div></div>
  <div class="box pb"><b>${S.name}</b> <span class="mut">Lv${lvl()}</span>${tl()} ${ic(f.pb,{buff:"💥",guard:"🛡️",poison:"☠️",burn:"🔥",stun:"💫"})}${bar(f.php,f.pmax,"#2e8b57")}<span class="mut">${Math.max(0,f.php)}/${f.pmax}</span></div>${VXH(f)}</div>
  <div class="msg">${f.log}</div><div class="grid">${ui}</div>`;
@@ -46,13 +46,13 @@ function fight(){
 function fin(l){F.log=l.join("<br>");F.menu="main";fight()}
 function useSkill(i){
  const f=F,s=SK[i],l=[`${S.name} setzt <b>${s.n}</b> ein!`];
- if(s.pp<99){if(f.pp[i]<1)return;f.pp[i]--}
+ if(s.pp<99){if(f.pp[i]<1)return;f.pp[i]--;qProg("skill",1,l)}
  f.anim="";f.dmg="";f.hE=0;f.hP=0;f.lP=s.pw>0?1:0;f.lE=0;f.vfx=[];
  if(Math.random()*100>=s.acc){l.push("Der Angriff geht daneben!");sfx("miss");f.vfx.push(["miss","vE",0])}
  else{f.vfx.push([SKFX[i],[3,5,9].includes(i)?"vP":"vE",0]);
   if(s.pw>0){
    let d=5+Math.floor(S.st*1.3)+wBon();d=d*s.pw*(f.pb.buff>0?1.5:1)*(1+.1*S.star)+rnd(0,3);
-   const crit=Math.random()<Math.min(.6,S.ge*.03+fxv("crit"));if(crit){d*=1.5;S.crits++}if(f.eb.guard)d*=.5;
+   const crit=Math.random()<Math.min(.6,S.ge*.03+fxv("crit"));if(crit){d*=1.5;S.crits++;qProg("crit",1,l)}if(f.eb.guard)d*=.5;
    d=Math.max(1,Math.round(d-f.def));f.ehp-=d;f.anim="e";f.dmg=d;f.hE=d;sfx(crit?"crit":"hit");l.push((crit?"<b>Kritischer Treffer!</b> ":"")+`${d} Schaden.`);encHit(d,l);
   }
   if(s.fx==="stun"&&Math.random()<.4){f.eb.stun=1;l.push("Der Gegner ist betäubt! 💫")}
@@ -64,7 +64,7 @@ function useSkill(i){
  enemyTurn(l);
 }
 function useItem(k){
- const f=F;if(S.it[k]<1)return;S.it[k]--;const t=IT.find(x=>x.k===k),l=[`Du benutzt ${t.n}.`];sfx(k==="k"||k==="e"?"buff":"heal");save();f.anim="";f.dmg="";f.hE=0;f.hP=0;f.lP=0;f.lE=0;f.vfx=[[k==="k"?"roar":k==="e"?"guard":"heal","vP",0]];
+ const f=F;if(S.it[k]<1)return;S.it[k]--;const t=IT.find(x=>x.k===k),l=[`Du benutzt ${t.n}.`];qProg("potion",1,l);sfx(k==="k"||k==="e"?"buff":"heal");save();f.anim="";f.dmg="";f.hE=0;f.hP=0;f.lP=0;f.lE=0;f.vfx=[[k==="k"?"roar":k==="e"?"guard":"heal","vP",0]];
  if(k==="h"||k==="H"||k==="x"){const h=k==="h"?40:k==="x"?200:100,b=f.php;f.php=Math.min(f.pmax,f.php+h);l.push(`Du heilst ${f.php-b} LP. 💚`)}
  if(k==="k"){f.pb.buff=3;l.push("Dein Schaden steigt für 3 Runden! 💥")}
  if(k==="g"){f.pb.poison=0;f.pb.burn=0;l.push("Gift und Brand sind geheilt! 💊")}
@@ -109,11 +109,12 @@ function endFight(win,l){
  if(win){
   const m=f.boss?3:1,sm=1+.1*S.star,r=(10+f.lvl*6)*m,g=Math.round((15+f.lvl*8)*m*sm),x=Math.round((15+f.lvl*10)*m*sm);
   S.ruhm+=r;S.gold+=g;S.exp+=x;S.wins++;if(f.php<=5)S.close++;if(!f.took)S.flawless++;l.push(`<b>🏆 Sieg!</b> +${r} Ruhm, +${g} Gold, +${x} EP.`);
-  if(f.boss&&!f.tower){S.boss++;if(!S.bk.includes(S.boss-1))S.bk.push(S.boss-1);if(S.boss>=3)S.tunl=1;(BREW[S.boss-1]||[]).forEach(id=>giveE(id,l));S.it.H++;S.it.g++;l.push("Beute: Großer Heiltrank ⚗️ und Gegengift 💊!");msg=`Boss ${f.name} besiegt!`}
+  if(f.moon){moonLoot(l);msg="Du hast den Vollmond-Werwolf erlegt!"}
+  else if(f.boss&&!f.tower){S.boss++;if(!S.bk.includes(S.boss-1))S.bk.push(S.boss-1);if(S.boss>=3)S.tunl=1;(BREW[S.boss-1]||[]).forEach(id=>giveE(id,l));S.it.H++;S.it.g++;l.push("Beute: Großer Heiltrank ⚗️ und Gegengift 💊!");msg=`Boss ${f.name} besiegt!`}
   else{if(Math.random()<.3){S.it.h++;l.push("Du findest einen Heiltrank! 🧪")}msg=`Du hast ${f.name} besiegt!`}
-  dropMat(f,l);
+  dropMat(f,l);qProg("win",1,l);if(f.tower)qProg("tower",1,l);if(f.tour)qProg("tour",1,l);
   if(f.tower){S.tbest=Math.max(S.tbest,f.tower);S.tcur=f.tower+1;f.next=true;l.push(`Etage ${f.tower} geschafft! Du verschnaufst kurz (+20 % LP).`);if(Math.random()<.25){S.it.a++;l.push("Du findest einen Äthertrank! 🔷")}if(f.tower%10===0){towerLoot(l);S.it.A++;l.push("Dazu ein Großer Äthertrank! 💠")}}
-  if(f.tour){if(f.tour<3){f.next=true;l.push(`Turnierrunde ${f.tour}/3 geschafft – du verschnaufst kurz.`)}else{S.troph++;tourLoot(l);S.gold+=100;S.exp+=50;S.ruhm+=30;l.push("<b>🏟️ Turniersieger!</b> Pokal, +100 Gold, +30 Ruhm, +50 EP.");msg="Du hast das Turnier gewonnen!"}}
+  if(f.tour){if(f.tour<3){f.next=true;l.push(`Turnierrunde ${f.tour}/3 geschafft – du verschnaufst kurz.`)}else{S.troph++;tourLoot(l);S.gold+=100;S.exp+=50;S.ruhm+=30;l.push("<b>🏟️ Turniersieger!</b> Pokal, +100 Gold, +30 Ruhm, +50 EP.");if(isTourDay(S.day)){S.gold+=100;S.exp+=50;S.ruhm+=30;tourLoot(l);l.push("🏟️ <b>Turniertag:</b> doppelte Siegprämie!")}msg="Du hast das Turnier gewonnen!"}}
  }else{const x=Math.floor(S.gold*.1);S.gold-=x;S.ruhm=Math.max(0,S.ruhm-5);S.exp+=5;S.losses++;if(f.tower)S.tcur=1;l.push(`<b>💀 Niederlage.</b> −${x} Gold, −5 Ruhm, +5 EP.`);msg=f.tower?`Der Turm hat dich bezwungen – du musst wieder auf Etage 1 beginnen. Rekord: Etage ${S.tbest}.`:f.tour?"Du bist im Turnier ausgeschieden.":"Du wurdest besiegt – trainiere und kehre stärker zurück!"}
  const nl=lvl();if(nl>old){setTimeout(()=>sfx("level"),1500);l.push(`<b>⭐ Stufe ${nl} erreicht!</b>`);const n=nl-old;S.st+=n;S.au+=n;S.ge+=n;l.push(`Stärke, Ausdauer und Geschick steigen um je ${n}! 💪`);SK.filter(s=>s.lv>old&&s.lv<=nl).forEach(s=>l.push(`Neue Fähigkeit: <b>${s.n}</b>!`))}
  checkTitles(l);save();fin(l);
