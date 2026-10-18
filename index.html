@@ -99,6 +99,7 @@ svg.vP{transform:scaleX(-1)}
 .spin{align-items:flex-start;font-size:44px;animation:spn 1.2s calc(var(--d) + .3s) forwards}
 @keyframes spn{0%{transform:rotate(0);opacity:0}20%{opacity:1}100%{transform:rotate(360deg);opacity:0}}
 .mt{font-weight:bold;font-size:20px;color:#fff;text-shadow:0 1px 3px #000;animation:ri 1s calc(var(--d) + .2s) forwards}
+.tl{font-size:11px;color:var(--mut);font-style:italic}
 </style>
 </head>
 <body>
@@ -112,7 +113,7 @@ const RANKS=[[0,"Knappe"],[50,"Ritter"],[150,"Edelritter"],[400,"Baron"],[900,"G
 const ENAMES=["Ritter Eisenhart","Sir Grimmwald","Ritter Schwarzdorn","Sir Bertram","Ritter Blutfels","Sir Hagen","Die Rote Gräfin","Ritter Donnerhelm"];
 const MV={A:["⚔️","Angriff"],F:["🎭","Finte"],P:["🛡️","Parade"]},BEATS={A:"F",F:"P",P:"A"};
 const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
-const fresh=()=>({name:"Sir Kunibert",day:1,en:6,gold:20,ruhm:0,st:3,au:3,ge:3,w:0,a:0,s:0,xp:{st:0,au:0,ge:0},exp:0,it:{h:2,H:0,k:0,e:0,g:0,x:0},own:[],ew:null,ea:null,boss:0,troph:0,star:0,tbest:0,tunl:0,wins:0,losses:0});
+const fresh=()=>({name:"Sir Kunibert",day:1,en:6,gold:20,ruhm:0,st:3,au:3,ge:3,w:0,a:0,s:0,xp:{st:0,au:0,ge:0},exp:0,it:{h:2,H:0,k:0,e:0,g:0,x:0},own:[],ew:null,ea:null,boss:0,troph:0,tt:[],title:null,crits:0,flawless:0,close:0,bk:[],star:0,tbest:0,tunl:0,wins:0,losses:0});
 const AU={ctx:null,mus:true,sfx:true,mode:null,want:null,timer:null,step:0,unlocked:false};
 try{const a=JSON.parse(localStorage.getItem("ritter_au")||"{}");if(a.m===false)AU.mus=false;if(a.s===false)AU.sfx=false}catch(e){}
 const auSave=()=>{try{localStorage.setItem("ritter_au",JSON.stringify({m:AU.mus,s:AU.sfx}))}catch(e){}};
@@ -205,6 +206,33 @@ world:c=>`<svg class="${c}" viewBox="0 0 120 120"><path class="sl r" d="M10 10L1
 miss:c=>`<span class="mt ${c}">Daneben!</span>`,
 dodge:c=>`<span class="mt ${c}">Ausgewichen!</span>`};
 const VXH=f=>(f.vfx||[]).map(v=>`<div class="vfx" style="--d:${v[2]?1.1:0}s">${VX[v[0]](v[1])}</div>`).join("");
+const TT=[
+{id:"w5",n:"der Tapfere",d:"5 Kämpfe gewinnen",t:()=>S.wins>=5,p:()=>`${Math.min(S.wins,5)}/5`},
+{id:"w25",n:"der Unerschrockene",d:"25 Kämpfe gewinnen",t:()=>S.wins>=25,p:()=>`${Math.min(S.wins,25)}/25`},
+{id:"w100",n:"der Unbezwingbare",d:"100 Kämpfe gewinnen",t:()=>S.wins>=100,p:()=>`${Math.min(S.wins,100)}/100`},
+{id:"cr",n:"der Scharfschneider",d:"50 kritische Treffer landen",t:()=>S.crits>=50,p:()=>`${Math.min(S.crits,50)}/50`},
+{id:"fl",n:"der Makellose",d:"3 Kämpfe ohne einen Kratzer gewinnen",t:()=>S.flawless>=3,p:()=>`${Math.min(S.flawless,3)}/3`},
+{id:"cl",n:"der Zähe",d:"Einen Kampf mit höchstens 5 LP gewinnen",t:()=>S.close>=1,p:()=>`${Math.min(S.close,1)}/1`},
+{id:"tc",n:"der Turnierchampion",d:"Ein Turnier gewinnen",t:()=>S.troph>=1,p:()=>`${Math.min(S.troph,1)}/1`},
+{id:"tk",n:"der Turnierkönig",d:"5 Turniere gewinnen",t:()=>S.troph>=5,p:()=>`${Math.min(S.troph,5)}/5`},
+{id:"b0",n:"der Räuberschreck",d:"Räuberhauptmann Graukopf besiegen",t:()=>S.bk.includes(0),p:()=>""},
+{id:"b1",n:"der Schattenbezwinger",d:"Den Schwarzen Ritter besiegen",t:()=>S.bk.includes(1),p:()=>""},
+{id:"b2",n:"der Drachentöter",d:"Drachenlord Vulkanus besiegen",t:()=>S.bk.includes(2),p:()=>""},
+{id:"b3",n:"der Frostbrecher",d:"Eiskönigin Frostara besiegen",t:()=>S.bk.includes(3),p:()=>""},
+{id:"b4",n:"der Lichjäger",d:"Lich Mortrax besiegen",t:()=>S.bk.includes(4),p:()=>""},
+{id:"b5",n:"der Dämonenbezwinger",d:"Dämonenfürst Azgaroth besiegen",t:()=>S.bk.includes(5),p:()=>""},
+{id:"tw10",n:"der Turmwächter",d:"Etage 10 des Turms erreichen",t:()=>S.tbest>=10,p:()=>`${Math.min(S.tbest,10)}/10`},
+{id:"tw25",n:"der Turmbezwinger",d:"Etage 25 des Turms erreichen",t:()=>S.tbest>=25,p:()=>`${Math.min(S.tbest,25)}/25`},
+{id:"st",n:"der Wiedergeborene",d:"Eine Wiedergeburt abschließen",t:()=>S.star>=1,p:()=>""},
+{id:"au",n:"der Auserwählte",d:"Alle sechs Bosse besiegen",t:()=>S.bk.length>=6,p:()=>`${S.bk.length}/6`}];
+const ttn=()=>(TT.find(y=>y.id===S.title)||{}).n;
+const tl=()=>ttn()?`<div class="tl">🎖️ ${ttn()}</div>`:"";
+function checkTitles(l){TT.forEach(x=>{if(!S.tt.includes(x.id)&&x.t()){S.tt.push(x.id);if(!S.title)S.title=x.id;l.push(`🎖️ <b>Neuer Titel: ${x.n}</b>`)}})}
+function setTitle(id){S.title=id;save();sfx("buff");titles()}
+function titles(){musicSet("home");app.innerHTML=`<div class="top"><b>🎖️ Titel</b><span>${S.tt.length}/${TT.length}</span></div>
+ <div class="card"><div class="row"><span>Kein Titel</span><button ${S.title?"":'class="p"'} onclick="setTitle(null)">${S.title?"Wählen":"Aktiv"}</button></div>
+ ${TT.map(x=>{const own=S.tt.includes(x.id),on=S.title===x.id;return `<div class="row"><span>${own?"":"🔒 "}<b>${x.n}</b><br><span class="mut">${x.d}</span></span>${own?`<button ${on?'class="p"':""} onclick="setTitle('${x.id}')">${on?"Getragen":"Tragen"}</button>`:`<span class="mut">${x.p()}</span>`}</div>`}).join("")}</div>
+ <div class="grid"><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`}
 const SK=[
 {n:"Schwerthieb",lv:1,pp:99,pw:1,acc:95,d:"Solider Standardangriff"},
 {n:"Schildstoß",lv:2,pp:8,pw:.8,acc:95,fx:"stun",d:"40 % Betäubung"},
@@ -224,6 +252,7 @@ function saveName(){const v=document.getElementById("nm").value.replace(/[<>&"'`
 let S=fresh(),msg="Willkommen, edler Ritter! Verdiene Gold, bestehe Abenteuer und steige auf – dabei wirst du automatisch stärker.",F=null;
 try{const x=localStorage.getItem("ritter1");if(x)S=Object.assign(fresh(),JSON.parse(x));}catch(e){}
 S.it=Object.assign({h:0,H:0,k:0,e:0,g:0,x:0},S.it);S.star=S.star||0;S.tbest=S.tbest||0;S.tunl=S.tunl||((S.boss||0)>=3?1:0);S.own=S.own||[];S.ew=S.ew||null;S.ea=S.ea||null;S.boss=S.boss||0;S.troph=S.troph||0;
+S.tt=S.tt||[];S.title=S.title||null;S.crits=S.crits||0;S.flawless=S.flawless||0;S.close=S.close||0;S.bk=S.bk||Array.from({length:S.boss||0},(_,i)=>i);
 const save=()=>{try{localStorage.setItem("ritter1",JSON.stringify(S))}catch(e){}};
 const app=document.getElementById("app");
 const rank=()=>{let r=RANKS[0][1];for(const x of RANKS)if(S.ruhm>=x[0])r=x[1];return r};
@@ -257,7 +286,8 @@ function home(){musicSet("home");
  <div>❤️ Ausdauer <b>${S.au}</b></div>
  <div>🎯 Geschick <b>${S.ge}</b></div>
  <div>⚡ Energie <b>${S.en}/6</b>${bar(S.en,6,"#e0a800")}</div>
- <div>🪙 Gold <b>${S.gold}</b></div><div>🏆 Ruhm <b>${S.ruhm}</b></div><div style="grid-column:1/-1">⭐ Stufe <b>${lvl()}</b> <span class="mut">(${S.exp} EP)</span>${bar(S.exp-expFor(lvl()),expFor(lvl()+1)-expFor(lvl()),"#8e44ad")}</div></div>
+ <div>🪙 Gold <b>${S.gold}</b></div><div>🏆 Ruhm <b>${S.ruhm}</b></div><div style="grid-column:1/-1">🎖️ ${ttn()?"<b>"+ttn()+"</b>":'<span class="mut">kein Titel</span>'} · <a href="#" onclick="titles();return false" style="color:var(--acc)">Titel (${S.tt.length}/${TT.length})</a></div>
+ <div style="grid-column:1/-1">⭐ Stufe <b>${lvl()}</b> <span class="mut">(${S.exp} EP)</span>${bar(S.exp-expFor(lvl()),expFor(lvl()+1)-expFor(lvl()),"#8e44ad")}</div></div>
  <div class="mut" style="margin-top:6px">Waffe: ${eq("w")?"✨ "+eq("w").n:W[S.w][0]} · Rüstung: ${eq("a")?"✨ "+eq("a").n:A[S.a][0]} · ${SH[S.s][0]}<br>Siege ${S.wins} · Niederlagen ${S.losses} · Pokale ${S.troph} · Bosse ${S.boss}/${BOSS.length} · Turm-Rekord ${S.tbest}</div></div>
  <div class="msg">${msg}</div>
  <div class="grid">
@@ -321,7 +351,7 @@ function mk(L,t,boss){
  return {lvl:L,name:boss?t.n:`${t.t} ${ENS[rnd(0,ENS.length-1)]}`,ehp:hp,emax:hp,atk:(3+L*2)*t.atk*sc,def:Math.floor(L*.8*t.def),tier:Math.min(4,Math.floor(L/2)),tint:t.tint||"#6b2d8f",mv:t.mv,boss:!!boss,enr:false};
 }
 function setup(e,tour,keep){
- F=Object.assign({php:keep?keep.php:maxhp(),pmax:maxhp(),menu:"main",anim:"",dmg:"",hE:0,hP:0,lP:0,lE:0,vfx:[],over:false,next:false,tour:tour||0,pp:keep?keep.pp:null,pb:{buff:0,guard:0,poison:0,burn:0,stun:0},eb:{bleed:0,stun:0,guard:0},log:e.boss?`${e.name} versperrt dir den Weg! Das wird ein harter Kampf.`:"Ein fremder Gegner fordert dich heraus! Was tust du?"},e);
+ F=Object.assign({php:keep?keep.php:maxhp(),pmax:maxhp(),menu:"main",anim:"",dmg:"",hE:0,hP:0,lP:0,lE:0,vfx:[],over:false,next:false,tour:tour||0,pp:keep?keep.pp:null,pb:{buff:0,guard:0,poison:0,burn:0,stun:0},eb:{bleed:0,stun:0,guard:0},log:(ttn()?`<b>${S.name} ${ttn()}</b> tritt an!<br>`:"")+(e.boss?`${e.name} versperrt dir den Weg! Das wird ein harter Kampf.`:"Ein fremder Gegner fordert dich heraus! Was tust du?")},e);
  if(!F.pp){F.pp={};SK.forEach((s,i)=>F.pp[i]=s.pp)}
  save();fight();
 }
@@ -345,7 +375,7 @@ function fight(){
  <div class="box eb"><b>${f.name}</b> <span class="mut">Lv${f.lvl}${f.tour?" · Turnier "+f.tour+"/3":""}${f.tower?" · Etage "+f.tower:""}${f.boss?" · BOSS":""}</span> ${ic(f.eb,{bleed:"🩸",stun:"💫",guard:"🛡️"})}${bar(f.ehp,f.emax,"#c0392b")}<span class="mut">${Math.max(0,f.ehp)}/${f.emax}</span></div>
  <div class="es ${f.boss?"big":""} ${f.hE?"hit":""}">${dm("e")}<div class="lg ${f.lE?"lungeE":""}">${knight(f.tier,f.tier,Math.min(3,Math.floor(f.lvl/3)),true,f.tint)}</div></div>
  <div class="ps ${f.hP?"hit late":""}">${dm("p")}<div class="lg ${f.lP?"lungeP":""}">${pk()}</div></div>
- <div class="box pb"><b>${S.name}</b> <span class="mut">Lv${lvl()}</span> ${ic(f.pb,{buff:"💥",guard:"🛡️",poison:"☠️",burn:"🔥",stun:"💫"})}${bar(f.php,f.pmax,"#2e8b57")}<span class="mut">${Math.max(0,f.php)}/${f.pmax}</span></div>${VXH(f)}</div>
+ <div class="box pb"><b>${S.name}</b> <span class="mut">Lv${lvl()}</span>${tl()} ${ic(f.pb,{buff:"💥",guard:"🛡️",poison:"☠️",burn:"🔥",stun:"💫"})}${bar(f.php,f.pmax,"#2e8b57")}<span class="mut">${Math.max(0,f.php)}/${f.pmax}</span></div>${VXH(f)}</div>
  <div class="msg">${f.log}</div><div class="grid">${ui}</div>`;
 }
 function fin(l){F.log=l.join("<br>");F.menu="main";fight()}
@@ -358,7 +388,7 @@ function useSkill(i){
  else{f.vfx.push([SKFX[i],[3,5,9].includes(i)?"vP":"vE",0]);
   if(s.pw>0){
    let d=5+Math.floor(S.st*1.3)+wBon();d=d*s.pw*(f.pb.buff>0?1.5:1)*(1+.1*S.star)+rnd(0,3);
-   const crit=Math.random()<S.ge*.03+fxv("crit");if(crit)d*=1.5;if(f.eb.guard)d*=.5;
+   const crit=Math.random()<S.ge*.03+fxv("crit");if(crit){d*=1.5;S.crits++}if(f.eb.guard)d*=.5;
    d=Math.max(1,Math.round(d-f.def));f.ehp-=d;f.anim="e";f.dmg=d;f.hE=d;sfx(crit?"crit":"hit");l.push((crit?"<b>Kritischer Treffer!</b> ":"")+`${d} Schaden.`);encHit(d,l);
   }
   if(s.fx==="stun"&&Math.random()<.4){f.eb.stun=1;l.push("Der Gegner ist betäubt! 💫")}
@@ -392,15 +422,15 @@ function enemyTurn(l){
   if(m[3]==="guard"){f.vfx.push(["guard","vE",1]);f.eb.guard=1;l.push("Der Gegner geht in Deckung. 🛡️")}
   else if(Math.random()*100>=m[2]-S.ge-fxv("dodge")){l.push("Du weichst aus!");sfx("miss");f.vfx.push(["dodge","vP",1])}
   else{
-   let d=(f.atk+rnd(0,3))*m[1]-aBon()-SH[S.s][2];if(f.pb.guard>0)d*=.5;d=Math.max(1,Math.round(d));f.php-=d;f.anim="p";f.dmg=d;f.hP=d;sfx("hurt");f.vfx.push(["slash","vP",1]);if(m[1]>=1.5)f.vfx.push(["flash","vP",1]);l.push(`Du erleidest ${d} Schaden.`);
+   let d=(f.atk+rnd(0,3))*m[1]-aBon()-SH[S.s][2];if(f.pb.guard>0)d*=.5;d=Math.max(1,Math.round(d));f.took=1;f.php-=d;f.anim="p";f.dmg=d;f.hP=d;sfx("hurt");f.vfx.push(["slash","vP",1]);if(m[1]>=1.5)f.vfx.push(["flash","vP",1]);l.push(`Du erleidest ${d} Schaden.`);
    if(m[3]==="poison"){f.pb.poison=4;sfx("poison");f.vfx.push(["poison","vP",1]);l.push("Du bist vergiftet! ☠️")}
    if(m[3]==="burn"&&!fxv("noburn")){f.vfx.push(["fire","vP",1]);f.pb.burn=3;l.push("Du brennst! 🔥")}
    if(m[3]==="stun"&&Math.random()<.5){f.vfx.push(["stun","vP",1]);f.pb.stun=1;l.push("Du bist betäubt! 💫")}
   }
  }
  const rg=fxv("regen");if(rg&&f.php<f.pmax){f.php=Math.min(f.pmax,f.php+rg);l.push(`Deine Rüstung heilt dich um ${rg} LP. 🌙`)}
- if(f.pb.poison>0){const d=2+Math.floor(f.lvl/2);f.php-=d;f.pb.poison--;l.push(`Gift: ${d} Schaden. ☠️`)}
- if(f.pb.burn>0){const d=4+f.lvl;f.php-=d;f.pb.burn--;l.push(`Verbrennung: ${d} Schaden. 🔥`)}
+ if(f.pb.poison>0){const d=2+Math.floor(f.lvl/2);f.took=1;f.php-=d;f.pb.poison--;l.push(`Gift: ${d} Schaden. ☠️`)}
+ if(f.pb.burn>0){const d=4+f.lvl;f.took=1;f.php-=d;f.pb.burn--;l.push(`Verbrennung: ${d} Schaden. 🔥`)}
  if(f.pb.buff>0)f.pb.buff--;if(f.pb.guard>0)f.pb.guard--;
  if(f.php<=0)return endFight(false,l);
  if(f.pb.stun){f.pb.stun=0;l.push("Du bist betäubt und verlierst deinen Zug!");return enemyTurn(l)}
@@ -410,14 +440,14 @@ function endFight(win,l){
  const f=F;f.over=true;const old=lvl();AU.want=null;musicStop();sfx(win?"win":"lose");
  if(win){
   const m=f.boss?3:1,sm=1+.1*S.star,r=(10+f.lvl*6)*m,g=Math.round((15+f.lvl*8)*m*sm),x=Math.round((15+f.lvl*10)*m*sm);
-  S.ruhm+=r;S.gold+=g;S.exp+=x;S.wins++;l.push(`<b>🏆 Sieg!</b> +${r} Ruhm, +${g} Gold, +${x} EP.`);
-  if(f.boss&&!f.tower){S.boss++;if(S.boss>=3)S.tunl=1;(BREW[S.boss-1]||[]).forEach(id=>giveE(id,l));S.it.H++;S.it.g++;l.push("Beute: Großer Heiltrank ⚗️ und Gegengift 💊!");msg=`Boss ${f.name} besiegt!`}
+  S.ruhm+=r;S.gold+=g;S.exp+=x;S.wins++;if(f.php<=5)S.close++;if(!f.took)S.flawless++;l.push(`<b>🏆 Sieg!</b> +${r} Ruhm, +${g} Gold, +${x} EP.`);
+  if(f.boss&&!f.tower){S.boss++;if(!S.bk.includes(S.boss-1))S.bk.push(S.boss-1);if(S.boss>=3)S.tunl=1;(BREW[S.boss-1]||[]).forEach(id=>giveE(id,l));S.it.H++;S.it.g++;l.push("Beute: Großer Heiltrank ⚗️ und Gegengift 💊!");msg=`Boss ${f.name} besiegt!`}
   else{if(Math.random()<.3){S.it.h++;l.push("Du findest einen Heiltrank! 🧪")}msg=`Du hast ${f.name} besiegt!`}
   if(f.tower){S.tbest=Math.max(S.tbest,f.tower);f.next=true;l.push(`Etage ${f.tower} geschafft! Du verschnaufst kurz (+20 % LP).`);if(f.tower%10===0)towerLoot(l)}
   if(f.tour){if(f.tour<3){f.next=true;l.push(`Turnierrunde ${f.tour}/3 geschafft – du verschnaufst kurz.`)}else{S.troph++;tourLoot(l);S.gold+=100;S.exp+=50;S.ruhm+=30;l.push("<b>🏟️ Turniersieger!</b> Pokal, +100 Gold, +30 Ruhm, +50 EP.");msg="Du hast das Turnier gewonnen!"}}
  }else{const x=Math.floor(S.gold*.1);S.gold-=x;S.ruhm=Math.max(0,S.ruhm-5);S.exp+=5;S.losses++;l.push(`<b>💀 Niederlage.</b> −${x} Gold, −5 Ruhm, +5 EP.`);msg=f.tower?`Der Turm hat dich bezwungen – Rekord: Etage ${S.tbest}.`:f.tour?"Du bist im Turnier ausgeschieden.":"Du wurdest besiegt – trainiere und kehre stärker zurück!"}
  const nl=lvl();if(nl>old){setTimeout(()=>sfx("level"),1500);l.push(`<b>⭐ Stufe ${nl} erreicht!</b>`);const n=nl-old;S.st+=n;S.au+=n;S.ge+=n;l.push(`Stärke, Ausdauer und Geschick steigen um je ${n}! 💪`);SK.filter(s=>s.lv>old&&s.lv<=nl).forEach(s=>l.push(`Neue Fähigkeit: <b>${s.n}</b>!`))}
- save();fin(l);
+ checkTitles(l);save();fin(l);
 }
 home();
 </script>
