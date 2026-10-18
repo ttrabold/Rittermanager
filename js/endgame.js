@@ -37,7 +37,7 @@ function rebirth(){if(S.boss<BOSS.length)return;musicSet("hall");
  <div class="card">${BLESS.map(b=>`<div class="row"><span>${b.e} <b>${b.n}</b>${blessV(b.id)?` <span class="mut">(×${blessV(b.id)})</span>`:""}<br><span class="mut">${b.d}</span></span><button class="p" ${b.ok&&!b.ok()?"disabled":""} onclick="doRebirth('${b.id}')">Wählen</button></div>`).join("")}</div>
  <div class="grid"><button style="grid-column:1/-1" onclick="home()">Abbrechen</button></div>`}
 function doRebirth(bid){if(S.boss<BOSS.length)return;S.bl=S.bl||{};S.bl[bid]=(S.bl[bid]||0)+1;
- S.star++;S.tcur=1;S.sk=[];S.lvl0=1;for(const o of[S.up,S.ru])for(const k of Object.keys(o))if(/^[wa]\d$/.test(k))delete o[k];
+ S.star++;S.tcur=1;S.sk=[];S.lvl0=1;for(const o of[S.up,S.ru])for(const k of Object.keys(o))if(/^[wa]\d$|^w:/.test(k))delete o[k];S.wc="schwert";
  Object.assign(S,{exp:0,ruhm:0,gold:50+500*blessV("start"),st:3,au:3,ge:3,w:0,a:0,s:0,boss:0,rv:0});if(blessV("start")){S.it.h+=3*blessV("start");S.it.H+=blessV("start")}
  const b=BLESS.find(x=>x.id===bid);msg=`Du wirst wiedergeboren! Wiedergeburt ${S.star} 🌟 – ${b.e} <b>${b.n}</b> begleitet dich.`;sfx("level");checkTitles(QN);save();home()}
 

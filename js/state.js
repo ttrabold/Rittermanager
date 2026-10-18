@@ -1,15 +1,15 @@
 // Ritter Manager – Spielstand: anlegen, laden, migrieren, speichern und abgeleitete Werte
 const fresh=()=>({mat:Object.fromEntries(MAT.map(m=>[m.k,0])),pr:{sm:{lv:1,xp:0},al:{lv:1,xp:0},ve:{lv:1,xp:0}},up:{},ru:{},bld:{kaserne:0,garten:0,mine:0,arkan:0,schatz:0},enStart:6,name:"Sir Kunibert",sex:"m",tcur:1,day:1,en:6,gold:20,ruhm:0,st:3,au:3,ge:3,w:0,a:0,s:0,exp:0,it:{h:2,H:0,k:0,e:0,g:0,x:0,a:0,A:0},own:[],ew:null,ea:null,boss:0,troph:0,tt:[],title:null,crits:0,flawless:0,close:0,bk:[],star:0,tbest:0,tunl:0,wins:0,losses:0});
 const eq=k=>EI.find(x=>x.id===S[k==="w"?"ew":"ea"]);
-const ikey=k=>k==="w"?(S.ew||"w"+S.w):(S.ea||"a"+S.a);
+const ikey=k=>k==="w"?(S.ew||wKey()):(S.ea||"a"+S.a);
 const upl=k=>(S.up||{})[ikey(k)]||0;
 const fxv=k=>{let v=0;for(const s of["ew","ea"]){const i=EI.find(x=>x.id===S[s]);if(i&&i.fx[k])v+=i.fx[k]}for(const q of["w","a"])for(const r of((S.ru||{})[ikey(q)]||[])){const R=RU.find(x=>x.id===r);if(R&&R.fx[k])v+=R.fx[k]}return v};
 const wBon=()=>{const e=eq("w");return (e?e.b:W[S.w][2])+upl("w")*2};
 const aBon=()=>{const e=eq("a");return (e?e.b:A[S.a][2])+upl("a")};
-const kinfo=key=>{const e=EI.find(x=>x.id===key);if(e)return {s:e.s,n:(e.cr?"⚒️ ":"✨ ")+e.n,b:e.b};const t=key[0],L=t==="w"?W:A,x=L[+key.slice(1)]||L[0];return {s:t,n:x[0],b:x[2]}};
+const kinfo=key=>{const e=EI.find(x=>x.id===key);if(e)return {s:e.s,n:(e.cr?"⚒️ ":"✨ ")+e.n,b:e.b,cat:e.cat};if(key.startsWith("w:")){const[,c,i]=key.split(":");return {s:"w",n:(WNAMES[c]||WNAMES.schwert)[+i],b:W[+i][2],cat:c}}const t=key[0],L=t==="w"?W:A,x=L[+key.slice(1)]||L[0];return {s:t,n:x[0],b:x[2]}};
 const knm=key=>{const u=(S.up||{})[key]||0,r=((S.ru||{})[key]||[]).length;return kinfo(key).n+(u?" +"+u:"")+(r?" "+"✦".repeat(r):"")};
 const iname=k=>knm(ikey(k));
-const invItems=()=>["w"+S.w,"a"+S.a,...S.own.filter(id=>EI.find(x=>x.id===id))].sort((a,b)=>(kinfo(a).s>kinfo(b).s)-(kinfo(a).s<kinfo(b).s));
+const invItems=()=>[wKey(),"a"+S.a,...S.own.filter(id=>EI.find(x=>x.id===id))].sort((a,b)=>(kinfo(a).s>kinfo(b).s)-(kinfo(a).s<kinfo(b).s));
 const isEq=key=>ikey("w")===key||ikey("a")===key;
 const gn=n=>S.sex==="f"&&n.startsWith("der ")?"die "+n.slice(4)+(/e$/.test(n)?"":"in"):n;
 const ttn=()=>{const t=TT.find(y=>y.id===S.title);return t&&gn(t.n)};

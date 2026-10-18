@@ -1,5 +1,5 @@
 // Ritter Manager – Grafik: Ritter- und Boss-Modelle, Waffen-/Rüstungseffekte, Hintergründe, Kampfeffekte
-const pk=()=>knight(S.w,S.a,S.s,false,null,eq("w")?eq("w").c:null,eq("a")?eq("a").c:null,S.ew,S.ea,S.sex==="f");
+const pk=()=>knight(S.w,S.a,S.s,false,null,eq("w")?eq("w").c:null,eq("a")?eq("a").c:null,S.ew,S.ea,S.sex==="f",undefined,eqCat());
 const VX={
 slash:c=>`<svg class="${c}" viewBox="0 0 120 120"><path class="sl" d="M14 14L106 106"/></svg>`,
 bash:c=>`<span class="fly">🛡️</span><span class="ring ${c}"></span>`,
@@ -69,7 +69,7 @@ b10a:b=>b?`<path class="wv" d="M40 62Q6 92 14 146L50 118Z" fill="#ff8f00"/>${fm(
 b11a:b=>b?`<circle class="pl" cx="61" cy="88" r="64" fill="#1a1a2e"/>`:ST(30,60,"#9fa8ff",0)+ST(92,60,"#9fa8ff",.4)+ST(61,100,"#fff",.8),
 b12a:b=>b?`<circle class="pl" cx="61" cy="88" r="64" fill="#e1bee7"/>`:`<ellipse class="pl" cx="61" cy="18" rx="19" ry="5" fill="none" stroke="#fff" stroke-width="3"/><path d="M61 64l9 12-9 20-9-20z" fill="#ce93d8" stroke="#fff"/>`+ST(28,60,"#fff",0)+ST(94,60,"#fff",.5),
 t4:b=>b?`<circle class="pl" cx="61" cy="88" r="60" fill="#ffd54a"/>`:`<ellipse class="pl" cx="61" cy="20" rx="17" ry="5" fill="none" stroke="#ffd54a" stroke-width="3"/><path d="M61 66l8 10-8 18-8-18z" fill="#ffd54a" stroke="#fff"/>`};
-function knight(w,a,s,flip,plume,ow,oa,wi,ai,fem,robe){
+function knight(w,a,s,flip,plume,ow,oa,wi,ai,fem,robe,wcat){
  const arm=a>0||!!oa,wc=ow||WC[w],ac=oa||robe||AC[a],sk="#e0b48a",pl=plume||(a>=3||oa?"#c0221f":null),ln="#0005",
   tab=plume||"#7a1d1d",lc=arm?ac:"#5b4636",bt=arm?"#3d3833":"#3a2a1c",hc=fem?"#8a4b22":"#5a3a1e",
   sq=fem?`<g transform="translate(61 0) scale(.8 1) translate(-61 0)">`:"<g>",av=b=>ai&&AV[ai]?sq+AV[ai](b,fem)+"</g>":"",
@@ -108,8 +108,8 @@ function knight(w,a,s,flip,plume,ow,oa,wi,ai,fem,robe){
  ${head}${plm}
  ${av(0)}
  ${limb(fem?"M82 66Q97 80 105 101":"M85 66Q98 80 105 101",ac)}${arm?`<circle cx="96" cy="82" r="${fem?3.8:4.5}" fill="${ac}" stroke="${ln}"/>`:""}
- ${wi&&VIS[wi]?weaponSvg(wi):`<path d="M104 96V20L107.5 8L111 20V96Z" fill="${wc}" stroke="#0005"/><path d="M107.5 14V94" stroke="#fff7"/>`}
- <path d="M96 94h23q2 3 0 6h-23q-2-3 0-6z" fill="#7a4a1c" stroke="#0004"/><rect x="105" y="100" width="5" height="12" fill="#5b3a1c"/><circle cx="107.5" cy="114" r="3" fill="#d4a017" stroke="#0005"/>
+ ${wcat&&wcat!=="schwert"?catSvg(wcat,w,ow,wi&&(EI.find(x=>x.id===wi)||{}).c):`${wi&&VIS[wi]?weaponSvg(wi):`<path d="M104 96V20L107.5 8L111 20V96Z" fill="${wc}" stroke="#0005"/><path d="M107.5 14V94" stroke="#fff7"/>`}
+ <path d="M96 94h23q2 3 0 6h-23q-2-3 0-6z" fill="#7a4a1c" stroke="#0004"/><rect x="105" y="100" width="5" height="12" fill="#5b3a1c"/><circle cx="107.5" cy="114" r="3" fill="#d4a017" stroke="#0005"/>`}
  <circle cx="107.5" cy="105.5" r="${fem?5.2:6}" fill="${arm?ac:sk}" stroke="#0006"/><path d="M102.5 103.5h10M102.5 107h10" stroke="#0003"/>
  ${s>0?`<path d="M12 64h32v24q0 19-16 28q-16-9-16-28z" fill="${SC[s]}" stroke="#0006" stroke-width="2"/><path d="M16 68h24v20q0 15-12 22q-12-7-12-22z" fill="none" stroke="#fff4" stroke-width="1.5"/><path d="M28 70v40M16 84h24" stroke="#fff6" stroke-width="3"/><circle cx="28" cy="84" r="3.5" fill="#d4a017" stroke="#0004"/>`:""}
  </g></svg>`}

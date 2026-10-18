@@ -40,7 +40,7 @@ function inv(){musicSet("home");const hb=hintBox("inv");
  app.innerHTML=`<div class="top"><b>🎒 Inventar</b><span><i class=coin></i> ${S.gold}</span></div>${hb}
  <div class="scene" style="height:170px">${BG}${pk()}</div>
  <div class="card"><h3>🛡️ Ausgerüstet</h3>
- ${slot("🗡️","Waffe",iname("w"),"+"+wBon()+" ⚔️",fx("w"))}
+ ${slot(wcat().e,"Waffe · "+wcat().n,iname("w"),"+"+wBon()+" ⚔️",fx("w")+"<br>"+wcat().d)}
  ${slot("🛡️","Rüstung",iname("a"),"+"+aBon()+" 🛡️",fx("a"))}
  ${slot("🔰","Schild",SH[S.s][0],"+"+SH[S.s][2]+" 🛡️",S.s?"Fängt Schaden ab":"Auf dem Markt erhältlich")}</div>
  <div class="card"><h3>📊 Kampfwerte</h3><div class="stats">
@@ -84,7 +84,7 @@ function shop(){musicSet("home");
   return `<div class="row"><span>${x[0]} <span class="mut">+${x[2]}</span></span>${own?'<b>✔ angelegt</b>':lower?'<span class="mut">besser vorhanden</span>':`<button ${can?"":"disabled"} onclick="buy('${k}',${i})">${x[1]} <i class=coin></i></button>`}</div>`}).join("");
  app.innerHTML=`<div class="top"><b>🏪 Markt</b><span><i class=coin></i> ${S.gold}</span></div>
  <div class="scene" style="height:170px">${BG}${pk()}</div>
- <div class="card">${sec("Waffen",W,"w","🗡️")}${sec("Rüstungen",A,"a","🛡️")}${sec("Schilde",SH,"s","🔰")}<div class="row"><span class="mut">✨ Verzauberte und geschmiedete Ausrüstung legst du im Inventar an.</span><button onclick="inv()">🎒 Inventar</button></div><h3>🧪 Tränke${isMarket(S.day)?' <span class="mut">· 🛒 Markttag −25 %</span>':""}</h3>${IT.map(t=>`<div class="row"><span>${t.e} ${t.n} ×${S.it[t.k]} <span class="mut">${t.d}</span></span><button ${S.gold>=ip(t.p)?"":"disabled"} onclick="buyIt('${t.k}')">${ip(t.p)} <i class=coin></i></button></div>`).join("")}</div>
+ <div class="card">${wpnSec()}${sec("Rüstungen",A,"a","🛡️")}${sec("Schilde",SH,"s","🔰")}<div class="row"><span class="mut">✨ Verzauberte und geschmiedete Ausrüstung legst du im Inventar an.</span><button onclick="inv()">🎒 Inventar</button></div><h3>🧪 Tränke${isMarket(S.day)?' <span class="mut">· 🛒 Markttag −25 %</span>':""}</h3>${IT.map(t=>`<div class="row"><span>${t.e} ${t.n} ×${S.it[t.k]} <span class="mut">${t.d}</span></span><button ${S.gold>=ip(t.p)?"":"disabled"} onclick="buyIt('${t.k}')">${ip(t.p)} <i class=coin></i></button></div>`).join("")}</div>
  <div class="grid"><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`;
 }
 function buy(k,i){const L={w:W,a:A,s:SH}[k];if(S.gold<L[i][1])return;S.gold-=L[i][1];S[k]=i;sfx("coin");msg=`Gekauft: <b>${L[i][0]}</b>!`;save();shop();}
@@ -154,3 +154,10 @@ function impText(){const t=document.getElementById("imp").value;expBuf=t;let d;t
  if(!impArm){impArm=1;impMsg=`Gefunden: <b>${String(d.name).replace(/[<>&"'`]/g,"")}</b>, Tag ${d.day||1}. Der aktive Platz ${SLOT} wird überschrieben!`;return saveScr()}
  try{localStorage.setItem(slotKey(SLOT),JSON.stringify(d))}catch(e){}impArm=0;location.reload()}
 function impFile(inp){const f=inp.files&&inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{expBuf=String(r.result||"");impArm=0;impText()};r.readAsText(f)}
+
+// ---- Markt: Waffen nach Art ----
+let shopCat=null;
+function wpnSec(){const cur=S.wc||"schwert";shopCat=shopCat||cur;const c=WCAT[shopCat];
+ return `<h3>⚔️ Waffen</h3><div style="display:flex;flex-wrap:wrap;gap:6px">${Object.keys(WCAT).map(k=>`<button ${k===shopCat?'class="p"':""} style="min-height:34px;padding:4px 10px;font-size:13px" onclick="shopCat='${k}';shop()">${WCAT[k].e} ${WCAT[k].n}</button>`).join("")}</div>
+ <div class="mut" style="margin:6px 0">${c.e} <b>${c.n}:</b> ${c.d}${cur!==shopCat?"<br>Kaufst du hier, ersetzt die neue Waffe deine bisherige gekaufte Waffe.":""}</div>`+
+ WNAMES[shopCat].map((n,i)=>{const own=cur===shopCat&&S.w===i,low=cur===shopCat&&i<S.w,p=wPrice(shopCat,i);return `<div class="row"><span>${n} <span class="mut">+${W[i][2]}</span></span>${own?'<b>✔ angelegt</b>':low?'<span class="mut">schwächer</span>':`<button ${S.gold>=p?"":"disabled"} onclick="buyW('${shopCat}',${i})">${p} <i class=coin></i></button>`}</div>`}).join("")}

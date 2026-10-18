@@ -1,7 +1,7 @@
 // Ritter Manager – Bestiarium: füllt sich mit jedem Gegner, dem du begegnest
 
 const BST=[
- ...ET.map((t,i)=>({k:"et"+i,n:t.t,cat:"Gegner",mv:t.mv,svg:()=>knight(2,2,1,true,t.tint),d:{Ritter:"Ausgeglichene Kämpfer, die gern in Deckung gehen.",Räuber:"Flink und leicht gerüstet – Vorsicht vor dem Giftdolch.",Feuerritter:"Ihre Klingen glühen und setzen dich in Brand.",Panzerritter:"Viel LP, dicke Rüstung, betäubende Hammerschläge.",Bogenschütze:"Wenig LP, aber der Pfeilhagel schmerzt."}[t.t]})),
+ ...ET.map((t,i)=>({k:"et"+i,n:t.t,cat:"Gegner",mv:t.mv,svg:()=>t.t==="Magier"?knight(2,0,0,true,t.tint,null,null,null,null,false,"#311b92","stab"):knight(2,2,t.t==="Bogenschütze"?0:1,true,t.tint,null,null,null,null,false,null,{Bogenschütze:"bogen",Panzerritter:"keule",Räuber:"dolch"}[t.t]),d:{Ritter:"Ausgeglichene Kämpfer, die gern in Deckung gehen.",Räuber:"Flink und leicht gerüstet – Vorsicht vor dem Giftdolch.",Feuerritter:"Ihre Klingen glühen und setzen dich in Brand.",Panzerritter:"Viel LP, dicke Rüstung, betäubende Hammerschläge.",Bogenschütze:"Wenig LP, aber der Pfeilhagel schmerzt.",Magier:"Zerbrechlich, aber ihre Feuerbälle und Frostblitze sind gefährlich."}[t.t]})),
  {k:"mimik",n:"Mimik",cat:"Sondergegner",mv:MIMIC.mv,svg:()=>mimicSvg(),d:"Sieht aus wie eine Schatztruhe – bis sie zubeißt."},
  {k:"wolf",n:"Vollmond-Werwolf",cat:"Sondergegner",mv:WOLF.mv,svg:()=>wolfSvg(),d:"Jagt nur in Vollmondnächten. Sein Biss vergiftet."},
  {k:"rival",n:"Sir Gregor der Neider",cat:"Sondergegner",mv:RIVT.mv,svg:()=>knight(3,3,2,true,"#4a148c","#6c3fa0",null,"ss",null),d:"Dein ewiger Rivale. Er wird mit dir stärker."},

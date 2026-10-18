@@ -9,7 +9,7 @@
 window.__reloads=0;
 </script></head>
 <body><div id="app"></div>
-<script src="../js/util.js"></script><script src="../js/data.js"></script><script src="../js/state.js"></script><script src="../js/audio.js"></script><script src="../js/speech.js"></script><script src="../js/unlock.js"></script><script src="../js/art.js"></script><script src="../js/professions.js"></script><script src="../js/day.js"></script><script src="../js/tavern.js"></script><script src="../js/screens.js"></script><script src="../js/combat.js"></script><script src="../js/help.js"></script><script src="../js/companions.js"></script><script src="../js/events.js"></script><script src="../js/story.js"></script><script src="../js/endgame.js"></script><script src="../js/bestiary.js"></script><script src="../js/main.js"></script>
+<script src="../js/util.js"></script><script src="../js/data.js"></script><script src="../js/state.js"></script><script src="../js/audio.js"></script><script src="../js/speech.js"></script><script src="../js/unlock.js"></script><script src="../js/art.js"></script><script src="../js/professions.js"></script><script src="../js/weapons.js"></script><script src="../js/day.js"></script><script src="../js/tavern.js"></script><script src="../js/screens.js"></script><script src="../js/combat.js"></script><script src="../js/help.js"></script><script src="../js/companions.js"></script><script src="../js/events.js"></script><script src="../js/story.js"></script><script src="../js/endgame.js"></script><script src="../js/bestiary.js"></script><script src="../js/main.js"></script>
 <pre id="out" style="position:fixed;inset:0;overflow:auto;margin:0;padding:12px;background:#111;color:#eee;font:13px monospace;z-index:999"></pre>
 <script>
 const R=[];let fails=0;
@@ -44,6 +44,9 @@ t("Taverne: Partie spielen",()=>{hero(20);S.tav=null;TV.o="gustl";TV.bet=10;tvSt
 t("Werkstatt: brauen, schmieden, Rune",()=>{hero(20);brew("h");forge("c1");rune("r1","w"+S.w);ok((S.ru["w"+S.w]||[]).includes("r1"))});
 t("Hinweiskarten",()=>{hero(20);S.hints={};inv();ok(document.querySelector(".hint"));hintOk("inv",document.querySelector(".hint button"));inv();ok(!document.querySelector(".hint"))});
 t("Keine 'undefined'/'NaN' im Burgbildschirm",()=>{hero(25);home();const tx=document.body.innerText;ok(!/undefined|NaN/.test(tx),"gefunden")});
+t("Waffenarten: kaufen, Wirkung, Modelle",()=>{hero(20);for(const c of Object.keys(WCAT)){buyW(c,2);ok(eqCat()===c,c);setup(mk(20,ET[0]));F.ehp=F.emax=1e6;useSkill("hieb");ok(!F.log.includes("NaN"),c+" NaN");ok(pk().length>500,c+" Modell")}home();inv();shop()});
+t("Gegner mit Waffenarten und Magier",()=>{hero(25);const cats=new Set();for(let k=0;k<200;k++){const e=mk(25,ET[rnd(0,ET.length-1)]);cats.add(e.look.wcat);if(e.look.wi){const it=EI.find(x=>x.id===e.look.wi);ok((it.cat||"schwert")===e.look.wcat,"Waffe passt nicht")}enemyKn(e)}ok(cats.size>=6,"nur "+cats.size+" Arten")});
+t("Upgrades auf Nicht-Schwert",()=>{hero(20);buyW("axt",3);upgrade(wKey());ok(S.up["w:axt:3"]===1);ok(iname("w").includes("+1"))});
 document.getElementById("out").textContent=`Rittermanager – automatische Tests\n${R.length-fails}/${R.length} bestanden\n\n`+R.join("\n");
 window.__testResult={total:R.length,fails,lines:R};
 </script></body></html>

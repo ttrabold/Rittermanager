@@ -9,7 +9,7 @@ function encHit(d,l){const f=F,r=Math.random(),b=fxv("burn");
  if(Math.random()<fxv("stun")){f.eb.stun=1;l.push("Der Gegner erstarrt! ❄️")}
  const h=Math.round(d*fxv("life"));if(h>0){const o=f.php;f.php=Math.min(f.pmax,f.php+h);if(f.php>o)l.push(`Die Klinge saugt ${f.php-o} LP auf. 💚`)}}
 const ppFull=()=>eqSk().every(id=>{const s=SKD(id);return s.pp>=99||F.pp[id]>=s.pp});
-const FEMT={Ritter:"Ritterin",Räuber:"Räuberin",Feuerritter:"Feuerritterin",Panzerritter:"Panzerritterin",Bogenschütze:"Bogenschützin"};
+const FEMT={Magier:"Magierin",Ritter:"Ritterin",Räuber:"Räuberin",Feuerritter:"Feuerritterin",Panzerritter:"Panzerritterin",Bogenschütze:"Bogenschützin"};
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 // Gegner: Geschlecht, Ausrüstung je Stufe und – ab Stufe 6 – verzauberte Gegenstände mit echter Wirkung
 function mk(L,t,boss){
@@ -17,26 +17,27 @@ function mk(L,t,boss){
  const e={lvl:L,name:boss?t.n:"",ehp:hp,emax:hp,atk:(3+L*2)*t.atk*sc,def:Math.floor(L*.8*t.def),tier:Math.min(4,Math.floor(L/2)),tint:t.tint||"#6b2d8f",mv:t.mv,boss:!!boss,enr:false,et:t.t||"Boss",bi:boss?BOSS.indexOf(t):-1};
  if(!boss){const fem=Math.random()<.4,bt=e.tier,light=t.t==="Räuber"||t.t==="Bogenschütze";
   let at=clamp(bt-rnd(0,2),0,light?2:4);if(t.t==="Panzerritter")at=Math.max(at,Math.min(4,bt));
-  const p=L<6?0:L<12?.4:L<20?.7:1,pick=s=>{const pool=EI.filter(x=>x.s===s&&x.b<=4+L*1.5);return pool.length&&Math.random()<p?pool[rnd(0,pool.length-1)]:null},wi=pick("w"),ai=pick("a");
+  const CATS={Ritter:["schwert","schwert","helle","axt"],Räuber:["dolch","axt","keule"],Feuerritter:["schwert","axt"],Panzerritter:["keule","helle"],Bogenschütze:["bogen"],Magier:["stab"]}[t.t]||["schwert"],wcat=CATS[rnd(0,CATS.length-1)];
+  const p=L<6?0:L<12?.4:L<20?.7:1,pick=(s,f)=>{const pool=EI.filter(x=>x.s===s&&x.b<=4+L*1.5&&(!f||f(x)));return pool.length&&Math.random()<p?pool[rnd(0,pool.length-1)]:null},wi=pick("w",x=>(x.cat||"schwert")===wcat),ai=t.t==="Magier"?null:pick("a");
   e.name=`${fem?FEMT[t.t]:t.t} ${ENS[rnd(0,ENS.length-1)]}`;
-  e.look={wt:clamp(bt-rnd(0,2),0,4),at,sh:clamp(Math.floor(L/3)-rnd(0,1),0,light?1:3),fem,wi:wi&&wi.id,ai:ai&&ai.id,wc:wi&&wi.c,ac:ai&&ai.c};
+  e.look={wt:clamp(bt-rnd(0,2),0,4),at:t.t==="Magier"?0:at,sh:t.t==="Magier"||["bogen","helle","stab"].includes(wcat)?0:clamp(Math.floor(L/3)-rnd(0,1),0,light?1:3),fem,wi:wi&&wi.id,ai:ai&&ai.id,wc:wi&&wi.c,ac:ai&&ai.c,wcat,robe:t.t==="Magier"?(fem?"#4a148c":"#311b92"):null};
   e.fx={};for(const it of[wi,ai])if(it)for(const k in it.fx)e.fx[k]=(e.fx[k]||0)+it.fx[k];
   if(e.fx.hp){const b=Math.round(e.fx.hp*(1+L/25));e.ehp+=b;e.emax+=b}
   if(wi||ai)e.intro=`${e.name} trägt ${[wi,ai].filter(Boolean).map(x=>"<b>"+x.n+"</b>").join(" und ")}! ✨<br>`}
  return e;
 }
-const enemyKn=f=>f.look?knight(f.look.wt,f.look.at,f.look.sh,true,f.tint,f.look.wc,f.look.ac,f.look.wi,f.look.ai,f.look.fem):knight(f.tier,f.tier,Math.min(3,Math.floor(f.lvl/3)),true,f.tint);
+const enemyKn=f=>f.look?knight(f.look.wt,f.look.at,f.look.sh,true,f.tint,f.look.wc,f.look.ac,f.look.wi,f.look.ai,f.look.fem,f.look.robe,f.look.wcat):knight(f.tier,f.tier,Math.min(3,Math.floor(f.lvl/3)),true,f.tint);
 function setup(e,tour,keep){
  F=Object.assign({php:keep?keep.php:maxhp(),pmax:maxhp(),menu:"main",anim:"",dmg:"",hE:0,hP:0,lP:0,lE:0,vfx:[],over:false,next:false,tour:tour||0,pp:keep?keep.pp:null,pb:{buff:0,guard:0,poison:0,burn:0,stun:0,regen:0},eb:{bleed:0,burn:0,poison:0,ps:0,stun:0,guard:0,weak:0},log:(e.tower?towerIntro(e.tower):"")+(e.boss&&e.bi>=0&&!e.tower?`📜 <i>${LORE[e.bi][0]}</i><br>`:"")+(e.intro||"")+((S.buffs||[]).length?`✨ Aktiv: ${S.buffs.map(b=>b.name+" ("+b.n+")").join(", ")}<br>`:"")+(e.moon?"🌕 <i>Ein Heulen zerreißt die Nacht …</i><br>":"")+(ttn()?`<b>${S.name} ${ttn()}</b> tritt an!<br>`:"")+(e.boss?`${e.name} versperrt dir den Weg! Das wird ein harter Kampf.`:"Ein fremder Gegner fordert dich heraus! Was tust du?")},e);
  if(!F.pp){F.pp={};SK.forEach(s=>F.pp[s.id]=s.pp)}
  if(e.boss&&e.bi>=0&&!e.tower&&S.merc){F.merc=1;S.merc=0;F.log+="<br>🗡️ Dein Söldner zieht mit dir in den Kampf!"}
  bSeen(F);save();fight();
 }
-function startFight(){if(S.en<2)return;S.en-=2;if(evMaybe())return;setup(mk(Math.max(1,lvl()+rnd(-1,1)),ET[rnd(0,4)]))}
-function startTour(){const fee=tourFee();if(S.en<4||S.gold<fee)return;S.en-=4;S.gold-=fee;setup(mk(Math.max(1,lvl()),ET[rnd(0,4)]),1)}
+function startFight(){if(S.en<2)return;S.en-=2;if(evMaybe())return;setup(mk(Math.max(1,lvl()+rnd(-1,1)),ET[rnd(0,ET.length-1)]))}
+function startTour(){const fee=tourFee();if(S.en<4||S.gold<fee)return;S.en-=4;S.gold-=fee;setup(mk(Math.max(1,lvl()),ET[rnd(0,ET.length-1)]),1)}
 function startTower(){if(!S.tunl||S.en<4)return;S.en-=4;towerFloor(S.tcur||1)}
-function towerFloor(n,keep){if(n>1&&(n-1)%5===0)setTimeout(()=>sfx("gong"),300);const b=n%5===0,bs=BOSS[(n/5-1)%BOSS.length],e=b?mk(bs.L+Math.floor(n/3),bs,true):mk(lvl()+Math.floor(n/2),ET[rnd(0,4)]);e.tower=n;setup(e,0,keep)}
-function nextTour(){if(F.tower)return towerFloor(F.tower+1,{php:Math.min(F.pmax,F.php+Math.round(F.pmax*.2)),pp:F.pp});const k={php:Math.min(F.pmax,F.php+Math.round(F.pmax*.3)),pp:F.pp},r=F.tour+1;setup(mk(Math.max(1,lvl()+r-1),ET[rnd(0,4)]),r,k)}
+function towerFloor(n,keep){if(n>1&&(n-1)%5===0)setTimeout(()=>sfx("gong"),300);const b=n%5===0,bs=BOSS[(n/5-1)%BOSS.length],e=b?mk(bs.L+Math.floor(n/3),bs,true):mk(lvl()+Math.floor(n/2),ET[rnd(0,ET.length-1)]);e.tower=n;setup(e,0,keep)}
+function nextTour(){if(F.tower)return towerFloor(F.tower+1,{php:Math.min(F.pmax,F.php+Math.round(F.pmax*.2)),pp:F.pp});const k={php:Math.min(F.pmax,F.php+Math.round(F.pmax*.3)),pp:F.pp},r=F.tour+1;setup(mk(Math.max(1,lvl()+r-1),ET[rnd(0,ET.length-1)]),r,k)}
 function startBoss(){const b=BOSS[S.boss];if(!b||S.en<3||S.ruhm<b.req)return;S.en-=3;setup(mk(b.L,b,true))}
 function leaveTower(){F.over=true;msg=`Du verlässt den Turm. Beim nächsten Besuch geht es auf <b>Etage ${S.tcur}</b> weiter. Rekord: Etage ${S.tbest}.`;save();home()}
 function fmenu(m){F.menu=m;Object.assign(F,{anim:"",dmg:"",hE:0,hP:0,lP:0,lE:0,vfx:[]});fight()}
@@ -63,17 +64,21 @@ function useSkill(id){
  if(s.pp<99){if(f.pp[id]<1)return;f.pp[id]--}
  if(id!=="hieb")qProg("skill",1,l);
  f.anim="";f.dmg="";f.hE=0;f.hP=0;f.lP=s.pw>0?1:0;f.lE=0;f.vfx=[];
- if(Math.random()*100>=s.acc){l.push("Der Angriff geht daneben!");sfx("miss");f.vfx.push(["miss","vE",0])}
+ const wk=wcat();
+ if(Math.random()*100>=s.acc+(s.pw>0?(wk.acc||0):0)){l.push("Der Angriff geht daneben!");sfx("miss");f.vfx.push(["miss","vE",0])}
  else if(s.pw>0&&f.fx&&Math.random()*100<(f.fx.dodge||0)){l.push(`${f.name} weicht geschickt aus! 💨`);sfx("miss");f.vfx.push(["dodge","vE",0])}
  else{f.vfx.push([s.vx||"slash",s.self?"vP":"vE",0]);
   if(s.pw>0){
    const hits=s.hits||1,pierce=s.fx==="pierce";let pw=s.pw,tot=0,anyCrit=false;
    if(s.fx==="exec"&&f.ehp<f.emax*.35){pw*=2.5;l.push("<b>Hinrichtung!</b> Der Gegner wankt …")}
-   for(let h=0;h<hits;h++){let d=(5+Math.floor(S.st*1.3)+wBon())*pw*(f.pb.buff>0?1.5:1)*(1+.1*S.star)*(1+buffV("dmg")+.1*blessV("dmg"))+rnd(0,3);
-    const crit=s.crit||Math.random()<Math.min(.6,S.ge*.03+fxv("crit")+buffV("crit")+compV("crit"));if(crit){d*=1.5;S.crits++;anyCrit=true;qProg("crit",1,l)}
-    if(f.eb.guard&&!pierce)d*=.5;tot+=Math.max(1,Math.round(d-(pierce?0:f.def)))}
+   pw*=wk.dmg||1;if(wk.reach&&f.ehp>f.emax*.7){pw*=1+wk.reach;l.push("🔱 Die Reichweite deiner Hellebarde zahlt sich aus!")}
+   const hitsN=hits+(wk.dbl&&Math.random()<wk.dbl?1:0);if(hitsN>hits)l.push("🔪 Doppelstich!");
+   for(let h=0;h<hitsN;h++){let d=(5+Math.floor((wk.magic?(S.st+S.ge)*.65:S.st*1.3))+wBon())*(h>=hits?.5:1)*pw*(f.pb.buff>0?1.5:1)*(1+.1*S.star)*(1+buffV("dmg")+.1*blessV("dmg"))+rnd(0,3);
+    const crit=s.crit||Math.random()<Math.min(.6,S.ge*.03+fxv("crit")+buffV("crit")+compV("crit")+(wk.crit||0));if(crit){d*=1.5;S.crits++;anyCrit=true;qProg("crit",1,l)}
+    if(f.eb.guard&&!pierce)d*=.5;tot+=Math.max(1,Math.round(d-(pierce?0:f.def*(1-(wk.armor||0)))))}
    f.ehp-=tot;f.anim="e";f.dmg=tot;f.hE=tot;sfx(anyCrit?"crit":"hit");
-   l.push((anyCrit?"<b>Kritischer Treffer!</b> ":"")+(hits>1?`${hits} Treffer – insgesamt ${tot} Schaden.`:`${tot} Schaden.`)+(pierce?" Die Rüstung hilft nichts!":""));encHit(tot,l);
+   if(wk.bleed&&Math.random()<wk.bleed&&!f.eb.bleed){f.eb.bleed=3;l.push("🪓 Die Axt reißt eine tiefe Wunde – der Gegner blutet! 🩸")}if(wk.stun&&Math.random()<wk.stun){f.eb.stun=1;l.push("🔨 Der Keulenhieb betäubt den Gegner! 💫")}
+   l.push((anyCrit?"<b>Kritischer Treffer!</b> ":"")+(hitsN>1?`${hitsN} Treffer – insgesamt ${tot} Schaden.`:`${tot} Schaden.`)+(pierce?" Die Rüstung hilft nichts!":""));encHit(tot,l);
    if(s.life){const o=f.php;f.php=Math.min(f.pmax,f.php+Math.round(tot*s.life));if(f.php>o)l.push(`Du saugst ${f.php-o} LP auf. 💚`)}
   }
   if(s.fx==="stun"&&Math.random()<(s.ch||.4)){f.eb.stun=1;l.push("Der Gegner ist betäubt! 💫")}

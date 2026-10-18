@@ -114,7 +114,7 @@ const eqSk=()=>["hieb",...(S.sk||[]).filter(knowSk)];
 const IT=[{k:"h",n:"Heiltrank",p:15,d:"+40 LP",e:"🧪"},{k:"H",n:"Großer Heiltrank",p:40,d:"+100 LP",e:"⚗️"},{k:"x",n:"Elixier des Lebens",p:90,d:"+200 LP",e:"🍶"},{k:"k",n:"Kraft-Elixier",p:25,d:"Schaden +50 % (3 Runden)",e:"💥"},{k:"g",n:"Gegengift",p:20,d:"Heilt Gift und Brand",e:"💊"},{k:"e",n:"Eisenhaut-Trank",p:25,d:"Schaden −50 % (3 Runden)",e:"🛡️"},{k:"a",n:"Äthertrank",p:35,d:"+3 Einsätze für alle Fähigkeiten",e:"🔷"},{k:"A",n:"Großer Äthertrank",p:90,d:"Füllt alle Fähigkeiten ganz auf",e:"💠"}];
 // ---- Turm-Kulissen: alle 5 Etagen (nach jedem Turm-Boss) eine neue, bedrohlichere Ebene ----
 const TIER=[["Eingangshalle","Fackeln flackern an den alten Mauern."],["Verliese","Ketten klirren in der feuchten Dunkelheit."],["Kristallhöhle","Eisige Kristalle glühen in unheimlichem Licht."],["Lavahallen","Glühende Lava brodelt unter deinen Füßen."],["Geisterhallen","Gespenstische Flammen tanzen zwischen zerbrochenen Säulen."],["Sturmspitze","Blitze zucken um die Turmspitze, der Sturm heult."],["Schattenreich","Aus der Finsternis starren dich unzählige Augen an."],["Weltenriss","Die Wirklichkeit selbst zerbricht um dich herum."]];
-const DROP={Ritter:{ez:4,le:2,hk:2,ak:1},Räuber:{le:4,gp:4,hk:2},Feuerritter:{fb:4,ez:2,ak:1},Panzerritter:{ez:5,mi:2,le:1},Bogenschütze:{le:3,hk:4,gp:2}};
+const DROP={Magier:{ak:4,fb:2,hk:2},Ritter:{ez:4,le:2,hk:2,ak:1},Räuber:{le:4,gp:4,hk:2},Feuerritter:{fb:4,ez:2,ak:1},Panzerritter:{ez:5,mi:2,le:1},Bogenschütze:{le:3,hk:4,gp:2}};
 const PR={sm:{n:"Schmied",e:"🔨"},al:{n:"Alchemie",e:"⚗️"},ve:{n:"Verzauberer",e:"🔮"}};
 const ALC=[{id:"h",lv:1,m:{hk:2}},{id:"g",lv:2,m:{gp:1,hk:1}},{id:"k",lv:3,m:{fb:1,hk:1}},{id:"e",lv:4,m:{ez:1,hk:2}},{id:"H",lv:5,m:{hk:4,fb:1}},{id:"x",lv:8,m:{hk:4,ak:1,ds:1}},{id:"a",lv:3,m:{ak:1,hk:2}},{id:"A",lv:6,m:{ak:2,fb:1,hk:2}}];
 const SMI=[{id:"c1",lv:2,m:{ez:6,le:2},g:20},{id:"c2",lv:3,m:{le:6,ez:3},g:20},{id:"c3",lv:5,m:{ez:8,mi:3},g:60},{id:"c4",lv:6,m:{ez:8,mi:3,le:4},g:60},{id:"c5",lv:8,m:{mi:6,ds:2,fb:3},g:150},{id:"c6",lv:9,m:{mi:6,ds:3,le:6},g:150}];
@@ -136,7 +136,8 @@ const ET=[
 {t:"Räuber",hp:.8,atk:.9,def:.6,tint:"#2f7d32",mv:[["Dolchstoß",1,95,"",4],["Giftdolch",.7,92,"poison",4],["Deckung",0,100,"guard",1]]},
 {t:"Feuerritter",hp:1,atk:1.1,def:.9,tint:"#e67e22",mv:[["Schlag",1,90,"",3],["Brandschlag",.9,88,"burn",4],["Wuchtschlag",1.6,75,"",2]]},
 {t:"Panzerritter",hp:1.4,atk:.8,def:1.5,tint:"#5d6d7e",mv:[["Hammerschlag",1.2,80,"stun",3],["Schlag",1,92,"",3],["Schildwall",0,100,"guard",3]]},
-{t:"Bogenschütze",hp:.7,atk:1.2,def:.4,tint:"#8e5a2b",mv:[["Pfeil",1,96,"",4],["Pfeilhagel",1.8,70,"",3]]}];
+{t:"Bogenschütze",hp:.7,atk:1.2,def:.4,tint:"#8e5a2b",mv:[["Pfeil",1,96,"",4],["Pfeilhagel",1.8,70,"",3]]},
+{t:"Magier",hp:.75,atk:1.25,def:.5,tint:"#5e35b1",mv:[["Arkanschlag",1,94,"",4],["Feuerball",1.1,88,"burn",3],["Frostblitz",.9,90,"stun",2],["Schutzzauber",0,100,"guard",1]]}];
 const BOSS=[
 {n:"Räuberhauptmann Graukopf",L:3,req:40,hp:2.4,atk:1,def:1,tint:"#2f7d32",mv:[["Säbelhieb",1,92,"",4],["Giftdolch",.8,92,"poison",3],["Plünderschlag",1.7,75,"",2]]},
 {n:"Der Schwarze Ritter",L:6,req:150,hp:2.5,atk:1.1,def:1.2,tint:"#222",mv:[["Dunkler Hieb",1.1,92,"",4],["Hammerschlag",1.3,80,"stun",3],["Schattenklinge",1.8,78,"",3],["Deckung",0,100,"guard",1]]},

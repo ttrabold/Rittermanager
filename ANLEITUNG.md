@@ -374,6 +374,7 @@ In Abenteuern, Turnieren und im Turm triffst du auf verschiedene Gegnertypen:
 | **Feuerritter** | Setzt dich mit dem Brandschlag in Flammen 🔥 |
 | **Panzerritter** | Viele LP und dicke Rüstung, betäubt mit dem Hammer 💫 |
 | **Bogenschütze** | Wenig LP, schießt aber hart, vor allem mit dem Pfeilhagel |
+| **Magier** | Zerbrechlich, aber mit Feuerbällen (Brand) und Frostblitzen (Betäubung) gefährlich |
 
 Gegner können **Männer oder Frauen** sein, du triffst also auch auf Ritterinnen, Räuberinnen und Bogenschützinnen. Ihre Ausrüstung hängt von ihrer Stufe ab. Räuber und Bogenschützen tragen leichtere Rüstungen, Panzerritter schwere.
 
@@ -422,14 +423,29 @@ Es gibt zwölf Bosse, die du nacheinander besiegen musst. Jeder Boss braucht ein
 
 Auf dem Markt kaufst du bessere Ausrüstung und Tränke. Gekaufte Ausrüstung legst du sofort an.
 
-### 🗡️ Waffen
-| Waffe | Preis | Schaden |
-|---|---|---|
-| Holzschwert | – | +0 |
-| Eisenschwert | 40 🪙 | +3 |
-| Stahlschwert | 120 🪙 | +6 |
-| Langschwert | 300 🪙 | +10 |
-| Drachenklinge | 700 🪙 | +16 |
+### ⚔️ Waffen
+
+Es gibt **sieben Waffenarten**, jede mit eigenen Stärken. Auf dem Markt wählst du oben die Art und darunter eine von 5 Stufen. Kaufst du eine Waffe einer anderen Art, ersetzt sie deine bisherige gekaufte Waffe.
+
+| Art | Wirkung |
+|---|---|
+| 🗡️ Schwert | ausgewogen: +3 Treffsicherheit, +5 % Krit |
+| 🪓 Axt | 15 % Chance auf Blutung, aber −5 Treffsicherheit |
+| 🔨 Keule | ignoriert 30 % der gegnerischen Rüstung, 10 % Betäubung, −5 % Schaden |
+| 🔱 Hellebarde | +25 % Schaden, solange der Gegner noch über 70 % LP hat |
+| 🏹 Bogen | +8 Treffsicherheit, +12 % Krit |
+| 🪄 Zauberstab | Schaden aus Stärke **und** Geschick, ignoriert 50 % Rüstung, −10 % Schaden |
+| 🔪 Dolch | +15 % Krit, 30 % Doppelstich, −5 % Schaden |
+
+| Stufe | Schaden | Preis | Schwert | Axt | Keule | Hellebarde | Bogen | Zauberstab | Dolch |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | +0 | – / 15 | Holzschwert | Holzfälleraxt | Knüppel | Speer | Kurzbogen | Holzstab | Messer |
+| 2 | +3 | 40 | Eisenschwert | Eisenaxt | Eisenkeule | Eisenspeer | Jagdbogen | Eichenstab | Eisendolch |
+| 3 | +6 | 120 | Stahlschwert | Streitaxt | Morgenstern | Hellebarde | Langbogen | Kristallstab | Stahldolch |
+| 4 | +10 | 300 | Langschwert | Doppelaxt | Kriegshammer | Glefe | Kompositbogen | Runenstab | Parierdolch |
+| 5 | +16 | 700 | Drachenklinge | Drachenaxt | Drachenhammer | Drachenhellebarde | Drachenbogen | Drachenstab | Drachenkralle |
+
+Jede Waffe sieht an deinem Ritter anders aus. Auch die Gegner kämpfen mit unterschiedlichen Waffen.
 
 ### 🛡️ Rüstungen
 | Rüstung | Preis | Schutz |
@@ -557,6 +573,12 @@ In der **🧰 Werkstatt** übst du drei Berufe aus. Du kannst alle drei gleichze
 | 6 | Meisterharnisch (+10) | Rüstung | +25 max. LP | ⛏️8 🪨3 🟫4 🪙60 |
 | 8 | Drachenstahl-Schwert (+26) | Waffe | 20 % Brand, +8 % Krit | 🪨6 🐉2 🌺3 🪙150 |
 | 9 | Drachenstahl-Panzer (+20) | Rüstung | +45 max. LP, brandimmun | 🪨6 🐉3 🟫6 🪙150 |
+| 4 | 🪓 Runenaxt (+12) | Axt | +6 % Krit, 8 % Lähmung | ⛏️8 🟫2 🪙40 |
+| 5 | 🔨 Donnerkeule (+15) | Keule | 15 % Lähmung | ⛏️10 🪨2 🪙60 |
+| 6 | 🔪 Schattendolch (+15) | Dolch | +12 % Krit, 20 % Gift | ⛏️5 🍄4 💎1 🪙60 |
+| 7 | 🔱 Sturmhellebarde (+17) | Hellebarde | +10 % Krit | ⛏️8 🪨4 💎1 🪙90 |
+| 7 | 🏹 Elfenbogen (+16) | Bogen | +12 % Krit, 15 % Gift | 🟫8 🍄3 🌿3 🪙90 |
+| 8 | 🪄 Erzmagierstab (+20) | Zauberstab | 20 % Brand, 6 % Lebensraub | 💎6 🌺4 🪨2 🪙120 |
 
 Ist ein geschmiedeter Gegenstand besser als deine Ausrüstung, legst du ihn sofort an. Sonst findest du ihn im Inventar unter „Besondere Waffen“ bzw. „Besondere Rüstungen“.
 
