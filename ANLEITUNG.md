@@ -16,15 +16,16 @@ Willkommen, edler Ritter (oder edle Ritterin)! Hier erfährst du alles, was du �
 10. [Gegner](#gegner)
 11. [Bosse](#bosse)
 12. [Der Markt](#der-markt)
-13. [Verzauberte Ausrüstung](#verzauberte-ausrüstung)
-14. [Materialien und Händler](#materialien-und-händler)
-15. [Berufe – die Werkstatt](#berufe--die-werkstatt)
-16. [Der Endlose Turm](#der-endlose-turm)
-17. [Wiedergeburt](#wiedergeburt)
-18. [Ränge](#ränge)
-19. [Titel](#titel)
-20. [Einstellungen und Spielstand](#einstellungen-und-spielstand)
-21. [Tipps für Einsteiger](#tipps-für-einsteiger)
+13. [Das Inventar](#das-inventar)
+14. [Verzauberte Ausrüstung](#verzauberte-ausrüstung)
+15. [Materialien und Händler](#materialien-und-händler)
+16. [Berufe – die Werkstatt](#berufe--die-werkstatt)
+17. [Der Endlose Turm](#der-endlose-turm)
+18. [Wiedergeburt](#wiedergeburt)
+19. [Ränge](#ränge)
+20. [Titel](#titel)
+21. [Einstellungen und Spielstand](#einstellungen-und-spielstand)
+22. [Tipps für Einsteiger](#tipps-für-einsteiger)
 
 ---
 
@@ -42,7 +43,7 @@ Auf dem Burgbildschirm siehst du:
 - **Dein Ritter** vor der Burg, mit der Ausrüstung, die er gerade trägt
 - **Deine Werte**: Stärke, Ausdauer, Geschick, Energie, Gold, Ruhm, Titel und Stufe
 - **Die Nachrichtenzeile**: Sie sagt dir, was zuletzt passiert ist.
-- **Die Aktionsknöpfe**: Arbeiten, Abenteuer, Markt, Händler, Werkstatt, Turnier, Turm, Wiedergeburt, Bosskampf und Schlafen
+- **Die Aktionsknöpfe**: Arbeiten, Abenteuer, Markt, Händler, Werkstatt, Inventar, Turnier, Turm, Wiedergeburt, Bosskampf und Schlafen
 - **Deine Fähigkeiten und Tränke** ganz unten
 
 ---
@@ -274,12 +275,25 @@ Auf dem Markt kaufst du bessere Ausrüstung und Tränke. Gekaufte Ausrüstung le
 
 ---
 
+## Das Inventar
+
+Im **🎒 Inventar** siehst du alles, was dein Ritter besitzt:
+
+- **Ausgerüstet:** Waffe, Rüstung und Schild mit ihren Werten, Aufwertungen (+1 bis +5), Runen (✦) und besonderen Kräften
+- **Kampfwerte:** Schaden, Schutz, maximale LP, Krit-Chance, Ausweichen und alle Zusatzeffekte wie Brand, Gift oder Lebensraub. So siehst du sofort, was ein Ausrüstungswechsel bringt.
+- **Besondere Waffen und Rüstungen:** Hier **legst du verzauberte und geschmiedete Gegenstände an oder ab**. Legst du sie ab, kämpfst du wieder mit deiner gekauften Ausrüstung.
+- **Tränke:** dein Vorrat. Tränke benutzt du im Kampf.
+- **Materialien:** alles, was du für die Berufe gesammelt hast
+- **Trophäen:** Pokale, besiegte Bosse, Titel und Turm-Rekord
+
+---
+
 ## Verzauberte Ausrüstung
 
 Verzauberte Waffen und Rüstungen kannst du nicht kaufen, du erbeutest sie. Sie sind stärker als normale Ausrüstung und haben besondere Kräfte. Außerdem sieht man sie an deinem Ritter: Flammen, Frost, Blitze, Giftschwaden und mehr.
 
 - Ist ein neuer Fund besser als deine aktuelle Ausrüstung, **legst du ihn automatisch an**.
-- Auf dem Markt kannst du verzauberte und selbst geschmiedete Gegenstände jederzeit **an- und ablegen**.
+- Im **🎒 Inventar** kannst du verzauberte und selbst geschmiedete Gegenstände jederzeit **an- und ablegen**.
 - Findest du einen Gegenstand, den du schon besitzt, bekommst du stattdessen Gold.
 
 ### Aus Turnieren
@@ -363,7 +377,7 @@ In der **🧰 Werkstatt** übst du drei Berufe aus. Du kannst alle drei gleichze
 | 8 | Drachenstahl-Schwert (+26) | Waffe | 20 % Brand, +8 % Krit | 🪨6 🐉2 🌺3 🪙150 |
 | 9 | Drachenstahl-Panzer (+20) | Rüstung | +45 max. LP, brandimmun | 🪨6 🐉3 🟫6 🪙150 |
 
-Ist ein geschmiedeter Gegenstand besser als deine Ausrüstung, legst du ihn sofort an. Sonst findest du ihn auf dem Markt unter „Besondere Ausrüstung“.
+Ist ein geschmiedeter Gegenstand besser als deine Ausrüstung, legst du ihn sofort an. Sonst findest du ihn im Inventar unter „Besondere Waffen“ bzw. „Besondere Rüstungen“.
 
 ### ⚗️ Alchemie
 

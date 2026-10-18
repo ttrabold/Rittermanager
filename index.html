@@ -275,8 +275,7 @@ const pk=()=>knight(S.w,S.a,S.s,false,null,eq("w")?eq("w").c:null,eq("a")?eq("a"
 function giveE(id,l){const it=EI.find(x=>x.id===id);if(S.own.includes(id)){S.gold+=100;l.push(`Du besitzt ${it.n} schon: +100 Gold.`);return}S.own.push(id);const k=it.s==="w"?"ew":"ea",cur=it.s==="w"?wBon():aBon(),auto=it.b>cur;if(auto)S[k]=id;l.push(`✨ <b>Verzauberte Beute: ${it.n}</b> (${it.d})${auto?" – angelegt!":" – in der Schmiede anlegbar."}`)}
 function tourLoot(l){const p=["fl","fz","sb","mo","wp","wm"].filter(id=>!S.own.includes(id));if(p.length)giveE(p[rnd(0,p.length-1)],l);else{S.gold+=150;l.push("Alle Turnierschätze besitzt du schon: +150 Gold!")}}
 function towerLoot(l){const p=["t1","t2","t3","t4"].filter(id=>!S.own.includes(id));if(p.length)giveE(p[rnd(0,p.length-1)],l);else{S.gold+=300;l.push("Alle Turmschätze besitzt du schon: +300 Gold!")}}
-function equipE(id){const it=EI.find(x=>x.id===id),k=it.s==="w"?"ew":"ea";S[k]=S[k]===id?null:id;save();sfx("buff");shop()}
-function ench(){return `<h3>✨ Besondere Ausrüstung</h3>`+(S.own.length?S.own.map(id=>{const it=EI.find(x=>x.id===id),on=S[it.s==="w"?"ew":"ea"]===id;return `<div class="row"><span>${it.cr?"⚒️":it.s==="w"?"🗡️":"🛡️"} ${it.n} <span class="mut">+${it.b} · ${it.d}</span></span><button ${on?'class="p"':""} onclick="equipE('${id}')">${on?"Ablegen":"Anlegen"}</button></div>`}).join(""):`<div class="mut">Noch nichts – gewinne Turniere und Bosskämpfe!</div>`)}
+function equipE(id){const it=EI.find(x=>x.id===id),k=it.s==="w"?"ew":"ea";S[k]=S[k]===id?null:id;save();sfx("buff");inv()}
 function encHit(d,l){const f=F,r=Math.random(),b=fxv("burn");
  if(r<b){f.eb.burn=2;l.push("Der Gegner geht in Flammen auf! 🔥")}
  else if(r<b+fxv("poison")){f.eb.ps=f.eb.poison>0?Math.min(2,f.eb.ps+1):1;f.eb.poison=3;l.push("Der Gegner ist vergiftet! ☠️")}
@@ -524,6 +523,31 @@ function workshop(){musicSet("forge");const P=S.pr[wsTab],btn=(ok,js,lbl)=>`<but
  <div class="card"><b>${PR[wsTab].e} ${PR[wsTab].n} · Stufe ${P.lv}</b>${P.lv<10?` <span class="mut">(${P.xp}/${prNeed(P.lv)} Berufs-EP)</span>${bar(P.xp,prNeed(P.lv),"#d4a017")}`:' <span class="mut">Meister!</span>'}<div style="margin-top:6px">${matRow()}</div></div>
  ${wsMsg?`<div class="msg">${wsMsg}</div>`:""}<div class="card">${body}</div>
  <div class="grid"><button onclick="trader()">🛒 Händler</button><button onclick="wsMsg='';home()">← Zurück zur Burg</button></div>`}
+// ---- Inventar ----
+function inv(){musicSet("home");
+ const p=v=>Math.round(v*100)+" %",eff=[],R=k=>fxv(k);
+ if(R("burn"))eff.push("🔥 "+p(R("burn"))+" Brand");if(R("poison"))eff.push("☠️ "+p(R("poison"))+" Gift");if(R("stun"))eff.push("❄️ "+p(R("stun"))+" Lähmung");
+ if(R("life"))eff.push("💚 "+p(R("life"))+" Lebensraub");if(R("regen"))eff.push("🌙 "+R("regen")+" LP pro Runde");if(R("noburn"))eff.push("🧯 Brandimmun");
+ const fx=k=>{const e=eq(k),r=(S.ru[ikey(k)]||[]).map(id=>RU.find(x=>x.id===id)).filter(Boolean);return [e?e.d:"",...r.map(x=>"✦ "+x.n+" ("+x.d+")")].filter(Boolean).join(" · ")||"keine besonderen Kräfte"};
+ const slot=(ic,lbl,name,val,d)=>`<div class="row"><span>${ic} <b>${lbl}</b><br>${name}<br><span class="mut">${d}</span></span><b style="white-space:nowrap">${val}</b></div>`;
+ const list=sd=>S.own.map(id=>EI.find(x=>x.id===id)).filter(it=>it&&it.s===sd).map(it=>{const on=S[sd==="w"?"ew":"ea"]===it.id,u=S.up[it.id]||0,r=(S.ru[it.id]||[]).length;
+  return `<div class="row"><span>${it.cr?"⚒️":"✨"} ${it.n}${u?" +"+u:""}${r?" "+"✦".repeat(r):""} <span class="mut">+${it.b+(sd==="w"?u*2:u)}</span><br><span class="mut">${it.d}</span></span><button ${on?'class="p"':""} onclick="equipE('${it.id}')">${on?"Ablegen":"Anlegen"}</button></div>`}).join("")||`<div class="mut">Noch keine.</div>`;
+ app.innerHTML=`<div class="top"><b>🎒 Inventar</b><span>🪙 ${S.gold}</span></div>
+ <div class="scene" style="height:170px">${BG}${pk()}</div>
+ <div class="card"><h3>🛡️ Ausgerüstet</h3>
+ ${slot("🗡️","Waffe",iname("w"),"+"+wBon()+" ⚔️",fx("w"))}
+ ${slot("🛡️","Rüstung",iname("a"),"+"+aBon()+" 🛡️",fx("a"))}
+ ${slot("🔰","Schild",SH[S.s][0],"+"+SH[S.s][2]+" 🛡️",S.s?"Fängt Schaden ab":"Auf dem Markt erhältlich")}</div>
+ <div class="card"><h3>📊 Kampfwerte</h3><div class="stats">
+ <div>⚔️ Schaden <b>${5+Math.floor(S.st*1.3)+wBon()}</b></div><div>🛡️ Schutz <b>${aBon()+SH[S.s][2]}</b></div>
+ <div>❤️ Max. LP <b>${maxhp()}</b></div><div>💥 Krit <b>${p(Math.min(.6,S.ge*.03+R("crit")))}</b></div>
+ <div>💨 Ausweichen <b>+${S.ge+R("dodge")} %</b></div>${S.star?`<div>🌟 Bonus <b>+${S.star*10} %</b></div>`:""}</div>
+ ${eff.length?`<div class="mut" style="margin-top:6px">${eff.join(" · ")}</div>`:""}</div>
+ <div class="card"><h3>🗡️ Besondere Waffen</h3>${list("w")}<h3>🛡️ Besondere Rüstungen</h3>${list("a")}</div>
+ <div class="card"><h3>🧪 Tränke</h3>${IT.map(t=>`<div class="row"><span>${t.e} ${t.n} <span class="mut">${t.d}</span></span><b>×${S.it[t.k]}</b></div>`).join("")}<div class="mut" style="margin-top:6px">Tränke setzt du im Kampf über 🎒 Tränke ein.</div></div>
+ <div class="card"><h3>📦 Materialien</h3>${MAT.map(m=>`<div class="row"><span>${m.e} ${m.n}</span><b>×${S.mat[m.k]}</b></div>`).join("")}</div>
+ <div class="card"><h3>🏆 Trophäen</h3><div class="stats"><div>🏆 Pokale <b>${S.troph}</b></div><div>👑 Bosse <b>${S.bk.length}/${BOSS.length}</b></div><div>🎖️ Titel <b>${S.tt.length}/${TT.length}</b></div><div>🗼 Turm-Rekord <b>${S.tbest}</b></div></div></div>
+ <div class="grid"><button onclick="shop()">🏪 Markt</button><button onclick="workshop()">🧰 Werkstatt</button><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`;window.scrollTo(0,0)}
 function home(){musicSet("home");
  app.innerHTML=`<div class="top">${editName?`<span style="display:flex;gap:6px;flex:1;margin-right:8px"><input id="nm" maxlength="20" value="${S.name}" onkeydown="if(event.key==='Enter')saveName()" style="flex:1;min-width:0;font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)"><button onclick="saveName()" style="min-height:36px;padding:4px 12px">✔</button></span>`:`<b>${S.name} <a href="#" onclick="editName=true;home();document.getElementById('nm').focus();return false" aria-label="Ritter umbenennen" style="text-decoration:none">✏️</a> <a href="#" onclick="toggleSex();return false" aria-label="Zwischen Ritter und Ritterin wechseln" title="Ritter/Ritterin wechseln" style="text-decoration:none">${S.sex==="f"?"♀️":"♂️"}</a></b>`}<span>${rank()}${S.star?" · 🌟×"+S.star:""} · Tag ${S.day}</span></div>
  <div class="scene">${BG}${castle}${pk()}</div>
@@ -542,11 +566,12 @@ function home(){musicSet("home");
  <button onclick="shop()">🏪 Markt<small>Ausrüstung & Tränke</small></button>
  <button onclick="trader()">🛒 Händler<small>Materialien</small></button>
  <button onclick="workshop()">🧰 Werkstatt<small>Berufe · 1 Energie</small></button>
+ <button onclick="inv()">🎒 Inventar<small>Ausrüstung & Beutel</small></button>
  <button onclick="startTour()" ${S.en<4||S.gold<20?"disabled":""}>🏟️ Turnier<small>4 Energie · 20 🪙 · 3 Kämpfe</small></button>
  <button onclick="startTower()" ${!S.tunl||S.en<4?"disabled":""}>🗼 Endloser Turm<small>${!S.tunl?"ab Boss 3":"4 Energie · Rekord "+S.tbest}</small></button>
- <button onclick="rebirth()" ${S.boss<BOSS.length?"disabled":""}>🌟 Wiedergeburt<small>${S.boss<BOSS.length?"nach allen Bossen":"Neustart mit Bonus"}</small></button>
  ${BOSS[S.boss]?`<button class="p" style="grid-column:1/-1" onclick="startBoss()" ${S.en<3||S.ruhm<BOSS[S.boss].req?"disabled":""}>👑 Bosskampf<small>${S.ruhm<BOSS[S.boss].req?"ab "+BOSS[S.boss].req+" Ruhm":BOSS[S.boss].n}</small></button>`:`<button disabled style="grid-column:1/-1">👑 Alle Bosse besiegt</button>`}
- <button onclick="newDay()" style="grid-column:1/-1">🌙 Schlafen · Neuer Tag</button></div>
+ <button onclick="rebirth()" ${S.boss<BOSS.length?"disabled":""}>🌟 Wiedergeburt<small>${S.boss<BOSS.length?"nach allen Bossen":"Neustart mit Bonus"}</small></button>
+ <button onclick="newDay()">🌙 Schlafen<small>Neuer Tag</small></button></div>
  <div class="card"><h3>📜 Fähigkeiten</h3>${SK.map(s=>`<div class="row"><span>${s.lv<=lvl()?"":"🔒 "}${s.n}</span><span class="mut">${s.lv<=lvl()?s.d:"ab Stufe "+s.lv}</span></div>`).join("")}<div class="mut" style="margin-top:6px">Tränke: ${IT.map(t=>t.e+" "+S.it[t.k]).join("  ")}</div></div>
  <p class="mut" style="text-align:center"><a href="#" onclick="if(confirm('Spiel wirklich zurücksetzen?')){S=fresh();save();msg='Ein neues Abenteuer beginnt!';home()}return false" style="color:var(--mut)">Neu starten</a></p>`;
 }
@@ -575,7 +600,7 @@ function shop(){musicSet("home");
   return `<div class="row"><span>${x[0]} <span class="mut">+${x[2]}</span></span>${own?'<b>✔ angelegt</b>':lower?'<span class="mut">besser vorhanden</span>':`<button ${can?"":"disabled"} onclick="buy('${k}',${i})">${x[1]} 🪙</button>`}</div>`}).join("");
  app.innerHTML=`<div class="top"><b>🏪 Markt</b><span>🪙 ${S.gold}</span></div>
  <div class="scene" style="height:170px">${BG}${pk()}</div>
- <div class="card">${sec("Waffen",W,"w","🗡️")}${sec("Rüstungen",A,"a","🛡️")}${sec("Schilde",SH,"s","🔰")}${ench()}<h3>🧪 Tränke</h3>${IT.map(t=>`<div class="row"><span>${t.e} ${t.n} ×${S.it[t.k]} <span class="mut">${t.d}</span></span><button ${S.gold>=t.p?"":"disabled"} onclick="buyIt('${t.k}')">${t.p} 🪙</button></div>`).join("")}</div>
+ <div class="card">${sec("Waffen",W,"w","🗡️")}${sec("Rüstungen",A,"a","🛡️")}${sec("Schilde",SH,"s","🔰")}<div class="row"><span class="mut">✨ Verzauberte und geschmiedete Ausrüstung legst du im Inventar an.</span><button onclick="inv()">🎒 Inventar</button></div><h3>🧪 Tränke</h3>${IT.map(t=>`<div class="row"><span>${t.e} ${t.n} ×${S.it[t.k]} <span class="mut">${t.d}</span></span><button ${S.gold>=t.p?"":"disabled"} onclick="buyIt('${t.k}')">${t.p} 🪙</button></div>`).join("")}</div>
  <div class="grid"><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`;
 }
 function buy(k,i){const L={w:W,a:A,s:SH}[k];if(S.gold<L[i][1])return;S.gold-=L[i][1];S[k]=i;sfx("coin");msg=`Gekauft: <b>${L[i][0]}</b>!`;save();shop();}
