@@ -362,14 +362,15 @@ function towerFloor(n,keep){const b=n%5===0,bs=BOSS[(n/5-1)%BOSS.length],e=b?mk(
 function rebirth(){if(S.boss<BOSS.length)return;if(!confirm("Wiedergeburt: Stufe, Gold, Ruhm, Ausrüstung und Bossfortschritt werden zurückgesetzt. Du behältst verzauberte Gegenstände, Tränke, Pokale und Turmrekord und erhältst +10 % Schaden, Gold und EP – die Gegner werden aber 8 % stärker. Fortfahren?"))return;S.star++;Object.assign(S,{exp:0,ruhm:0,gold:50,st:3,au:3,ge:3,w:0,a:0,s:0,boss:0,xp:{st:0,au:0,ge:0}});msg=`Du wirst wiedergeboren! Wiedergeburt ${S.star} 🌟`;sfx("level");save();home()}
 function nextTour(){if(F.tower)return towerFloor(F.tower+1,{php:Math.min(F.pmax,F.php+Math.round(F.pmax*.2)),pp:F.pp});const k={php:Math.min(F.pmax,F.php+Math.round(F.pmax*.3)),pp:F.pp},r=F.tour+1;setup(mk(Math.max(1,lvl()+r-1),ET[rnd(0,4)]),r,k)}
 function startBoss(){const b=BOSS[S.boss];if(!b||S.en<3||S.ruhm<b.req)return;S.en-=3;setup(mk(b.L,b,true))}
+function leaveTower(){const d=F.over?F.tower:F.tower-1;F.over=true;msg=`Du verlässt den Turm nach ${d} geschafften Etagen. Rekord: Etage ${S.tbest}.`;save();home()}
 function fmenu(m){F.menu=m;Object.assign(F,{anim:"",dmg:"",hE:0,hP:0,lP:0,lE:0,vfx:[]});fight()}
 function fight(){
  const f=F;if(!f.over)musicSet(f.boss?"boss":"battle");const ic=(o,m)=>Object.keys(m).filter(k=>o[k]>0).map(k=>m[k]).join("");
  let ui;
- if(f.over)ui=f.next?`<button class="p" style="grid-column:1/-1" onclick="nextTour()">Nächster Gegner ⚔️</button>`:`<button class="p" style="grid-column:1/-1" onclick="home()">Zurück zur Burg</button>`;
+ if(f.over)ui=f.next?`<button class="p" style="grid-column:1/-1" onclick="nextTour()">Nächster Gegner ⚔️</button>${f.tower?'<button style="grid-column:1/-1" onclick="leaveTower()">🏰 Turm verlassen</button>':""}`:`<button class="p" style="grid-column:1/-1" onclick="home()">Zurück zur Burg</button>`;
  else if(f.menu==="skills")ui=hasSk().map(i=>{const s=SK[i],pp=f.pp[i];return `<button ${pp<1?"disabled":""} onclick="useSkill(${i})">${s.n}<small>${s.pp<99?pp+"/"+s.pp+"× · ":""}${s.d}</small></button>`}).join("")+`<button onclick="fmenu('main')">← Zurück</button>`;
  else if(f.menu==="items")ui=IT.map(t=>`<button ${S.it[t.k]<1?"disabled":""} onclick="useItem('${t.k}')">${t.e} ${t.n} ×${S.it[t.k]}<small>${t.d}</small></button>`).join("")+`<button onclick="fmenu('main')">← Zurück</button>`;
- else ui=`<button class="p" onclick="fmenu('skills')">⚔️ Kämpfen</button><button onclick="fmenu('items')">🎒 Tränke</button><button onclick="flee()" style="grid-column:1/-1">🏃 Fliehen</button>`;
+ else ui=`<button class="p" onclick="fmenu('skills')">⚔️ Kämpfen</button><button onclick="fmenu('items')">🎒 Tränke</button>${f.tower?'<button onclick="leaveTower()" style="grid-column:1/-1">🏳️ Turm verlassen</button>':'<button onclick="flee()" style="grid-column:1/-1">🏃 Fliehen</button>'}`;
  const dm=(w)=>{const v=w==="e"?f.hE:f.hP;return v?`<span class="dmg ${w==="p"?"late":""}" style="left:30px">-${v}</span>`:""};
  app.innerHTML=`<div class="scene fs">
  <div class="box eb"><b>${f.name}</b> <span class="mut">Lv${f.lvl}${f.tour?" · Turnier "+f.tour+"/3":""}${f.tower?" · Etage "+f.tower:""}${f.boss?" · BOSS":""}</span> ${ic(f.eb,{bleed:"🩸",stun:"💫",guard:"🛡️"})}${bar(f.ehp,f.emax,"#c0392b")}<span class="mut">${Math.max(0,f.ehp)}/${f.emax}</span></div>
