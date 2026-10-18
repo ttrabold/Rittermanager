@@ -26,11 +26,11 @@ const BLD=[
  {id:"schatz",n:"Schatzkammer",e:"💰",max:5,g:100,d:"Gold",y:lv=>({g:30*lv})}];
 const bCost=(b,n)=>{const m=b.id==="kaserne"?{ez:6*n,le:6*n,mi:2*n}:{ez:3*n,le:2*n};if(b.id!=="kaserne"&&n>=3)m.mi=n-2;if(b.id!=="kaserne"&&n>=5)m.ds=1;return {m,g:b.g*n*n}};
 const enMax=()=>6+((S.bld||{}).kaserne||0);
-const yTxt=y=>Object.entries(y).filter(([k,v])=>v>0).map(([k,v])=>k==="g"?`🪙${v}`:k==="en"?`⚡+${v}`:`${MT(k).e}${v}`).join(" ")||"–";
+const yTxt=y=>Object.entries(y).filter(([k,v])=>v>0).map(([k,v])=>k==="g"?`<i class=coin></i>${v}`:k==="en"?`⚡+${v}`:`${MT(k).e}${v}`).join(" ")||"–";
 function build(id){const b=BLD.find(x=>x.id===id),lv=S.bld[id];if(lv>=b.max)return;const c=bCost(b,lv+1);if(!hasM(c.m)||S.gold<c.g)return;
  S.gold-=c.g;for(const k in c.m)S.mat[k]-=c.m[k];S.bld[id]++;sfx("level");msg=`${b.e} <b>${b.n}</b> ist jetzt auf Stufe ${S.bld[id]}!`;save();castleScr()}
 function castleScr(){musicSet("home");
- app.innerHTML=`<div class="top"><b>🏗️ Burgausbau</b><span>🪙 ${S.gold}</span></div>
+ app.innerHTML=`<div class="top"><b>🏗️ Burgausbau</b><span><i class=coin></i> ${S.gold}</span></div>
  <div class="scene">${BG}${bldSvg()}${castle}${pk()}</div>
  <div class="msg" data-quiet>Gebäude liefern <b>jede Nacht</b> Erträge. Volle Erträge gibt es, wenn du am Tag mindestens <b>4 Energie</b> genutzt hast, halbe ab 2. Wer nur faulenzt, bekommt nichts.</div>
  <div class="card"><div style="margin-bottom:6px">${matRow()}</div>${BLD.map(b=>{const lv=S.bld[b.id],c=lv<b.max?bCost(b,lv+1):null;
@@ -61,7 +61,7 @@ function qRew(){const r=Math.random(),L=lvl();
  if(r<.4)return {g:25+L*6};
  if(r<.75){const k=["ez","le","hk","gp","fb","ak"][rnd(0,5)],n=k==="ak"||k==="fb"?rnd(1,2):rnd(2,3),m={[k]:n};if(L>=8&&Math.random()<.3)m.mi=1;return {m}}
  return {it:[{h:2},{a:1},{k:1},{e:1},{g:1}][rnd(0,4)]}}
-const rTxt=r=>r.g?`🪙${r.g}`:r.m?yTxt(r.m):Object.entries(r.it).map(([k,n])=>`${IT.find(x=>x.k===k).e}${n}`).join(" ");
+const rTxt=r=>r.g?`<i class=coin></i>${r.g}`:r.m?yTxt(r.m):Object.entries(r.it).map(([k,n])=>`${IT.find(x=>x.k===k).e}${n}`).join(" ");
 function rGive(r){if(r.g)S.gold+=r.g;if(r.m)for(const k in r.m)S.mat[k]+=r.m[k];if(r.it)for(const k in r.it)S.it[k]+=r.it[k]}
 function qGen(){let list;
  for(let t=0;t<40;t++){const pool=QT.filter(q=>!q.ok||q.ok()).sort(()=>Math.random()-.5).slice(0,3);

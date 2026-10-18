@@ -40,19 +40,19 @@ function tavern(){musicSet("tavern");const o=TAVO.find(x=>x.id===TV.o),left=tavL
  let body="";
  if(TV.ph==="bet"){if(!o.bets.includes(TV.bet))TV.bet=o.bets[0];
   body=`<h3>🎲 Würfelpoker</h3><div class="mut">Beide werfen 5 Würfel. Du darfst einmal beliebige Würfel neu werfen, dann der Gegner. Die bessere Kombination gewinnt den Einsatz. Vierling zahlt das Anderthalbfache, Fünfling das Dreifache. Höchstens 5 Partien pro Tag.</div>
-  <h3>Gegner</h3>${TAVO.map(x=>`<div class="row"><span>${x.e} <b>${x.n}</b> <span class="mut">${x.bets.join("/")} 🪙</span><br><span class="mut">${x.ok()?x.d:"🔒 "+x.lk}</span></span>${x.ok()?`<button ${x.id===TV.o?'class="p"':""} onclick="TV.o='${x.id}';tavern()">${x.id===TV.o?"Gewählt":"Wählen"}</button>`:""}</div>`).join("")}
-  <h3>Einsatz gegen ${o.n}</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${o.bets.map(b=>`<button ${b===TV.bet?'class="p"':""} ${S.gold<b?"disabled":""} onclick="TV.bet=${b};tavern()">${b} 🪙</button>`).join("")}</div>
-  <div class="grid"><button class="p" style="grid-column:1/-1" ${left<1||S.gold<TV.bet?"disabled":""} onclick="tvStart()">🎲 Würfeln<small>${left<1?"Für heute genug gespielt – komm morgen wieder":`Einsatz ${TV.bet} 🪙 · heute noch ${left} Partie${left>1?"n":""}`}</small></button></div>`}
+  <h3>Gegner</h3>${TAVO.map(x=>`<div class="row"><span>${x.e} <b>${x.n}</b> <span class="mut">${x.bets.join("/")} <i class=coin></i></span><br><span class="mut">${x.ok()?x.d:"🔒 "+x.lk}</span></span>${x.ok()?`<button ${x.id===TV.o?'class="p"':""} onclick="TV.o='${x.id}';tavern()">${x.id===TV.o?"Gewählt":"Wählen"}</button>`:""}</div>`).join("")}
+  <h3>Einsatz gegen ${o.n}</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${o.bets.map(b=>`<button ${b===TV.bet?'class="p"':""} ${S.gold<b?"disabled":""} onclick="TV.bet=${b};tavern()">${b} <i class=coin></i></button>`).join("")}</div>
+  <div class="grid"><button class="p" style="grid-column:1/-1" ${left<1||S.gold<TV.bet?"disabled":""} onclick="tvStart()">🎲 Würfeln<small>${left<1?"Für heute genug gespielt – komm morgen wieder":`Einsatz ${TV.bet} <i class=coin></i> · heute noch ${left} Partie${left>1?"n":""}`}</small></button></div>`}
  else{const hp=hand(TV.p),he=hand(TV.e),done=TV.ph==="done";
   body=`<h3>${o.e} ${o.n} <span class="mut">${HANDS[he[0]]}</span></h3><div class="dice">${TV.e.map((v,i)=>dieSvg(v,1,0,i,TV.rollE)).join("")}</div>
   <h3>Du <span class="mut">${HANDS[hp[0]]}</span></h3><div class="dice">${TV.p.map((v,i)=>dieSvg(v,0,TV.sel[i],i,TV.rollP)).join("")}</div>
-  ${done?`<div class="msg" style="font-size:16px">${TV.res}</div><div class="grid"><button class="p" ${tavLeft()<1||S.gold<TV.bet?"disabled":""} onclick="tvStart()">🎲 Nochmal<small>${TV.bet} 🪙 · noch ${tavLeft()} heute</small></button><button onclick="TV.ph='bet';tavern()">Gegner / Einsatz</button></div>`
+  ${done?`<div class="msg" style="font-size:16px">${TV.res}</div><div class="grid"><button class="p" ${tavLeft()<1||S.gold<TV.bet?"disabled":""} onclick="tvStart()">🎲 Nochmal<small>${TV.bet} <i class=coin></i> · noch ${tavLeft()} heute</small></button><button onclick="TV.ph='bet';tavern()">Gegner / Einsatz</button></div>`
   :`<div class="mut" style="margin-top:4px">Tippe die Würfel an, die du <b>neu werfen</b> willst.</div><div class="grid"><button class="p" onclick="tvRoll()">${TV.sel.some(Boolean)?`🎲 ${TV.sel.filter(Boolean).length} Würfel neu werfen`:"✋ Alle behalten"}</button><button onclick="TV.sel=TV.sel.map(()=>false);tavern()">Auswahl löschen</button></div>`}`}
- app.innerHTML=`<div class="top"><b>🍺 Zum Goldenen Humpen</b><span>🪙 ${S.gold}</span></div>
+ app.innerHTML=`<div class="top"><b>🍺 Zum Goldenen Humpen</b><span><i class=coin></i> ${S.gold}</span></div>
  <div class="scene tav">${TAVBG}<div class="tvk">${pk()}</div><div class="tvk">${opp}</div></div>
  <div class="msg">🧔 Der Wirt raunt: <i>${RUMORS[TV.rum%RUMORS.length]}</i></div>
  <div class="card">${body}</div>
- <div class="mut" style="text-align:center;margin-top:6px">Würfelsiege: ${S.tavW||0} · Gewinn/Verlust gesamt: ${(S.tavG||0)>=0?"+":""}${S.tavG||0} 🪙</div>
+ <div class="mut" style="text-align:center;margin-top:6px">Würfelsiege: ${S.tavW||0} · Gewinn/Verlust gesamt: ${(S.tavG||0)>=0?"+":""}${S.tavG||0} <i class=coin></i></div>
  <div class="grid"><button style="grid-column:1/-1" onclick="TV.ph='bet';home()">← Zurück zur Burg</button></div>`;TV.rollP=TV.rollE=false}
 function tvStart(){const o=TAVO.find(x=>x.id===TV.o);if(!o.ok()||tavLeft()<1||S.gold<TV.bet)return;
  S.gold-=TV.bet;S.tav=S.tav&&S.tav.day===S.day?S.tav:{day:S.day,n:0};S.tav.n++;save();
@@ -63,7 +63,7 @@ function tvRoll(){if(TV.ph!=="pick")return;const o=TAVO.find(x=>x.id===TV.o);
  const keep=oppKeep(o.ai,TV.e,hand(TV.p));if(keep.some(k=>!k)){TV.e=reroll(TV.e,keep);TV.rollE=true;setTimeout(()=>sfx("dice"),350)}
  const hp=hand(TV.p),he=hand(TV.e),c=cmpH(hp,he),l=[];TV.ph="done";TV.sel=[];TV.rum++;
  if(c>0){const m=hp[0]===8?3:hp[0]===7?1.5:1,w=Math.round(TV.bet*m);S.gold+=TV.bet+w;S.tavW=(S.tavW||0)+1;S.tavG=(S.tavG||0)+w;
-  TV.res=`🏆 <b>Gewonnen!</b> ${HANDS[hp[0]]} schlägt ${HANDS[he[0]]}. +${w} 🪙${m>1?` (×${m}-Bonus!)`:""}`;setTimeout(()=>sfx("win"),500);qProg("dice",1,l);checkTitles(l)}
+  TV.res=`🏆 <b>Gewonnen!</b> ${HANDS[hp[0]]} schlägt ${HANDS[he[0]]}. +${w} <i class=coin></i>${m>1?` (×${m}-Bonus!)`:""}`;setTimeout(()=>sfx("win"),500);qProg("dice",1,l);checkTitles(l)}
  else if(c===0){S.gold+=TV.bet;TV.res=`🤝 <b>Unentschieden</b> – beide ${HANDS[hp[0]]}. Du bekommst deinen Einsatz zurück.`}
- else{S.tavG=(S.tavG||0)-TV.bet;TV.res=`💀 <b>Verloren.</b> ${HANDS[he[0]]} schlägt ${HANDS[hp[0]]}. −${TV.bet} 🪙`;setTimeout(()=>sfx("lose"),500)}
+ else{S.tavG=(S.tavG||0)-TV.bet;TV.res=`💀 <b>Verloren.</b> ${HANDS[he[0]]} schlägt ${HANDS[hp[0]]}. −${TV.bet} <i class=coin></i>`;setTimeout(()=>sfx("lose"),500)}
  if(l.length)TV.res+="<br>"+l.join("<br>");save();tavern()}

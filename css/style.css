@@ -152,3 +152,5 @@ svg.vP{transform:scaleX(-1)}
 .die.roll{animation:droll .55s ease-out backwards}@keyframes droll{0%{transform:rotate(-220deg) scale(.4) translateY(-24px);opacity:0}70%{transform:rotate(12deg) scale(1.06)}100%{transform:none;opacity:1}}
 .tav{display:flex;justify-content:space-around;align-items:flex-end}.tav .tvk{position:relative;z-index:2}.tav svg.k{height:140px;margin-bottom:4px}
 @media (prefers-reduced-motion:reduce){.die.roll{animation:none}}
+.coin{position:relative;display:inline-block;width:1em;height:1em;margin:0 .08em;border-radius:50%;vertical-align:-.15em;background:linear-gradient(135deg,#fff1a8 0%,#ffd23f 35%,#e9a800 65%,#b97c00 100%);box-shadow:inset 0 0 0 .07em #9a6400,0 .05em .08em #0006}
+.coin::after{content:"";position:absolute;inset:.2em;border-radius:50%;border:.065em solid #a86f00;background:linear-gradient(315deg,#fff1a8,#f5c21a 50%,#d39400)}

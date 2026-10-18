@@ -3,7 +3,7 @@ function checkTitles(l){TT.forEach(x=>{if(!S.tt.includes(x.id)&&x.t()){S.tt.push
 const GUIDE_SRC=["ANLEITUNG.md","https://raw.githubusercontent.com/ttrabold/Rittermanager/main/ANLEITUNG.md"],GUIDE_WEB="https://github.com/ttrabold/Rittermanager/blob/main/ANLEITUNG.md";
 let guideHtml=null;
 const slug=t=>t.toLowerCase().replace(/<[^>]+>/g,"").replace(/[^\p{L}\p{N} -]/gu,"").trim().replace(/ /g,"-");
-function mdInline(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\*(.+?)\*/g,"<i>$1</i>").replace(/\[([^\]]+)\]\(([^)]+)\)/g,(m,a,h)=>h[0]==="#"?`<a href="${h}" onclick="document.getElementById('${h.slice(1)}')?.scrollIntoView({behavior:'smooth'});return false">${a}</a>`:`<a href="${h}" target="_blank" rel="noopener">${a}</a>`)}
+function mdInline(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/🪙/g,"<i class=coin></i>").replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\*(.+?)\*/g,"<i>$1</i>").replace(/\[([^\]]+)\]\(([^)]+)\)/g,(m,a,h)=>h[0]==="#"?`<a href="${h}" onclick="document.getElementById('${h.slice(1)}')?.scrollIntoView({behavior:'smooth'});return false">${a}</a>`:`<a href="${h}" target="_blank" rel="noopener">${a}</a>`)}
 function md(src){const L=src.replace(/\r/g,"").split("\n"),o=[];let i=0;
  const cells=r=>r.trim().replace(/^\||\|$/g,"").split("|").map(c=>mdInline(c.trim()));
  while(i<L.length){const l=L[i];
@@ -37,7 +37,7 @@ function inv(){musicSet("home");
  const slot=(ic,lbl,name,val,d)=>`<div class="row"><span>${ic} <b>${lbl}</b><br>${name}<br><span class="mut">${d}</span></span><b style="white-space:nowrap">${val}</b></div>`;
  const list=sd=>S.own.map(id=>EI.find(x=>x.id===id)).filter(it=>it&&it.s===sd).map(it=>{const on=S[sd==="w"?"ew":"ea"]===it.id,u=S.up[it.id]||0,r=(S.ru[it.id]||[]).length;
   return `<div class="row"><span>${it.cr?"⚒️":"✨"} ${it.n}${u?" +"+u:""}${r?" "+"✦".repeat(r):""} <span class="mut">+${it.b+(sd==="w"?u*2:u)}</span><br><span class="mut">${it.d}</span></span><button ${on?'class="p"':""} onclick="equipE('${it.id}')">${on?"Ablegen":"Anlegen"}</button></div>`}).join("")||`<div class="mut">Noch keine.</div>`;
- app.innerHTML=`<div class="top"><b>🎒 Inventar</b><span>🪙 ${S.gold}</span></div>
+ app.innerHTML=`<div class="top"><b>🎒 Inventar</b><span><i class=coin></i> ${S.gold}</span></div>
  <div class="scene" style="height:170px">${BG}${pk()}</div>
  <div class="card"><h3>🛡️ Ausgerüstet</h3>
  ${slot("🗡️","Waffe",iname("w"),"+"+wBon()+" ⚔️",fx("w"))}
@@ -62,7 +62,7 @@ function home(){musicSet("home");if(QN.length){msg+="<br>"+QN.join("<br>");QN=[]
  <div>❤️ Ausdauer <b>${S.au}</b></div>
  <div>🎯 Geschick <b>${S.ge}</b></div>
  <div>⚡ Energie <b>${S.en}/${enMax()}</b>${bar(S.en,enMax(),"#e0a800")}</div>
- <div>🪙 Gold <b>${S.gold}</b></div><div>🏆 Ruhm <b>${S.ruhm}</b></div><div style="grid-column:1/-1">🎖️ ${ttn()?"<b>"+ttn()+"</b>":'<span class="mut">kein Titel</span>'} · <a href="#" onclick="titles();return false" style="color:var(--acc)">Titel (${S.tt.length}/${TT.length})</a> · <a href="#" onclick="guide();return false" style="color:var(--acc)">📖 Anleitung</a></div>
+ <div><i class=coin></i> Gold <b>${S.gold}</b></div><div>🏆 Ruhm <b>${S.ruhm}</b></div><div style="grid-column:1/-1">🎖️ ${ttn()?"<b>"+ttn()+"</b>":'<span class="mut">kein Titel</span>'} · <a href="#" onclick="titles();return false" style="color:var(--acc)">Titel (${S.tt.length}/${TT.length})</a> · <a href="#" onclick="guide();return false" style="color:var(--acc)">📖 Anleitung</a></div>
  <div style="grid-column:1/-1">⭐ Stufe <b>${lvl()}</b> <span class="mut">(${S.exp} EP)</span>${bar(S.exp-expFor(lvl()),expFor(lvl()+1)-expFor(lvl()),"#8e44ad")}</div></div>
  <div class="mut" style="margin-top:6px">Waffe: ${iname("w")} · Rüstung: ${iname("a")} · ${SH[S.s][0]}<br>Siege ${S.wins} · Niederlagen ${S.losses} · Pokale ${S.troph} · Bosse ${S.boss}/${BOSS.length} · Turm-Rekord ${S.tbest}</div></div>
  <div class="msg">${msg}</div>
@@ -74,7 +74,7 @@ function home(){musicSet("home");if(QN.length){msg+="<br>"+QN.join("<br>");QN=[]
  <button onclick="trader()">🛒 Händler<small>Materialien</small></button>
  <button onclick="workshop()">🧰 Werkstatt<small>Berufe · 1 Energie</small></button>
  <button onclick="inv()">🎒 Inventar<small>Ausrüstung & Beutel</small></button>
- <button onclick="startTour()" ${S.en<4||S.gold<tourFee()?"disabled":""}>🏟️ Turnier<small>4 Energie · ${tourFee()?tourFee()+" 🪙":"heute gratis!"} · 3 Kämpfe</small></button>
+ <button onclick="startTour()" ${S.en<4||S.gold<tourFee()?"disabled":""}>🏟️ Turnier<small>4 Energie · ${tourFee()?tourFee()+" <i class=coin></i>":"heute gratis!"} · 3 Kämpfe</small></button>
  <button onclick="startTower()" ${!S.tunl||S.en<4?"disabled":""}>🗼 Endloser Turm<small>${!S.tunl?"ab Boss 3":"4 Energie · "+(S.tcur>1?"weiter ab Etage "+S.tcur:"Rekord "+S.tbest)}</small></button>
  ${BOSS[S.boss]?`<button class="p" style="grid-column:1/-1" onclick="startBoss()" ${S.en<3||S.ruhm<BOSS[S.boss].req?"disabled":""}>👑 Bosskampf<small>${S.ruhm<BOSS[S.boss].req?"ab "+BOSS[S.boss].req+" Ruhm":BOSS[S.boss].n}</small></button>`:`<button disabled style="grid-column:1/-1">👑 Alle Bosse besiegt</button>`}
  ${isFull(S.day)&&S.moonDone!==S.day?`<button class="p" style="grid-column:1/-1;background:#3949ab;border-color:#3949ab" onclick="startMoon()" ${S.en<3?"disabled":""}>🌕 Vollmond-Jagd<small>3 Energie · nur heute Nacht · ein Versuch</small></button>`:""}
@@ -93,10 +93,10 @@ function work(){
 function shop(){musicSet("home");
  const sec=(t,L,k,ic)=>`<h3>${ic} ${t}</h3>`+L.map((x,i)=>{
   const own=S[k]===i,can=i>S[k]&&S.gold>=x[1],lower=i<S[k];
-  return `<div class="row"><span>${x[0]} <span class="mut">+${x[2]}</span></span>${own?'<b>✔ angelegt</b>':lower?'<span class="mut">besser vorhanden</span>':`<button ${can?"":"disabled"} onclick="buy('${k}',${i})">${x[1]} 🪙</button>`}</div>`}).join("");
- app.innerHTML=`<div class="top"><b>🏪 Markt</b><span>🪙 ${S.gold}</span></div>
+  return `<div class="row"><span>${x[0]} <span class="mut">+${x[2]}</span></span>${own?'<b>✔ angelegt</b>':lower?'<span class="mut">besser vorhanden</span>':`<button ${can?"":"disabled"} onclick="buy('${k}',${i})">${x[1]} <i class=coin></i></button>`}</div>`}).join("");
+ app.innerHTML=`<div class="top"><b>🏪 Markt</b><span><i class=coin></i> ${S.gold}</span></div>
  <div class="scene" style="height:170px">${BG}${pk()}</div>
- <div class="card">${sec("Waffen",W,"w","🗡️")}${sec("Rüstungen",A,"a","🛡️")}${sec("Schilde",SH,"s","🔰")}<div class="row"><span class="mut">✨ Verzauberte und geschmiedete Ausrüstung legst du im Inventar an.</span><button onclick="inv()">🎒 Inventar</button></div><h3>🧪 Tränke${isMarket(S.day)?' <span class="mut">· 🛒 Markttag −25 %</span>':""}</h3>${IT.map(t=>`<div class="row"><span>${t.e} ${t.n} ×${S.it[t.k]} <span class="mut">${t.d}</span></span><button ${S.gold>=ip(t.p)?"":"disabled"} onclick="buyIt('${t.k}')">${ip(t.p)} 🪙</button></div>`).join("")}</div>
+ <div class="card">${sec("Waffen",W,"w","🗡️")}${sec("Rüstungen",A,"a","🛡️")}${sec("Schilde",SH,"s","🔰")}<div class="row"><span class="mut">✨ Verzauberte und geschmiedete Ausrüstung legst du im Inventar an.</span><button onclick="inv()">🎒 Inventar</button></div><h3>🧪 Tränke${isMarket(S.day)?' <span class="mut">· 🛒 Markttag −25 %</span>':""}</h3>${IT.map(t=>`<div class="row"><span>${t.e} ${t.n} ×${S.it[t.k]} <span class="mut">${t.d}</span></span><button ${S.gold>=ip(t.p)?"":"disabled"} onclick="buyIt('${t.k}')">${ip(t.p)} <i class=coin></i></button></div>`).join("")}</div>
  <div class="grid"><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`;
 }
 function buy(k,i){const L={w:W,a:A,s:SH}[k];if(S.gold<L[i][1])return;S.gold-=L[i][1];S[k]=i;sfx("coin");msg=`Gekauft: <b>${L[i][0]}</b>!`;save();shop();}
