@@ -31,7 +31,7 @@ Willkommen, edler Ritter (oder edle Ritterin)! Hier erfährst du alles, was du �
 
 ## Worum geht es?
 
-Du beginnst als einfacher Knappe ohne Rüstung und mit einem Holzschwert. Verdiene Gold, bestehe Abenteuer, gewinne Turniere und besiege sechs mächtige Bosse, bis du zur **Unsterblichen Legende** wirst. Danach wartet der Endlose Turm, und mit der Wiedergeburt kannst du noch einmal von vorn beginnen, nur stärker.
+Du beginnst als einfacher Knappe ohne Rüstung und mit einem Holzschwert. Verdiene Gold, bestehe Abenteuer, gewinne Turniere und besiege zwölf mächtige Bosse, bis du zur **Unsterblichen Legende** und schließlich zum **Halbgott** (oder zur **Halbgöttin**) wirst. Danach wartet der Endlose Turm, und mit der Wiedergeburt kannst du noch einmal von vorn beginnen, nur stärker.
 
 ---
 
@@ -223,7 +223,7 @@ In Abenteuern, Turnieren und im Turm triffst du auf verschiedene Gegnertypen:
 
 ## Bosse
 
-Es gibt sechs Bosse, die du nacheinander besiegen musst. Jeder Boss braucht eine bestimmte Menge **Ruhm**, bevor du ihn herausfordern kannst. Ein Bosskampf kostet 3 Energie, und fliehen kannst du nicht.
+Es gibt zwölf Bosse, die du nacheinander besiegen musst. Jeder Boss braucht eine bestimmte Menge **Ruhm**, bevor du ihn herausfordern kannst. Ein Bosskampf kostet 3 Energie, und fliehen kannst du nicht.
 
 | # | Boss | Benötigter Ruhm | Gefährlich wegen |
 |---|---|---|---|
@@ -233,6 +233,14 @@ Es gibt sechs Bosse, die du nacheinander besiegen musst. Jeder Boss braucht eine
 | 4 | Eiskönigin Frostara | 1000 | Frost-Betäubung, Blizzard |
 | 5 | Lich Mortrax | 2000 | Giftwolke, Todesstrahl |
 | 6 | Dämonenfürst Azgaroth | 4000 | Höllenfeuer, Verderben |
+| 7 | Sturmriese Donnerfaust | 6000 | Donnerschlag-Betäubung, Kettenblitz |
+| 8 | Hexenkönigin Morgana | 8500 | Fluchnebel (Gift), Seelenfeuer (Brand) |
+| 9 | Krakenfürst Abyssor | 12000 | Würgegriff (Betäubung), Tintengift, Flutwelle |
+| 10 | Phönixkaiser Ignarion | 16000 | Feuersturm, Aschenregen |
+| 11 | Schattenkaiser Nyx | 21000 | Albtraum (Betäubung), die vernichtende Leere |
+| 12 | Der Weltenfresser | 28000 | Alles auf einmal: Feuer, Gift, Betäubung und das Weltenende |
+
+> 💡 Ab Boss 7 lohnt es sich, die Berufe zu nutzen. Aufgewertete Ausrüstung, Runen und selbst gebraute Tränke machen den Unterschied.
 
 > ⚠️ **Achtung:** Fällt ein Boss unter die Hälfte seiner LP, **gerät er in Rage** und schlägt deutlich härter zu.
 
@@ -315,6 +323,12 @@ Verzauberte Waffen und Rüstungen kannst du nicht kaufen, du erbeutest sie. Sie 
 | Frostara | Frostbrand (25 % Lähmung, +10 % Krit) | Eisharnisch (+40 LP, +5 % Ausweichen) |
 | Mortrax | Seelenschnitter (15 % Lebensraub, +10 % Krit) | Lichgewand (heilt 5 LP/Runde, +30 LP) |
 | Azgaroth | Höllenschwert (35 % Brand, 12 % Lebensraub) | Dämonenpanzer (+60 LP, brandimmun) |
+| Donnerfaust | Donnerhammer (20 % Lähmung, +10 % Krit) | Sturmplatte (+70 LP, +6 % Ausweichen) |
+| Morgana | Hexendorn (35 % Gift, 10 % Lebensraub) | Hexenschleier (heilt 7 LP/Runde, +10 % Ausweichen) |
+| Abyssor | Tiefseedreizack (20 % Lähmung, 20 % Gift) | Korallenpanzer (+90 LP, heilt 5 LP/Runde) |
+| Ignarion | Phönixklinge (40 % Brand, 12 % Lebensraub, +10 % Krit) | Phönixmantel (brandimmun, heilt 8 LP/Runde, +60 LP) |
+| Nyx | Nachtschneide (+22 % Krit, 12 % Lebensraub) | Leere-Rüstung (+15 % Ausweichen, +80 LP) |
+| Weltenfresser | Weltenklinge (25 % Brand, 15 % Lähmung, +15 % Krit, 10 % Lebensraub) | Ewige Aegis (+120 LP, heilt 8 LP/Runde, brandimmun, +8 % Ausweichen) |
 
 *Lebensraub*: Ein Teil deines Schadens heilt dich.
 
@@ -432,7 +446,7 @@ Ab dem dritten besiegten Boss steht dir der Endlose Turm offen. Ein Besuch koste
 
 ## Wiedergeburt
 
-Hast du alle sechs Bosse besiegt, kannst du **wiedergeboren** werden.
+Hast du alle zwölf Bosse besiegt, kannst du **wiedergeboren** werden.
 
 **Du verlierst:** Stufe, Gold (du startest mit 50), Ruhm, gekaufte Ausrüstung (samt ihren Aufwertungen und Runen) und den Fortschritt bei den Bossen.
 
@@ -460,6 +474,7 @@ Dein Rang richtet sich nach deinem Ruhm:
 | 2000 | Herzog | Herzogin |
 | 5000 | Held des Königreichs | Heldin des Königreichs |
 | 10000 | Unsterbliche Legende | Unsterbliche Legende |
+| 25000 | Halbgott | Halbgöttin |
 
 ---
 
@@ -486,7 +501,14 @@ Für besondere Leistungen bekommst du **Titel**. Einen davon kannst du tragen. E
 | der Turmwächter / die Turmwächterin | Etage 10 des Turms erreichen |
 | der Turmbezwinger / die Turmbezwingerin | Etage 25 des Turms erreichen |
 | der/die Wiedergeborene | Eine Wiedergeburt abschließen |
-| der/die Auserwählte | Alle sechs Bosse besiegen |
+| der Sturmbezwinger / die Sturmbezwingerin | Sturmriese Donnerfaust besiegen |
+| der Hexenjäger / die Hexenjägerin | Hexenkönigin Morgana besiegen |
+| der Tiefenbezwinger / die Tiefenbezwingerin | Krakenfürst Abyssor besiegen |
+| der Phönixbändiger / die Phönixbändigerin | Phönixkaiser Ignarion besiegen |
+| der Nachtbrecher / die Nachtbrecherin | Schattenkaiser Nyx besiegen |
+| der Weltenretter / die Weltenretterin | Den Weltenfresser besiegen |
+| der/die Auserwählte | Die ersten sechs Bosse besiegen |
+| der/die Legendäre | Alle zwölf Bosse besiegen |
 
 ---
 
@@ -508,7 +530,7 @@ Für besondere Leistungen bekommst du **Titel**. Einen davon kannst du tragen. E
 1. **Am ersten Tag** gehst du am besten 2× auf Abenteuer und arbeitest 2×. Ein Eisenschwert für 40 Gold lohnt sich früh.
 2. **Kaufe Ausrüstung in der Reihenfolge Waffe, Rüstung, Schild.** Ein schnellerer Sieg bedeutet weniger eingesteckten Schaden.
 3. **Hab immer 2–3 Heiltränke dabei.** Vor allem für Turniere und Bosse.
-4. **Nimm Gegengift zu Graukopf, Vulkanus, Mortrax und Azgaroth mit.** Gift und Brand summieren sich schnell.
+4. **Nimm Gegengift zu Graukopf, Vulkanus, Mortrax, Azgaroth, Morgana, Abyssor, Ignarion und den Weltenfresser mit.** Gift und Brand summieren sich schnell.
 5. **Kriegsruf und Kraft-Elixier wirken 3 Runden.** Setze danach deine stärksten Fähigkeiten ein.
 6. **Gegen Bosse lohnt sich Eiserne Haltung**, kurz bevor sie in Rage geraten.
 7. **Turniere sind der einzige Weg** zu den sechs Turnierschätzen. Der Windmantel und das Mondsilber-Kettenhemd sind früh sehr wertvoll.

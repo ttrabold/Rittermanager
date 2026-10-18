@@ -25,7 +25,12 @@ body{background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman"
 .k .br{animation:br 2.6s ease-in-out infinite}
 @keyframes br{50%{transform:translateY(1.3px)}}
 .fs .es:before,.fs .ps:before{content:"";position:absolute;left:50%;bottom:-8px;width:150px;height:26px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,var(--plat),transparent)}
-@media (prefers-reduced-motion:reduce){.cl,.ffy,.k .br,.tw,.fk,.fl2,.dr,.rot,.pl,.wv{animation:none}}
+.hov{animation:hov 3s ease-in-out infinite}@keyframes hov{50%{transform:translateY(-5px)}}
+.flap{transform-box:fill-box;transform-origin:100% 100%;animation:flap 1.4s ease-in-out infinite alternate}.flap.r{transform-origin:0 100%;animation-direction:alternate-reverse}
+@keyframes flap{from{transform:rotate(-5deg)}to{transform:rotate(7deg)}}
+.sway{transform-box:fill-box;transform-origin:50% 0;animation:sway 2.2s ease-in-out infinite alternate}@keyframes sway{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+.glow{animation:pl2 1.2s ease-in-out infinite alternate}@keyframes pl2{from{opacity:.6}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.cl,.ffy,.k .br,.tw,.fk,.fl2,.dr,.rot,.pl,.wv,.hov,.flap,.sway,.glow{animation:none}}
 .scene svg.k{height:150px;position:relative;z-index:2;margin-bottom:8px}
 .castle{position:absolute;right:8px;bottom:26px;height:90px;z-index:1}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px}
@@ -135,8 +140,8 @@ const AC=["#6b4a2b","#8b6b43","#9aa3ab","#c3ccd4","#7fd6e0"],WC=["#a67c52","#b8b
 const W=[["Holzschwert",0,0],["Eisenschwert",40,3],["Stahlschwert",120,6],["Langschwert",300,10],["Drachenklinge",700,16]];
 const A=[["Lumpen",0,0],["Lederwams",40,2],["Kettenhemd",120,4],["Plattenpanzer",300,7],["Mithril-Rüstung",700,11]];
 const SH=[["Kein Schild",0,0],["Holzschild",30,1],["Eisenschild",100,2],["Turmschild",280,4]];
-const RANKF={"Knappe":"Knappin","Ritter":"Ritterin","Edelritter":"Edelritterin","Baron":"Baronin","Graf":"Gräfin","Herzog":"Herzogin","Held des Königreichs":"Heldin des Königreichs"};
-const RANKS=[[0,"Knappe"],[50,"Ritter"],[150,"Edelritter"],[400,"Baron"],[900,"Graf"],[2000,"Herzog"],[5000,"Held des Königreichs"],[10000,"Unsterbliche Legende"]];
+const RANKF={"Knappe":"Knappin","Ritter":"Ritterin","Edelritter":"Edelritterin","Baron":"Baronin","Graf":"Gräfin","Herzog":"Herzogin","Held des Königreichs":"Heldin des Königreichs","Halbgott":"Halbgöttin"};
+const RANKS=[[0,"Knappe"],[50,"Ritter"],[150,"Edelritter"],[400,"Baron"],[900,"Graf"],[2000,"Herzog"],[5000,"Held des Königreichs"],[10000,"Unsterbliche Legende"],[25000,"Halbgott"]];
 const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const fresh=()=>({name:"Sir Kunibert",sex:"m",day:1,en:6,gold:20,ruhm:0,st:3,au:3,ge:3,w:0,a:0,s:0,exp:0,it:{h:2,H:0,k:0,e:0,g:0,x:0},own:[],ew:null,ea:null,boss:0,troph:0,tt:[],title:null,crits:0,flawless:0,close:0,bk:[],star:0,tbest:0,tunl:0,wins:0,losses:0});
 const AU={ctx:null,mus:true,sfx:true,mode:null,want:null,timer:null,step:0,unlocked:false};
@@ -256,6 +261,18 @@ const EI=[
 {id:"t2",n:"Titanenpanzer",s:"a",b:16,c:"#b0b8c0",fx:{hp:50},d:"+50 max. LP"},
 {id:"t3",n:"Chronosdolch",s:"w",b:20,c:"#e056fd",fx:{stun:.3},d:"30 % Lähmung"},
 {id:"t4",n:"Aegisharnisch",s:"a",b:19,c:"#f1c40f",fx:{dodge:12,regen:4},d:"+12 % Ausweichen, heilt 4 LP/Runde"},
+{id:"b7w",n:"Donnerhammer",s:"w",b:44,c:"#9fc5ff",fx:{stun:.2,crit:.1},d:"20 % Lähmung, +10 % Krit"},
+{id:"b7a",n:"Sturmplatte",s:"a",b:30,c:"#5d7fa3",fx:{hp:70,dodge:6},d:"+70 max. LP, +6 % Ausweichen"},
+{id:"b8w",n:"Hexendorn",s:"w",b:50,c:"#ab47bc",fx:{poison:.35,life:.1},d:"35 % Gift, 10 % Lebensraub"},
+{id:"b8a",n:"Hexenschleier",s:"a",b:33,c:"#6a1b9a",fx:{regen:7,dodge:10},d:"Heilt 7 LP/Runde, +10 % Ausweichen"},
+{id:"b9w",n:"Tiefseedreizack",s:"w",b:56,c:"#26c6a6",fx:{stun:.2,poison:.2},d:"20 % Lähmung, 20 % Gift"},
+{id:"b9a",n:"Korallenpanzer",s:"a",b:37,c:"#0e6655",fx:{hp:90,regen:5},d:"+90 max. LP, heilt 5 LP/Runde"},
+{id:"b10w",n:"Phönixklinge",s:"w",b:62,c:"#ffb300",fx:{burn:.4,life:.12,crit:.1},d:"40 % Brand, 12 % Lebensraub, +10 % Krit"},
+{id:"b10a",n:"Phönixmantel",s:"a",b:41,c:"#ff8f00",fx:{noburn:1,regen:8,hp:60},d:"Brandimmun, heilt 8 LP/Runde, +60 max. LP"},
+{id:"b11w",n:"Nachtschneide",s:"w",b:70,c:"#3d3d6b",fx:{crit:.22,life:.12},d:"+22 % Krit, 12 % Lebensraub"},
+{id:"b11a",n:"Leere-Rüstung",s:"a",b:46,c:"#1a1a2e",fx:{dodge:15,hp:80},d:"+15 % Ausweichen, +80 max. LP"},
+{id:"b12w",n:"Weltenklinge",s:"w",b:80,c:"#ce93d8",fx:{burn:.25,stun:.15,crit:.15,life:.1},d:"25 % Brand, 15 % Lähmung, +15 % Krit, 10 % Lebensraub"},
+{id:"b12a",n:"Ewige Aegis",s:"a",b:52,c:"#e1bee7",fx:{hp:120,regen:8,noburn:1,dodge:8},d:"+120 max. LP, heilt 8 LP/Runde, brandimmun, +8 % Ausweichen"},
 {id:"c1",n:"Hammerklinge",s:"w",b:7,c:"#9aa3ab",fx:{stun:.1},d:"10 % Lähmung",cr:1},
 {id:"c2",n:"Beschlagener Lederpanzer",s:"a",b:5,c:"#8b5a2b",fx:{dodge:4},d:"+4 % Ausweichen",cr:1},
 {id:"c3",n:"Meisterklinge",s:"w",b:14,c:"#dfe6ec",fx:{crit:.08},d:"+8 % Krit-Chance",cr:1},
@@ -263,7 +280,7 @@ const EI=[
 {id:"c5",n:"Drachenstahl-Schwert",s:"w",b:26,c:"#e0603a",fx:{burn:.2,crit:.08},d:"20 % Brand, +8 % Krit",cr:1},
 {id:"c6",n:"Drachenstahl-Panzer",s:"a",b:20,c:"#b5462a",fx:{hp:45,noburn:1},d:"+45 max. LP, brandimmun",cr:1}];
 const MAT=[{k:"ez",n:"Eisenerz",e:"⛏️",p:8},{k:"le",n:"Leder",e:"🟫",p:8},{k:"hk",n:"Heilkraut",e:"🌿",p:6},{k:"gp",n:"Giftpilz",e:"🍄",p:8},{k:"fb",n:"Feuerblüte",e:"🌺",p:15},{k:"ak",n:"Arkankristall",e:"💎",p:20},{k:"mi",n:"Mithrilerz",e:"🪨",p:35},{k:"ds",n:"Drachenschuppe",e:"🐉",p:150}];
-const BREW=[["gz","rm"],["ss","sp"],["dz","ds"],["fk","fr"],["ls","lm"],["az","ar"]];
+const BREW=[["gz","rm"],["ss","sp"],["dz","ds"],["fk","fr"],["ls","lm"],["az","ar"],["b7w","b7a"],["b8w","b8a"],["b9w","b9a"],["b10w","b10a"],["b11w","b11a"],["b12w","b12a"]];
 const eq=k=>EI.find(x=>x.id===S[k==="w"?"ew":"ea"]);
 const ikey=k=>k==="w"?(S.ew||"w"+S.w):(S.ea||"a"+S.a);
 const upl=k=>(S.up||{})[ikey(k)]||0;
@@ -319,7 +336,14 @@ const TT=[
 {id:"tw10",n:"der Turmwächter",d:"Etage 10 des Turms erreichen",t:()=>S.tbest>=10,p:()=>`${Math.min(S.tbest,10)}/10`},
 {id:"tw25",n:"der Turmbezwinger",d:"Etage 25 des Turms erreichen",t:()=>S.tbest>=25,p:()=>`${Math.min(S.tbest,25)}/25`},
 {id:"st",n:"der Wiedergeborene",d:"Eine Wiedergeburt abschließen",t:()=>S.star>=1,p:()=>""},
-{id:"au",n:"der Auserwählte",d:"Alle sechs Bosse besiegen",t:()=>S.bk.length>=6,p:()=>`${S.bk.length}/6`}];
+{id:"b6",n:"der Sturmbezwinger",d:"Sturmriese Donnerfaust besiegen",t:()=>S.bk.includes(6),p:()=>""},
+{id:"b7",n:"der Hexenjäger",d:"Hexenkönigin Morgana besiegen",t:()=>S.bk.includes(7),p:()=>""},
+{id:"b8",n:"der Tiefenbezwinger",d:"Krakenfürst Abyssor besiegen",t:()=>S.bk.includes(8),p:()=>""},
+{id:"b9",n:"der Phönixbändiger",d:"Phönixkaiser Ignarion besiegen",t:()=>S.bk.includes(9),p:()=>""},
+{id:"b10",n:"der Nachtbrecher",d:"Schattenkaiser Nyx besiegen",t:()=>S.bk.includes(10),p:()=>""},
+{id:"b11",n:"der Weltenretter",d:"Den Weltenfresser besiegen",t:()=>S.bk.includes(11),p:()=>""},
+{id:"au",n:"der Auserwählte",d:"Die ersten sechs Bosse besiegen",t:()=>[0,1,2,3,4,5].every(i=>S.bk.includes(i)),p:()=>`${[0,1,2,3,4,5].filter(i=>S.bk.includes(i)).length}/6`},
+{id:"lg",n:"der Legendäre",d:"Alle zwölf Bosse besiegen",t:()=>S.bk.length>=12,p:()=>`${S.bk.length}/12`}];
 const gn=n=>S.sex==="f"&&n.startsWith("der ")?"die "+n.slice(4)+(/e$/.test(n)?"":"in"):n;
 const ttn=()=>{const t=TT.find(y=>y.id===S.title);return t&&gn(t.n)};
 const tl=()=>ttn()?`<div class="tl">🎖️ ${ttn()}</div>`:"";
@@ -370,6 +394,12 @@ dz:{b:"fang",f:"#d32f2f",e:"#ffd54a",g:"#ff3b1f",fx:()=>FIRE("#ff3b1f","#ffd000"
 fk:{b:"wide",f:"#aee8ff",e:"#fff",g:"#4fc3ff",fx:()=>FIRE("#2ea8ff","#b3ecff")},
 ls:{b:"curved",f:"#7d3c98",e:"#b9ffd0",g:"#7dffb0",fx:()=>SMOKE("#7dffb0")},
 az:{b:"jagged",f:"#2b0a0a",e:"#ff3b00",g:"#ff3b00",fx:()=>FIRE("#b71c1c","#ff6d00")+LAVA},
+b7w:{b:"wide",f:"#c9dcff",e:"#fff",g:"#7fb2ff",fx:()=>BOLT+SPARK},
+b8w:{b:"curved",f:"#6a1b9a",e:"#e1bee7",g:"#ab47bc",fx:()=>SMOKE("#ab47bc")+DRIP},
+b9w:{b:"fang",f:"#1abc9c",e:"#d1fff5",g:"#26c6a6",fx:()=>SMOKE("#5ee6c9")+ICE},
+b10w:{b:"wide",f:"#ffcc33",e:"#fff6d5",g:"#ff8f00",fx:()=>FIRE("#ff6f00","#ffd54f")},
+b11w:{b:"jagged",f:"#23233f",e:"#9fa8ff",g:"#5c6bc0",fx:()=>SMOKE("#3d3d6b")+SPARK},
+b12w:{b:"wide",f:"#f3e5f5",e:"#fff",g:"#ce93d8",fx:()=>FIRE("#8e24aa","#e1bee7")+SPARK},
 t1:{b:"wide",f:"#fff27a",e:"#fff",g:"#ffd54a",fx:()=>SPARK},
 t3:{b:"dagger",f:"#f3a6ff",e:"#fff",g:"#e056fd",fx:()=>CLOCK}};
 const weaponSvg=id=>{const v=VIS[id];return `<g style="filter:drop-shadow(0 0 5px ${v.g})"><path d="${BL[v.b]}" fill="${v.f}" stroke="${v.e}" stroke-width="1.5"/><path d="M107.5 10V92" stroke="${v.e}" stroke-width="1" opacity=".6"/>${v.fx()}</g><circle cx="107.5" cy="97" r="3" fill="${v.g}" stroke="#0006"/>`};
@@ -384,6 +414,12 @@ fr:b=>b?`<circle class="pl" cx="61" cy="88" r="60" fill="#7fd6ff"/>`:`<polygon p
 lm:b=>b?`<path d="M38 100L28 144L94 144L84 100Z" fill="#5b2c6f" opacity=".95"/>`:[[34,116,0],[88,116,.5],[61,128,1]].map(p=>`<ellipse class="fl2" style="animation-delay:${p[2]}s" cx="${p[0]}" cy="${p[1]}" rx="5" ry="8" fill="#7dffb0" opacity=".7"/>`).join(""),
 ar:(b,fe)=>b?`<circle class="pl" cx="61" cy="88" r="62" fill="#ff1a00"/>`:`<path d="M46 30Q36 14 40 4Q50 16 52 28Z" fill="#2b0a0a" stroke="#ff3b00"/><path d="M76 30Q86 14 82 4Q72 16 70 28Z" fill="#2b0a0a" stroke="#ff3b00"/>${fe?`<circle cx="57" cy="43" r="2" fill="#ff2a00"/><circle cx="65" cy="43" r="2" fill="#ff2a00"/>`:`<rect x="52" y="39" width="20" height="5" rx="2" fill="#ff2a00"/>`}<ellipse cx="34" cy="64" rx="12" ry="9" fill="#2b0a0a" stroke="#ff3b00"/><ellipse cx="88" cy="64" rx="12" ry="9" fill="#2b0a0a" stroke="#ff3b00"/>`,
 t2:b=>b?"":`<ellipse cx="32" cy="64" rx="16" ry="11" fill="#b0b8c0" stroke="#0004"/><ellipse cx="90" cy="64" rx="16" ry="11" fill="#b0b8c0" stroke="#0004"/><rect x="46" y="68" width="30" height="34" fill="#dfe5ea" opacity=".5"/>`,
+b7a:b=>b?`<circle class="pl" cx="61" cy="88" r="60" fill="#7fb2ff"/>`:`<ellipse cx="33" cy="64" rx="15" ry="10" fill="#5d7fa3" stroke="#0004"/><ellipse cx="89" cy="64" rx="15" ry="10" fill="#5d7fa3" stroke="#0004"/>`+BOLT.replace(/M(\d+) 92/g,(m,x)=>`M${x-70} 70`),
+b8a:b=>b?`<path class="wv" d="M40 62Q8 96 16 146L50 118Z" fill="#6a1b9a" opacity=".9"/><circle class="pl" cx="61" cy="88" r="58" fill="#ab47bc"/>`:SMOKE("#ab47bc").replace(/cx="(\d+)" cy="(\d+)"/g,(m,x,y)=>`cx="${x-60}" cy="${+y+50}"`),
+b9a:b=>b?`<circle class="pl" cx="61" cy="88" r="60" fill="#1abc9c"/>`:`<path d="M24 60q6-14 14-4q-2-12 8-8" stroke="#ff8a80" stroke-width="3" fill="none"/><path d="M98 60q-6-14-14-4q2-12-8-8" stroke="#ff8a80" stroke-width="3" fill="none"/>`,
+b10a:b=>b?`<path class="wv" d="M40 62Q6 92 14 146L50 118Z" fill="#ff8f00"/>${fm(24,140,1.1,"#ff6f00",0)}${fm(36,146,.9,"#ffd54f",.2)}`:fm(34,62,.9,"#ffb300",0)+fm(88,62,.9,"#ffb300",.15),
+b11a:b=>b?`<circle class="pl" cx="61" cy="88" r="64" fill="#1a1a2e"/>`:ST(30,60,"#9fa8ff",0)+ST(92,60,"#9fa8ff",.4)+ST(61,100,"#fff",.8),
+b12a:b=>b?`<circle class="pl" cx="61" cy="88" r="64" fill="#e1bee7"/>`:`<ellipse class="pl" cx="61" cy="18" rx="19" ry="5" fill="none" stroke="#fff" stroke-width="3"/><path d="M61 64l9 12-9 20-9-20z" fill="#ce93d8" stroke="#fff"/>`+ST(28,60,"#fff",0)+ST(94,60,"#fff",.5),
 t4:b=>b?`<circle class="pl" cx="61" cy="88" r="60" fill="#ffd54a"/>`:`<ellipse class="pl" cx="61" cy="20" rx="17" ry="5" fill="none" stroke="#ffd54a" stroke-width="3"/><path d="M61 66l8 10-8 18-8-18z" fill="#ffd54a" stroke="#fff"/>`};
 const SK=[
 {n:"Schwerthieb",lv:1,pp:99,pw:1,acc:95,d:"Solider Standardangriff"},
@@ -411,8 +447,8 @@ const app=document.getElementById("app");
 const rank=()=>{let r=RANKS[0][1];for(const x of RANKS)if(S.ruhm>=x[0])r=x[1];return S.sex==="f"?RANKF[r]||r:r};
 const maxhp=()=>40+S.au*6+lvl()*4+fxv("hp");
 
-function knight(w,a,s,flip,plume,ow,oa,wi,ai,fem){
- const arm=a>0||!!oa,wc=ow||WC[w],ac=oa||AC[a],sk="#e0b48a",pl=plume||(a>=3||oa?"#c0221f":null),ln="#0005",
+function knight(w,a,s,flip,plume,ow,oa,wi,ai,fem,robe){
+ const arm=a>0||!!oa,wc=ow||WC[w],ac=oa||robe||AC[a],sk="#e0b48a",pl=plume||(a>=3||oa?"#c0221f":null),ln="#0005",
   tab=plume||"#7a1d1d",lc=arm?ac:"#5b4636",bt=arm?"#3d3833":"#3a2a1c",hc=fem?"#8a4b22":"#5a3a1e",
   sq=fem?`<g transform="translate(61 0) scale(.8 1) translate(-61 0)">`:"<g>",av=b=>ai&&AV[ai]?sq+AV[ai](b,fem)+"</g>":"",
   lw=fem?11:13,belt=fem?84:92;
@@ -455,6 +491,123 @@ function knight(w,a,s,flip,plume,ow,oa,wi,ai,fem){
  <circle cx="107.5" cy="105.5" r="${fem?5.2:6}" fill="${arm?ac:sk}" stroke="#0006"/><path d="M102.5 103.5h10M102.5 107h10" stroke="#0003"/>
  ${s>0?`<path d="M12 64h32v24q0 19-16 28q-16-9-16-28z" fill="${SC[s]}" stroke="#0006" stroke-width="2"/><path d="M16 68h24v20q0 15-12 22q-12-7-12-22z" fill="none" stroke="#fff4" stroke-width="1.5"/><path d="M28 70v40M16 84h24" stroke="#fff6" stroke-width="3"/><circle cx="28" cy="84" r="3.5" fill="#d4a017" stroke="#0004"/>`:""}
  </g></svg>`}
+// ---- Boss-Modelle ----
+const KX=(k,back,front)=>k.replace('fill="#0003"/>','fill="#0003"/>'+back).replace(/<\/g><\/svg>$/,front+"</g></svg>");
+const BSV=(inner,sh)=>`<svg class="k" viewBox="0 0 130 160" style="transform:scaleX(-1)"><ellipse cx="62" cy="152" rx="${sh||40}" ry="6" fill="#0003"/>${inner}</svg>`;
+const limbB=(d,c,w)=>`<path d="${d}" stroke="#0005" stroke-width="${w+3}" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${c}" stroke-width="${w}" fill="none" stroke-linecap="round"/>`;
+const BOSSV=[
+// 1 Räuberhauptmann Graukopf
+()=>BSV(`<path class="wv" d="M40 60Q18 100 24 148L52 128Z" fill="#2f5d32" stroke="#0004"/>
+ <rect x="45" y="104" width="14" height="30" rx="3" fill="#5b4636"/><rect x="64" y="104" width="14" height="30" rx="3" fill="#5b4636"/>
+ <path d="M43 130h18v20h-22zM62 130h18l5 20h-23z" fill="#1f1a17" stroke="#0005"/>
+ <g class="br">${limbB("M40 64Q30 84 34 102","#6b4a2b",9)}<circle cx="34" cy="104" r="5.5" fill="#e0b48a" stroke="#0005"/>
+ <path d="M38 60Q61 52 84 60L82 106H40Z" fill="#6b4a2b" stroke="#0005"/><path d="M53 59l8 16 8-16" fill="#e8dcc0"/><path d="M40 64L82 100" stroke="#3a2a1c" stroke-width="5"/>
+ <circle cx="50" cy="73" r="1.6" fill="#d4a017"/><circle cx="58" cy="80" r="1.6" fill="#d4a017"/><circle cx="66" cy="87" r="1.6" fill="#d4a017"/>
+ <rect x="39" y="94" width="44" height="6" rx="2" fill="#3a2a1c"/><circle cx="61" cy="97" r="4" fill="#e8e2d0" stroke="#0005"/><circle cx="59.5" cy="96" r=".9"/><circle cx="62.5" cy="96" r=".9"/>
+ <rect x="56" y="54" width="10" height="7" fill="#e0b48a"/><circle cx="61" cy="42" r="16" fill="#e0b48a" stroke="#0004"/>
+ <path d="M46 44Q46 66 61 68Q76 66 76 44Q70 54 61 54Q52 54 46 44Z" fill="#9e9e9e" stroke="#0003"/><path d="M54 50q7-4 14 0" stroke="#bdbdbd" stroke-width="3" fill="none" stroke-linecap="round"/>
+ <path d="M44 38Q46 22 61 22Q78 22 78 38Z" fill="#b71c1c" stroke="#0004"/><path d="M45 33l-12 5 9 4zM45 35l-10 10 9-2z" fill="#b71c1c" stroke="#0004"/>
+ <path d="M44 38L78 44" stroke="#111" stroke-width="1.5"/><rect x="52" y="37" width="9" height="7" rx="2" fill="#111"/><circle cx="68" cy="41" r="2" fill="#222"/><path d="M64 36l7-2" stroke="#555" stroke-width="1.6"/>
+ ${limbB("M84 64Q98 80 105 101","#6b4a2b",9)}
+ <path d="M104 98Q94 62 116 22Q112 62 112 98Z" fill="#cfd8dc" stroke="#0006"/><path d="M106 92Q100 62 113 30" stroke="#fff8" fill="none"/>
+ <path d="M97 95h21v5h-21z" fill="#d4a017" stroke="#0004"/><circle cx="107.5" cy="105" r="6" fill="#e0b48a" stroke="#0006"/></g>`),
+// 2 Der Schwarze Ritter
+()=>KX(knight(4,4,3,true,"#8b0000","#4a4a4a","#1c1c1c"),
+ `<path class="wv" d="M40 60Q14 100 20 150l6-8 6 8 6-8 6 8 6-10L52 122Z" fill="#2b0000" stroke="#0006"/>`,
+ `<path d="M24 60l6-14 6 12zM86 58l6-12 6 14z" fill="#2a2a2a" stroke="#000"/><rect class="glow" x="50" y="39" width="22" height="5" rx="2" fill="#ff1a1a" style="filter:drop-shadow(0 0 3px #f00)"/>`),
+// 3 Drachenlord Vulkanus
+()=>BSV(`<path class="flap" d="M58 62Q36 20 14 6Q20 22 10 30Q22 34 6 50Q24 50 14 70Q34 62 50 76Z" fill="#7a1f0a" stroke="#3b0d03" stroke-width="1.5"/><path d="M56 64L14 6M54 68L8 30M52 72L6 50" stroke="#3b0d03" stroke-width="1.5" fill="none"/>
+ <path class="sway" d="M44 116Q16 128 10 108Q8 94 20 96Q16 108 28 112Q40 114 48 104Z" fill="#b23c17" stroke="#0004"/><path d="M10 108l-8-6 10 0z" fill="#7a1f0a"/>
+ <g class="br"><path d="M44 106Q32 124 38 146h18l2-26Z" fill="#a8371a" stroke="#0005"/><path d="M72 110Q86 128 80 146H64l-2-26Z" fill="#a8371a" stroke="#0005"/>
+ <path d="M36 146l3 6 4-6 4 6 4-6M62 146l3 6 4-6 4 6 4-6" stroke="#f5f5dc" stroke-width="2" fill="none"/>
+ <path d="M44 66Q60 52 80 66Q92 92 80 118Q62 128 46 118Q34 92 44 66Z" fill="#c0451c" stroke="#0005"/>
+ <path d="M52 70Q62 64 72 70L70 114Q62 118 54 114Z" fill="#f2b36b"/><path d="M53 80h18M53 90h18M54 100h16M55 110h14" stroke="#c97a3a"/>
+ <path d="M48 64l-4-8 8 4zM42 76l-8-4 8-2z" fill="#7a1f0a"/>
+ <path d="M70 70Q76 50 84 36" stroke="#c0451c" stroke-width="16" fill="none" stroke-linecap="round"/><path d="M74 66Q78 50 86 38" stroke="#f2b36b" stroke-width="5" fill="none"/>
+ <path d="M76 24Q96 14 116 26Q120 32 114 36L98 40Q84 46 76 36Z" fill="#c0451c" stroke="#0005"/><path d="M98 38l2 4 3-4 3 4 3-4" stroke="#fff" stroke-width="1.5" fill="none"/>
+ <path d="M80 24L72 4L86 18ZM88 21L92 2L96 18Z" fill="#3b0d03"/><ellipse class="glow" cx="94" cy="27" rx="3.5" ry="2.5" fill="#ffd600"/><path d="M94 25v4" stroke="#000" stroke-width="1.2"/>
+ <circle cx="112" cy="29" r="1.3" fill="#3b0d03"/>${fm(118,34,.7,"#ff6d00",0)}${fm(122,30,.5,"#ffd000",.2)}
+ <circle class="fl2" cx="120" cy="24" r="2" fill="#ff9100"/><circle class="fl2" style="animation-delay:.8s" cx="124" cy="30" r="1.5" fill="#ffd000"/>
+ ${limbB("M72 78Q86 86 90 98","#c0451c",8)}<path d="M88 98l2 6 3-6 3 5" stroke="#f5f5dc" stroke-width="2" fill="none"/></g>`,44),
+// 4 Eiskönigin Frostara
+()=>KX(knight(4,4,0,true,"transparent","#e8fbff","#bfe9ff","fz","fr",true),
+ `<path class="wv" d="M42 60Q12 100 18 152L58 132Z" fill="#bfe9ff" opacity=".85" stroke="#7fd6ff"/>${ST(16,120,"#fff",0)}${ST(30,140,"#fff",.6)}`,
+ `<path d="M48 27l3-15 4 10 6-17 6 17 4-10 3 15z" fill="#e8fbff" stroke="#7fd6ff" stroke-width="1.5"/><circle class="glow" cx="61" cy="16" r="2.2" fill="#7fd6ff"/>${ST(40,30,"#fff",.3)}${ST(84,28,"#fff",.9)}`),
+// 5 Lich Mortrax
+()=>BSV(`<g class="hov"><circle class="pl" cx="61" cy="80" r="56" fill="#7dffb0"/>
+ <path d="M40 58Q61 50 82 58L92 142L84 134L76 144L68 134L60 144L52 134L44 144L36 134Z" fill="#3c1f52" stroke="#0006"/><path d="M61 60V140" stroke="#0003" stroke-width="2"/><path d="M48 70h26" stroke="#d4a017" stroke-width="2"/>
+ ${limbB("M42 64Q30 82 34 100","#3c1f52",9)}<path d="M34 100l-3 7M34 100l0 8M34 100l3 7" stroke="#e8e2d0" stroke-width="1.8"/>
+ <path d="M42 54Q40 16 61 16Q82 16 80 54L74 60H48Z" fill="#2a1438" stroke="#0006"/>
+ <path d="M50 34Q50 22 61 22Q72 22 72 34Q72 42 68 46V51H54V46Q50 42 50 34Z" fill="#e8e2d0" stroke="#0005"/>
+ <ellipse cx="56" cy="35" rx="3.4" ry="4" fill="#111"/><ellipse cx="66" cy="35" rx="3.4" ry="4" fill="#111"/><circle class="glow" cx="56" cy="35.5" r="1.7" fill="#7dffb0"/><circle class="glow" cx="66" cy="35.5" r="1.7" fill="#7dffb0"/>
+ <path d="M61 39l-2 4h4z" fill="#111"/><path d="M55 47h12M58 45v4M61 45v4M64 45v4" stroke="#111" stroke-width="1"/>
+ <path d="M48 22l4-9 4 6 5-10 5 10 4-6 4 9z" fill="#d4a017" stroke="#0005"/>
+ ${limbB("M80 64Q96 78 104 96","#3c1f52",9)}<path d="M108 150V20" stroke="#4e342e" stroke-width="4"/><path d="M101 94h14" stroke="#e8e2d0" stroke-width="3"/>
+ <circle class="pl" cx="108" cy="14" r="14" fill="#7dffb0"/><circle cx="108" cy="14" r="6" fill="#b9ffd0" stroke="#2e7d32"/>
+ <path d="M101 16q7-12 14 0" stroke="#e8e2d0" stroke-width="2" fill="none"/>
+ ${[[30,60,0],[92,110,.7],[40,120,1.3]].map(p=>`<ellipse class="fl2" style="animation-delay:${p[2]}s" cx="${p[0]}" cy="${p[1]}" rx="4" ry="7" fill="#7dffb0" opacity=".6"/>`).join("")}</g>`,28),
+// 6 Dämonenfürst Azgaroth
+()=>KX(knight(4,4,0,true,"#ff3b00","#2b0a0a","#4a0f0f","az","ar"),
+ `<path class="flap" d="M46 64Q12 30 4 6Q18 22 20 40Q6 40 2 58Q20 52 26 64Q12 70 12 86Q30 72 46 76Z" fill="#3b0a0a" stroke="#ff3b00" stroke-width="1.2"/>
+ <path class="flap r" d="M78 64Q112 30 122 6Q108 22 106 40Q120 40 126 58Q106 52 100 64Q114 70 114 86Q96 72 78 76Z" fill="#3b0a0a" stroke="#ff3b00" stroke-width="1.2"/>
+ <path class="sway" d="M54 118Q36 140 14 136Q24 142 12 150" stroke="#4a0f0f" stroke-width="4" fill="none"/>${fm(40,152,.9,"#ff3b00",0)}${fm(84,152,.9,"#ff6d00",.2)}${fm(62,154,.7,"#ffb300",.1)}`,
+ `<circle class="glow" cx="57" cy="41.5" r="1.8" fill="#ffea00"/><circle class="glow" cx="65" cy="41.5" r="1.8" fill="#ffea00"/>`),
+// 7 Sturmriese Donnerfaust
+()=>BSV(`<g opacity=".9"><ellipse cx="34" cy="14" rx="20" ry="9" fill="#78909c"/><ellipse cx="52" cy="10" rx="16" ry="9" fill="#90a4ae"/><ellipse cx="20" cy="18" rx="12" ry="7" fill="#607d8b"/></g>
+ <path class="tw" d="M36 20l-6 12h6l-5 12" stroke="#fff27a" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+ <rect x="40" y="108" width="18" height="34" rx="5" fill="#7b93b4" stroke="#0005"/><rect x="66" y="108" width="18" height="34" rx="5" fill="#7b93b4" stroke="#0005"/>
+ <path d="M36 136h26l3 14H34zM62 136h26l4 14H60z" fill="#6d4c41" stroke="#0005"/>
+ <g class="br">${limbB("M34 62Q20 84 26 104","#8fa8c8",14)}<circle cx="26" cy="106" r="8" fill="#8fa8c8" stroke="#0005"/><path class="tw" d="M18 112l-4 8 5-1-3 8" stroke="#fff27a" stroke-width="2" fill="none"/>
+ <path d="M30 58Q61 44 92 58L88 110H34Z" fill="#8fa8c8" stroke="#0005"/><path d="M61 60V100M48 76q6 3 12 0M62 76q6 3 12 0M50 88q5 2 10 0M62 88q5 2 10 0" stroke="#6a83a5" stroke-width="2" fill="none"/>
+ <path d="M26 58Q34 46 48 52L44 70Q32 70 26 58Z" fill="#6d4c41" stroke="#0005"/><path d="M28 60l4-4M34 58l3-5M40 58l2-5" stroke="#4e342e"/>
+ <path d="M34 104h54l-6 18H40z" fill="#6d4c41" stroke="#0005"/><rect x="33" y="100" width="56" height="7" rx="2" fill="#3e2723"/><circle cx="61" cy="103.5" r="4.5" fill="#d4a017" stroke="#0005"/>
+ <circle cx="61" cy="36" r="14" fill="#8fa8c8" stroke="#0004"/>
+ <path d="M46 38Q44 68 61 72Q78 68 76 38Q70 50 61 50Q52 50 46 38Z" fill="#eceff1" stroke="#0003"/><path d="M47 30L42 16l9 8 3-12 6 10 4-12 4 12 6-10 2 12 8-8-4 14z" fill="#eceff1" stroke="#0003"/>
+ <path d="M52 33l6 2M70 33l-6 2" stroke="#37474f" stroke-width="2"/><circle class="glow" cx="56" cy="37" r="2" fill="#fff27a"/><circle class="glow" cx="66" cy="37" r="2" fill="#fff27a"/>
+ ${limbB("M88 62Q100 80 106 100","#8fa8c8",14)}
+ <rect x="104" y="22" width="7" height="92" rx="2" fill="#5d4037" stroke="#0005"/><rect x="90" y="10" width="34" height="22" rx="3" fill="#78909c" stroke="#0006"/><path d="M92 14h30M92 28h30" stroke="#b0bec5"/>
+ <path class="tw" d="M104 14l-4 8h5l-4 8" stroke="#fff27a" stroke-width="2.2" fill="none"/><circle cx="107.5" cy="103" r="8" fill="#8fa8c8" stroke="#0006"/></g>`,46),
+// 8 Hexenkönigin Morgana
+()=>KX(knight(0,0,0,true,null,"#ab47bc",null,"b8w","b8a",true,"#4a148c"),"",
+ `<path d="M36 31Q61 22 86 31L88 35Q61 28 34 35Z" fill="#1a0a2e" stroke="#0006"/><path d="M47 31Q56 18 62 2Q66 12 64 14Q74 20 76 31Z" fill="#1a0a2e" stroke="#0006"/><path d="M47 29Q61 25 76 29" stroke="#76ff03" stroke-width="2.5" fill="none"/>
+ <circle class="glow" cx="55" cy="40" r="2.3" fill="#76ff03"/><circle class="glow" cx="67" cy="40" r="2.3" fill="#76ff03"/>`),
+// 9 Krakenfürst Abyssor
+()=>BSV(`${[[30,"M36 96Q20 120 26 140Q30 150 22 156"],[46,"M46 100Q38 126 46 144Q50 152 44 158"],[60,"M60 102Q60 128 54 146Q52 154 58 158"],[74,"M74 100Q82 126 76 144Q74 152 82 156"],[88,"M86 96Q104 118 98 138Q96 148 104 152"]].map((t,i)=>`<path class="sway" style="animation-delay:${i*.3}s" d="${t[1]}" stroke="#0e6655" stroke-width="11" fill="none" stroke-linecap="round"/>`).join("")}
+ <g class="br"><path d="M28 72Q24 14 62 10Q100 14 96 72Q92 100 62 102Q32 100 28 72Z" fill="#117a65" stroke="#0005"/>
+ ${[[42,30,5],[78,26,4],[50,18,3],[86,48,4],[36,54,3]].map(c=>`<circle cx="${c[0]}" cy="${c[1]}" r="${c[2]}" fill="#1abc9c" opacity=".7"/>`).join("")}
+ <path d="M44 14l-4-10 8 6 2-10 5 9 4-9 3 10 6-8-1 12z" fill="#ff8a80" stroke="#c62828"/>
+ <ellipse cx="52" cy="62" rx="9" ry="10" fill="#ffeb3b" stroke="#0005"/><ellipse cx="78" cy="62" rx="9" ry="10" fill="#ffeb3b" stroke="#0005"/><rect x="51" y="54" width="3" height="16" rx="1.5"/><rect x="77" y="54" width="3" height="16" rx="1.5"/>
+ <path d="M44 52l14 4M86 52l-14 4" stroke="#0b5345" stroke-width="3"/><path d="M56 84q8 6 16 0" stroke="#0b5345" stroke-width="3" fill="none"/>
+ <path d="M96 76Q108 86 106 100" stroke="#0e6655" stroke-width="10" fill="none" stroke-linecap="round"/>
+ <path d="M106 152V22" stroke="#d4a017" stroke-width="4"/><path d="M96 34V14M106 26V6M116 34V14M96 30h20" stroke="#d4a017" stroke-width="3.5" fill="none"/><path d="M93 16l3-6 3 6M103 8l3-6 3 6M113 16l3-6 3 6" fill="#d4a017"/></g>
+ ${[[20,40,0],[100,60,.7],[16,90,1.4]].map(b=>`<circle class="fl2" style="animation-delay:${b[2]}s" cx="${b[0]}" cy="${b[1]}" r="3" fill="none" stroke="#b2ebf2"/>`).join("")}`,46),
+// 10 Phönixkaiser Ignarion
+()=>BSV(`<g class="hov"><circle class="pl" cx="62" cy="76" r="58" fill="#ffb300"/>
+ <path class="flap" d="M54 72Q22 50 4 14Q24 28 30 22Q30 40 46 44Q36 52 56 60Z" fill="#ff6f00" stroke="#e65100"/>${fm(10,24,.8,"#ffd54f",0)}${fm(22,34,.8,"#ff9100",.15)}${fm(34,44,.7,"#ffd54f",.3)}
+ <path class="flap r" d="M70 72Q102 50 122 14Q102 28 96 22Q96 40 80 44Q90 52 70 60Z" fill="#ff6f00" stroke="#e65100"/>${fm(116,24,.8,"#ffd54f",.1)}${fm(104,34,.8,"#ff9100",.25)}${fm(92,44,.7,"#ffd54f",.4)}
+ <path class="wv" d="M54 110Q38 136 26 150Q46 142 58 122Q56 140 50 154Q64 140 64 122Q70 142 78 152Q74 132 70 112Z" fill="#ff6f00" stroke="#e65100"/>
+ <path d="M48 72Q60 40 76 72Q82 100 62 118Q42 100 48 72Z" fill="#ff8f00" stroke="#e65100"/><path d="M56 78Q62 60 70 78Q72 98 62 108Q52 98 56 78Z" fill="#ffd54f"/>
+ <path d="M56 116l-3 10M56 126l-4 3M56 126l1 4M68 116l3 10M71 126l4 3M71 126l-1 4" stroke="#5d4037" stroke-width="2"/>
+ <circle cx="66" cy="44" r="11" fill="#ffb300" stroke="#e65100"/><path d="M76 41l14 4-14 5z" fill="#ffe082" stroke="#e65100"/><circle cx="70" cy="42" r="2" fill="#3e2723"/><circle cx="70.6" cy="41.4" r=".6" fill="#fff"/>
+ ${fm(58,36,.9,"#ff6f00",0)}${fm(64,33,1.1,"#ffd54f",.1)}${fm(70,35,.9,"#ff9100",.2)}
+ <path d="M54 22l3-7 4 5 5-8 5 8 4-5 3 7z" fill="#ffd700" stroke="#b8860b"/>
+ ${[[40,30,0],[90,90,.6],[30,100,1.2],[96,30,.9]].map(e=>`<circle class="fl2" style="animation-delay:${e[2]}s" cx="${e[0]}" cy="${e[1]}" r="2" fill="#ffd54f"/>`).join("")}</g>`,30),
+// 11 Schattenkaiser Nyx
+()=>KX(knight(4,4,3,true,"#5c6bc0","#3d3d6b","#1a1a2e","b11w","b11a"),
+ `${[[22,70,0],[100,60,.5],[18,120,1],[104,124,1.5]].map(p=>`<ellipse class="fl2" style="animation-delay:${p[2]}s" cx="${p[0]}" cy="${p[1]}" rx="8" ry="12" fill="#3d3d6b" opacity=".6"/>`).join("")}<path class="wv" d="M40 60Q14 100 20 152L56 132Z" fill="#0d0d1a" stroke="#5c6bc0"/>`,
+ `<path d="M46 27l3-13 5 8 7-13 7 13 5-8 3 13z" fill="#9fa8ff" stroke="#3949ab"/><circle class="glow" cx="61" cy="17" r="2" fill="#e8eaf6"/><rect class="glow" x="50" y="39" width="22" height="5" rx="2" fill="#b388ff" style="filter:drop-shadow(0 0 3px #b388ff)"/>`),
+// 12 Der Weltenfresser
+()=>BSV(`<circle class="pl" cx="64" cy="80" r="64" fill="#7c4dff"/>
+ <g class="rot"><circle cx="64" cy="78" r="62" fill="none" stroke="#ce93d8" stroke-width="1.5" stroke-dasharray="4 8"/></g>
+ <path class="sway" d="M18 110Q0 90 8 64" stroke="#2a0a4a" stroke-width="9" fill="none" stroke-linecap="round"/><path class="sway" style="animation-delay:.8s" d="M110 110Q128 90 120 64" stroke="#2a0a4a" stroke-width="9" fill="none" stroke-linecap="round"/>
+ <g class="br"><path d="M14 152Q6 84 30 48Q62 14 98 42Q124 72 116 152Z" fill="#2a0a4a" stroke="#ce93d8" stroke-width="1.5"/>
+ <path d="M32 50Q22 30 30 10Q34 30 42 40ZM96 42Q108 24 104 4Q96 24 88 34ZM62 28Q60 10 66 0Q70 14 70 28Z" fill="#4a148c" stroke="#ce93d8"/>
+ ${[[30,80],[96,90],[40,130],[88,130],[24,110],[104,118],[70,140]].map((p,i)=>ST(p[0],p[1],i%2?"#fff":"#e1bee7",i*.3)).join("")}
+ <ellipse cx="66" cy="62" rx="20" ry="13" fill="#fff" stroke="#000"/><circle class="glow" cx="68" cy="62" r="9" fill="#e040fb"/><ellipse cx="68" cy="62" rx="2.5" ry="8" fill="#000"/>
+ <path d="M46 58Q66 40 86 58" stroke="#000" stroke-width="3" fill="none"/>
+ <path d="M32 92Q67 140 102 92Q67 108 32 92Z" fill="#4a0010" stroke="#000"/>
+ ${[.14,.24,.34,.44,.56,.66,.76,.86].map(t=>{const x=32+70*t,yt=92+32*t*(1-t),yb=92+96*t*(1-t);return `<path d="M${x-3} ${yt}L${x} ${yt+6}L${x+3} ${yt}Z" fill="#f5f5dc"/><path d="M${x-3} ${yb}L${x} ${yb-5}L${x+3} ${yb}Z" fill="#f5f5dc"/>`}).join("")}</g>`,52)];
+const bossSvg=i=>BOSSV[i]?BOSSV[i]():knight(4,4,3,true,BOSS[i].tint);
 const castle=`<svg class="castle" viewBox="0 0 100 90"><g fill="#8d8473" stroke="#0003"><rect x="10" y="30" width="22" height="60"/><rect x="68" y="30" width="22" height="60"/><rect x="28" y="48" width="44" height="42"/><path d="M8 30h26v-8h-5v4h-4v-4h-4v4h-4v-4h-5zM66 30h26v-8h-5v4h-4v-4h-4v4h-4v-4h-5z"/></g><path d="M42 90v-18q8-12 16 0v18z" fill="#4a3a28"/><path d="M50 22v-14l12 4-12 4" fill="#c0221f"/><g fill="#ffcf6b" style="opacity:var(--star)"><rect x="18" y="40" width="5" height="8" rx="2"/><rect x="77" y="40" width="5" height="8" rx="2"/><rect x="47" y="56" width="6" height="7" rx="2"/></g></svg>`;
 const TREE=(x,y,k)=>`<path d="M${x} ${y-20*k}l${7*k} ${11*k}h${-3*k}l${6*k} ${9*k}h${-20*k}l${6*k} ${-9*k}h${-3*k}z" style="fill:var(--tree)"/>`;
 const BG=`<svg class="bg" viewBox="0 0 600 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
@@ -620,10 +773,16 @@ const BOSS=[
 {n:"Drachenlord Vulkanus",L:10,req:500,hp:3,atk:1.2,def:1.3,tint:"#d35400",mv:[["Klauenhieb",1,92,"",3],["Feueratem",1,90,"burn",4],["Schwanzschlag",1.5,80,"stun",2],["Inferno",2.2,72,"burn",2]]},
 {n:"Eiskönigin Frostara",L:14,req:1000,hp:3.2,atk:1.2,def:1.3,tint:"#7fd6ff",mv:[["Eissplitter",1,92,"",4],["Frostschlag",1.2,85,"stun",3],["Blizzard",2,75,"",3],["Eispanzer",0,100,"guard",1]]},
 {n:"Lich Mortrax",L:18,req:2000,hp:3.5,atk:1.3,def:1.4,tint:"#7d3c98",mv:[["Seelenraub",1,92,"",4],["Giftwolke",.9,90,"poison",3],["Todesstrahl",2.2,75,"",3],["Knochenschild",0,100,"guard",1]]},
-{n:"Dämonenfürst Azgaroth",L:24,req:4000,hp:4,atk:1.4,def:1.5,tint:"#8b0000",mv:[["Höllenklinge",1.1,92,"",4],["Höllenfeuer",1.2,88,"burn",3],["Schreckensschlag",1.8,78,"stun",3],["Verderben",2.6,70,"",2]]}];
+{n:"Dämonenfürst Azgaroth",L:24,req:4000,hp:4,atk:1.4,def:1.5,tint:"#8b0000",mv:[["Höllenklinge",1.1,92,"",4],["Höllenfeuer",1.2,88,"burn",3],["Schreckensschlag",1.8,78,"stun",3],["Verderben",2.6,70,"",2]]},
+{n:"Sturmriese Donnerfaust",L:28,req:6000,hp:4.2,atk:1.4,def:1.55,tint:"#5d7fa3",mv:[["Faustschlag",1.1,92,"",4],["Donnerschlag",1.3,85,"stun",3],["Kettenblitz",2,78,"",3],["Sturmwall",0,100,"guard",1]]},
+{n:"Hexenkönigin Morgana",L:32,req:8500,hp:4.4,atk:1.42,def:1.55,tint:"#6a1b9a",mv:[["Dornenpeitsche",1,92,"",3],["Fluchnebel",1,90,"poison",4],["Seelenfeuer",1.4,85,"burn",3],["Verdammnis",2.4,72,"",2]]},
+{n:"Krakenfürst Abyssor",L:36,req:12000,hp:4.8,atk:1.44,def:1.6,tint:"#0e6655",mv:[["Tentakelhieb",1.1,92,"",4],["Würgegriff",1.2,85,"stun",3],["Tintengift",1,90,"poison",3],["Flutwelle",2.2,75,"",2]]},
+{n:"Phönixkaiser Ignarion",L:40,req:16000,hp:5,atk:1.46,def:1.6,tint:"#ff8f00",mv:[["Flammenkralle",1.1,92,"",4],["Feuersturm",1.5,85,"burn",3],["Aschenregen",1.8,80,"",3],["Wiedergeburt",0,100,"guard",1]]},
+{n:"Schattenkaiser Nyx",L:45,req:21000,hp:5.3,atk:1.48,def:1.65,tint:"#1a1a2e",mv:[["Schattenhieb",1.2,92,"",4],["Albtraum",1.2,85,"stun",3],["Nachtklinge",2,80,"",3],["Leere",2.8,68,"",2]]},
+{n:"Der Weltenfresser",L:50,req:28000,hp:5.8,atk:1.5,def:1.7,tint:"#4a148c",mv:[["Zermalmen",1.2,92,"",3],["Urfeuer",1.3,88,"burn",3],["Weltengift",1.1,90,"poison",2],["Zeitriss",1.4,85,"stun",2],["Weltenende",3,68,"",2]]}];
 function mk(L,t,boss){
  const sc=1+.08*S.star,hp=Math.round((40+L*12)*t.hp*sc);
- return {lvl:L,name:boss?t.n:`${t.t} ${ENS[rnd(0,ENS.length-1)]}`,ehp:hp,emax:hp,atk:(3+L*2)*t.atk*sc,def:Math.floor(L*.8*t.def),tier:Math.min(4,Math.floor(L/2)),tint:t.tint||"#6b2d8f",mv:t.mv,boss:!!boss,enr:false,et:t.t||"Boss"};
+ return {lvl:L,name:boss?t.n:`${t.t} ${ENS[rnd(0,ENS.length-1)]}`,ehp:hp,emax:hp,atk:(3+L*2)*t.atk*sc,def:Math.floor(L*.8*t.def),tier:Math.min(4,Math.floor(L/2)),tint:t.tint||"#6b2d8f",mv:t.mv,boss:!!boss,enr:false,et:t.t||"Boss",bi:boss?BOSS.indexOf(t):-1};
 }
 function setup(e,tour,keep){
  F=Object.assign({php:keep?keep.php:maxhp(),pmax:maxhp(),menu:"main",anim:"",dmg:"",hE:0,hP:0,lP:0,lE:0,vfx:[],over:false,next:false,tour:tour||0,pp:keep?keep.pp:null,pb:{buff:0,guard:0,poison:0,burn:0,stun:0},eb:{bleed:0,burn:0,poison:0,ps:0,stun:0,guard:0},log:(ttn()?`<b>${S.name} ${ttn()}</b> tritt an!<br>`:"")+(e.boss?`${e.name} versperrt dir den Weg! Das wird ein harter Kampf.`:"Ein fremder Gegner fordert dich heraus! Was tust du?")},e);
@@ -649,7 +808,7 @@ function fight(){
  const dm=(w)=>{const v=w==="e"?f.hE:f.hP;return v?`<span class="dmg ${w==="p"?"late":""}" style="left:30px">-${v}</span>`:""};
  app.innerHTML=`<div class="scene fs">${BG}
  <div class="box eb"><b>${f.name}</b> <span class="mut">Lv${f.lvl}${f.tour?" · Turnier "+f.tour+"/3":""}${f.tower?" · Etage "+f.tower:""}${f.boss?" · BOSS":""}</span> ${ic(f.eb,{bleed:"🩸",burn:"🔥",poison:"☠️",stun:"💫",guard:"🛡️"})}${bar(f.ehp,f.emax,"#c0392b")}<span class="mut">${Math.max(0,f.ehp)}/${f.emax}</span></div>
- <div class="es ${f.boss?"big":""} ${f.hE?"hit":""}">${dm("e")}<div class="lg ${f.lE?"lungeE":""}">${knight(f.tier,f.tier,Math.min(3,Math.floor(f.lvl/3)),true,f.tint)}</div></div>
+ <div class="es ${f.boss?"big":""} ${f.hE?"hit":""}">${dm("e")}<div class="lg ${f.lE?"lungeE":""}">${f.boss&&f.bi>=0?bossSvg(f.bi):knight(f.tier,f.tier,Math.min(3,Math.floor(f.lvl/3)),true,f.tint)}</div></div>
  <div class="ps ${f.hP?"hit late":""}">${dm("p")}<div class="lg ${f.lP?"lungeP":""}">${pk()}</div></div>
  <div class="box pb"><b>${S.name}</b> <span class="mut">Lv${lvl()}</span>${tl()} ${ic(f.pb,{buff:"💥",guard:"🛡️",poison:"☠️",burn:"🔥",stun:"💫"})}${bar(f.php,f.pmax,"#2e8b57")}<span class="mut">${Math.max(0,f.php)}/${f.pmax}</span></div>${VXH(f)}</div>
  <div class="msg">${f.log}</div><div class="grid">${ui}</div>`;
