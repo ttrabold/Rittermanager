@@ -20,6 +20,10 @@ const mercCost=()=>40+lvl()*25;
 function mercHire(){if(S.merc||S.gold<mercCost())return;S.gold-=mercCost();S.merc=1;sfx("coin");msg=`🗡️ Ein Söldner begleitet dich in den nächsten Bosskampf.`;save();home()}
 function mercTurn(f,l){if(!f.merc||f.ehp<=0)return;const d=10+lvl()*3;f.ehp-=d;l.push(`🗡️ Dein Söldner schlägt zu: ${d} Schaden.`)}
 
+// ---- Kriegskasse des Königs: im späten Spiel einmal pro Tag viel Gold gegen Ruhm ----
+const kasseCost=()=>100*lvl(),kasseRuhm=()=>15*lvl();
+function kasseGive(){if(!has("kasse")||S.kasse===S.day||S.gold<kasseCost())return;S.gold-=kasseCost();S.kasse=S.day;const r=kasseRuhm();S.ruhm+=r;sfx("level");msg=`👑 Du füllst die Kriegskasse des Königs. Das ganze Reich spricht von deiner Großzügigkeit: +${r} Ruhm.`;save();home()}
+
 // ---- Tavernenrunde: einmal pro Tag Ruhm für Gold ----
 const roundCost=()=>50+lvl()*10;
 function tavRound(){if(S.round===S.day||S.gold<roundCost())return;S.gold-=roundCost();S.round=S.day;const r=lvl()*3+10;S.ruhm+=r;TV.rum+=1;sfx("win");TV.res=null;TV.note=`🍻 <b>Eine Runde für alle!</b> Die Taverne jubelt dir zu: +${r} Ruhm. Der Wirt flüstert dir gleich zwei Gerüchte zu.`;save();tavern()}

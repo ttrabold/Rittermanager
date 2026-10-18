@@ -3,7 +3,7 @@
 const MT=k=>MAT.find(m=>m.k===k);
 function pick(t){let r=Math.random()*Object.values(t).reduce((a,b)=>a+b,0);for(const k in t){if(r<t[k])return k;r-=t[k]}return Object.keys(t)[0]}
 function dropMat(f,l){const got={},add=(k,n)=>{S.mat[k]+=n;got[k]=(got[k]||0)+n};
- if(f.boss){add("ds",rnd(1,2));add("ak",2);add("mi",rnd(1,2));add(pick({hk:1,fb:1,gp:1}),2)}
+ if(f.boss){if(f.tower?f.tower%10===0:(f.moon||f.rival)?Math.random()<.3:true)add("ds",f.tower||f.moon||f.rival?1:rnd(1,2));add("ak",2);add("mi",rnd(1,2));add(pick({hk:1,fb:1,gp:1}),2)}
  else{const t=DROP[f.et]||DROP.Ritter;add(pick(t),1);if(Math.random()<.5)add(pick(t),1);if(f.lvl>=8&&Math.random()<.15)add("mi",1)}
  if(S.cmp==="hund"){add(pick(DROP[f.et]||DROP.Ritter),1);if(Math.random()<.3){const g=5+lvl()*2;S.gold+=g;l.push(`🐕 Bello buddelt ${g} Gold aus!`)}}
  if(has("craft"))l.push("Materialien: "+Object.entries(got).map(([k,n])=>`${MT(k).e} ${MT(k).n} ×${n}`).join(", "))}

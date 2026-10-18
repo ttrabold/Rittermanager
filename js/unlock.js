@@ -12,6 +12,7 @@ const FEAT=[
  {id:"craft",e:"🧰",n:"Werkstatt & Händler",ok:()=>lvl()>=12,d:"Sammle Materialien, werde Schmied, Alchemist und Verzauberer."},
  {id:"cal",e:"📅",n:"Kalender & Vollmond",ok:()=>lvl()>=15,d:"Markttag, Turniertag – und bei Vollmond jagt der Werwolf."},
  {id:"burg",e:"🏗️",n:"Burgausbau",ok:()=>lvl()>=18,d:"Baue Gebäude, die dir jede Nacht Erträge bringen."},
+ {id:"kasse",e:"👑",n:"Kriegskasse des Königs",ok:()=>S.boss>=6,d:"Einmal am Tag tauschst du viel Gold gegen Ruhm."},
  {id:"tower",e:"🗼",n:"Endloser Turm",ok:()=>!!S.tunl,d:"Kämpfe dich Etage für Etage nach oben."},
  {id:"rebirth",e:"🌟",n:"Wiedergeburt",ok:()=>S.boss>=BOSS.length||S.star>0,d:"Beginne neu – stärker als zuvor."}];
 const has=id=>(S.unl||[]).includes(id);

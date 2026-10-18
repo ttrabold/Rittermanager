@@ -116,6 +116,7 @@ function homeGrid(){const b=(id,js,lbl,sub,dis,cls)=>`<button ${cls?`class="${cl
  if(has("boss"))full.push(BOSS[S.boss]?b("boss","startBoss()","👑 Bosskampf",S.ruhm<BOSS[S.boss].req?"ab "+BOSS[S.boss].req+" Ruhm":BOSS[S.boss].n,S.en<3||S.ruhm<BOSS[S.boss].req,"p"):'<button disabled>👑 Alle Bosse besiegt</button>');
  if(rivalReady())full.push(b("rival","startRival()",`⚔️ Herausforderung: Sir Gregor`,`Duell ${(S.rv||0)+1}/${RIVAL.length} · 3 Energie`,S.en<3,"p"));
  if(has("boss")&&BOSS[S.boss]&&S.ruhm>=BOSS[S.boss].req)full.push(S.merc?'<button disabled>🗡️ Söldner angeheuert – er kämpft im nächsten Bosskampf</button>':b("","mercHire()","🗡️ Söldner anheuern",`${mercCost()} Gold · hilft im nächsten Bosskampf`,S.gold<mercCost()));
+ if(has("kasse"))full.push(S.kasse===S.day?'<button disabled>👑 Kriegskasse – heute schon gespendet</button>':b("kasse","kasseGive()","👑 Kriegskasse des Königs",`${kasseCost()} <i class=coin></i> → +${kasseRuhm()} Ruhm · einmal am Tag`,S.gold<kasseCost()));
  if(has("cal")&&isFull(S.day)&&S.moonDone!==S.day)full.push(`<button class="p" style="background:#3949ab;border-color:#3949ab" ${S.en<3?"disabled":""} onclick="startMoon()">🌕 Vollmond-Jagd<small>3 Energie · nur heute Nacht · ein Versuch</small></button>`);
  const span=h=>h.replace("<button ",'<button style="grid-column:1/-1" ');
  if(half.length%2)half[half.length-1]=span(half[half.length-1]);

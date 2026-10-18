@@ -129,7 +129,7 @@ const EVT=[
  [2,()=>{const x=10+lvl()*5;S.exp+=x;return `Ein alter Veteran übt mit dir Schwertkampf: <b>+${x} EP</b>. 🤺`}],
  [2,()=>{S.ruhm+=5+lvl();return "Auf dem Marktplatz feiert man dein Können: <b>+"+(5+lvl())+" Ruhm</b>. 🎉"}],
  [1,()=>{S.en=Math.max(1,S.en-1);return `Du hast schlecht geschlafen und startest mit <b>nur ${S.en} Energie</b>. 😴`}],
- [1,()=>{const x=Math.min(S.gold,Math.max(1,Math.floor(S.gold*.1)));S.gold-=x;return x?`Taschendiebe haben dir nachts <b>${x} Gold</b> gestohlen! 🦹`:"Taschendiebe schleichen durch die Gassen – aber bei dir ist nichts zu holen."}]];
+ [1,()=>{const x=Math.min(S.gold,Math.max(1,Math.floor(S.gold*.1)),50+lvl()*15);S.gold-=x;return x?`Taschendiebe haben dir nachts <b>${x} Gold</b> gestohlen! 🦹`:"Taschendiebe schleichen durch die Gassen – aber bei dir ist nichts zu holen."}]];
 const ENS=["Eisenhart","Grimmwald","Schwarzdorn","Bertram","Blutfels","Hagen","Donnerhelm","Wolfram"];
 const ET=[
 {t:"Ritter",hp:1,atk:1,def:1,mv:[["Schlag",1,92,"",5],["Wuchtschlag",1.6,75,"",3],["Deckung",0,100,"guard",2]]},
@@ -145,9 +145,9 @@ const BOSS=[
 {n:"Eiskönigin Frostara",L:14,req:1000,hp:3.2,atk:1.2,def:1.3,tint:"#7fd6ff",mv:[["Eissplitter",1,92,"",4],["Frostschlag",1.2,85,"stun",3],["Blizzard",2,75,"",3],["Eispanzer",0,100,"guard",1]]},
 {n:"Lich Mortrax",L:18,req:2000,hp:3.5,atk:1.3,def:1.4,tint:"#7d3c98",mv:[["Seelenraub",1,92,"",4],["Giftwolke",.9,90,"poison",3],["Todesstrahl",2.2,75,"",3],["Knochenschild",0,100,"guard",1]]},
 {n:"Dämonenfürst Azgaroth",L:24,req:4000,hp:4,atk:1.4,def:1.5,tint:"#8b0000",mv:[["Höllenklinge",1.1,92,"",4],["Höllenfeuer",1.2,88,"burn",3],["Schreckensschlag",1.8,78,"stun",3],["Verderben",2.6,70,"",2]]},
-{n:"Sturmriese Donnerfaust",L:28,req:6000,hp:4.2,atk:1.4,def:1.55,tint:"#5d7fa3",mv:[["Faustschlag",1.1,92,"",4],["Donnerschlag",1.3,85,"stun",3],["Kettenblitz",2,78,"",3],["Sturmwall",0,100,"guard",1]]},
-{n:"Hexenkönigin Morgana",L:32,req:8500,hp:4.4,atk:1.42,def:1.55,tint:"#6a1b9a",mv:[["Dornenpeitsche",1,92,"",3],["Fluchnebel",1,90,"poison",4],["Seelenfeuer",1.4,85,"burn",3],["Verdammnis",2.4,72,"",2]]},
-{n:"Krakenfürst Abyssor",L:36,req:12000,hp:4.8,atk:1.44,def:1.6,tint:"#0e6655",mv:[["Tentakelhieb",1.1,92,"",4],["Würgegriff",1.2,85,"stun",3],["Tintengift",1,90,"poison",3],["Flutwelle",2.2,75,"",2]]},
-{n:"Phönixkaiser Ignarion",L:40,req:16000,hp:5,atk:1.46,def:1.6,tint:"#ff8f00",mv:[["Flammenkralle",1.1,92,"",4],["Feuersturm",1.5,85,"burn",3],["Aschenregen",1.8,80,"",3],["Wiedergeburt",0,100,"guard",1]]},
-{n:"Schattenkaiser Nyx",L:45,req:21000,hp:5.3,atk:1.48,def:1.65,tint:"#1a1a2e",mv:[["Schattenhieb",1.2,92,"",4],["Albtraum",1.2,85,"stun",3],["Nachtklinge",2,80,"",3],["Leere",2.8,68,"",2]]},
-{n:"Der Weltenfresser",L:50,req:28000,hp:5.8,atk:1.5,def:1.7,tint:"#4a148c",mv:[["Zermalmen",1.2,92,"",3],["Urfeuer",1.3,88,"burn",3],["Weltengift",1.1,90,"poison",2],["Zeitriss",1.4,85,"stun",2],["Weltenende",3,68,"",2]]}];
+{n:"Sturmriese Donnerfaust",L:28,req:6000,hp:4.5,atk:1.45,def:1.55,tint:"#5d7fa3",mv:[["Faustschlag",1.1,92,"",4],["Donnerschlag",1.3,85,"stun",3],["Kettenblitz",2,78,"",3],["Sturmwall",0,100,"guard",1]]},
+{n:"Hexenkönigin Morgana",L:32,req:8500,hp:4.8,atk:1.48,def:1.55,tint:"#6a1b9a",mv:[["Dornenpeitsche",1,92,"",3],["Fluchnebel",1,90,"poison",4],["Seelenfeuer",1.4,85,"burn",3],["Verdammnis",2.4,72,"",2]]},
+{n:"Krakenfürst Abyssor",L:36,req:12000,hp:5.3,atk:1.51,def:1.6,tint:"#0e6655",mv:[["Tentakelhieb",1.1,92,"",4],["Würgegriff",1.2,85,"stun",3],["Tintengift",1,90,"poison",3],["Flutwelle",2.2,75,"",2]]},
+{n:"Phönixkaiser Ignarion",L:40,req:16000,hp:5.6,atk:1.54,def:1.6,tint:"#ff8f00",mv:[["Flammenkralle",1.1,92,"",4],["Feuersturm",1.5,85,"burn",3],["Aschenregen",1.8,80,"",3],["Wiedergeburt",0,100,"guard",1]]},
+{n:"Schattenkaiser Nyx",L:45,req:21000,hp:6,atk:1.57,def:1.65,tint:"#1a1a2e",mv:[["Schattenhieb",1.2,92,"",4],["Albtraum",1.2,85,"stun",3],["Nachtklinge",2,80,"",3],["Leere",2.8,68,"",2]]},
+{n:"Der Weltenfresser",L:50,req:28000,hp:6.6,atk:1.6,def:1.7,tint:"#4a148c",mv:[["Zermalmen",1.2,92,"",3],["Urfeuer",1.3,88,"burn",3],["Weltengift",1.1,90,"poison",2],["Zeitriss",1.4,85,"stun",2],["Weltenende",3,68,"",2]]}];

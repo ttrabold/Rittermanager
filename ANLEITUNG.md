@@ -57,6 +57,7 @@ Damit der Anfang nicht überfordert, stehen dir zu Beginn nur **Arbeiten, Abente
 | Stufe 15 | 📅 Kalender (Markttag, Turniertag) und 🌕 Vollmond-Jagd |
 | Stufe 18 | 🏗️ Burgausbau |
 | 3. Boss besiegt | 🗼 Endloser Turm |
+| 6. Boss besiegt | 👑 Kriegskasse des Königs |
 | Alle Bosse besiegt | 🌟 Wiedergeburt |
 
 Jede Freischaltung wird mit **🔓 Neu freigeschaltet** angekündigt. Der neue Knopf trägt ein rotes **NEU**, bis du ihn zum ersten Mal benutzt. Was du einmal freigeschaltet hast, bleibt dir erhalten, auch nach einer Wiedergeburt.
@@ -71,7 +72,7 @@ Auf dem Burgbildschirm siehst du:
 - **Dein Ritter** vor der Burg, mit der Ausrüstung, die er gerade trägt
 - **Deine Werte**: Stärke, Ausdauer, Geschick, Energie, Gold, Ruhm, Titel und Stufe
 - **Die Nachrichtenzeile**: Sie sagt dir, was zuletzt passiert ist.
-- **Die Aktionsknöpfe**: Arbeiten, Abenteuer, Markt, Händler, Werkstatt, Inventar, Turnier, Turm, Bosskampf, Vollmond-Jagd, Burgausbau, Taverne, Wiedergeburt und Schlafen
+- **Die Aktionsknöpfe**: Arbeiten, Abenteuer, Markt, Händler, Werkstatt, Inventar, Turnier, Turm, Bosskampf, Vollmond-Jagd, Burgausbau, Taverne, Kriegskasse, Wiedergeburt und Schlafen
 - **Kalender und Tagesaufträge** oberhalb der Szene und unter der Nachrichtenzeile
 - **Deine Fähigkeiten und Tränke** ganz unten
 
@@ -111,7 +112,7 @@ Jeder neue Morgen bringt ein zufälliges Ereignis:
 - 🤺 **Ein alter Veteran** trainiert mit dir, und du bekommst Erfahrung.
 - 🎉 **Auf dem Marktplatz** wird dein Können gefeiert, und du bekommst Ruhm.
 - 😴 **Schlecht geschlafen**: Du startest mit 1 Energie weniger.
-- 🦹 **Taschendiebe** stehlen dir nachts 10 % deines Goldes.
+- 🦹 **Taschendiebe** stehlen dir nachts 10 % deines Goldes, höchstens aber 50 Gold + 15 pro Stufe.
 
 Gute Ereignisse sind häufiger als schlechte. Je höher deine Stufe, desto größer fallen die Belohnungen aus.
 
@@ -409,6 +410,8 @@ Es gibt zwölf Bosse, die du nacheinander besiegen musst. Jeder Boss braucht ein
 
 > 🗡️ **Söldner:** Hast du genug Ruhm für den nächsten Boss, kannst du auf dem Burgbildschirm einen **Söldner anheuern**. Er kämpft im nächsten Bosskampf an deiner Seite und schlägt jede Runde zu.
 
+> 👑 **Kriegskasse des Königs:** Ab dem sechsten besiegten Boss kannst du auf dem Burgbildschirm **einmal am Tag** Gold in die Kriegskasse des Königs geben. Das kostet 100 Gold pro Stufe und bringt 15 Ruhm pro Stufe, auf Stufe 30 also 3000 Gold für 450 Ruhm. So wird überschüssiges Gold im späten Spiel zu Ruhm für die nächsten Bosse.
+
 > 📜 Jeder Boss hat seine eigene Geschichte. Sie wird vor dem Kampf erzählt, und nach dem Sieg erfährst du, wie sie endet. Nach dem Weltenfresser wartet ein **Epilog**.
 
 **Belohnung für jeden Boss:**
@@ -540,9 +543,9 @@ Für die Berufe brauchst du **Materialien**. Du bekommst sie auf zwei Wegen:
 | 🌺 Feuerblüte | 15 🪙 | Feuerrittern |
 | 💎 Arkankristall | 20 🪙 | Rittern, Feuerrittern, Bossen |
 | 🪨 Mithrilerz | 35 🪙 | Panzerrittern, starken Gegnern (ab Stufe 8), Bossen |
-| 🐉 Drachenschuppe | 150 🪙 | nur bei Bossen |
+| 🐉 Drachenschuppe | 150 🪙 | bei Bossen, selten beim Vollmond-Werwolf und bei Sir Gregor, im Turm nur auf jeder 10. Etage |
 
-Bosse lassen besonders viel fallen: Drachenschuppen, Arkankristalle, Mithrilerz und Kräuter.
+Bosse lassen besonders viel fallen: Drachenschuppen, Arkankristalle, Mithrilerz und Kräuter. Drachenschuppen bleiben dabei selten. Die Turm-Bosse auf der 5., 15., 25. Etage usw. geben keine.
 
 ---
 

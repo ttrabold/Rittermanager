@@ -19,7 +19,7 @@ function simRun(maxDay,seedLog){
   if(has("craft"))for(const key of invItems().filter(isEq)){const u=(S.up[key]||0)+1;if(u<=maxUp()){const c=upCost(kinfo(key).s,u);if(hasM(c)&&S.gold>=upGold(u)+100&&S.en>2)upgrade(key)}}
   while(S.en>0){
    const b=BOSS[S.boss];
-   if(has("boss")&&b&&S.ruhm>=b.req&&S.en>=3&&lvl()>=b.L-1){if(S.gold>mercCost()*3&&!S.merc)mercHire();bossTries++;startBoss();fightAI();if(F.ko==="p")bossFails++;else T.boss[S.boss]=day;continue}
+   if(has("boss")&&b&&S.ruhm>=b.req&&S.en>=3&&lvl()>=b.L-1){if(S.gold>mercCost()*3&&!S.merc)mercHire();bossTries++;startBoss();fightAI();if(F.ko==="p"){bossFails++;T.bf=T.bf||{};T.bf[S.boss+1]=(T.bf[S.boss+1]||0)+1}else T.boss[S.boss]=day;continue}
    if(rivalReady()&&S.en>=3){startRival();fightAI();if(F.ko==="e")T.rival[S.rv]=day;continue}
    if(has("cal")&&isFull(S.day)&&S.moonDone!==S.day&&S.en>=3){startMoon();fightAI();continue}
    if(has("tour")&&S.en>=4&&S.gold>=tourFee()&&(isTourDay(S.day)||day%3===0)){startTour();fightAI();while(F.over&&F.next&&F.ko!=="p"){nextTour();fightAI()}continue}
@@ -27,7 +27,8 @@ function simRun(maxDay,seedLog){
    if(S.en>=2){startFight();if(EVN)evAI();else fightAI();continue}
    if(has("craft")&&S.mat.hk>=2){brew("h");continue}
    work()}
-  if(has("burg")){for(const bd of BLD){const lv=S.bld[bd.id];if(lv<bd.max){const c=bCost(bd,lv+1);if(hasM(c.m)&&S.gold>=c.g+200)build(bd.id)}}}
+  if(has("burg")){for(const bd of BLD){const lv=S.bld[bd.id];if(lv<bd.max){const c=bCost(bd,lv+1);if(S.gold>=c.g+400&&has("craft"))for(const k in c.m)while(S.mat[k]<c.m[k]&&S.gold>=MT(k).p+c.g+200){S.gold-=MT(k).p;S.mat[k]++}if(hasM(c.m)&&S.gold>=c.g+200)build(bd.id)}}for(const d of DECO)if(!hasDeco(d.id)&&(!d.ok||d.ok())&&S.gold>d.g*3)decoBuy(d.id)}
+  if(has("kasse")&&S.gold>=kasseCost()*2)kasseGive();
   if(has("comp")){for(const c of COMP)if(!(S.comp||[]).includes(c.id)&&c.ok()&&S.gold>c.price*2){compBuy(c.id)}S.cmp=(S.comp||[]).includes("knappe")?"knappe":S.cmp}
   gearBuy();potionsBuy();
   for(const f of S.unl)if(!before.has(f))T.unl[f]=day;
@@ -37,4 +38,4 @@ function simRun(maxDay,seedLog){
  fight=of;nightShow=oNS;
  const L=T.lvl,dayOfLvl=n=>{for(const d in L)if(L[d]>=n)return +d;return null};
  return {tage:Object.keys(L).length,stufe:lvl(),bosse:S.boss,tode:deaths,bossVersuche:bossTries,bossNiederlagen:bossFails,
-  freischaltung:T.unl,bossTag:T.boss,rivaleTag:T.rival,stufeTag:Object.fromEntries([2,4,6,8,10,12,15,18,20,25,30,40,50].map(n=>[n,dayOfLvl(n)])),gold:S.gold,ruhm:S.ruhm,gebaeude:bldSum()}}
+  freischaltung:T.unl,bossTag:T.boss,rivaleTag:T.rival,stufeTag:Object.fromEntries([2,4,6,8,10,12,15,18,20,25,30,40,50].map(n=>[n,dayOfLvl(n)])),gold:S.gold,ruhm:S.ruhm,gebaeude:bldSum(),ds:S.mat.ds,leder:S.mat.le,bossFehl:T.bf||{}}}
