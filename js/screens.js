@@ -42,9 +42,9 @@ function inv(){musicSet("home");const hb=hintBox("inv");
  <div class="card"><h3>🛡️ Ausgerüstet</h3>
  ${slot(wcat().e,"Waffe · "+wcat().n,iname("w"),"+"+wBon()+" ⚔️",fx("w")+"<br>"+wcat().d)}
  ${slot("🛡️","Rüstung",iname("a"),"+"+aBon()+" 🛡️",fx("a"))}
- ${slot("🔰","Schild",SH[S.s][0],"+"+SH[S.s][2]+" 🛡️",S.s?"Fängt Schaden ab":"Auf dem Markt erhältlich")}</div>
+ ${slot("🔰","Schild",iname("sh"),"+"+sBon()+" 🛡️",S.es||(S.ru[ikey("sh")]||[]).length?fx("sh"):S.s?"Fängt Schaden ab":"Auf dem Markt erhältlich")}</div>
  <div class="card"><h3>📊 Kampfwerte</h3><div class="stats">
- <div>⚔️ Schaden <b>${5+Math.floor(S.st*1.3)+wBon()}</b></div><div>🛡️ Schutz <b>${aBon()+SH[S.s][2]}</b></div>
+ <div>⚔️ Schaden <b>${5+Math.floor(S.st*1.3)+wBon()}</b></div><div>🛡️ Schutz <b>${aBon()+sBon()}</b></div>
  <div>❤️ Max. LP <b>${maxhp()}</b></div><div>💥 Krit <b>${p(Math.min(.6,S.ge*.03+R("crit")))}</b></div>
  <div>💨 Ausweichen <b>+${S.ge+R("dodge")} %</b></div>${S.star?`<div>🌟 Bonus <b>+${S.star*10} %</b></div>`:""}</div>
  ${eff.length?`<div class="mut" style="margin-top:6px">${eff.join(" · ")}</div>`:""}</div>
@@ -66,7 +66,7 @@ function home(){musicSet("home");if(QN.length){msg+="<br>"+QN.join("<br>");QN=[]
  <div>⚡ Energie <b>${S.en}/${enMax()}</b>${bar(S.en,enMax(),"#e0a800")}</div>
  <div><i class=coin></i> Gold <b>${S.gold}</b></div><div>🏆 Ruhm <b>${S.ruhm}</b></div><div style="grid-column:1/-1">🎖️ ${ttn()?"<b>"+ttn()+"</b>":'<span class="mut">kein Titel</span>'}${S.tt.length?` · <a href="#" onclick="titles();return false" style="color:var(--acc)">Titel (${S.tt.length}/${TT.length})</a>`:""} · <a href="#" onclick="guide();return false" style="color:var(--acc)">📖 Anleitung</a></div>
  <div style="grid-column:1/-1">⭐ Stufe <b>${lvl()}</b> <span class="mut">(${S.exp} EP)</span>${bar(S.exp-expFor(lvl()),expFor(lvl()+1)-expFor(lvl()),"#8e44ad")}</div></div>
- <div class="mut" style="margin-top:6px">Waffe: ${iname("w")} · Rüstung: ${iname("a")} · ${SH[S.s][0]}<br>Siege ${S.wins} · Niederlagen ${S.losses}${has("tour")?" · Pokale "+S.troph:""}${has("boss")?` · Bosse ${S.boss}/${BOSS.length}`:""}${has("tower")?" · Turm-Rekord "+S.tbest:""}${(S.buffs||[]).length?"<br>✨ "+S.buffs.map(b=>b.name+" (noch "+b.n+" Kämpfe)").join(", "):""}</div></details>
+ <div class="mut" style="margin-top:6px">Waffe: ${iname("w")} · Rüstung: ${iname("a")} · ${iname("sh")}<br>Siege ${S.wins} · Niederlagen ${S.losses}${has("tour")?" · Pokale "+S.troph:""}${has("boss")?` · Bosse ${S.boss}/${BOSS.length}`:""}${has("tower")?" · Turm-Rekord "+S.tbest:""}${(S.buffs||[]).length?"<br>✨ "+S.buffs.map(b=>b.name+" (noch "+b.n+" Kämpfe)").join(", "):""}</div></details>
  <div class="msg">${msg}</div>
  ${has("quests")?questCard():""}
  ${homeGrid()}

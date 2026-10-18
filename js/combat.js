@@ -2,7 +2,7 @@
 function giveE(id,l){const it=EI.find(x=>x.id===id);if(S.own.includes(id)){S.gold+=100;l.push(`Du besitzt ${it.n} schon: +100 Gold.`);return}S.own.push(id);const k=it.s==="w"?"ew":"ea",cur=it.s==="w"?wBon():aBon(),auto=it.b>cur;if(auto)S[k]=id;l.push(`✨ <b>Verzauberte Beute: ${it.n}</b> (${it.d})${auto?" – angelegt!":" – in der Schmiede anlegbar."}`)}
 function tourLoot(l){const p=["fl","fz","sb","mo","wp","wm"].filter(id=>!S.own.includes(id));if(p.length)giveE(p[rnd(0,p.length-1)],l);else{S.gold+=150;l.push("Alle Turnierschätze besitzt du schon: +150 Gold!")}}
 function towerLoot(l){const p=["t1","t2","t3","t4"].filter(id=>!S.own.includes(id));if(p.length)giveE(p[rnd(0,p.length-1)],l);else{S.gold+=300;l.push("Alle Turmschätze besitzt du schon: +300 Gold!")}}
-function equipE(id){const it=EI.find(x=>x.id===id),k=it.s==="w"?"ew":"ea";S[k]=S[k]===id?null:id;save();sfx("buff");inv()}
+function equipE(id){const it=itm(id);if(!it)return;const k=it.s==="w"?"ew":it.s==="a"?"ea":"es";S[k]=S[k]===id?null:id;save();sfx("buff");inv()}
 function encHit(d,l){const f=F,r=Math.random(),b=fxv("burn");
  if(r<b&&!(f.fx&&f.fx.noburn)){f.eb.burn=2;l.push("Der Gegner geht in Flammen auf! 🔥")}
  else if(r<b+fxv("poison")){f.eb.ps=f.eb.poison>0?Math.min(2,f.eb.ps+1):1;f.eb.poison=3;l.push("Der Gegner ist vergiftet! ☠️")}
@@ -113,7 +113,7 @@ function enemyAct(l){
  if(m[3]==="guard"){f.vfx.push(["guard","vE",1]);f.eb.guard=1;l.push("Der Gegner geht in Deckung. 🛡️")}
  else if(Math.random()*100>=Math.max(25,m[2]-S.ge-fxv("dodge"))){l.push("Du weichst aus!");sfx("miss");f.vfx.push(["dodge","vP",1])}
  else{
-  let d=(f.atk+rnd(0,3))*m[1]*(f.eb.weak>0?.7:1)-aBon()-SH[S.s][2];if(f.pb.guard>0)d*=.5;d=Math.max(1,Math.round(d));const fx=f.fx||{},ec=Math.random()<(fx.crit||0);if(ec)d=Math.round(d*1.5);f.took=1;f.php-=d;f.anim="p";f.dmg=d;f.hP=d;sfx("hurt");f.vfx.push(["slash","vP",1]);if(m[1]>=1.5)f.vfx.push(["flash","vP",1]);l.push(`${ec?"<b>Kritischer Treffer!</b> ":""}Du erleidest ${d} Schaden.`);
+  let d=(f.atk+rnd(0,3))*m[1]*(f.eb.weak>0?.7:1)-aBon()-sBon();if(f.pb.guard>0)d*=.5;d=Math.max(1,Math.round(d));const fx=f.fx||{},ec=Math.random()<(fx.crit||0);if(ec)d=Math.round(d*1.5);f.took=1;f.php-=d;f.anim="p";f.dmg=d;f.hP=d;sfx("hurt");f.vfx.push(["slash","vP",1]);if(m[1]>=1.5)f.vfx.push(["flash","vP",1]);l.push(`${ec?"<b>Kritischer Treffer!</b> ":""}Du erleidest ${d} Schaden.`);
   if(Math.random()<(fx.burn||0)&&!fxv("noburn")){f.pb.burn=3;f.vfx.push(["fire","vP",1]);l.push("Die verzauberte Waffe setzt dich in Brand! 🔥")}
   if(Math.random()<(fx.poison||0)){f.pb.poison=4;l.push("Die verzauberte Waffe vergiftet dich! ☠️")}
   if(Math.random()<(fx.stun||0)*.6){f.pb.stun=1;f.vfx.push(["stun","vP",1]);l.push("Die verzauberte Waffe lähmt dich! ❄️")}
