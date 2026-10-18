@@ -1,6 +1,6 @@
 // Ritter Manager – Zufallsbeute: gewürfelte Waffen, Rüstungen und Schilde mit Seltenheiten
 
-const RAR=[{n:"Selten",e:"🟢",c:"#43a047"},{n:"Rar",e:"🔵",c:"#1e88e5"},{n:"Episch",e:"🟣",c:"#8e24aa"},{n:"Legendär",e:"🟠",c:"#fb8c00"}];
+const RAR=[{n:"Selten",e:"🟢",c:"#43a047"},{n:"Rar",e:"🔵",c:"#1e88e5"},{n:"Episch",e:"🟣",c:"#b45fd0"},{n:"Legendär",e:"🟠",c:"#fb8c00"}];
 // Effekte je Slot: Höchstwert bei Gegenstandsstufe il (t = Anteil bis Stufe 50), Text, Namenszusatz, Leuchtfarbe
 const LFX={
  burn:{nm:"Brand",s:"w",max:(il,t)=>.10+.25*t,d:v=>`${Math.round(v*100)} % Brand`,suf:"der Glut",c:"#ff6a2b"},
@@ -37,9 +37,9 @@ function lootGive(kind,il,l,n){const w=(LOOTW[kind==="tower10"?"tower":kind]||LO
  l.push(`${RAR[r].e} <b style="color:${RAR[r].c}">${RAR[r].n}e Beute: ${it.n}</b> (+${it.b} ${it.s==="w"?"⚔️":"🛡️"}, ${it.d})${cmp?"<br>"+cmp:""}${auto?" – angelegt!":" – liegt im Beutel."}`);return it}
 
 // ---- Vergleich mit dem angelegten Teil derselben Art ----
-function cmpHtml(it){const cur=eq(it.s),cf=(cur&&cur.fx)||{},o=[],d=it.b-slotBase(it.s),pc=k=>!LFX[k]||LFX[k].int||LFX[k].fix?"":" %",sc=k=>LFX[k]&&!LFX[k].int&&!LFX[k].fix?100:1;
- if(d)o.push(`${it.s==="w"?"⚔️":"🛡️"} ${d>0?"▲ +":"▼ −"}${Math.abs(d)}`);
- for(const k of new Set([...Object.keys(it.fx),...Object.keys(cf)])){const v=Math.round(((it.fx[k]||0)-(cf[k]||0))*sc(k));if(!v)continue;const nm=LFX[k]?LFX[k].nm:k;o.push(`${nm} ${v>0?"▲ +":"▼ −"}${k==="noburn"?"":Math.abs(v)+pc(k)}`)}
+function cmpHtml(it){const cur=eq(it.s),cf=(cur&&cur.fx)||{},o=[],d=it.b-slotBase(it.s),pc=k=>!LFX[k]||LFX[k].int||LFX[k].fix?"":"&nbsp;%",sc=k=>LFX[k]&&!LFX[k].int&&!LFX[k].fix?100:1;
+ if(d)o.push(`${it.s==="w"?"⚔️":"🛡️"}&nbsp;${d>0?"▲&nbsp;+":"▼&nbsp;−"}${Math.abs(d)}`);
+ for(const k of new Set([...Object.keys(it.fx),...Object.keys(cf)])){const v=Math.round(((it.fx[k]||0)-(cf[k]||0))*sc(k));if(!v)continue;const nm=LFX[k]?LFX[k].nm:k;o.push(k==="noburn"?`${nm}&nbsp;${v>0?"▲":"▼"}`:`${nm}&nbsp;${v>0?"▲&nbsp;+":"▼&nbsp;−"}${Math.abs(v)+pc(k)}`)}
  return o.length?`<span class="mut">${o.join(" · ")}</span>`:""}
 
 // ---- Beutel und Zerlegen ----
@@ -54,3 +54,15 @@ function salvage(id){const it=(S.gear||[]).find(x=>x.id===id);if(!it||isWorn(id)
  delete S.up[id];delete S.ru[id];S.gear=S.gear.filter(x=>x.id!==id);
  salvMsg=`🔨 ${it.n} zerlegt: `+Object.entries(got).map(([k,n])=>`${MT(k).e} ${MT(k).n} ×${n}`).join(", ");return true}
 function salvageAll(r){let n=0;for(const it of bagItems().filter(x=>x.r===r))if(salvage(it.id))n++;if(n)salvMsg=`🔨 ${n} ${RAR[r].e} ${RAR[r].n}e Gegenstände zerlegt.`;return n}
+
+// ---- Beutel-Ansicht im Inventar ----
+function invSalv(id){if(salvage(id)){sfx("coin");save()}inv()}
+function invSalvAll(r){if(salvageAll(r)){sfx("coin");save()}inv()}
+function bagHtml(){const row=it=>{const R=RAR[it.r],worn=isWorn(it.id),u=S.up[it.id]||0,ru=(S.ru[it.id]||[]).length,sl=it.s==="w"?`${WCAT[it.cat].e} ${WCAT[it.cat].n}`:it.s==="a"?"🛡️ Rüstung":"🔰 Schild";
+  return `<div class="row"><span><b style="color:${R.c}">${R.e} ${it.n}${u?" +"+u:""}${ru?" "+"✦".repeat(ru):""}</b>${worn?' <span class="mut">(angelegt)</span>':""}<br><span class="mut">${sl} · +${it.b+(it.s==="w"?u*2:u)} ${it.s==="w"?"⚔️":"🛡️"} · ${R.n} · Stufe ${it.il}<br>${it.d}</span>${worn?"":"<br>"+cmpHtml(it)}</span>
+  <span style="display:flex;flex-direction:column;gap:4px">${worn?`<button class="p" onclick="equipE('${it.id}')">Ablegen</button>`:`<button onclick="equipE('${it.id}')">Anlegen</button><button onclick="invSalv('${it.id}')">Zerlegen</button>`}</span></div>`};
+ const all=(S.gear||[]).slice().sort((a,b)=>isWorn(b.id)-isWorn(a.id)||b.r-a.r||b.b-a.b),n=bagItems().length,cnt=r=>bagItems().filter(x=>x.r===r).length,m=salvMsg;salvMsg="";
+ return `<h3>🎒 Beutel (${n}/${BAG})</h3>${bagFull()?'<div class="mut" style="color:var(--acc)">Dein Beutel ist übervoll. Turm, Turnier und Bosskampf sind gesperrt, bis du aufräumst.</div>':""}${m?`<div class="mut">${m}</div>`:""}
+ ${all.map(row).join("")||'<div class="mut">Noch keine Beute. Gewinne Turniere, Turm-Bosse und Bosse.</div>'}
+ <div class="grid" style="margin-top:8px"><button ${cnt(0)?"":"disabled"} onclick="invSalvAll(0)">Alles 🟢 zerlegen<small>${cnt(0)} Stück</small></button><button ${cnt(1)?"":"disabled"} onclick="invSalvAll(1)">Alles 🔵 zerlegen<small>${cnt(1)} Stück</small></button></div>
+ <div class="mut" style="margin-top:6px">Zerlegen ergibt Materialien: 🟢 Eisenerz oder Leder · 🔵 Arkankristalle · 🟣 Mithrilerz und Kristalle · 🟠 eine Drachenschuppe. Aufwertungen zahlen sich zur Hälfte zurück, Runen gehen verloren.</div>`}

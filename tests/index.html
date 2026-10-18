@@ -66,6 +66,10 @@ t("Zufallsbeute: Beutel voll",()=>{hero(30);S.tunl=1;F=null;for(let i=0;i<=BAG;i
  home();ok(document.getElementById("app").innerHTML.includes("Beutel voll"),"Hinweis fehlt");salvageAll(0);ok(!bagFull(),"aufräumen")});
 t("Zufallsbeute: Vergleich",()=>{hero(30);const a=gearAdd(30,1,"w"),b=gearAdd(60,1,"w");equipE(a.id);const h=cmpHtml(b);ok(/[▲▼]/.test(h),"kein Vergleich: "+h)});
 t("Zufallsbeute: Export behält Beute",()=>{hero(20);gearAdd(20,2,"sh");const d=impParse(expStr());ok(d.gear.length===S.gear.length&&d.gear[0].id===S.gear[0].id,"Beute fehlt im Export")});
+t("Zufallsbeute: Inventar",()=>{hero(30);for(let r=0;r<4;r++)gearAdd(30,r);inv();const h=document.getElementById("app").innerHTML;
+ ok(h.includes("Beutel (4/20)"),"Beutel-Titel");ok(h.includes("Alles 🟢 zerlegen")&&h.includes("Alles 🔵 zerlegen"),"Sammelknöpfe");ok(/[▲▼]/.test(h),"Vergleich");ok(!/undefined|NaN/.test(h),"undefined/NaN");
+ const z=[...document.querySelectorAll("button")].find(b=>b.textContent.trim()==="Zerlegen");ok(z,"Zerlegen-Knopf");z.click();ok(S.gear.length===3,"nicht zerlegt");
+ const a=[...document.querySelectorAll("button")].find(b=>b.textContent.trim()==="Anlegen");a.click();ok(S.ew||S.ea||S.es,"nicht angelegt");inv();ok(document.getElementById("app").innerHTML.includes("Beutel (2/20)"),"angelegt zählt noch")});
 t("Kriegskasse: ab Boss 6, einmal am Tag",()=>{newGame();S.exp=expFor(30);S.lvl0=30;S.gold=99999;unlCheck();ok(!has("kasse"),"zu früh frei");S.boss=6;unlCheck();ok(has("kasse"),"nicht frei");home();ok(document.body.innerHTML.includes("Kriegskasse"),"Knopf fehlt");
  const g=S.gold,r=S.ruhm;kasseGive();ok(S.gold===g-kasseCost()&&S.ruhm===r+kasseRuhm(),"Tausch falsch");kasseGive();ok(S.gold===g-kasseCost(),"zweimal am Tag");S.day++;kasseGive();ok(S.gold===g-2*kasseCost(),"neuer Tag geht nicht");
  S.day++;S.gold=kasseCost()-1;kasseGive();ok(S.kasse!==S.day,"ohne genug Gold")});

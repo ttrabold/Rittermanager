@@ -48,7 +48,8 @@ function inv(){musicSet("home");const hb=hintBox("inv");
  <div>❤️ Max. LP <b>${maxhp()}</b></div><div>💥 Krit <b>${p(Math.min(.6,S.ge*.03+R("crit")))}</b></div>
  <div>💨 Ausweichen <b>+${S.ge+R("dodge")} %</b></div>${S.star?`<div>🌟 Bonus <b>+${S.star*10} %</b></div>`:""}</div>
  ${eff.length?`<div class="mut" style="margin-top:6px">${eff.join(" · ")}</div>`:""}</div>
- <div class="card"><h3>🗡️ Besondere Waffen</h3>${list("w")}<h3>🛡️ Besondere Rüstungen</h3>${list("a")}</div>
+ <div class="card">${bagHtml()}</div>
+ ${S.own.length?`<div class="card"><h3>🗡️ Besondere Waffen</h3>${list("w")}<h3>🛡️ Besondere Rüstungen</h3>${list("a")}</div>`:""}
  <div class="card"><h3>🧪 Tränke</h3>${IT.map(t=>`<div class="row"><span>${t.e} ${t.n} <span class="mut">${t.d}</span></span><b>×${S.it[t.k]}</b></div>`).join("")}<div class="mut" style="margin-top:6px">Tränke setzt du im Kampf über 🎒 Tränke ein.</div></div>
  <div class="card"><h3>📦 Materialien</h3>${MAT.map(m=>`<div class="row"><span>${m.e} ${m.n}</span><b>×${S.mat[m.k]}</b></div>`).join("")}</div>
  <div class="card"><button style="width:100%" onclick="bestScr()">📖 Bestiarium<small>${BST.filter(x=>(S.bst||{})[x.k]).length}/${BST.length} Gegner entdeckt</small></button></div>
