@@ -15,14 +15,16 @@ Willkommen, edler Ritter (oder edle Ritterin)! Hier erfährst du alles, was du �
 9. [Zustände](#zustände)
 10. [Gegner](#gegner)
 11. [Bosse](#bosse)
-12. [Die Schmiede](#die-schmiede)
+12. [Der Markt](#der-markt)
 13. [Verzauberte Ausrüstung](#verzauberte-ausrüstung)
-14. [Der Endlose Turm](#der-endlose-turm)
-15. [Wiedergeburt](#wiedergeburt)
-16. [Ränge](#ränge)
-17. [Titel](#titel)
-18. [Einstellungen und Spielstand](#einstellungen-und-spielstand)
-19. [Tipps für Einsteiger](#tipps-für-einsteiger)
+14. [Materialien und Händler](#materialien-und-händler)
+15. [Berufe – die Werkstatt](#berufe--die-werkstatt)
+16. [Der Endlose Turm](#der-endlose-turm)
+17. [Wiedergeburt](#wiedergeburt)
+18. [Ränge](#ränge)
+19. [Titel](#titel)
+20. [Einstellungen und Spielstand](#einstellungen-und-spielstand)
+21. [Tipps für Einsteiger](#tipps-für-einsteiger)
 
 ---
 
@@ -40,7 +42,7 @@ Auf dem Burgbildschirm siehst du:
 - **Dein Ritter** vor der Burg, mit der Ausrüstung, die er gerade trägt
 - **Deine Werte**: Stärke, Ausdauer, Geschick, Energie, Gold, Ruhm, Titel und Stufe
 - **Die Nachrichtenzeile**: Sie sagt dir, was zuletzt passiert ist.
-- **Die Aktionsknöpfe**: Arbeiten, Abenteuer, Schmiede, Turnier, Turm, Wiedergeburt, Bosskampf und Schlafen
+- **Die Aktionsknöpfe**: Arbeiten, Abenteuer, Markt, Händler, Werkstatt, Turnier, Turm, Wiedergeburt, Bosskampf und Schlafen
 - **Deine Fähigkeiten und Tränke** ganz unten
 
 ---
@@ -52,6 +54,7 @@ Jeder Tag beginnt mit **6 Energie**. Fast jede Aktivität kostet Energie:
 | Aktivität | Kosten |
 |---|---|
 | ⚒️ Arbeiten | 1 Energie |
+| 🧰 Herstellen in der Werkstatt | 1 Energie |
 | ⚔️ Abenteuer | 2 Energie |
 | 👑 Bosskampf | 3 Energie |
 | 🏟️ Turnier | 4 Energie + 20 Gold |
@@ -165,7 +168,7 @@ Neue Fähigkeiten schaltest du automatisch frei, wenn du die nötige Stufe errei
 
 ## Tränke
 
-Tränke kaufst du in der Schmiede. Im Kampf öffnest du sie über **🎒 Tränke**. Einen Trank zu trinken kostet deinen Zug.
+Tränke kaufst du auf dem Markt oder braust sie selbst (siehe [Berufe](#berufe--die-werkstatt)). Im Kampf öffnest du sie über **🎒 Tränke**. Einen Trank zu trinken kostet deinen Zug.
 
 | Trank | Preis | Wirkung |
 |---|---|---|
@@ -240,9 +243,9 @@ Es gibt sechs Bosse, die du nacheinander besiegen musst. Jeder Boss braucht eine
 
 ---
 
-## Die Schmiede
+## Der Markt
 
-In der Schmiede kaufst du bessere Ausrüstung und Tränke. Gekaufte Ausrüstung legst du sofort an.
+Auf dem Markt kaufst du bessere Ausrüstung und Tränke. Gekaufte Ausrüstung legst du sofort an.
 
 ### 🗡️ Waffen
 | Waffe | Preis | Schaden |
@@ -276,7 +279,7 @@ In der Schmiede kaufst du bessere Ausrüstung und Tränke. Gekaufte Ausrüstung 
 Verzauberte Waffen und Rüstungen kannst du nicht kaufen, du erbeutest sie. Sie sind stärker als normale Ausrüstung und haben besondere Kräfte. Außerdem sieht man sie an deinem Ritter: Flammen, Frost, Blitze, Giftschwaden und mehr.
 
 - Ist ein neuer Fund besser als deine aktuelle Ausrüstung, **legst du ihn automatisch an**.
-- In der Schmiede kannst du verzauberte Gegenstände jederzeit **an- und ablegen**.
+- Auf dem Markt kannst du verzauberte und selbst geschmiedete Gegenstände jederzeit **an- und ablegen**.
 - Findest du einen Gegenstand, den du schon besitzt, bekommst du stattdessen Gold.
 
 ### Aus Turnieren
@@ -311,6 +314,95 @@ Verzauberte Waffen und Rüstungen kannst du nicht kaufen, du erbeutest sie. Sie 
 
 ---
 
+## Materialien und Händler
+
+Für die Berufe brauchst du **Materialien**. Du bekommst sie auf zwei Wegen:
+
+1. **Kämpfe gewinnen.** Nach jedem Sieg findest du 1–2 Materialien. Welche, hängt vom Gegner ab.
+2. **Beim 🛒 Händler kaufen.** Er verkauft alle Materialien und kauft übrige für 40 % des Preises zurück.
+
+| Material | Preis beim Händler | Findest du vor allem bei |
+|---|---|---|
+| ⛏️ Eisenerz | 8 🪙 | Rittern, Panzerrittern, Feuerrittern |
+| 🟫 Leder | 8 🪙 | Räubern, Bogenschützen |
+| 🌿 Heilkraut | 6 🪙 | Bogenschützen, Räubern, Rittern |
+| 🍄 Giftpilz | 8 🪙 | Räubern, Bogenschützen |
+| 🌺 Feuerblüte | 15 🪙 | Feuerrittern |
+| 💎 Arkankristall | 20 🪙 | Rittern, Feuerrittern, Bossen |
+| 🪨 Mithrilerz | 35 🪙 | Panzerrittern, starken Gegnern (ab Stufe 8), Bossen |
+| 🐉 Drachenschuppe | 150 🪙 | nur bei Bossen |
+
+Bosse lassen besonders viel fallen: Drachenschuppen, Arkankristalle, Mithrilerz und Kräuter.
+
+---
+
+## Berufe – die Werkstatt
+
+In der **🧰 Werkstatt** übst du drei Berufe aus. Du kannst alle drei gleichzeitig lernen. Jeder Beruf hat eine eigene **Stufe von 1 bis 10**.
+
+- **Kosten:** Jedes Herstellen kostet **1 Energie** und die angezeigten Materialien. Manche Rezepte kosten zusätzlich Gold.
+- **Berufs-EP:** Mit jedem hergestellten Stück sammelst du Berufs-EP. Steigt der Beruf eine Stufe auf, schaltest du neue Rezepte frei.
+- **Kostenanzeige:** Fehlt dir etwas, wird es rot angezeigt.
+
+### 🔨 Schmied
+
+**Aufwerten:** Deine angelegte Waffe und Rüstung kannst du um bis zu **+5** verstärken. Das gilt auch für verzauberte und geschmiedete Gegenstände.
+- Jede Stufe auf der Waffe bringt **+2 Schaden**, jede Stufe auf der Rüstung **+1 Schutz**.
+- Wie weit du aufwerten kannst, hängt von deiner Schmied-Stufe ab: +1 ab Stufe 1, +2 ab Stufe 3, +3 ab Stufe 5, +4 ab Stufe 7, +5 ab Stufe 9.
+- Höhere Aufwertungen brauchen Mithrilerz, die +5 auch eine Drachenschuppe.
+- Aufwertungen bleiben am Gegenstand. Kaufst du eine neue Waffe, beginnt sie wieder bei +0.
+
+**Schmieden:** Du stellst eigene Ausrüstung her, die es nirgends zu kaufen gibt:
+
+| Stufe | Gegenstand | Art | Kraft | Materialien |
+|---|---|---|---|---|
+| 2 | Hammerklinge (+7) | Waffe | 10 % Lähmung | ⛏️6 🟫2 🪙20 |
+| 3 | Beschlagener Lederpanzer (+5) | Rüstung | +4 % Ausweichen | 🟫6 ⛏️3 🪙20 |
+| 5 | Meisterklinge (+14) | Waffe | +8 % Krit | ⛏️8 🪨3 🪙60 |
+| 6 | Meisterharnisch (+10) | Rüstung | +25 max. LP | ⛏️8 🪨3 🟫4 🪙60 |
+| 8 | Drachenstahl-Schwert (+26) | Waffe | 20 % Brand, +8 % Krit | 🪨6 🐉2 🌺3 🪙150 |
+| 9 | Drachenstahl-Panzer (+20) | Rüstung | +45 max. LP, brandimmun | 🪨6 🐉3 🟫6 🪙150 |
+
+Ist ein geschmiedeter Gegenstand besser als deine Ausrüstung, legst du ihn sofort an. Sonst findest du ihn auf dem Markt unter „Besondere Ausrüstung“.
+
+### ⚗️ Alchemie
+
+Du braust Tränke selbst, statt sie zu kaufen:
+
+| Stufe | Trank | Zutaten |
+|---|---|---|
+| 1 | 🧪 Heiltrank | 🌿2 |
+| 2 | 💊 Gegengift | 🍄1 🌿1 |
+| 3 | 💥 Kraft-Elixier | 🌺1 🌿1 |
+| 4 | 🛡️ Eisenhaut-Trank | ⛏️1 🌿2 |
+| 5 | ⚗️ Großer Heiltrank | 🌿4 🌺1 |
+| 8 | 🍶 Elixier des Lebens | 🌿4 💎1 🐉1 |
+
+> 💡 Liegt deine Alchemie-Stufe **3 oder mehr Stufen über dem Rezept**, braust du jedes Mal **zwei** Tränke.
+
+### 🔮 Verzauberer
+
+Du setzt **Runen** in deine angelegte Waffe oder Rüstung ein. Sie wirken zusätzlich zu allen anderen Kräften, auch auf verzauberten Gegenständen.
+
+| Stufe | Rune | Für | Wirkung | Materialien |
+|---|---|---|---|---|
+| 1 | Glutrune | Waffe | +10 % Brandchance | 🌺2 💎1 |
+| 2 | Giftrune | Waffe | +12 % Giftchance | 🍄3 💎1 |
+| 3 | Schärferune | Waffe | +6 % Krit | ⛏️2 💎2 |
+| 5 | Frostrune | Waffe | +8 % Lähmung | 💎3 🪨1 |
+| 7 | Blutrune | Waffe | +8 % Lebensraub | 💎3 🐉1 |
+| 1 | Lebensrune | Rüstung | +15 max. LP | 🌿2 💎1 |
+| 3 | Windrune | Rüstung | +4 % Ausweichen | 🟫2 💎2 |
+| 4 | Mondrune | Rüstung | Heilt 2 LP pro Runde | 🌿3 💎2 |
+| 6 | Feuerschutzrune | Rüstung | Brandimmun | 🌺3 💎2 |
+
+- **Plätze:** Jedes Teil hat zunächst **einen Runenplatz**, ab Verzauberer-Stufe 6 sind es **zwei**.
+- **Keine Doppelten:** Dieselbe Rune kann nicht zweimal auf einem Teil sitzen.
+- **Entfernen:** Mit ✖ entfernst du eine Rune, um Platz zu schaffen. Die Rune geht dabei verloren.
+- **Anzeige:** Gegenstände mit Runen erkennst du an den ✦ hinter dem Namen.
+
+---
+
 ## Der Endlose Turm
 
 Ab dem dritten besiegten Boss steht dir der Endlose Turm offen. Ein Besuch kostet 4 Energie.
@@ -328,9 +420,9 @@ Ab dem dritten besiegten Boss steht dir der Endlose Turm offen. Ein Besuch koste
 
 Hast du alle sechs Bosse besiegt, kannst du **wiedergeboren** werden.
 
-**Du verlierst:** Stufe, Gold (du startest mit 50), Ruhm, gekaufte Ausrüstung und den Fortschritt bei den Bossen.
+**Du verlierst:** Stufe, Gold (du startest mit 50), Ruhm, gekaufte Ausrüstung (samt ihren Aufwertungen und Runen) und den Fortschritt bei den Bossen.
 
-**Du behältst:** verzauberte Gegenstände, Tränke, Pokale, Turm-Rekord und alle Titel.
+**Du behältst:** verzauberte und geschmiedete Gegenstände (samt Aufwertungen und Runen), Tränke, Materialien, Berufsstufen, Pokale, Turm-Rekord und alle Titel.
 
 **Du erhältst dauerhaft:** +10 % Schaden, +10 % Gold und +10 % Erfahrung.
 
@@ -388,7 +480,7 @@ Für besondere Leistungen bekommst du **Titel**. Einen davon kannst du tragen. E
 
 - **✏️ Umbenennen**: Klicke auf den Stift neben deinem Namen und gib einen neuen Namen ein (bis zu 20 Zeichen).
 - **♂️ / ♀️ Ritter oder Ritterin**: Ein Klick auf das Symbol neben deinem Namen wechselt zwischen Ritter und Ritterin. Aussehen, Rang und Titel passen sich an.
-- **🎵 Musik / 🔊 Sound**: Die Knöpfe unten rechts schalten Musik und Soundeffekte ein oder aus. Die Musik passt sich der Situation an: ruhig auf der Burg, Hammerschläge in der Schmiede, Fanfaren im Turnier, Trommeln im Kampf und ein düsterer Chor bei Bossen. Gerät ein Boss in Rage, wird die Musik schneller. Bei knappen Lebenspunkten hörst du deinen Herzschlag.
+- **🎵 Musik / 🔊 Sound**: Die Knöpfe unten rechts schalten Musik und Soundeffekte ein oder aus. Die Musik passt sich der Situation an: ruhig auf der Burg, Hammerschläge in der Werkstatt, Fanfaren im Turnier, Trommeln im Kampf und ein düsterer Chor bei Bossen. Gerät ein Boss in Rage, wird die Musik schneller. Bei knappen Lebenspunkten hörst du deinen Herzschlag.
 - **Hell / Dunkel**: Das Spiel folgt der Einstellung deines Geräts. Im dunklen Modus spielt es nachts unter Sternen und Mond.
 - **Speichern**: Dein Fortschritt wird automatisch in deinem Browser gespeichert. Auf einem anderen Gerät oder in einem anderen Browser beginnst du von vorn. Wenn du die Browserdaten löschst, ist der Spielstand weg.
 - **Neu starten**: Ganz unten auf dem Burgbildschirm kannst du deinen Spielstand zurücksetzen. Das kann nicht rückgängig gemacht werden.
@@ -406,6 +498,8 @@ Für besondere Leistungen bekommst du **Titel**. Einen davon kannst du tragen. E
 5. **Kriegsruf und Kraft-Elixier wirken 3 Runden.** Setze danach deine stärksten Fähigkeiten ein.
 6. **Gegen Bosse lohnt sich Eiserne Haltung**, kurz bevor sie in Rage geraten.
 7. **Turniere sind der einzige Weg** zu den sechs Turnierschätzen. Der Windmantel und das Mondsilber-Kettenhemd sind früh sehr wertvoll.
-8. **Im Turm** solltest du rechtzeitig aussteigen, wenn deine LP knapp werden. Dein Rekord bleibt erhalten.
+8. **Verkaufe keine Drachenschuppen.** Du brauchst sie für die besten Rezepte, und beim Händler kosten sie 150 Gold.
+9. **Alchemie lohnt sich früh.** Heilkraut ist billig, und Heiltränke sind die wichtigste Zutat für schwere Kämpfe.
+10. **Im Turm** solltest du rechtzeitig aussteigen, wenn deine LP knapp werden. Dein Rekord bleibt erhalten.
 
 Viel Glück, edler Ritter! 🛡️⚔️

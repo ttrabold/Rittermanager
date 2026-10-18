@@ -255,18 +255,28 @@ const EI=[
 {id:"t1",n:"Sternenklinge",s:"w",b:22,c:"#fff27a",fx:{crit:.18,burn:.15},d:"+18 % Krit, 15 % Brand"},
 {id:"t2",n:"Titanenpanzer",s:"a",b:16,c:"#b0b8c0",fx:{hp:50},d:"+50 max. LP"},
 {id:"t3",n:"Chronosdolch",s:"w",b:20,c:"#e056fd",fx:{stun:.3},d:"30 % Lähmung"},
-{id:"t4",n:"Aegisharnisch",s:"a",b:19,c:"#f1c40f",fx:{dodge:12,regen:4},d:"+12 % Ausweichen, heilt 4 LP/Runde"}];
+{id:"t4",n:"Aegisharnisch",s:"a",b:19,c:"#f1c40f",fx:{dodge:12,regen:4},d:"+12 % Ausweichen, heilt 4 LP/Runde"},
+{id:"c1",n:"Hammerklinge",s:"w",b:7,c:"#9aa3ab",fx:{stun:.1},d:"10 % Lähmung",cr:1},
+{id:"c2",n:"Beschlagener Lederpanzer",s:"a",b:5,c:"#8b5a2b",fx:{dodge:4},d:"+4 % Ausweichen",cr:1},
+{id:"c3",n:"Meisterklinge",s:"w",b:14,c:"#dfe6ec",fx:{crit:.08},d:"+8 % Krit-Chance",cr:1},
+{id:"c4",n:"Meisterharnisch",s:"a",b:10,c:"#c3ccd4",fx:{hp:25},d:"+25 max. LP",cr:1},
+{id:"c5",n:"Drachenstahl-Schwert",s:"w",b:26,c:"#e0603a",fx:{burn:.2,crit:.08},d:"20 % Brand, +8 % Krit",cr:1},
+{id:"c6",n:"Drachenstahl-Panzer",s:"a",b:20,c:"#b5462a",fx:{hp:45,noburn:1},d:"+45 max. LP, brandimmun",cr:1}];
+const MAT=[{k:"ez",n:"Eisenerz",e:"⛏️",p:8},{k:"le",n:"Leder",e:"🟫",p:8},{k:"hk",n:"Heilkraut",e:"🌿",p:6},{k:"gp",n:"Giftpilz",e:"🍄",p:8},{k:"fb",n:"Feuerblüte",e:"🌺",p:15},{k:"ak",n:"Arkankristall",e:"💎",p:20},{k:"mi",n:"Mithrilerz",e:"🪨",p:35},{k:"ds",n:"Drachenschuppe",e:"🐉",p:150}];
 const BREW=[["gz","rm"],["ss","sp"],["dz","ds"],["fk","fr"],["ls","lm"],["az","ar"]];
 const eq=k=>EI.find(x=>x.id===S[k==="w"?"ew":"ea"]);
-const fxv=k=>{let v=0;for(const s of["ew","ea"]){const i=EI.find(x=>x.id===S[s]);if(i&&i.fx[k])v+=i.fx[k]}return v};
-const wBon=()=>{const e=eq("w");return e?e.b:W[S.w][2]};
-const aBon=()=>{const e=eq("a");return e?e.b:A[S.a][2]};
+const ikey=k=>k==="w"?(S.ew||"w"+S.w):(S.ea||"a"+S.a);
+const upl=k=>(S.up||{})[ikey(k)]||0;
+const fxv=k=>{let v=0;for(const s of["ew","ea"]){const i=EI.find(x=>x.id===S[s]);if(i&&i.fx[k])v+=i.fx[k]}for(const q of["w","a"])for(const r of((S.ru||{})[ikey(q)]||[])){const R=RU.find(x=>x.id===r);if(R&&R.fx[k])v+=R.fx[k]}return v};
+const wBon=()=>{const e=eq("w");return (e?e.b:W[S.w][2])+upl("w")*2};
+const aBon=()=>{const e=eq("a");return (e?e.b:A[S.a][2])+upl("a")};
+const iname=k=>{const e=eq(k),u=upl(k),r=((S.ru||{})[ikey(k)]||[]).length;return (e?(e.cr?"⚒️ ":"✨ ")+e.n:(k==="w"?W[S.w][0]:A[S.a][0]))+(u?" +"+u:"")+(r?" "+"✦".repeat(r):"")};
 const pk=()=>knight(S.w,S.a,S.s,false,null,eq("w")?eq("w").c:null,eq("a")?eq("a").c:null,S.ew,S.ea,S.sex==="f");
 function giveE(id,l){const it=EI.find(x=>x.id===id);if(S.own.includes(id)){S.gold+=100;l.push(`Du besitzt ${it.n} schon: +100 Gold.`);return}S.own.push(id);const k=it.s==="w"?"ew":"ea",cur=it.s==="w"?wBon():aBon(),auto=it.b>cur;if(auto)S[k]=id;l.push(`✨ <b>Verzauberte Beute: ${it.n}</b> (${it.d})${auto?" – angelegt!":" – in der Schmiede anlegbar."}`)}
 function tourLoot(l){const p=["fl","fz","sb","mo","wp","wm"].filter(id=>!S.own.includes(id));if(p.length)giveE(p[rnd(0,p.length-1)],l);else{S.gold+=150;l.push("Alle Turnierschätze besitzt du schon: +150 Gold!")}}
 function towerLoot(l){const p=["t1","t2","t3","t4"].filter(id=>!S.own.includes(id));if(p.length)giveE(p[rnd(0,p.length-1)],l);else{S.gold+=300;l.push("Alle Turmschätze besitzt du schon: +300 Gold!")}}
 function equipE(id){const it=EI.find(x=>x.id===id),k=it.s==="w"?"ew":"ea";S[k]=S[k]===id?null:id;save();sfx("buff");shop()}
-function ench(){return `<h3>✨ Verzauberte Ausrüstung</h3>`+(S.own.length?S.own.map(id=>{const it=EI.find(x=>x.id===id),on=S[it.s==="w"?"ew":"ea"]===id;return `<div class="row"><span>${it.s==="w"?"🗡️":"🛡️"} ${it.n} <span class="mut">+${it.b} · ${it.d}</span></span><button ${on?'class="p"':""} onclick="equipE('${id}')">${on?"Ablegen":"Anlegen"}</button></div>`}).join(""):`<div class="mut">Noch nichts – gewinne Turniere und Bosskämpfe!</div>`)}
+function ench(){return `<h3>✨ Besondere Ausrüstung</h3>`+(S.own.length?S.own.map(id=>{const it=EI.find(x=>x.id===id),on=S[it.s==="w"?"ew":"ea"]===id;return `<div class="row"><span>${it.cr?"⚒️":it.s==="w"?"🗡️":"🛡️"} ${it.n} <span class="mut">+${it.b} · ${it.d}</span></span><button ${on?'class="p"':""} onclick="equipE('${id}')">${on?"Ablegen":"Anlegen"}</button></div>`}).join(""):`<div class="mut">Noch nichts – gewinne Turniere und Bosskämpfe!</div>`)}
 function encHit(d,l){const f=F,r=Math.random(),b=fxv("burn");
  if(r<b){f.eb.burn=2;l.push("Der Gegner geht in Flammen auf! 🔥")}
  else if(r<b+fxv("poison")){f.eb.ps=f.eb.poison>0?Math.min(2,f.eb.ps+1):1;f.eb.poison=3;l.push("Der Gegner ist vergiftet! ☠️")}
@@ -395,7 +405,7 @@ function toggleSex(){const f=S.sex!=="f";if(S.name==="Sir Kunibert"||S.name==="D
 function saveName(){const v=document.getElementById("nm").value.replace(/[<>&"'`]/g,"").trim().slice(0,20);if(v)S.name=v;editName=false;save();msg=v?`Dein${S.sex==="f"?"e Ritterin":" Ritter"} heißt jetzt <b>${S.name}</b>!`:msg;home()}
 let S=fresh(),msg="Willkommen, edler Ritter! Verdiene Gold, bestehe Abenteuer und steige auf – dabei wirst du automatisch stärker.",F=null;
 try{const x=localStorage.getItem("ritter1");if(x)S=Object.assign(fresh(),JSON.parse(x));}catch(e){}
-S.it=Object.assign({h:0,H:0,k:0,e:0,g:0,x:0},S.it);S.sex=S.sex==="f"?"f":"m";S.star=S.star||0;S.tbest=S.tbest||0;S.tunl=S.tunl||((S.boss||0)>=3?1:0);S.own=S.own||[];S.ew=S.ew||null;S.ea=S.ea||null;S.boss=S.boss||0;S.troph=S.troph||0;
+S.it=Object.assign({h:0,H:0,k:0,e:0,g:0,x:0},S.it);S.sex=S.sex==="f"?"f":"m";S.mat=Object.assign(Object.fromEntries(MAT.map(m=>[m.k,0])),S.mat);S.pr=Object.assign({sm:{lv:1,xp:0},al:{lv:1,xp:0},ve:{lv:1,xp:0}},S.pr);S.up=S.up||{};S.ru=S.ru||{};S.star=S.star||0;S.tbest=S.tbest||0;S.tunl=S.tunl||((S.boss||0)>=3?1:0);S.own=S.own||[];S.ew=S.ew||null;S.ea=S.ea||null;S.boss=S.boss||0;S.troph=S.troph||0;
 S.name=String(S.name).replace(/[<>&"'`]/g,"").trim().slice(0,20)||"Sir Kunibert";S.tt=S.tt||[];S.title=S.title||null;S.crits=S.crits||0;S.flawless=S.flawless||0;S.close=S.close||0;S.bk=S.bk||Array.from({length:S.boss||0},(_,i)=>i);
 const save=()=>{try{localStorage.setItem("ritter1",JSON.stringify(S))}catch(e){}};
 const app=document.getElementById("app");
@@ -469,6 +479,51 @@ ${[[24,184,1],[38,182,.8],[205,184,.9],[220,186,1.1],[372,180,1],[388,182,.8],[5
 </svg>`;
 const bar=(v,m,c)=>`<div class="bar"><i style="width:${Math.max(0,Math.min(100,v/m*100))}%;background:${c}"></i></div>`;
 
+// ---- Berufe: Materialien, Händler, Werkstatt ----
+const MT=k=>MAT.find(m=>m.k===k);
+const DROP={Ritter:{ez:4,le:2,hk:2,ak:1},Räuber:{le:4,gp:4,hk:2},Feuerritter:{fb:4,ez:2,ak:1},Panzerritter:{ez:5,mi:2,le:1},Bogenschütze:{le:3,hk:4,gp:2}};
+function pick(t){let r=Math.random()*Object.values(t).reduce((a,b)=>a+b,0);for(const k in t){if(r<t[k])return k;r-=t[k]}return Object.keys(t)[0]}
+function dropMat(f,l){const got={},add=(k,n)=>{S.mat[k]+=n;got[k]=(got[k]||0)+n};
+ if(f.boss){add("ds",rnd(1,2));add("ak",2);add("mi",rnd(1,2));add(pick({hk:1,fb:1,gp:1}),2)}
+ else{const t=DROP[f.et]||DROP.Ritter;add(pick(t),1);if(Math.random()<.5)add(pick(t),1);if(f.lvl>=8&&Math.random()<.15)add("mi",1)}
+ l.push("Materialien: "+Object.entries(got).map(([k,n])=>`${MT(k).e} ${MT(k).n} ×${n}`).join(", "))}
+const PR={sm:{n:"Schmied",e:"🔨"},al:{n:"Alchemie",e:"⚗️"},ve:{n:"Verzauberer",e:"🔮"}};
+const prNeed=lv=>lv*6;
+const ALC=[{id:"h",lv:1,m:{hk:2}},{id:"g",lv:2,m:{gp:1,hk:1}},{id:"k",lv:3,m:{fb:1,hk:1}},{id:"e",lv:4,m:{ez:1,hk:2}},{id:"H",lv:5,m:{hk:4,fb:1}},{id:"x",lv:8,m:{hk:4,ak:1,ds:1}}];
+const SMI=[{id:"c1",lv:2,m:{ez:6,le:2},g:20},{id:"c2",lv:3,m:{le:6,ez:3},g:20},{id:"c3",lv:5,m:{ez:8,mi:3},g:60},{id:"c4",lv:6,m:{ez:8,mi:3,le:4},g:60},{id:"c5",lv:8,m:{mi:6,ds:2,fb:3},g:150},{id:"c6",lv:9,m:{mi:6,ds:3,le:6},g:150}];
+const RU=[{id:"r1",n:"Glutrune",s:"w",lv:1,m:{fb:2,ak:1},fx:{burn:.1},d:"+10 % Brandchance"},{id:"r2",n:"Giftrune",s:"w",lv:2,m:{gp:3,ak:1},fx:{poison:.12},d:"+12 % Giftchance"},
+ {id:"r3",n:"Schärferune",s:"w",lv:3,m:{ez:2,ak:2},fx:{crit:.06},d:"+6 % Krit-Chance"},{id:"r4",n:"Frostrune",s:"w",lv:5,m:{ak:3,mi:1},fx:{stun:.08},d:"+8 % Lähmung"},{id:"r5",n:"Blutrune",s:"w",lv:7,m:{ak:3,ds:1},fx:{life:.08},d:"+8 % Lebensraub"},
+ {id:"r6",n:"Lebensrune",s:"a",lv:1,m:{hk:2,ak:1},fx:{hp:15},d:"+15 max. LP"},{id:"r7",n:"Windrune",s:"a",lv:3,m:{le:2,ak:2},fx:{dodge:4},d:"+4 % Ausweichen"},{id:"r8",n:"Mondrune",s:"a",lv:4,m:{hk:3,ak:2},fx:{regen:2},d:"Heilt 2 LP pro Runde"},{id:"r9",n:"Feuerschutzrune",s:"a",lv:6,m:{fb:3,ak:2},fx:{noburn:1},d:"Brandimmun"}];
+const upCost=(k,n)=>{const m=k==="w"?{ez:2*n}:{le:2*n,ez:n};if(n>=3)m.mi=n-2;if(n>=5)m.ds=1;return m};
+const maxUp=()=>Math.min(5,Math.ceil(S.pr.sm.lv/2));
+const slots=()=>S.pr.ve.lv>=6?2:1;
+const hasM=m=>Object.entries(m).every(([k,n])=>S.mat[k]>=n);
+const costH=(m,g)=>Object.entries(m).map(([k,n])=>`<span style="color:${S.mat[k]>=n?"inherit":"var(--acc)"}">${MT(k).e}${n}</span>`).join(" ")+(g?` <span style="color:${S.gold>=g?"inherit":"var(--acc)"}">🪙${g}</span>`:"");
+let wsTab="sm",wsMsg="";
+function prXP(p,x,l){const P=S.pr[p];if(P.lv>=10)return;P.xp+=x;while(P.lv<10&&P.xp>=prNeed(P.lv)){P.xp-=prNeed(P.lv);P.lv++;sfx("level");l.push(`<b>${PR[p].e} ${PR[p].n} steigt auf Stufe ${P.lv}!</b>`)}}
+function work1(p,lv,m,g,act){if(S.en<1||S.pr[p].lv<lv||!hasM(m)||S.gold<(g||0))return;S.en--;S.gold-=g||0;for(const k in m)S.mat[k]-=m[k];const l=[act()];prXP(p,3+lv,l);wsMsg=l.join("<br>");sfx("buff");save();workshop()}
+function brew(id){const r=ALC.find(x=>x.id===id),t=IT.find(x=>x.k===id),n=S.pr.al.lv>=r.lv+3?2:1;work1("al",r.lv,r.m,0,()=>{S.it[id]+=n;return `Du braust ${n}× ${t.e} <b>${t.n}</b>.`})}
+function forge(id){const r=SMI.find(x=>x.id===id);if(S.own.includes(id))return;work1("sm",r.lv,r.m,r.g,()=>{const l=[];giveE(id,l);return "Du schmiedest: "+l.join(" ")})}
+function upgrade(k){const n=upl(k)+1;if(n>maxUp())return;work1("sm",1,upCost(k,n),10*n,()=>{S.up[ikey(k)]=n;return `Deine ${k==="w"?"Waffe":"Rüstung"} ist jetzt <b>${iname(k)}</b>.`})}
+function rune(id){const r=RU.find(x=>x.id===id),key=ikey(r.s),cur=S.ru[key]||[];if(cur.length>=slots()||cur.includes(id))return;work1("ve",r.lv,r.m,0,()=>{S.ru[key]=[...cur,id];return `Die <b>${r.n}</b> leuchtet auf deiner ${r.s==="w"?"Waffe":"Rüstung"}. ✦`})}
+function unrune(k,i){const key=ikey(k),cur=S.ru[key]||[],r=RU.find(x=>x.id===cur[i]);cur.splice(i,1);S.ru[key]=cur;wsMsg=`Die ${r?r.n:"Rune"} zerfällt zu Staub.`;save();workshop()}
+function trade(k,n){const m=MT(k);if(n>0){if(S.gold<m.p)return;S.gold-=m.p;S.mat[k]++;sfx("coin")}else{if(S.mat[k]<1)return;S.mat[k]--;S.gold+=Math.floor(m.p*.4);sfx("coin")}save();trader()}
+const matRow=()=>`<div class="mut" style="display:flex;flex-wrap:wrap;gap:4px 12px">${MAT.map(m=>`<span title="${m.n}">${m.e} ${S.mat[m.k]}</span>`).join("")}</div>`;
+function trader(){musicSet("home");app.innerHTML=`<div class="top"><b>🛒 Händler</b><span>🪙 ${S.gold}</span></div>
+ <div class="msg">„Erze, Kräuter, Kristalle – alles, was ein Handwerker braucht! Ich kaufe auch an, für 40 % des Preises.“</div>
+ <div class="card">${MAT.map(m=>`<div class="row"><span>${m.e} ${m.n} <b>×${S.mat[m.k]}</b></span><span style="display:flex;gap:6px"><button ${S.mat[m.k]<1?"disabled":""} onclick="trade('${m.k}',-1)">Verkaufen<small>+${Math.floor(m.p*.4)} 🪙</small></button><button ${S.gold<m.p?"disabled":""} onclick="trade('${m.k}',1)">Kaufen<small>${m.p} 🪙</small></button></span></div>`).join("")}</div>
+ <div class="grid"><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`}
+function workshop(){musicSet("forge");const P=S.pr[wsTab],btn=(ok,js,lbl)=>`<button ${ok&&S.en>=1?"":"disabled"} onclick="${js}">${lbl||"Herstellen"}<small>1 ⚡</small></button>`;let body="";
+ if(wsTab==="al")body=`<h3>🧪 Tränke brauen</h3>`+ALC.map(r=>{const t=IT.find(x=>x.k===r.id),lk=P.lv<r.lv;return `<div class="row"><span>${lk?"🔒 ":""}${t.e} ${t.n}${P.lv>=r.lv+3?" <b>×2</b>":""}<br><span class="mut">${lk?"ab Stufe "+r.lv:costH(r.m)}</span></span>${lk?"":btn(hasM(r.m),`brew('${r.id}')`,"Brauen")}</div>`}).join("")+`<div class="mut" style="margin-top:6px">Ab 3 Stufen über dem Rezept braust du doppelt.</div>`;
+ if(wsTab==="sm")body=`<h3>⬆️ Aufwerten</h3>`+["w","a"].map(k=>{const n=upl(k)+1,mx=n>maxUp();return `<div class="row"><span>${k==="w"?"🗡️":"🛡️"} ${iname(k)}<br><span class="mut">${n>5?"Maximal aufgewertet":mx?`+${n} ab Schmied-Stufe ${n*2-1}`:`→ +${n} (${k==="w"?"+2 Schaden":"+1 Schutz"}): `+costH(upCost(k,n),10*n)}</span></span>${n>5||mx?"":btn(hasM(upCost(k,n))&&S.gold>=10*n,`upgrade('${k}')`,"Aufwerten")}</div>`}).join("")
+  +`<h3>⚒️ Schmieden</h3>`+SMI.map(r=>{const it=EI.find(x=>x.id===r.id),lk=P.lv<r.lv,own=S.own.includes(r.id);return `<div class="row"><span>${lk?"🔒 ":""}${it.s==="w"?"🗡️":"🛡️"} ${it.n} <span class="mut">+${it.b}</span><br><span class="mut">${it.d}${lk?" · ab Stufe "+r.lv:own?"":" · "+costH(r.m,r.g)}</span></span>${lk?"":own?'<span class="mut">✔ besitzt du</span>':btn(hasM(r.m)&&S.gold>=r.g,`forge('${r.id}')`,"Schmieden")}</div>`}).join("");
+ if(wsTab==="ve")body=`<h3>✦ Ausrüstung (${slots()} ${slots()>1?"Plätze":"Platz"} je Teil)</h3>`+["w","a"].map(k=>{const cur=S.ru[ikey(k)]||[];return `<div class="row"><span>${k==="w"?"🗡️":"🛡️"} ${iname(k)}<br><span class="mut">${cur.length?cur.map((id,i)=>{const r=RU.find(x=>x.id===id);return `${r.n} (${r.d}) <a href="#" onclick="unrune('${k}',${i});return false" style="color:var(--acc)" aria-label="Rune entfernen">✖</a>`}).join(" · "):"keine Runen"}</span></span></div>`}).join("")
+  +`<h3>🔮 Runen</h3>`+RU.map(r=>{const lk=P.lv<r.lv,cur=S.ru[ikey(r.s)]||[],has=cur.includes(r.id),full=cur.length>=slots();return `<div class="row"><span>${lk?"🔒 ":""}${r.s==="w"?"🗡️":"🛡️"} ${r.n}<br><span class="mut">${r.d}${lk?" · ab Stufe "+r.lv:" · "+costH(r.m)}</span></span>${lk?"":has?'<span class="mut">✔ aktiv</span>':full?'<span class="mut">kein Platz frei</span>':btn(hasM(r.m),`rune('${r.id}')`,"Einsetzen")}</div>`}).join("")+`<div class="mut" style="margin-top:6px">Runen bleiben auf dem Gegenstand. Entfernte Runen gehen verloren. Ab Stufe 6 hat jedes Teil 2 Plätze.</div>`;
+ app.innerHTML=`<div class="top"><b>🧰 Werkstatt</b><span>⚡ ${S.en}/6 · 🪙 ${S.gold}</span></div>
+ <div class="grid" style="grid-template-columns:repeat(3,1fr);margin-top:0">${Object.keys(PR).map(p=>`<button ${p===wsTab?'class="p"':""} onclick="wsTab='${p}';wsMsg='';workshop()">${PR[p].e} ${PR[p].n}<small>Stufe ${S.pr[p].lv}</small></button>`).join("")}</div>
+ <div class="card"><b>${PR[wsTab].e} ${PR[wsTab].n} · Stufe ${P.lv}</b>${P.lv<10?` <span class="mut">(${P.xp}/${prNeed(P.lv)} Berufs-EP)</span>${bar(P.xp,prNeed(P.lv),"#d4a017")}`:' <span class="mut">Meister!</span>'}<div style="margin-top:6px">${matRow()}</div></div>
+ ${wsMsg?`<div class="msg">${wsMsg}</div>`:""}<div class="card">${body}</div>
+ <div class="grid"><button onclick="trader()">🛒 Händler</button><button onclick="wsMsg='';home()">← Zurück zur Burg</button></div>`}
 function home(){musicSet("home");
  app.innerHTML=`<div class="top">${editName?`<span style="display:flex;gap:6px;flex:1;margin-right:8px"><input id="nm" maxlength="20" value="${S.name}" onkeydown="if(event.key==='Enter')saveName()" style="flex:1;min-width:0;font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)"><button onclick="saveName()" style="min-height:36px;padding:4px 12px">✔</button></span>`:`<b>${S.name} <a href="#" onclick="editName=true;home();document.getElementById('nm').focus();return false" aria-label="Ritter umbenennen" style="text-decoration:none">✏️</a> <a href="#" onclick="toggleSex();return false" aria-label="Zwischen Ritter und Ritterin wechseln" title="Ritter/Ritterin wechseln" style="text-decoration:none">${S.sex==="f"?"♀️":"♂️"}</a></b>`}<span>${rank()}${S.star?" · 🌟×"+S.star:""} · Tag ${S.day}</span></div>
  <div class="scene">${BG}${castle}${pk()}</div>
@@ -479,12 +534,14 @@ function home(){musicSet("home");
  <div>⚡ Energie <b>${S.en}/6</b>${bar(S.en,6,"#e0a800")}</div>
  <div>🪙 Gold <b>${S.gold}</b></div><div>🏆 Ruhm <b>${S.ruhm}</b></div><div style="grid-column:1/-1">🎖️ ${ttn()?"<b>"+ttn()+"</b>":'<span class="mut">kein Titel</span>'} · <a href="#" onclick="titles();return false" style="color:var(--acc)">Titel (${S.tt.length}/${TT.length})</a> · <a href="#" onclick="guide();return false" style="color:var(--acc)">📖 Anleitung</a></div>
  <div style="grid-column:1/-1">⭐ Stufe <b>${lvl()}</b> <span class="mut">(${S.exp} EP)</span>${bar(S.exp-expFor(lvl()),expFor(lvl()+1)-expFor(lvl()),"#8e44ad")}</div></div>
- <div class="mut" style="margin-top:6px">Waffe: ${eq("w")?"✨ "+eq("w").n:W[S.w][0]} · Rüstung: ${eq("a")?"✨ "+eq("a").n:A[S.a][0]} · ${SH[S.s][0]}<br>Siege ${S.wins} · Niederlagen ${S.losses} · Pokale ${S.troph} · Bosse ${S.boss}/${BOSS.length} · Turm-Rekord ${S.tbest}</div></div>
+ <div class="mut" style="margin-top:6px">Waffe: ${iname("w")} · Rüstung: ${iname("a")} · ${SH[S.s][0]}<br>Siege ${S.wins} · Niederlagen ${S.losses} · Pokale ${S.troph} · Bosse ${S.boss}/${BOSS.length} · Turm-Rekord ${S.tbest}</div></div>
  <div class="msg">${msg}</div>
  <div class="grid">
  <button onclick="work()" ${S.en<1?"disabled":""}>⚒️ Arbeiten<small>1 Energie · Gold</small></button>
  <button class="p" onclick="startFight()" ${S.en<2?"disabled":""}>⚔️ Abenteuer<small>2 Energie</small></button>
- <button onclick="shop()">🔨 Schmiede<small>Ausrüstung & Tränke</small></button>
+ <button onclick="shop()">🏪 Markt<small>Ausrüstung & Tränke</small></button>
+ <button onclick="trader()">🛒 Händler<small>Materialien</small></button>
+ <button onclick="workshop()">🧰 Werkstatt<small>Berufe · 1 Energie</small></button>
  <button onclick="startTour()" ${S.en<4||S.gold<20?"disabled":""}>🏟️ Turnier<small>4 Energie · 20 🪙 · 3 Kämpfe</small></button>
  <button onclick="startTower()" ${!S.tunl||S.en<4?"disabled":""}>🗼 Endloser Turm<small>${!S.tunl?"ab Boss 3":"4 Energie · Rekord "+S.tbest}</small></button>
  <button onclick="rebirth()" ${S.boss<BOSS.length?"disabled":""}>🌟 Wiedergeburt<small>${S.boss<BOSS.length?"nach allen Bossen":"Neustart mit Bonus"}</small></button>
@@ -512,11 +569,11 @@ function newDay(){
  for(const e of EVT){if(r<e[0]){ev=e;break}r-=e[0]}
  msg=ev[1]();save();home();
 }
-function shop(){musicSet("forge");
+function shop(){musicSet("home");
  const sec=(t,L,k,ic)=>`<h3>${ic} ${t}</h3>`+L.map((x,i)=>{
   const own=S[k]===i,can=i>S[k]&&S.gold>=x[1],lower=i<S[k];
   return `<div class="row"><span>${x[0]} <span class="mut">+${x[2]}</span></span>${own?'<b>✔ angelegt</b>':lower?'<span class="mut">besser vorhanden</span>':`<button ${can?"":"disabled"} onclick="buy('${k}',${i})">${x[1]} 🪙</button>`}</div>`}).join("");
- app.innerHTML=`<div class="top"><b>🔨 Schmiede</b><span>🪙 ${S.gold}</span></div>
+ app.innerHTML=`<div class="top"><b>🏪 Markt</b><span>🪙 ${S.gold}</span></div>
  <div class="scene" style="height:170px">${BG}${pk()}</div>
  <div class="card">${sec("Waffen",W,"w","🗡️")}${sec("Rüstungen",A,"a","🛡️")}${sec("Schilde",SH,"s","🔰")}${ench()}<h3>🧪 Tränke</h3>${IT.map(t=>`<div class="row"><span>${t.e} ${t.n} ×${S.it[t.k]} <span class="mut">${t.d}</span></span><button ${S.gold>=t.p?"":"disabled"} onclick="buyIt('${t.k}')">${t.p} 🪙</button></div>`).join("")}</div>
  <div class="grid"><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`;
@@ -541,7 +598,7 @@ const BOSS=[
 {n:"Dämonenfürst Azgaroth",L:24,req:4000,hp:4,atk:1.4,def:1.5,tint:"#8b0000",mv:[["Höllenklinge",1.1,92,"",4],["Höllenfeuer",1.2,88,"burn",3],["Schreckensschlag",1.8,78,"stun",3],["Verderben",2.6,70,"",2]]}];
 function mk(L,t,boss){
  const sc=1+.08*S.star,hp=Math.round((40+L*12)*t.hp*sc);
- return {lvl:L,name:boss?t.n:`${t.t} ${ENS[rnd(0,ENS.length-1)]}`,ehp:hp,emax:hp,atk:(3+L*2)*t.atk*sc,def:Math.floor(L*.8*t.def),tier:Math.min(4,Math.floor(L/2)),tint:t.tint||"#6b2d8f",mv:t.mv,boss:!!boss,enr:false};
+ return {lvl:L,name:boss?t.n:`${t.t} ${ENS[rnd(0,ENS.length-1)]}`,ehp:hp,emax:hp,atk:(3+L*2)*t.atk*sc,def:Math.floor(L*.8*t.def),tier:Math.min(4,Math.floor(L/2)),tint:t.tint||"#6b2d8f",mv:t.mv,boss:!!boss,enr:false,et:t.t||"Boss"};
 }
 function setup(e,tour,keep){
  F=Object.assign({php:keep?keep.php:maxhp(),pmax:maxhp(),menu:"main",anim:"",dmg:"",hE:0,hP:0,lP:0,lE:0,vfx:[],over:false,next:false,tour:tour||0,pp:keep?keep.pp:null,pb:{buff:0,guard:0,poison:0,burn:0,stun:0},eb:{bleed:0,burn:0,poison:0,ps:0,stun:0,guard:0},log:(ttn()?`<b>${S.name} ${ttn()}</b> tritt an!<br>`:"")+(e.boss?`${e.name} versperrt dir den Weg! Das wird ein harter Kampf.`:"Ein fremder Gegner fordert dich heraus! Was tust du?")},e);
@@ -552,7 +609,7 @@ function startFight(){if(S.en<2)return;S.en-=2;setup(mk(Math.max(1,lvl()+rnd(-1,
 function startTour(){if(S.en<4||S.gold<20)return;S.en-=4;S.gold-=20;setup(mk(Math.max(1,lvl()),ET[rnd(0,4)]),1)}
 function startTower(){if(!S.tunl||S.en<4)return;S.en-=4;towerFloor(1)}
 function towerFloor(n,keep){const b=n%5===0,bs=BOSS[(n/5-1)%BOSS.length],e=b?mk(bs.L+Math.floor(n/3),bs,true):mk(lvl()+Math.floor(n/2),ET[rnd(0,4)]);e.tower=n;setup(e,0,keep)}
-function rebirth(){if(S.boss<BOSS.length)return;if(!confirm("Wiedergeburt: Stufe, Gold, Ruhm, Ausrüstung und Bossfortschritt werden zurückgesetzt. Du behältst verzauberte Gegenstände, Tränke, Pokale und Turmrekord und erhältst +10 % Schaden, Gold und EP – die Gegner werden aber 8 % stärker. Fortfahren?"))return;S.star++;Object.assign(S,{exp:0,ruhm:0,gold:50,st:3,au:3,ge:3,w:0,a:0,s:0,boss:0});msg=`Du wirst wiedergeboren! Wiedergeburt ${S.star} 🌟`;sfx("level");save();home()}
+function rebirth(){if(S.boss<BOSS.length)return;if(!confirm("Wiedergeburt: Stufe, Gold, Ruhm, Ausrüstung und Bossfortschritt werden zurückgesetzt. Du behältst verzauberte und geschmiedete Gegenstände, Tränke, Materialien, Berufsstufen, Pokale und Turmrekord und erhältst +10 % Schaden, Gold und EP – die Gegner werden aber 8 % stärker. Fortfahren?"))return;S.star++;for(const o of[S.up,S.ru])for(const k of Object.keys(o))if(/^[wa]\d$/.test(k))delete o[k];Object.assign(S,{exp:0,ruhm:0,gold:50,st:3,au:3,ge:3,w:0,a:0,s:0,boss:0});msg=`Du wirst wiedergeboren! Wiedergeburt ${S.star} 🌟`;sfx("level");save();home()}
 function nextTour(){if(F.tower)return towerFloor(F.tower+1,{php:Math.min(F.pmax,F.php+Math.round(F.pmax*.2)),pp:F.pp});const k={php:Math.min(F.pmax,F.php+Math.round(F.pmax*.3)),pp:F.pp},r=F.tour+1;setup(mk(Math.max(1,lvl()+r-1),ET[rnd(0,4)]),r,k)}
 function startBoss(){const b=BOSS[S.boss];if(!b||S.en<3||S.ruhm<b.req)return;S.en-=3;setup(mk(b.L,b,true))}
 function leaveTower(){const d=F.over?F.tower:F.tower-1;F.over=true;msg=`Du verlässt den Turm nach ${d} geschafften Etagen. Rekord: Etage ${S.tbest}.`;save();home()}
@@ -638,6 +695,7 @@ function endFight(win,l){
   S.ruhm+=r;S.gold+=g;S.exp+=x;S.wins++;if(f.php<=5)S.close++;if(!f.took)S.flawless++;l.push(`<b>🏆 Sieg!</b> +${r} Ruhm, +${g} Gold, +${x} EP.`);
   if(f.boss&&!f.tower){S.boss++;if(!S.bk.includes(S.boss-1))S.bk.push(S.boss-1);if(S.boss>=3)S.tunl=1;(BREW[S.boss-1]||[]).forEach(id=>giveE(id,l));S.it.H++;S.it.g++;l.push("Beute: Großer Heiltrank ⚗️ und Gegengift 💊!");msg=`Boss ${f.name} besiegt!`}
   else{if(Math.random()<.3){S.it.h++;l.push("Du findest einen Heiltrank! 🧪")}msg=`Du hast ${f.name} besiegt!`}
+  dropMat(f,l);
   if(f.tower){S.tbest=Math.max(S.tbest,f.tower);f.next=true;l.push(`Etage ${f.tower} geschafft! Du verschnaufst kurz (+20 % LP).`);if(f.tower%10===0)towerLoot(l)}
   if(f.tour){if(f.tour<3){f.next=true;l.push(`Turnierrunde ${f.tour}/3 geschafft – du verschnaufst kurz.`)}else{S.troph++;tourLoot(l);S.gold+=100;S.exp+=50;S.ruhm+=30;l.push("<b>🏟️ Turniersieger!</b> Pokal, +100 Gold, +30 Ruhm, +50 EP.");msg="Du hast das Turnier gewonnen!"}}
  }else{const x=Math.floor(S.gold*.1);S.gold-=x;S.ruhm=Math.max(0,S.ruhm-5);S.exp+=5;S.losses++;l.push(`<b>💀 Niederlage.</b> −${x} Gold, −5 Ruhm, +5 EP.`);msg=f.tower?`Der Turm hat dich bezwungen – Rekord: Etage ${S.tbest}.`:f.tour?"Du bist im Turnier ausgeschieden.":"Du wurdest besiegt – trainiere und kehre stärker zurück!"}
