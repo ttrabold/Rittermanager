@@ -20,8 +20,8 @@ function genItem(il,r,s,cat){il=Math.max(1,Math.round(il));
  if(!s){const x=Math.random();s=x<.5?"w":x<.8?"a":"sh"}
  if(s==="w"&&!cat){const ks=Object.keys(WCAT);cat=ks[rnd(0,ks.length-1)]}
  const t=Math.min(1,il/50),pool=Object.keys(LFX).filter(k=>LFX[k].s===(s==="w"?"w":"a")).sort(()=>Math.random()-.5),fx={};
- for(const k of pool.slice(0,r+1)){const L=LFX[k],v=L.max(il,t)*(L.fix?1:rf(.7,1));fx[k]=L.fix?1:L.int?Math.max(1,Math.round(v)):Math.max(.01,Math.round(v*100)/100)}
- const base=s==="w"?il*1.6:s==="a"?il*1.05:4+il*.3,b=Math.max(1,Math.round(base*rf(.85,1.15)*(1+.05*r)));
+ for(const k of pool.slice(0,r+1)){const L=LFX[k],v=L.max(il,t)*(L.fix?1:rf(.7,1))*(s==="sh"?.6:1);fx[k]=L.fix?1:L.int?Math.max(1,Math.round(v)):Math.max(.01,Math.round(v*100)/100)}
+ const base=s==="w"?4+il*1.5:s==="a"?2+il:4+il*.15,b=Math.max(1,Math.round(base*rf(.85,1.1)*(1+.03*r)));
  const tier=Math.min(4,Math.floor(il/10)),first=Object.keys(fx)[0];
  const bn=s==="w"?WNAMES[cat][tier]:s==="a"?A[Math.max(1,tier)][0]:SH[Math.min(3,1+Math.floor(tier/2))][0];
  const it={id:"g"+(S.gid=(S.gid||0)+1),n:`${bn} ${LFX[first].suf}`,s,b,c:LFX[first].c,fx,d:fxDesc(fx),r,il,gen:1};

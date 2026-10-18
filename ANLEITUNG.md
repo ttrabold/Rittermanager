@@ -132,7 +132,7 @@ Oben auf dem Burgbildschirm siehst du Wochentag, Mondphase und die nächsten bes
 | Wann | Ereignis | Was passiert |
 |---|---|---|
 | Jeden **Samstag** | 🛒 **Markttag** | Beim Händler ist alles 30 % günstiger, Tränke auf dem Markt 25 % |
-| Jeden **Sonntag** | 🏟️ **Turniertag** | Das Turnier kostet keine Gebühr, und der Turniersieg bringt die doppelte Prämie samt zweitem Turnierschatz |
+| Jeden **Sonntag** | 🏟️ **Turniertag** | Das Turnier kostet keine Gebühr, und der Turniersieg bringt die doppelte Prämie samt zweitem Beutestück |
 | Alle **8 Tage** | 🌕 **Vollmond** | Der **Vollmond-Werwolf** jagt. Du hast einen Versuch. |
 
 ### 🌕 Vollmond-Jagd
@@ -140,10 +140,8 @@ Oben auf dem Burgbildschirm siehst du Wochentag, Mondphase und die nächsten bes
 Bei Vollmond erscheint auf dem Burgbildschirm der Knopf **Vollmond-Jagd**. Der Werwolf ist ein Wanderboss auf deiner Stufe. Er beißt giftig, springt dich betäubend an und geht mit seinem Heulen in Deckung. Du hast pro Vollmond **einen Versuch**.
 
 **Beute:**
-- beim ersten Sieg die **Mondsichel** (Waffe: +12 % Krit, 8 % Lebensraub)
-- beim zweiten Sieg den **Wolfspelz** (Rüstung: +8 % Ausweichen, heilt 3 LP pro Runde)
-- danach Gold
-- jedes Mal dazu ein Äthertrank und Arkankristalle
+- ein Stück [Zufallsbeute](#verzauberte-ausrüstung), mindestens 🔵 Rar
+- dazu ein Äthertrank und Arkankristalle
 
 ---
 
@@ -231,7 +229,7 @@ Drei Kämpfe hintereinander, und jeder Gegner ist etwas stärker als der vorige.
 Gewinnst du alle drei Kämpfe, wirst du **Turniersieger** und bekommst:
 - einen 🏆 Pokal
 - +100 Gold, +30 Ruhm, +50 EP
-- einen zufälligen **verzauberten Turnierschatz** (siehe [Verzauberte Ausrüstung](#verzauberte-ausrüstung))
+- ein Stück [Zufallsbeute](#verzauberte-ausrüstung)
 
 ### 👑 Bosskampf
 Siehe [Bosse](#bosse).
@@ -416,7 +414,7 @@ Es gibt zwölf Bosse, die du nacheinander besiegen musst. Jeder Boss braucht ein
 
 **Belohnung für jeden Boss:**
 - dreifache Kampfbelohnung
-- **zwei verzauberte Gegenstände** (eine Waffe und eine Rüstung)
+- **zwei Stücke [Zufallsbeute](#verzauberte-ausrüstung)**, mindestens 🔵 Rar
 - ein Großer Heiltrank ⚗️ und ein Gegengift 💊
 - ab Boss 3: Der Endlose Turm wird freigeschaltet.
 
@@ -472,9 +470,10 @@ Jede Waffe sieht an deinem Ritter anders aus. Auch die Gegner kämpfen mit unter
 
 Im **🎒 Inventar** siehst du alles, was dein Ritter besitzt:
 
-- **Ausgerüstet:** Waffe, Rüstung und Schild mit ihren Werten, Aufwertungen (+1 bis +5), Runen (✦) und besonderen Kräften
+- **Ausgerüstet:** Waffe, Rüstung und Schild mit ihren Werten, Aufwertungen, Runen (✦) und besonderen Kräften
 - **Kampfwerte:** Schaden, Schutz, maximale LP, Krit-Chance, Ausweichen und alle Zusatzeffekte wie Brand, Gift oder Lebensraub. So siehst du sofort, was ein Ausrüstungswechsel bringt.
-- **Besondere Waffen und Rüstungen:** Hier **legst du verzauberte und geschmiedete Gegenstände an oder ab**. Legst du sie ab, kämpfst du wieder mit deiner gekauften Ausrüstung.
+- **🎒 Beutel:** deine Zufallsbeute. Hier legst du sie an oder ab, vergleichst sie mit deiner Ausrüstung und zerlegst, was du nicht brauchst (siehe [Verzauberte Ausrüstung](#verzauberte-ausrüstung)).
+- **Besondere Waffen und Rüstungen:** geschmiedete Gegenstände und frühere feste Beutestücke. Auch sie legst du hier an oder ab. Legst du sie ab, kämpfst du wieder mit deiner gekauften Ausrüstung.
 - **Tränke:** dein Vorrat. Tränke benutzt du im Kampf.
 - **Materialien:** alles, was du für die Berufe gesammelt hast
 - **Trophäen:** Pokale, besiegte Bosse, Titel und Turm-Rekord
@@ -483,47 +482,63 @@ Im **🎒 Inventar** siehst du alles, was dein Ritter besitzt:
 
 ## Verzauberte Ausrüstung
 
-Verzauberte Waffen und Rüstungen kannst du nicht kaufen, du erbeutest sie. Sie sind stärker als normale Ausrüstung und haben besondere Kräfte. Außerdem sieht man sie an deinem Ritter: Flammen, Frost, Blitze, Giftschwaden und mehr.
+Verzauberte Waffen, Rüstungen und Schilde kannst du nicht kaufen, du erbeutest sie. Jedes Beutestück wird **zufällig gewürfelt**: welche Art, wie stark und welche besonderen Kräfte. Zwei Funde mit demselben Namen können also sehr unterschiedlich gut sein. Man sieht sie auch an deinem Ritter, an der leuchtenden Waffe und Rüstung.
 
-- Ist ein neuer Fund besser als deine aktuelle Ausrüstung, **legst du ihn automatisch an**.
-- Im **🎒 Inventar** kannst du verzauberte und selbst geschmiedete Gegenstände jederzeit **an- und ablegen**.
-- Findest du einen Gegenstand, den du schon besitzt, bekommst du stattdessen Gold.
+### Seltenheit
 
-### Aus Turnieren
-| Gegenstand | Art | Kraft |
-|---|---|---|
-| Flammenklinge | Waffe | 25 % Chance, den Gegner in Brand zu setzen |
-| Frostzahn | Waffe | 20 % Chance, den Gegner zu lähmen |
-| Sturmbringer | Waffe | +12 % Krit-Chance |
-| Mondsilber-Kettenhemd | Rüstung | Heilt 3 LP pro Runde |
-| Wächterpanzer | Rüstung | +20 maximale LP |
-| Windmantel | Rüstung | +10 % Ausweichen |
+| Seltenheit | Besondere Kräfte |
+|---|---|
+| 🟢 Selten | 1 |
+| 🔵 Rar | 2 |
+| 🟣 Episch | 3 |
+| 🟠 Legendär | 4 |
 
-### Von den Bossen
-| Boss | Waffe | Rüstung |
-|---|---|---|
-| Graukopf | Giftzahn-Säbel (30 % Gift) | Räubermantel (+5 % Ausweichen) |
-| Schwarzer Ritter | Schattenklinge (+15 % Krit) | Schattenpanzer (+8 % Ausweichen) |
-| Vulkanus | Drachenzahn (30 % Brand, 10 % Lebensraub) | Drachenschuppen (brandimmun, +30 LP) |
-| Frostara | Frostbrand (25 % Lähmung, +10 % Krit) | Eisharnisch (+40 LP, +5 % Ausweichen) |
-| Mortrax | Seelenschnitter (15 % Lebensraub, +10 % Krit) | Lichgewand (heilt 5 LP/Runde, +30 LP) |
-| Azgaroth | Höllenschwert (35 % Brand, 12 % Lebensraub) | Dämonenpanzer (+60 LP, brandimmun) |
-| Donnerfaust | Donnerhammer (20 % Lähmung, +10 % Krit) | Sturmplatte (+70 LP, +6 % Ausweichen) |
-| Morgana | Hexendorn (35 % Gift, 10 % Lebensraub) | Hexenschleier (heilt 7 LP/Runde, +10 % Ausweichen) |
-| Abyssor | Tiefseedreizack (20 % Lähmung, 20 % Gift) | Korallenpanzer (+90 LP, heilt 5 LP/Runde) |
-| Ignarion | Phönixklinge (40 % Brand, 12 % Lebensraub, +10 % Krit) | Phönixmantel (brandimmun, heilt 8 LP/Runde, +60 LP) |
-| Nyx | Nachtschneide (+22 % Krit, 12 % Lebensraub) | Leere-Rüstung (+15 % Ausweichen, +80 LP) |
-| Weltenfresser | Weltenklinge (25 % Brand, 15 % Lähmung, +15 % Krit, 10 % Lebensraub) | Ewige Aegis (+120 LP, heilt 8 LP/Runde, brandimmun, +8 % Ausweichen) |
+Höhere Seltenheit bringt außerdem einen etwas höheren Grundwert.
+
+### Was gewürfelt wird
+
+- **Art:** etwa die Hälfte sind Waffen, aus allen sieben [Waffenarten](#der-markt), dazu Rüstungen und Schilde. Eine Waffe behält die Wirkung ihrer Art, eine Axt zum Beispiel immer die Blutung.
+- **Grundwert:** Schaden bei Waffen, Schutz bei Rüstungen und Schilden. Er richtet sich nach der **Stufe des Fundes**: Je schwerer der Gegner, desto stärker die Beute.
+- **Besondere Kräfte:**
+  - Waffen: Brand, Gift, Lähmung, Krit-Chance, Lebensraub
+  - Rüstungen und Schilde: maximale LP, Heilung pro Runde, Ausweichen, Brandimmunität
+
+  Schilde haben etwas schwächere Kräfte als Rüstungen.
 
 *Lebensraub*: Ein Teil deines Schadens heilt dich.
 
-### Aus dem Endlosen Turm (alle 10 Etagen)
-| Gegenstand | Art | Kraft |
+### Woher du Beute bekommst
+
+| Quelle | Beute | Seltenheit |
 |---|---|---|
-| Sternenklinge | Waffe | +18 % Krit, 15 % Brand |
-| Titanenpanzer | Rüstung | +50 maximale LP |
-| Chronosdolch | Waffe | 30 % Lähmung |
-| Aegisharnisch | Rüstung | +12 % Ausweichen, heilt 4 LP pro Runde |
+| 🏟️ Turniersieg | 1 Stück, am Turniertag 2 | meist 🟢 oder 🔵, selten 🟣 oder 🟠 |
+| 🗼 Turm-Boss (jede 5. Etage) | 1 Stück | wird mit jeder Etage besser, ab Etage 30 öfter 🟠 |
+| 🗼 Jede 10. Etage | 1 Stück | wie Turm-Boss, aber eine Seltenheit besser |
+| 👑 Boss | 2 Stücke | mindestens 🔵, gute Chance auf 🟣 |
+| 🌕 Vollmond-Werwolf | 1 Stück | mindestens 🔵 |
+
+### Anlegen und vergleichen
+
+- Bei jedem Fund siehst du sofort, was er gegenüber deiner angelegten Ausrüstung ändert, zum Beispiel **⚔️ ▲ +6 · Krit ▼ −5 %**. Der Vergleich rechnet die Aufwertungen deines angelegten Teils mit ein.
+- Trägst du in einem Platz noch nichts Verzaubertes und ist der Fund besser, **legst du ihn automatisch an**. Sonst landet er im **🎒 Beutel** im Inventar, und du entscheidest selbst.
+- Zufallsbeute lässt sich wie jede Ausrüstung **aufwerten** und mit **Runen** versehen, auch Schilde (+1 Schutz je Aufwertung, Rüstungsrunen).
+
+### Der Beutel und das Zerlegen
+
+Im Beutel ist Platz für **20 Stücke**. Angelegte Ausrüstung zählt nicht mit. Ist er übervoll, geht nichts verloren, aber **Turm, Turnier und Bosskampf sind gesperrt**, bis du aufgeräumt hast.
+
+Was du nicht brauchst, **zerlegst** du in Materialien, einzeln oder mit **Alles 🟢 zerlegen** / **Alles 🔵 zerlegen**:
+
+| Seltenheit | Ertrag |
+|---|---|
+| 🟢 Selten | 2–3 Eisenerz oder Leder |
+| 🔵 Rar | 1–2 Arkankristalle |
+| 🟣 Episch | 2 Mithrilerz und 2 Arkankristalle |
+| 🟠 Legendär | 1 Drachenschuppe und 2 Mithrilerz |
+
+Steckt in einem Stück eine Aufwertung, bekommst du die Hälfte der dafür eingesetzten Materialien zurück. Runen gehen beim Zerlegen verloren. Angelegte Ausrüstung kannst du nicht zerlegen.
+
+> 💡 Frühere feste Beutestücke wie die Flammenklinge, der Drachenzahn oder die Weltenklinge fallen nicht mehr. Wer sie schon besitzt, behält sie samt Aufwertungen und Runen.
 
 ---
 
@@ -726,7 +741,8 @@ Ab dem dritten besiegten Boss steht dir der Endlose Turm offen. Ein Besuch koste
 - Nach jeder Etage erholst du dich um **20 % deiner LP**. Begrenzte Fähigkeiten füllen sich nicht von selbst wieder auf. Dafür brauchst du **🔷 Äthertränke**.
 - Mit etwas Glück (25 %) findest du nach einer Etage einen **Äthertrank**.
 - **Jede 5. Etage** bewacht ein Boss.
-- **Jede 10. Etage** wartet ein verzauberter Turmschatz und ein **Großer Äthertrank**.
+- **Jeder Turm-Boss** lässt ein Stück [Zufallsbeute](#verzauberte-ausrüstung) fallen, und je höher die Etage, desto besser.
+- **Jede 10. Etage** bringt eine Seltenheit bessere Beute und dazu einen **Großen Äthertrank**.
 - Du kannst den Turm jederzeit **verlassen**. Beim nächsten Besuch geht es auf der Etage weiter, auf der du aufgehört hast. Du startest dann mit vollen LP und voll aufgeladenen Fähigkeiten, ein Besuch kostet aber wieder 4 Energie.
 - **Wirst du besiegt**, beginnst du beim nächsten Mal wieder auf **Etage 1**.
 - Deine höchste Etage wird als **Turm-Rekord** gespeichert. Endet ein Turmlauf mit einer Niederlage, kommt er in die **🗼 Ruhmeshalle** im Inventar, die deine fünf besten Läufe zeigt.
@@ -756,7 +772,7 @@ Hast du alle zwölf Bosse besiegt, kannst du **wiedergeboren** werden.
 
 **Du verlierst:** Stufe, Gold (du startest mit 50), Ruhm, gekaufte Ausrüstung (samt ihren Aufwertungen und Runen), den Fortschritt bei den Bossen und beim Rivalen.
 
-**Du behältst:** verzauberte und geschmiedete Gegenstände (samt Aufwertungen und Runen), Tränke, Materialien, Berufsstufen, Burg und Verzierungen, Begleiter, Pokale, Turm-Rekord, Titel und alles Freigeschaltete.
+**Du behältst:** verzauberte und geschmiedete Gegenstände samt Beutel (mit Aufwertungen und Runen), Tränke, Materialien, Berufsstufen, Burg und Verzierungen, Begleiter, Pokale, Turm-Rekord, Titel und alles Freigeschaltete.
 
 **Du erhältst dauerhaft:** +10 % Schaden, +10 % Gold und +10 % Erfahrung. Alle Gegner werden aber 8 % stärker.
 
@@ -854,7 +870,7 @@ Für besondere Leistungen bekommst du **Titel**. Einen davon kannst du tragen. E
 4. **Nimm Gegengift zu Graukopf, Vulkanus, Mortrax, Azgaroth, Morgana, Abyssor, Ignarion und den Weltenfresser mit.** Gift und Brand summieren sich schnell.
 5. **Kriegsruf und Kraft-Elixier wirken 3 Runden.** Setze danach deine stärksten Fähigkeiten ein.
 6. **Gegen Bosse lohnt sich Eiserne Haltung**, kurz bevor sie in Rage geraten.
-7. **Turniere sind der einzige Weg** zu den sechs Turnierschätzen. Der Windmantel und das Mondsilber-Kettenhemd sind früh sehr wertvoll.
+7. **Turniere bringen früh die erste Zufallsbeute.** Ein Fund mit Ausweichen oder Heilung pro Runde ist am Anfang sehr wertvoll.
 8. **Verkaufe keine Drachenschuppen.** Du brauchst sie für die besten Rezepte, und beim Händler kosten sie 150 Gold.
 9. **Alchemie lohnt sich früh.** Heilkraut ist billig, und Heiltränke sind die wichtigste Zutat für schwere Kämpfe.
 10. **Im Turm** solltest du rechtzeitig aussteigen, wenn deine LP knapp werden. Dein Rekord bleibt erhalten.

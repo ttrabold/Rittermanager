@@ -30,6 +30,7 @@ function simRun(maxDay,seedLog){
   if(has("burg")){for(const bd of BLD){const lv=S.bld[bd.id];if(lv<bd.max){const c=bCost(bd,lv+1);if(S.gold>=c.g+400&&has("craft"))for(const k in c.m)while(S.mat[k]<c.m[k]&&S.gold>=MT(k).p+c.g+200){S.gold-=MT(k).p;S.mat[k]++}if(hasM(c.m)&&S.gold>=c.g+200)build(bd.id)}}for(const d of DECO)if(!hasDeco(d.id)&&(!d.ok||d.ok())&&S.gold>d.g*3)decoBuy(d.id)}
   if(has("kasse")&&S.gold>=kasseCost()*2)kasseGive();
   if(has("comp")){for(const c of COMP)if(!(S.comp||[]).includes(c.id)&&c.ok()&&S.gold>c.price*2){compBuy(c.id)}S.cmp=(S.comp||[]).includes("knappe")?"knappe":S.cmp}
+  for(const it of bagItems().sort((a,b)=>b.b-a.b)){const c=eq(it.s),cb=c?c.b:it.s==="w"?W[S.w][2]:it.s==="a"?A[S.a][2]:SH[S.s][2];if(it.b>cb)equipE(it.id)}for(let r=0;r<4;r++)salvageAll(r);
   gearBuy();potionsBuy();
   for(const f of S.unl)if(!before.has(f))T.unl[f]=day;
   T.lvl[day]=lvl();
@@ -38,4 +39,4 @@ function simRun(maxDay,seedLog){
  fight=of;nightShow=oNS;
  const L=T.lvl,dayOfLvl=n=>{for(const d in L)if(L[d]>=n)return +d;return null};
  return {tage:Object.keys(L).length,stufe:lvl(),bosse:S.boss,tode:deaths,bossVersuche:bossTries,bossNiederlagen:bossFails,
-  freischaltung:T.unl,bossTag:T.boss,rivaleTag:T.rival,stufeTag:Object.fromEntries([2,4,6,8,10,12,15,18,20,25,30,40,50].map(n=>[n,dayOfLvl(n)])),gold:S.gold,ruhm:S.ruhm,gebaeude:bldSum(),ds:S.mat.ds,leder:S.mat.le,bossFehl:T.bf||{}}}
+  freischaltung:T.unl,bossTag:T.boss,rivaleTag:T.rival,stufeTag:Object.fromEntries([2,4,6,8,10,12,15,18,20,25,30,40,50].map(n=>[n,dayOfLvl(n)])),gold:S.gold,ruhm:S.ruhm,gebaeude:bldSum(),ds:S.mat.ds,leder:S.mat.le,bossFehl:T.bf||{},beute:{w:(eq("w")||{}).b,a:(eq("a")||{}).b,sh:(eq("sh")||{}).b,r:[S.ew,S.ea,S.es].map(id=>(itm(id)||{}).r)}}}
