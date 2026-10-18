@@ -373,7 +373,7 @@ sp:b=>b?`<circle class="pl" cx="61" cy="88" r="60" fill="#6c3fa0"/>`:SMOKE("#6c3
 ds:b=>b?`<path d="M38 66L0 34L12 68L2 88L38 92Z" fill="#8a2a00"/><path d="M84 66L116 40L108 70L116 88L84 92Z" fill="#8a2a00"/>`:[0,1,2].map(r=>[0,1,2,3].map(c=>`<path d="M${42+c*11+(r%2)*5} ${68+r*12}q5 8 10 0" fill="none" stroke="#ffb74d" stroke-width="2"/>`).join("")).join("")+fm(34,64,.8,"#ff6d00",0)+fm(88,64,.8,"#ff6d00",.2),
 fr:b=>b?`<circle class="pl" cx="61" cy="88" r="60" fill="#7fd6ff"/>`:`<polygon points="22,66 30,44 42,64" fill="#e8fbff" stroke="#7fd6ff"/><polygon points="80,64 92,44 100,66" fill="#e8fbff" stroke="#7fd6ff"/>`+ST(20,40,"#fff",0)+ST(100,38,"#fff",.5),
 lm:b=>b?`<path d="M38 100L28 144L94 144L84 100Z" fill="#5b2c6f" opacity=".95"/>`:[[34,116,0],[88,116,.5],[61,128,1]].map(p=>`<ellipse class="fl2" style="animation-delay:${p[2]}s" cx="${p[0]}" cy="${p[1]}" rx="5" ry="8" fill="#7dffb0" opacity=".7"/>`).join(""),
-ar:b=>b?`<circle class="pl" cx="61" cy="88" r="62" fill="#ff1a00"/>`:`<path d="M46 30Q36 14 40 4Q50 16 52 28Z" fill="#2b0a0a" stroke="#ff3b00"/><path d="M76 30Q86 14 82 4Q72 16 70 28Z" fill="#2b0a0a" stroke="#ff3b00"/><rect x="52" y="39" width="20" height="5" rx="2" fill="#ff2a00"/><ellipse cx="34" cy="64" rx="12" ry="9" fill="#2b0a0a" stroke="#ff3b00"/><ellipse cx="88" cy="64" rx="12" ry="9" fill="#2b0a0a" stroke="#ff3b00"/>`,
+ar:(b,fe)=>b?`<circle class="pl" cx="61" cy="88" r="62" fill="#ff1a00"/>`:`<path d="M46 30Q36 14 40 4Q50 16 52 28Z" fill="#2b0a0a" stroke="#ff3b00"/><path d="M76 30Q86 14 82 4Q72 16 70 28Z" fill="#2b0a0a" stroke="#ff3b00"/>${fe?`<circle cx="57" cy="43" r="2" fill="#ff2a00"/><circle cx="65" cy="43" r="2" fill="#ff2a00"/>`:`<rect x="52" y="39" width="20" height="5" rx="2" fill="#ff2a00"/>`}<ellipse cx="34" cy="64" rx="12" ry="9" fill="#2b0a0a" stroke="#ff3b00"/><ellipse cx="88" cy="64" rx="12" ry="9" fill="#2b0a0a" stroke="#ff3b00"/>`,
 t2:b=>b?"":`<ellipse cx="32" cy="64" rx="16" ry="11" fill="#b0b8c0" stroke="#0004"/><ellipse cx="90" cy="64" rx="16" ry="11" fill="#b0b8c0" stroke="#0004"/><rect x="46" y="68" width="30" height="34" fill="#dfe5ea" opacity=".5"/>`,
 t4:b=>b?`<circle class="pl" cx="61" cy="88" r="60" fill="#ffd54a"/>`:`<ellipse class="pl" cx="61" cy="20" rx="17" ry="5" fill="none" stroke="#ffd54a" stroke-width="3"/><path d="M61 66l8 10-8 18-8-18z" fill="#ffd54a" stroke="#fff"/>`};
 const SK=[
@@ -404,30 +404,46 @@ const maxhp=()=>40+S.au*6+lvl()*4+fxv("hp");
 
 function knight(w,a,s,flip,plume,ow,oa,wi,ai,fem){
  const arm=a>0||!!oa,wc=ow||WC[w],ac=oa||AC[a],sk="#e0b48a",pl=plume||(a>=3||oa?"#c0221f":null),ln="#0005",
-  tab=plume||"#7a1d1d",lc=arm?ac:"#5b4636",bt=arm?"#3d3833":"#3a2a1c",hc=fem?"#8a4b22":"#5a3a1e";
- const leg=x=>`<path d="M${x} 104h13l-1.5 38h-10z" fill="${lc}" stroke="${ln}"/>${arm?`<circle cx="${x+6.5}" cy="122" r="5" fill="${ac}" stroke="${ln}"/><path d="M${x+3.5} 121h6" stroke="#fff5"/>`:""}<path d="M${x-2} 141h16l7 9h-23z" fill="${bt}" stroke="#0004"/>`;
- const limb=(d,c)=>`<path d="${d}" stroke="#0005" stroke-width="12" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${c}" stroke-width="9" fill="none" stroke-linecap="round"/>`;
+  tab=plume||"#7a1d1d",lc=arm?ac:"#5b4636",bt=arm?"#3d3833":"#3a2a1c",hc=fem?"#8a4b22":"#5a3a1e",
+  sq=fem?`<g transform="translate(61 0) scale(.8 1) translate(-61 0)">`:"<g>",av=b=>ai&&AV[ai]?sq+AV[ai](b,fem)+"</g>":"",
+  lw=fem?11:13,belt=fem?84:92;
+ const leg=x=>`<path d="M${x} 104h${lw}l-1.5 38h${2-lw+1}z" fill="${lc}" stroke="${ln}"/>${arm?`<circle cx="${x+lw/2}" cy="122" r="${fem?4.2:5}" fill="${ac}" stroke="${ln}"/><path d="M${x+lw/2-3} 121h6" stroke="#fff5"/>`:""}${fem?`<path d="M${x-1} 141h${lw+2}l5 9h-${lw+6}z" fill="${bt}" stroke="#0004"/>`:`<path d="M${x-2} 141h16l7 9h-23z" fill="${bt}" stroke="#0004"/>`}`;
+ const limb=(d,c)=>`<path d="${d}" stroke="#0005" stroke-width="${fem?10:12}" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${c}" stroke-width="${fem?7.5:9}" fill="none" stroke-linecap="round"/>`;
+ const body=fem
+  ?(arm?`<path d="M45 86h32l11 32h-54z" fill="${ac}" stroke="${ln}"/><path d="M42 97h38M39 107h44" stroke="#0003"/><path d="M55 87h12l-1 40h-10z" fill="${tab}" stroke="#0004"/><path d="M56 92h10" stroke="#d4a017" stroke-width="1.5"/>
+    <path d="M40 60Q61 54 82 60Q81 75 77 87Q61 91 45 87Q41 75 40 60Z" fill="${ac}" stroke="${ln}"/><path d="M46 70q7.5 8 15 0q7.5 8 15 0" stroke="#0003" fill="none" stroke-width="1.5"/><path d="M46 63Q51 60 56 60L54 69Q49 69 47 67Z" fill="#fff4"/>`
+   :`<path d="M40 60Q61 54 82 60Q80 74 77 86Q90 110 92 126H30Q32 110 45 86Q42 74 40 60Z" fill="${ac}" stroke="#0004"/><path d="M53 59q8 8 16 0" stroke="#0003" fill="none" stroke-width="2"/><path d="M50 92l-6 32M61 90v36M72 92l6 32" stroke="#0002" stroke-width="1.5"/>`)
+  :(arm?`<path d="M39 95h44l4 16h-52z" fill="${ac}" stroke="${ln}"/><path d="M37 103h48" stroke="#0003"/><path d="M51 96h20l-3 28h-14z" fill="${tab}" stroke="#0004"/><path d="M53 100h16" stroke="#d4a017" stroke-width="1.5"/>
+    <path d="M38 60Q61 52 84 60L81 99Q61 106 41 99Z" fill="${ac}" stroke="${ln}"/><path d="M61 57V101" stroke="#0002" stroke-width="2"/><path d="M45 64Q50 60 56 60L54 92Q48 90 46 86Z" fill="#fff3"/>`
+   :`<path d="M38 60Q61 54 84 60L87 114H35Z" fill="${ac}" stroke="#0004"/><path d="M54 60l7 10 7-10" stroke="#0003" fill="none" stroke-width="2"/>`);
+ const shoulders=!arm?"":fem
+  ?[41,81].map(x=>`<ellipse cx="${x}" cy="62" rx="8" ry="6" fill="${ac}" stroke="${ln}"/><path d="M${x-7} 64q7 4 14 0" stroke="#0003" fill="none"/><path d="M${x-4} 59q4-2 8 0" stroke="#fff6" fill="none"/>`).join("")
+  :[37,85].map(x=>`<ellipse cx="${x}" cy="63" rx="12" ry="9" fill="${ac}" stroke="${ln}"/><path d="M${x-11} 66q11 6 22 0M${x-10} 69q10 5 20 0" stroke="#0003" fill="none"/><path d="M${x-6} 58q6-3 12 0" stroke="#fff5" fill="none"/>`).join("");
+ const head=arm
+  ?(fem?`<rect x="54" y="53" width="14" height="7" rx="3" fill="${ac}" stroke="${ln}"/><ellipse cx="61" cy="45" rx="10" ry="12" fill="${sk}"/>
+    <path d="M52 37q4 4 9 1q5 3 9-1v3H52z" fill="${hc}"/><circle cx="57" cy="43" r="1.7" fill="#222"/><circle cx="65" cy="43" r="1.7" fill="#222"/><path d="M55.4 42.4l-2.2-1M66.6 42.4l2.2-1" stroke="#222" stroke-width="1.1" stroke-linecap="round"/><path d="M58.5 51q2.5 2 5 0" stroke="#c0392b" stroke-width="1.6" fill="none"/>
+    <path fill-rule="evenodd" d="M44 52Q43 24 61 24Q79 24 78 52L75 59H47Z M52 37H70V51Q61 59 52 51Z" fill="${ac}" stroke="${ln}"/><rect x="60" y="33" width="2" height="10" rx="1" fill="${ac}" stroke="#0004"/><path d="M48 40Q48 30 56 27" stroke="#fff6" stroke-width="2.5" fill="none" stroke-linecap="round"/>`
+   :`<rect x="51" y="53" width="20" height="8" rx="3" fill="${ac}" stroke="${ln}"/>
+    <path d="M44 48Q43 24 61 24Q79 24 78 48L77 55Q61 61 45 55Z" fill="${ac}" stroke="${ln}"/><path d="M61 25V38" stroke="#0003" stroke-width="2"/><path d="M48 42Q48 30 56 27" stroke="#fff6" stroke-width="2.5" fill="none" stroke-linecap="round"/><rect x="50" y="39" width="22" height="5" rx="2" fill="#1b1b1b"/><path d="M66 48h6M66 51h5" stroke="#1b1b1b" stroke-width="1.2"/>`)
+  :`<rect x="56" y="54" width="10" height="7" fill="${sk}"/>${fem?`<path d="M44 38Q37 64 43 80Q50 76 52 58Z" fill="${hc}" stroke="#0003"/><path d="M78 38Q85 64 79 80Q72 76 70 58Z" fill="${hc}" stroke="#0003"/>`:""}<circle cx="61" cy="42" r="17" fill="${sk}" stroke="#0004"/>
+   <path d="M44 42Q42 22 61 24Q80 22 78 42Q72 30 61 30Q50 30 44 42z" fill="${hc}"/><circle cx="55" cy="40" r="2" fill="#222"/><circle cx="67" cy="40" r="2" fill="#222"/>
+   ${fem?`<path d="M53 39.5l-2.5-1.5M53.3 41l-2.7-.4M69 39.5l2.5-1.5M68.7 41l2.7-.4" stroke="#222" stroke-width="1.1" stroke-linecap="round"/><path d="M52 35.5q3-1.5 6 0M64 35.5q3-1.5 6 0" stroke="${hc}" stroke-width="1.4" fill="none"/><path d="M57 49q4 3 8 0" stroke="#c0392b" stroke-width="2" fill="none"/>`
+   :`<path d="M45 44Q46 58 61 60Q76 58 77 44Q72 52 61 52Q50 52 45 44Z" fill="${hc}"/><path d="M54.5 49q3.2-2.4 6.5-.6q3.3-1.8 6.5.6" stroke="${hc}" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M58 51.5q3 1.6 6 0" stroke="#7a4a2a" stroke-width="1.3" fill="none"/>`}`;
+ const plm=!pl?"":fem?`<path d="M60 26Q52 8 36 14Q48 16 50 32Z" fill="${pl}" stroke="#0003"/>`:`<path d="M61 25q-4-14 12-12q-8 4-4 12z" fill="${pl}"/>`;
  return `<svg class="k" viewBox="0 0 130 160" ${flip?'style="transform:scaleX(-1)"':''}>
- <ellipse cx="62" cy="152" rx="34" ry="5" fill="#0003"/>${ai&&AV[ai]?AV[ai](1):""}
- ${leg(44)}${leg(65)}<g class="br">
- ${limb("M38 64Q29 82 33 101",ac)}<circle cx="33" cy="103" r="5.5" fill="${arm?ac:sk}" stroke="${ln}"/>
- ${arm?`<path d="M39 95h44l4 16h-52z" fill="${ac}" stroke="${ln}"/><path d="M37 103h48" stroke="#0003"/><path d="M51 96h20l-3 28h-14z" fill="${tab}" stroke="#0004"/><path d="M53 100h16" stroke="#d4a017" stroke-width="1.5"/>
- <path d="M38 60Q61 52 84 60L81 99Q61 106 41 99Z" fill="${ac}" stroke="${ln}"/><path d="M61 57V101" stroke="#0002" stroke-width="2"/><path d="M45 64Q50 60 56 60L54 92Q48 90 46 86Z" fill="#fff3"/>`
- :`<path d="M38 60Q61 54 84 60L87 114H35Z" fill="${ac}" stroke="#0004"/><path d="M54 60l7 10 7-10" stroke="#0003" fill="none" stroke-width="2"/>`}
- <rect x="39" y="92" width="44" height="6" rx="2" fill="#5b3a1c"/><rect x="58" y="91.5" width="7" height="7" rx="1.5" fill="#d4a017" stroke="#0004"/>
- ${arm?[37,85].map(x=>`<ellipse cx="${x}" cy="63" rx="11" ry="8" fill="${ac}" stroke="${ln}"/><path d="M${x-10} 66q10 6 20 0" stroke="#0003" fill="none"/><path d="M${x-6} 59q6-3 12 0" stroke="#fff5" fill="none"/>`).join(""):""}
- ${fem?`<path d="M47 32Q18 40 26 80Q30 92 40 84Q34 62 50 54Z" fill="${hc}" stroke="#0004"/>`:""}
- ${arm?`<rect x="51" y="53" width="20" height="8" rx="3" fill="${ac}" stroke="${ln}"/>
- <path d="M44 48Q43 24 61 24Q79 24 78 48L77 55Q61 61 45 55Z" fill="${ac}" stroke="${ln}"/><path d="M61 25V38" stroke="#0003" stroke-width="2"/><path d="M48 42Q48 30 56 27" stroke="#fff6" stroke-width="2.5" fill="none" stroke-linecap="round"/><rect x="50" y="39" width="22" height="5" rx="2" fill="#1b1b1b"/><path d="M66 48h6M66 51h5" stroke="#1b1b1b" stroke-width="1.2"/>`
- :`<rect x="56" y="54" width="10" height="7" fill="${sk}"/><circle cx="61" cy="42" r="17" fill="${sk}" stroke="#0004"/>
- <path d="M44 42Q42 22 61 24Q80 22 78 42Q72 30 61 30Q50 30 44 42z" fill="${hc}"/><circle cx="55" cy="40" r="2" fill="#222"/><circle cx="67" cy="40" r="2" fill="#222"/>
- ${fem?`<path d="M52 37l-3-2M70 37l3-2M54 38l-3-1M68 38l3-1" stroke="#222" stroke-width="1.2"/><path d="M57 49q4 3 8 0" stroke="#c0392b" stroke-width="2" fill="none"/>`:`<path d="M55 49q6 4 12 0" stroke="#7a4a2a" fill="none"/>`}`}
- ${pl?`<path d="M61 25q-4-14 12-12q-8 4-4 12z" fill="${pl}"/>`:""}
- ${ai&&AV[ai]?AV[ai](0):""}
- ${limb("M85 66Q98 80 105 101",ac)}${arm?`<circle cx="96" cy="82" r="4.5" fill="${ac}" stroke="${ln}"/>`:""}
+ <ellipse cx="62" cy="152" rx="${fem?30:34}" ry="5" fill="#0003"/>${av(1)}
+ ${leg(fem?46:44)}${leg(65)}<g class="br">
+ ${limb(fem?"M41 64Q33 82 35 101":"M38 64Q29 82 33 101",ac)}<circle cx="${fem?35:33}" cy="103" r="${fem?4.8:5.5}" fill="${arm?ac:sk}" stroke="${ln}"/>
+ ${body}
+ <rect x="${fem?45:39}" y="${belt}" width="${fem?32:44}" height="${fem?5:6}" rx="2" fill="#5b3a1c"/><rect x="58" y="${belt-.5}" width="7" height="${fem?6:7}" rx="1.5" fill="#d4a017" stroke="#0004"/>
+ ${shoulders}
+ ${fem&&arm?`<path d="M47 32Q18 40 26 80Q30 92 40 84Q34 62 50 54Z" fill="${hc}" stroke="#0004"/>`:""}
+ ${head}${plm}
+ ${av(0)}
+ ${limb(fem?"M82 66Q97 80 105 101":"M85 66Q98 80 105 101",ac)}${arm?`<circle cx="96" cy="82" r="${fem?3.8:4.5}" fill="${ac}" stroke="${ln}"/>`:""}
  ${wi&&VIS[wi]?weaponSvg(wi):`<path d="M104 96V20L107.5 8L111 20V96Z" fill="${wc}" stroke="#0005"/><path d="M107.5 14V94" stroke="#fff7"/>`}
  <path d="M96 94h23q2 3 0 6h-23q-2-3 0-6z" fill="#7a4a1c" stroke="#0004"/><rect x="105" y="100" width="5" height="12" fill="#5b3a1c"/><circle cx="107.5" cy="114" r="3" fill="#d4a017" stroke="#0005"/>
- <circle cx="107.5" cy="105.5" r="6" fill="${arm?ac:sk}" stroke="#0006"/><path d="M102.5 103.5h10M102.5 107h10" stroke="#0003"/>
+ <circle cx="107.5" cy="105.5" r="${fem?5.2:6}" fill="${arm?ac:sk}" stroke="#0006"/><path d="M102.5 103.5h10M102.5 107h10" stroke="#0003"/>
  ${s>0?`<path d="M12 64h32v24q0 19-16 28q-16-9-16-28z" fill="${SC[s]}" stroke="#0006" stroke-width="2"/><path d="M16 68h24v20q0 15-12 22q-12-7-12-22z" fill="none" stroke="#fff4" stroke-width="1.5"/><path d="M28 70v40M16 84h24" stroke="#fff6" stroke-width="3"/><circle cx="28" cy="84" r="3.5" fill="#d4a017" stroke="#0004"/>`:""}
  </g></svg>`}
 const castle=`<svg class="castle" viewBox="0 0 100 90"><g fill="#8d8473" stroke="#0003"><rect x="10" y="30" width="22" height="60"/><rect x="68" y="30" width="22" height="60"/><rect x="28" y="48" width="44" height="42"/><path d="M8 30h26v-8h-5v4h-4v-4h-4v4h-4v-4h-5zM66 30h26v-8h-5v4h-4v-4h-4v4h-4v-4h-5z"/></g><path d="M42 90v-18q8-12 16 0v18z" fill="#4a3a28"/><path d="M50 22v-14l12 4-12 4" fill="#c0221f"/><g fill="#ffcf6b" style="opacity:var(--star)"><rect x="18" y="40" width="5" height="8" rx="2"/><rect x="77" y="40" width="5" height="8" rx="2"/><rect x="47" y="56" width="6" height="7" rx="2"/></g></svg>`;
