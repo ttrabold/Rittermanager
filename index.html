@@ -32,11 +32,9 @@ button.p small{color:#fbe3e3}
 .row:last-child{border:0}
 h3{margin:4px 0 6px;font-size:16px}
 .vs{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:14px;margin-bottom:6px}
-.fs{height:190px;justify-content:space-around}
 .hit{animation:hit .4s}
 @keyframes hit{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px);filter:brightness(1.8)}60%{transform:translateX(8px)}}
 .dmg{position:absolute;top:30px;font-weight:bold;font-size:24px;color:#c0221f;z-index:5;animation:up 1s forwards;text-shadow:0 1px 0 #fff}
-@keyframes up{to{transform:translateY(-26px);opacity:0}}
 .moves{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
 .moves button{font-size:26px;padding:10px 4px}
 .moves button small{font-size:12px}
@@ -123,11 +121,10 @@ const AC=["#6b4a2b","#8b6b43","#9aa3ab","#c3ccd4","#7fd6e0"],WC=["#a67c52","#b8b
 const W=[["Holzschwert",0,0],["Eisenschwert",40,3],["Stahlschwert",120,6],["Langschwert",300,10],["Drachenklinge",700,16]];
 const A=[["Lumpen",0,0],["Lederwams",40,2],["Kettenhemd",120,4],["Plattenpanzer",300,7],["Mithril-Rüstung",700,11]];
 const SH=[["Kein Schild",0,0],["Holzschild",30,1],["Eisenschild",100,2],["Turmschild",280,4]];
+const RANKF={"Knappe":"Knappin","Ritter":"Ritterin","Edelritter":"Edelritterin","Baron":"Baronin","Graf":"Gräfin","Herzog":"Herzogin","Held des Königreichs":"Heldin des Königreichs"};
 const RANKS=[[0,"Knappe"],[50,"Ritter"],[150,"Edelritter"],[400,"Baron"],[900,"Graf"],[2000,"Herzog"],[5000,"Held des Königreichs"],[10000,"Unsterbliche Legende"]];
-const ENAMES=["Ritter Eisenhart","Sir Grimmwald","Ritter Schwarzdorn","Sir Bertram","Ritter Blutfels","Sir Hagen","Die Rote Gräfin","Ritter Donnerhelm"];
-const MV={A:["⚔️","Angriff"],F:["🎭","Finte"],P:["🛡️","Parade"]},BEATS={A:"F",F:"P",P:"A"};
 const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
-const fresh=()=>({name:"Sir Kunibert",day:1,en:6,gold:20,ruhm:0,st:3,au:3,ge:3,w:0,a:0,s:0,xp:{st:0,au:0,ge:0},exp:0,it:{h:2,H:0,k:0,e:0,g:0,x:0},own:[],ew:null,ea:null,boss:0,troph:0,tt:[],title:null,crits:0,flawless:0,close:0,bk:[],star:0,tbest:0,tunl:0,wins:0,losses:0});
+const fresh=()=>({name:"Sir Kunibert",sex:"m",day:1,en:6,gold:20,ruhm:0,st:3,au:3,ge:3,w:0,a:0,s:0,exp:0,it:{h:2,H:0,k:0,e:0,g:0,x:0},own:[],ew:null,ea:null,boss:0,troph:0,tt:[],title:null,crits:0,flawless:0,close:0,bk:[],star:0,tbest:0,tunl:0,wins:0,losses:0});
 const AU={ctx:null,mus:true,sfx:true,mode:null,want:null,timer:null,step:0,unlocked:false};
 try{const a=JSON.parse(localStorage.getItem("ritter_au")||"{}");if(a.m===false)AU.mus=false;if(a.s===false)AU.sfx=false}catch(e){}
 const auSave=()=>{try{localStorage.setItem("ritter_au",JSON.stringify({m:AU.mus,s:AU.sfx}))}catch(e){}};
@@ -160,6 +157,7 @@ function toggleS(){AU.sfx=!AU.sfx;auSave();updSnd();if(AU.sfx)sfx("coin")}
 function updSnd(){document.getElementById("mb").className=AU.mus?"":"off";document.getElementById("sb").className=AU.sfx?"":"off"}
 const sd=document.createElement("div");sd.id="snd";sd.innerHTML=`<button id="mb" onclick="toggleM()" aria-label="Musik an oder aus">🎵 Musik</button><button id="sb" onclick="toggleS()" aria-label="Sound an oder aus">🔊 Sound</button>`;document.body.appendChild(sd);updSnd();
 document.addEventListener("pointerdown",()=>{if(AU.unlocked)return;AU.unlocked=true;ac();if(AU.mus)musicStart()});
+document.addEventListener("visibilitychange",()=>{if(!AU.ctx)return;if(document.hidden)AU.ctx.suspend();else if(AU.unlocked)AU.ctx.resume()});
 document.addEventListener("click",e=>{const b=e.target.closest("button");if(b&&!b.closest("#snd")&&!b.disabled)sfx("click")});
 const EI=[
 {id:"fl",n:"Flammenklinge",s:"w",b:10,c:"#ff6a2b",fx:{burn:.25},d:"25 % Brandchance"},
@@ -189,15 +187,15 @@ const eq=k=>EI.find(x=>x.id===S[k==="w"?"ew":"ea"]);
 const fxv=k=>{let v=0;for(const s of["ew","ea"]){const i=EI.find(x=>x.id===S[s]);if(i&&i.fx[k])v+=i.fx[k]}return v};
 const wBon=()=>{const e=eq("w");return e?e.b:W[S.w][2]};
 const aBon=()=>{const e=eq("a");return e?e.b:A[S.a][2]};
-const pk=()=>knight(S.w,S.a,S.s,false,null,eq("w")?eq("w").c:null,eq("a")?eq("a").c:null,S.ew,S.ea);
+const pk=()=>knight(S.w,S.a,S.s,false,null,eq("w")?eq("w").c:null,eq("a")?eq("a").c:null,S.ew,S.ea,S.sex==="f");
 function giveE(id,l){const it=EI.find(x=>x.id===id);if(S.own.includes(id)){S.gold+=100;l.push(`Du besitzt ${it.n} schon: +100 Gold.`);return}S.own.push(id);const k=it.s==="w"?"ew":"ea",cur=it.s==="w"?wBon():aBon(),auto=it.b>cur;if(auto)S[k]=id;l.push(`✨ <b>Verzauberte Beute: ${it.n}</b> (${it.d})${auto?" – angelegt!":" – in der Schmiede anlegbar."}`)}
 function tourLoot(l){const p=["fl","fz","sb","mo","wp","wm"].filter(id=>!S.own.includes(id));if(p.length)giveE(p[rnd(0,p.length-1)],l);else{S.gold+=150;l.push("Alle Turnierschätze besitzt du schon: +150 Gold!")}}
 function towerLoot(l){const p=["t1","t2","t3","t4"].filter(id=>!S.own.includes(id));if(p.length)giveE(p[rnd(0,p.length-1)],l);else{S.gold+=300;l.push("Alle Turmschätze besitzt du schon: +300 Gold!")}}
 function equipE(id){const it=EI.find(x=>x.id===id),k=it.s==="w"?"ew":"ea";S[k]=S[k]===id?null:id;save();sfx("buff");shop()}
 function ench(){return `<h3>✨ Verzauberte Ausrüstung</h3>`+(S.own.length?S.own.map(id=>{const it=EI.find(x=>x.id===id),on=S[it.s==="w"?"ew":"ea"]===id;return `<div class="row"><span>${it.s==="w"?"🗡️":"🛡️"} ${it.n} <span class="mut">+${it.b} · ${it.d}</span></span><button ${on?'class="p"':""} onclick="equipE('${id}')">${on?"Ablegen":"Anlegen"}</button></div>`}).join(""):`<div class="mut">Noch nichts – gewinne Turniere und Bosskämpfe!</div>`)}
 function encHit(d,l){const f=F,r=Math.random(),b=fxv("burn");
- if(r<b){f.eb.bleed=3;l.push("Der Gegner geht in Flammen auf! 🔥")}
- else if(r<b+fxv("poison")){f.eb.bleed=3;l.push("Der Gegner ist vergiftet! ☠️")}
+ if(r<b){f.eb.burn=2;l.push("Der Gegner geht in Flammen auf! 🔥")}
+ else if(r<b+fxv("poison")){f.eb.ps=f.eb.poison>0?Math.min(2,f.eb.ps+1):1;f.eb.poison=3;l.push("Der Gegner ist vergiftet! ☠️")}
  if(Math.random()<fxv("stun")){f.eb.stun=1;l.push("Der Gegner erstarrt! ❄️")}
  const h=Math.round(d*fxv("life"));if(h>0){const o=f.php;f.php=Math.min(f.pmax,f.php+h);l.push(`Die Klinge saugt ${f.php-o} LP auf. 💚`)}}
 const SKFX=["slash","bash","heavy","roar","bleed","guard","whirl","dragon","star","heal","world"];
@@ -239,13 +237,14 @@ const TT=[
 {id:"tw25",n:"der Turmbezwinger",d:"Etage 25 des Turms erreichen",t:()=>S.tbest>=25,p:()=>`${Math.min(S.tbest,25)}/25`},
 {id:"st",n:"der Wiedergeborene",d:"Eine Wiedergeburt abschließen",t:()=>S.star>=1,p:()=>""},
 {id:"au",n:"der Auserwählte",d:"Alle sechs Bosse besiegen",t:()=>S.bk.length>=6,p:()=>`${S.bk.length}/6`}];
-const ttn=()=>(TT.find(y=>y.id===S.title)||{}).n;
+const gn=n=>S.sex==="f"&&n.startsWith("der ")?"die "+n.slice(4)+(/e$/.test(n)?"":"in"):n;
+const ttn=()=>{const t=TT.find(y=>y.id===S.title);return t&&gn(t.n)};
 const tl=()=>ttn()?`<div class="tl">🎖️ ${ttn()}</div>`:"";
-function checkTitles(l){TT.forEach(x=>{if(!S.tt.includes(x.id)&&x.t()){S.tt.push(x.id);if(!S.title)S.title=x.id;l.push(`🎖️ <b>Neuer Titel: ${x.n}</b>`)}})}
+function checkTitles(l){TT.forEach(x=>{if(!S.tt.includes(x.id)&&x.t()){S.tt.push(x.id);if(!S.title)S.title=x.id;l.push(`🎖️ <b>Neuer Titel: ${gn(x.n)}</b>`)}})}
 function setTitle(id){S.title=id;save();sfx("buff");titles()}
 function titles(){musicSet("home");app.innerHTML=`<div class="top"><b>🎖️ Titel</b><span>${S.tt.length}/${TT.length}</span></div>
  <div class="card"><div class="row"><span>Kein Titel</span><button ${S.title?"":'class="p"'} onclick="setTitle(null)">${S.title?"Wählen":"Aktiv"}</button></div>
- ${TT.map(x=>{const own=S.tt.includes(x.id),on=S.title===x.id;return `<div class="row"><span>${own?"":"🔒 "}<b>${x.n}</b><br><span class="mut">${x.d}</span></span>${own?`<button ${on?'class="p"':""} onclick="setTitle('${x.id}')">${on?"Getragen":"Tragen"}</button>`:`<span class="mut">${x.p()}</span>`}</div>`}).join("")}</div>
+ ${TT.map(x=>{const own=S.tt.includes(x.id),on=S.title===x.id;return `<div class="row"><span>${own?"":"🔒 "}<b>${gn(x.n)}</b><br><span class="mut">${x.d}</span></span>${own?`<button ${on?'class="p"':""} onclick="setTitle('${x.id}')">${on?"Getragen":"Tragen"}</button>`:`<span class="mut">${x.p()}</span>`}</div>`}).join("")}</div>
  <div class="grid"><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`}
 const fm=(x,y,s,c,d)=>`<path class="fk" style="animation-delay:${d}s" d="M${x} ${y}q${-5*s} ${-12*s} 0 ${-26*s}q${9*s} ${11*s} 0 ${26*s}z" fill="${c}"/>`;
 const ST=(x,y,c,d)=>`<path class="tw" style="animation-delay:${d}s" d="M${x} ${y-5}l1.6 3.4 3.4 1.6-3.4 1.6-1.6 3.4-1.6-3.4-3.4-1.6 3.4-1.6z" fill="${c}"/>`;
@@ -298,17 +297,18 @@ const SK=[
 const IT=[{k:"h",n:"Heiltrank",p:15,d:"+40 LP",e:"🧪"},{k:"H",n:"Großer Heiltrank",p:40,d:"+100 LP",e:"⚗️"},{k:"x",n:"Elixier des Lebens",p:90,d:"+200 LP",e:"🍶"},{k:"k",n:"Kraft-Elixier",p:25,d:"Schaden +50 % (3 Runden)",e:"💥"},{k:"g",n:"Gegengift",p:20,d:"Heilt Gift und Brand",e:"💊"},{k:"e",n:"Eisenhaut-Trank",p:25,d:"Schaden −50 % (3 Runden)",e:"🛡️"}];
 const lvl=()=>1+Math.floor(Math.sqrt(S.exp/20)),expFor=l=>(l-1)*(l-1)*20;
 let editName=false;
-function saveName(){const v=document.getElementById("nm").value.replace(/[<>&"'`]/g,"").trim().slice(0,20);if(v)S.name=v;editName=false;save();msg=v?`Dein Ritter heißt jetzt <b>${S.name}</b>!`:msg;home()}
+function toggleSex(){const f=S.sex!=="f";if(S.name==="Sir Kunibert"||S.name==="Dame Kunigunde")S.name=f?"Dame Kunigunde":"Sir Kunibert";S.sex=f?"f":"m";save();sfx("buff");msg=f?"Aus dem Ritter wird eine <b>Ritterin</b>!":"Aus der Ritterin wird ein <b>Ritter</b>!";home()}
+function saveName(){const v=document.getElementById("nm").value.replace(/[<>&"'`]/g,"").trim().slice(0,20);if(v)S.name=v;editName=false;save();msg=v?`Dein${S.sex==="f"?"e Ritterin":" Ritter"} heißt jetzt <b>${S.name}</b>!`:msg;home()}
 let S=fresh(),msg="Willkommen, edler Ritter! Verdiene Gold, bestehe Abenteuer und steige auf – dabei wirst du automatisch stärker.",F=null;
 try{const x=localStorage.getItem("ritter1");if(x)S=Object.assign(fresh(),JSON.parse(x));}catch(e){}
-S.it=Object.assign({h:0,H:0,k:0,e:0,g:0,x:0},S.it);S.star=S.star||0;S.tbest=S.tbest||0;S.tunl=S.tunl||((S.boss||0)>=3?1:0);S.own=S.own||[];S.ew=S.ew||null;S.ea=S.ea||null;S.boss=S.boss||0;S.troph=S.troph||0;
-S.tt=S.tt||[];S.title=S.title||null;S.crits=S.crits||0;S.flawless=S.flawless||0;S.close=S.close||0;S.bk=S.bk||Array.from({length:S.boss||0},(_,i)=>i);
+S.it=Object.assign({h:0,H:0,k:0,e:0,g:0,x:0},S.it);S.sex=S.sex==="f"?"f":"m";S.star=S.star||0;S.tbest=S.tbest||0;S.tunl=S.tunl||((S.boss||0)>=3?1:0);S.own=S.own||[];S.ew=S.ew||null;S.ea=S.ea||null;S.boss=S.boss||0;S.troph=S.troph||0;
+S.name=String(S.name).replace(/[<>&"'`]/g,"").trim().slice(0,20)||"Sir Kunibert";S.tt=S.tt||[];S.title=S.title||null;S.crits=S.crits||0;S.flawless=S.flawless||0;S.close=S.close||0;S.bk=S.bk||Array.from({length:S.boss||0},(_,i)=>i);
 const save=()=>{try{localStorage.setItem("ritter1",JSON.stringify(S))}catch(e){}};
 const app=document.getElementById("app");
-const rank=()=>{let r=RANKS[0][1];for(const x of RANKS)if(S.ruhm>=x[0])r=x[1];return r};
+const rank=()=>{let r=RANKS[0][1];for(const x of RANKS)if(S.ruhm>=x[0])r=x[1];return S.sex==="f"?RANKF[r]||r:r};
 const maxhp=()=>40+S.au*6+lvl()*4+fxv("hp");
 
-function knight(w,a,s,flip,plume,ow,oa,wi,ai){
+function knight(w,a,s,flip,plume,ow,oa,wi,ai,fem){
  const wc=ow||WC[w],ac=oa||AC[a],helm=a>0||oa?ac:"#e0b48a",pl=plume||(a>=3||oa?"#c0221f":null);
  return `<svg class="k" viewBox="0 0 130 160" ${flip?'style="transform:scaleX(-1)"':''}>
  <ellipse cx="62" cy="152" rx="34" ry="5" fill="#0003"/>${ai&&AV[ai]?AV[ai](1):""}
@@ -316,8 +316,10 @@ function knight(w,a,s,flip,plume,ow,oa,wi,ai){
  <rect x="40" y="144" width="19" height="7" rx="3" fill="#3a2a1c"/><rect x="63" y="144" width="19" height="7" rx="3" fill="#3a2a1c"/>
  <rect x="36" y="58" width="50" height="50" rx="9" fill="${ac}" stroke="#0004"/>
  <rect x="36" y="94" width="50" height="6" fill="#5b3a1c"/>
+ ${fem?`<path d="M47 32Q18 40 26 80Q30 92 40 84Q34 62 50 54Z" fill="#8a4b22" stroke="#0004"/>`:""}
  <circle cx="61" cy="42" r="17" fill="${helm}" stroke="#0004"/>
  ${a>0||oa?'<rect x="52" y="39" width="20" height="5" rx="2" fill="#1b1b1b"/>':'<circle cx="55" cy="40" r="2" fill="#222"/><circle cx="67" cy="40" r="2" fill="#222"/><path d="M55 49q6 4 12 0" stroke="#7a4a2a" fill="none"/>'}
+ ${fem&&!(a>0||oa)?`<path d="M44 42Q42 22 61 24Q80 22 78 42Q72 30 61 30Q50 30 44 42z" fill="#8a4b22"/><path d="M52 37l-3-2M70 37l3-2M54 38l-3-1M68 38l3-1" stroke="#222" stroke-width="1.2"/><path d="M57 49q4 3 8 0" stroke="#c0392b" stroke-width="2" fill="none"/>`:""}
  ${pl?`<path d="M61 25q-4-14 12-12q-8 4-4 12z" fill="${pl}"/>`:''}
  ${ai&&AV[ai]?AV[ai](0):""}<rect x="84" y="66" width="22" height="10" rx="5" fill="${ac}"/>
  ${wi&&VIS[wi]?weaponSvg(wi):`<rect x="104" y="20" width="7" height="78" rx="2" fill="${wc}" stroke="#0005"/><polygon points="104,20 111,20 107.5,8" fill="${wc}" stroke="#0005"/>`}
@@ -328,8 +330,7 @@ const castle=`<svg class="castle" viewBox="0 0 100 90"><g fill="#8d8473" stroke=
 const bar=(v,m,c)=>`<div class="bar"><i style="width:${Math.max(0,Math.min(100,v/m*100))}%;background:${c}"></i></div>`;
 
 function home(){musicSet("home");
- const need=k=>Math.ceil(S[k]/2)+1;
- app.innerHTML=`<div class="top">${editName?`<span style="display:flex;gap:6px;flex:1;margin-right:8px"><input id="nm" maxlength="20" value="${S.name}" onkeydown="if(event.key==='Enter')saveName()" style="flex:1;min-width:0;font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)"><button onclick="saveName()" style="min-height:36px;padding:4px 12px">✔</button></span>`:`<b>${S.name} <a href="#" onclick="editName=true;home();document.getElementById('nm').focus();return false" aria-label="Ritter umbenennen" style="text-decoration:none">✏️</a></b>`}<span>${rank()}${S.star?" · 🌟×"+S.star:""} · Tag ${S.day}</span></div>
+ app.innerHTML=`<div class="top">${editName?`<span style="display:flex;gap:6px;flex:1;margin-right:8px"><input id="nm" maxlength="20" value="${S.name}" onkeydown="if(event.key==='Enter')saveName()" style="flex:1;min-width:0;font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)"><button onclick="saveName()" style="min-height:36px;padding:4px 12px">✔</button></span>`:`<b>${S.name} <a href="#" onclick="editName=true;home();document.getElementById('nm').focus();return false" aria-label="Ritter umbenennen" style="text-decoration:none">✏️</a> <a href="#" onclick="toggleSex();return false" aria-label="Zwischen Ritter und Ritterin wechseln" title="Ritter/Ritterin wechseln" style="text-decoration:none">${S.sex==="f"?"♀️":"♂️"}</a></b>`}<span>${rank()}${S.star?" · 🌟×"+S.star:""} · Tag ${S.day}</span></div>
  <div class="scene">${castle}${pk()}</div>
  <div class="card"><div class="stats">
  <div>💪 Stärke <b>${S.st}</b></div>
@@ -352,22 +353,24 @@ function home(){musicSet("home");
  <div class="card"><h3>📜 Fähigkeiten</h3>${SK.map(s=>`<div class="row"><span>${s.lv<=lvl()?"":"🔒 "}${s.n}</span><span class="mut">${s.lv<=lvl()?s.d:"ab Stufe "+s.lv}</span></div>`).join("")}<div class="mut" style="margin-top:6px">Tränke: ${IT.map(t=>t.e+" "+S.it[t.k]).join("  ")}</div></div>
  <p class="mut" style="text-align:center"><a href="#" onclick="if(confirm('Spiel wirklich zurücksetzen?')){S=fresh();save();msg='Ein neues Abenteuer beginnt!';home()}return false" style="color:var(--mut)">Neu starten</a></p>`;
 }
-function train(k){
- if(S.en<1)return;S.en--;S.xp[k]++;
- const n={st:"Stärke",au:"Ausdauer",ge:"Geschick"}[k];
- if(S.xp[k]>=Math.ceil(S[k]/2)+1){S[k]++;S.xp[k]=0;sfx("level");msg=`Training erfolgreich! <b>${n} steigt auf ${S[k]}.</b>`}
- else msg=`Du trainierst hart. ${n} wird besser – bald ist es soweit.`;
- save();home();
-}
 function work(){
- if(S.en<1)return;S.en--;const g=rnd(8,14)+Math.floor(S.st/3);S.gold+=g;sfx("coin");
+ if(S.en<1)return;S.en--;const g=rnd(8,14)+lvl()*2;S.gold+=g;sfx("coin");
  const t=["Du hilfst dem Schmied","Du bewachst die Stadttore","Du hackst Holz für den Burgvogt","Du eskortierst einen Händler"];
  msg=`${t[rnd(0,3)]} und verdienst <b>${g} Gold</b>.`;save();home();
 }
+const EVT=[
+ [3,()=>"Ein neuer Morgen. Der Hahn kräht!"],
+ [3,()=>"Die Sonne geht auf – ein guter Tag für Abenteuer."],
+ [2,()=>{const g=rnd(5,15);S.gold+=g;return `Ein Bote des Königs bringt dir <b>${g} Gold</b>. 👑`}],
+ [2,()=>{S.it.h++;return "Ein fahrender Händler schenkt dir einen <b>Heiltrank</b>. 🧪"}],
+ [2,()=>{const x=10+lvl()*5;S.exp+=x;return `Ein alter Veteran übt mit dir Schwertkampf: <b>+${x} EP</b>. 🤺`}],
+ [2,()=>{S.ruhm+=5+lvl();return "Auf dem Marktplatz feiert man dein Können: <b>+"+(5+lvl())+" Ruhm</b>. 🎉"}],
+ [1,()=>{S.en=5;return "Du hast schlecht geschlafen und startest mit <b>nur 5 Energie</b>. 😴"}],
+ [1,()=>{const x=Math.min(S.gold,Math.max(1,Math.floor(S.gold*.1)));S.gold-=x;return x?`Taschendiebe haben dir nachts <b>${x} Gold</b> gestohlen! 🦹`:"Taschendiebe schleichen durch die Gassen – aber bei dir ist nichts zu holen."}]];
 function newDay(){
- S.day++;S.en=6;const e=rnd(1,5);
- msg=["Ein neuer Morgen. Der Hahn kräht!","Die Sonne geht auf – ein guter Tag für Abenteuer.","Ein Bote bringt dir 5 Gold vom König."][e<=3?e-1:e===4?0:2];
- if(msg.includes("5 Gold"))S.gold+=5;save();home();
+ S.day++;S.en=6;let r=Math.random()*EVT.reduce((a,e)=>a+e[0],0),ev=EVT[0];
+ for(const e of EVT){if(r<e[0]){ev=e;break}r-=e[0]}
+ msg=ev[1]();save();home();
 }
 function shop(){musicSet("home");
  const sec=(t,L,k,ic)=>`<h3>${ic} ${t}</h3>`+L.map((x,i)=>{
@@ -401,7 +404,7 @@ function mk(L,t,boss){
  return {lvl:L,name:boss?t.n:`${t.t} ${ENS[rnd(0,ENS.length-1)]}`,ehp:hp,emax:hp,atk:(3+L*2)*t.atk*sc,def:Math.floor(L*.8*t.def),tier:Math.min(4,Math.floor(L/2)),tint:t.tint||"#6b2d8f",mv:t.mv,boss:!!boss,enr:false};
 }
 function setup(e,tour,keep){
- F=Object.assign({php:keep?keep.php:maxhp(),pmax:maxhp(),menu:"main",anim:"",dmg:"",hE:0,hP:0,lP:0,lE:0,vfx:[],over:false,next:false,tour:tour||0,pp:keep?keep.pp:null,pb:{buff:0,guard:0,poison:0,burn:0,stun:0},eb:{bleed:0,stun:0,guard:0},log:(ttn()?`<b>${S.name} ${ttn()}</b> tritt an!<br>`:"")+(e.boss?`${e.name} versperrt dir den Weg! Das wird ein harter Kampf.`:"Ein fremder Gegner fordert dich heraus! Was tust du?")},e);
+ F=Object.assign({php:keep?keep.php:maxhp(),pmax:maxhp(),menu:"main",anim:"",dmg:"",hE:0,hP:0,lP:0,lE:0,vfx:[],over:false,next:false,tour:tour||0,pp:keep?keep.pp:null,pb:{buff:0,guard:0,poison:0,burn:0,stun:0},eb:{bleed:0,burn:0,poison:0,ps:0,stun:0,guard:0},log:(ttn()?`<b>${S.name} ${ttn()}</b> tritt an!<br>`:"")+(e.boss?`${e.name} versperrt dir den Weg! Das wird ein harter Kampf.`:"Ein fremder Gegner fordert dich heraus! Was tust du?")},e);
  if(!F.pp){F.pp={};SK.forEach((s,i)=>F.pp[i]=s.pp)}
  save();fight();
 }
@@ -409,7 +412,7 @@ function startFight(){if(S.en<2)return;S.en-=2;setup(mk(Math.max(1,lvl()+rnd(-1,
 function startTour(){if(S.en<4||S.gold<20)return;S.en-=4;S.gold-=20;setup(mk(Math.max(1,lvl()),ET[rnd(0,4)]),1)}
 function startTower(){if(!S.tunl||S.en<4)return;S.en-=4;towerFloor(1)}
 function towerFloor(n,keep){const b=n%5===0,bs=BOSS[(n/5-1)%BOSS.length],e=b?mk(bs.L+Math.floor(n/3),bs,true):mk(lvl()+Math.floor(n/2),ET[rnd(0,4)]);e.tower=n;setup(e,0,keep)}
-function rebirth(){if(S.boss<BOSS.length)return;if(!confirm("Wiedergeburt: Stufe, Gold, Ruhm, Ausrüstung und Bossfortschritt werden zurückgesetzt. Du behältst verzauberte Gegenstände, Tränke, Pokale und Turmrekord und erhältst +10 % Schaden, Gold und EP – die Gegner werden aber 8 % stärker. Fortfahren?"))return;S.star++;Object.assign(S,{exp:0,ruhm:0,gold:50,st:3,au:3,ge:3,w:0,a:0,s:0,boss:0,xp:{st:0,au:0,ge:0}});msg=`Du wirst wiedergeboren! Wiedergeburt ${S.star} 🌟`;sfx("level");save();home()}
+function rebirth(){if(S.boss<BOSS.length)return;if(!confirm("Wiedergeburt: Stufe, Gold, Ruhm, Ausrüstung und Bossfortschritt werden zurückgesetzt. Du behältst verzauberte Gegenstände, Tränke, Pokale und Turmrekord und erhältst +10 % Schaden, Gold und EP – die Gegner werden aber 8 % stärker. Fortfahren?"))return;S.star++;Object.assign(S,{exp:0,ruhm:0,gold:50,st:3,au:3,ge:3,w:0,a:0,s:0,boss:0});msg=`Du wirst wiedergeboren! Wiedergeburt ${S.star} 🌟`;sfx("level");save();home()}
 function nextTour(){if(F.tower)return towerFloor(F.tower+1,{php:Math.min(F.pmax,F.php+Math.round(F.pmax*.2)),pp:F.pp});const k={php:Math.min(F.pmax,F.php+Math.round(F.pmax*.3)),pp:F.pp},r=F.tour+1;setup(mk(Math.max(1,lvl()+r-1),ET[rnd(0,4)]),r,k)}
 function startBoss(){const b=BOSS[S.boss];if(!b||S.en<3||S.ruhm<b.req)return;S.en-=3;setup(mk(b.L,b,true))}
 function leaveTower(){const d=F.over?F.tower:F.tower-1;F.over=true;msg=`Du verlässt den Turm nach ${d} geschafften Etagen. Rekord: Etage ${S.tbest}.`;save();home()}
@@ -423,7 +426,7 @@ function fight(){
  else ui=`<button class="p" onclick="fmenu('skills')">⚔️ Kämpfen</button><button onclick="fmenu('items')">🎒 Tränke</button>${f.tower?'<button onclick="leaveTower()" style="grid-column:1/-1">🏳️ Turm verlassen</button>':'<button onclick="flee()" style="grid-column:1/-1">🏃 Fliehen</button>'}`;
  const dm=(w)=>{const v=w==="e"?f.hE:f.hP;return v?`<span class="dmg ${w==="p"?"late":""}" style="left:30px">-${v}</span>`:""};
  app.innerHTML=`<div class="scene fs">
- <div class="box eb"><b>${f.name}</b> <span class="mut">Lv${f.lvl}${f.tour?" · Turnier "+f.tour+"/3":""}${f.tower?" · Etage "+f.tower:""}${f.boss?" · BOSS":""}</span> ${ic(f.eb,{bleed:"🩸",stun:"💫",guard:"🛡️"})}${bar(f.ehp,f.emax,"#c0392b")}<span class="mut">${Math.max(0,f.ehp)}/${f.emax}</span></div>
+ <div class="box eb"><b>${f.name}</b> <span class="mut">Lv${f.lvl}${f.tour?" · Turnier "+f.tour+"/3":""}${f.tower?" · Etage "+f.tower:""}${f.boss?" · BOSS":""}</span> ${ic(f.eb,{bleed:"🩸",burn:"🔥",poison:"☠️",stun:"💫",guard:"🛡️"})}${bar(f.ehp,f.emax,"#c0392b")}<span class="mut">${Math.max(0,f.ehp)}/${f.emax}</span></div>
  <div class="es ${f.boss?"big":""} ${f.hE?"hit":""}">${dm("e")}<div class="lg ${f.lE?"lungeE":""}">${knight(f.tier,f.tier,Math.min(3,Math.floor(f.lvl/3)),true,f.tint)}</div></div>
  <div class="ps ${f.hP?"hit late":""}">${dm("p")}<div class="lg ${f.lP?"lungeP":""}">${pk()}</div></div>
  <div class="box pb"><b>${S.name}</b> <span class="mut">Lv${lvl()}</span>${tl()} ${ic(f.pb,{buff:"💥",guard:"🛡️",poison:"☠️",burn:"🔥",stun:"💫"})}${bar(f.php,f.pmax,"#2e8b57")}<span class="mut">${Math.max(0,f.php)}/${f.pmax}</span></div>${VXH(f)}</div>
@@ -433,13 +436,12 @@ function fin(l){F.log=l.join("<br>");F.menu="main";fight()}
 function useSkill(i){
  const f=F,s=SK[i],l=[`${S.name} setzt <b>${s.n}</b> ein!`];
  if(s.pp<99){if(f.pp[i]<1)return;f.pp[i]--}
- f.lP=s.pw>0?1:0;
- f.anim="";f.dmg="";f.hE=0;f.hP=0;f.lP=0;f.lE=0;f.vfx=[];
+ f.anim="";f.dmg="";f.hE=0;f.hP=0;f.lP=s.pw>0?1:0;f.lE=0;f.vfx=[];
  if(Math.random()*100>=s.acc){l.push("Der Angriff geht daneben!");sfx("miss");f.vfx.push(["miss","vE",0])}
  else{f.vfx.push([SKFX[i],[3,5,9].includes(i)?"vP":"vE",0]);
   if(s.pw>0){
    let d=5+Math.floor(S.st*1.3)+wBon();d=d*s.pw*(f.pb.buff>0?1.5:1)*(1+.1*S.star)+rnd(0,3);
-   const crit=Math.random()<S.ge*.03+fxv("crit");if(crit){d*=1.5;S.crits++}if(f.eb.guard)d*=.5;
+   const crit=Math.random()<Math.min(.6,S.ge*.03+fxv("crit"));if(crit){d*=1.5;S.crits++}if(f.eb.guard)d*=.5;
    d=Math.max(1,Math.round(d-f.def));f.ehp-=d;f.anim="e";f.dmg=d;f.hE=d;sfx(crit?"crit":"hit");l.push((crit?"<b>Kritischer Treffer!</b> ":"")+`${d} Schaden.`);encHit(d,l);
   }
   if(s.fx==="stun"&&Math.random()<.4){f.eb.stun=1;l.push("Der Gegner ist betäubt! 💫")}
@@ -451,40 +453,42 @@ function useSkill(i){
  enemyTurn(l);
 }
 function useItem(k){
- const f=F;if(S.it[k]<1)return;S.it[k]--;const t=IT.find(x=>x.k===k),l=[`Du benutzt ${t.n}.`];sfx(k==="k"||k==="e"?"buff":"heal");f.vfx.push([k==="k"?"roar":k==="e"?"guard":"heal","vP",0]);f.anim="";f.dmg="";f.hE=0;f.hP=0;f.lP=0;f.lE=0;f.vfx=[];
+ const f=F;if(S.it[k]<1)return;S.it[k]--;const t=IT.find(x=>x.k===k),l=[`Du benutzt ${t.n}.`];sfx(k==="k"||k==="e"?"buff":"heal");save();f.anim="";f.dmg="";f.hE=0;f.hP=0;f.lP=0;f.lE=0;f.vfx=[[k==="k"?"roar":k==="e"?"guard":"heal","vP",0]];
  if(k==="h"||k==="H"||k==="x"){const h=k==="h"?40:k==="x"?200:100,b=f.php;f.php=Math.min(f.pmax,f.php+h);l.push(`Du heilst ${f.php-b} LP. 💚`)}
  if(k==="k"){f.pb.buff=3;l.push("Dein Schaden steigt für 3 Runden! 💥")}
  if(k==="g"){f.pb.poison=0;f.pb.burn=0;l.push("Gift und Brand sind geheilt! 💊")}
  if(k==="e"){f.pb.guard=3;l.push("Deine Haut wird hart wie Eisen! 🛡️")}
  enemyTurn(l);
 }
-function flee(){const l=[];Object.assign(F,{hE:0,hP:0,lP:0,lE:0,vfx:[]});if(F.boss||F.tour||F.tower){F.log="Hier gibt es kein Entkommen!";return fight()}if(Math.random()<.5+S.ge*.03){F.over=true;l.push("Du ergreifst die Flucht! Kein Ruhm, aber auch kein Verlust.");msg="Du bist geflohen.";save();return fin(l)}l.push("Flucht gescheitert!");enemyTurn(l)}
+function flee(){const l=[];Object.assign(F,{hE:0,hP:0,lP:0,lE:0,vfx:[]});if(F.boss||F.tour||F.tower){F.log="Hier gibt es kein Entkommen!";return fight()}if(Math.random()<Math.min(.9,.5+S.ge*.03)){F.over=true;l.push("Du ergreifst die Flucht! Kein Ruhm, aber auch kein Verlust.");msg="Du bist geflohen.";save();return fin(l)}l.push("Flucht gescheitert!");enemyTurn(l)}
+function enemyAct(l){
+ const f=F;
+ if(f.eb.stun){f.eb.stun=0;l.push(`${f.name} ist betäubt und setzt aus.`);return}
+ const tot=f.mv.reduce((a,m)=>a+m[4],0);let r=Math.random()*tot,m=f.mv[0];
+ for(const x of f.mv){if(r<x[4]){m=x;break}r-=x[4]}
+ l.push(`${f.name} setzt <b>${m[0]}</b> ein!`);if(m[3]!=="guard")f.lE=1;
+ if(m[3]==="guard"){f.vfx.push(["guard","vE",1]);f.eb.guard=1;l.push("Der Gegner geht in Deckung. 🛡️")}
+ else if(Math.random()*100>=Math.max(25,m[2]-S.ge-fxv("dodge"))){l.push("Du weichst aus!");sfx("miss");f.vfx.push(["dodge","vP",1])}
+ else{
+  let d=(f.atk+rnd(0,3))*m[1]-aBon()-SH[S.s][2];if(f.pb.guard>0)d*=.5;d=Math.max(1,Math.round(d));f.took=1;f.php-=d;f.anim="p";f.dmg=d;f.hP=d;sfx("hurt");f.vfx.push(["slash","vP",1]);if(m[1]>=1.5)f.vfx.push(["flash","vP",1]);l.push(`Du erleidest ${d} Schaden.`);
+  if(m[3]==="poison"){f.pb.poison=4;sfx("poison");f.vfx.push(["poison","vP",1]);l.push("Du bist vergiftet! ☠️")}
+  if(m[3]==="burn"&&!fxv("noburn")){f.vfx.push(["fire","vP",1]);f.pb.burn=3;l.push("Du brennst! 🔥")}
+  if(m[3]==="stun"&&Math.random()<.5){f.vfx.push(["stun","vP",1]);f.pb.stun=1;l.push("Du bist betäubt! 💫")}
+ }
+}
 function enemyTurn(l){
  const f=F;
  if(f.ehp<=0)return endFight(true,l);
  f.eb.guard=0;
- if(f.eb.bleed>0){const d=4+f.lvl;f.ehp-=d;f.eb.bleed--;l.push(`${f.name} blutet: ${d} Schaden. 🩸`);if(f.ehp<=0)return endFight(true,l)}
+ for(const[k,d,t,e]of[["bleed",4+f.lvl,"blutet","🩸"],["burn",6+f.lvl,"brennt","🔥"],["poison",(4+f.lvl)*Math.max(1,f.eb.ps),"leidet unter Gift","☠️"]])if(f.eb[k]>0){f.ehp-=d;f.eb[k]--;if(k==="poison"&&!f.eb.poison)f.eb.ps=0;l.push(`${f.name} ${t}: ${d} Schaden. ${e}`);if(f.ehp<=0)return endFight(true,l)}
  if(f.boss&&!f.enr&&f.ehp<f.emax/2){f.enr=true;f.atk*=1.3;l.push(`<b>${f.name} gerät in Rage!</b> 😡`)}
- if(f.eb.stun){f.eb.stun=0;l.push(`${f.name} ist betäubt und setzt aus.`)}
- else{
-  const tot=f.mv.reduce((a,m)=>a+m[4],0);let r=Math.random()*tot,m=f.mv[0];
-  for(const x of f.mv){if(r<x[4]){m=x;break}r-=x[4]}
-  l.push(`${f.name} setzt <b>${m[0]}</b> ein!`);if(m[3]!=="guard")f.lE=1;
-  if(m[3]==="guard"){f.vfx.push(["guard","vE",1]);f.eb.guard=1;l.push("Der Gegner geht in Deckung. 🛡️")}
-  else if(Math.random()*100>=m[2]-S.ge-fxv("dodge")){l.push("Du weichst aus!");sfx("miss");f.vfx.push(["dodge","vP",1])}
-  else{
-   let d=(f.atk+rnd(0,3))*m[1]-aBon()-SH[S.s][2];if(f.pb.guard>0)d*=.5;d=Math.max(1,Math.round(d));f.took=1;f.php-=d;f.anim="p";f.dmg=d;f.hP=d;sfx("hurt");f.vfx.push(["slash","vP",1]);if(m[1]>=1.5)f.vfx.push(["flash","vP",1]);l.push(`Du erleidest ${d} Schaden.`);
-   if(m[3]==="poison"){f.pb.poison=4;sfx("poison");f.vfx.push(["poison","vP",1]);l.push("Du bist vergiftet! ☠️")}
-   if(m[3]==="burn"&&!fxv("noburn")){f.vfx.push(["fire","vP",1]);f.pb.burn=3;l.push("Du brennst! 🔥")}
-   if(m[3]==="stun"&&Math.random()<.5){f.vfx.push(["stun","vP",1]);f.pb.stun=1;l.push("Du bist betäubt! 💫")}
-  }
- }
+ enemyAct(l);
  const rg=fxv("regen");if(rg&&f.php<f.pmax){f.php=Math.min(f.pmax,f.php+rg);l.push(`Deine Rüstung heilt dich um ${rg} LP. 🌙`)}
  if(f.pb.poison>0){const d=2+Math.floor(f.lvl/2);f.took=1;f.php-=d;f.pb.poison--;l.push(`Gift: ${d} Schaden. ☠️`)}
  if(f.pb.burn>0){const d=4+f.lvl;f.took=1;f.php-=d;f.pb.burn--;l.push(`Verbrennung: ${d} Schaden. 🔥`)}
  if(f.pb.buff>0)f.pb.buff--;if(f.pb.guard>0)f.pb.guard--;
  if(f.php<=0)return endFight(false,l);
- if(f.pb.stun){f.pb.stun=0;l.push("Du bist betäubt und verlierst deinen Zug!");return enemyTurn(l)}
+ if(f.pb.stun){f.pb.stun=0;l.push("Du bist betäubt und verlierst deinen Zug!");enemyAct(l);if(f.php<=0)return endFight(false,l)}
  fin(l);
 }
 function endFight(win,l){
