@@ -75,18 +75,36 @@ const TT=[
 {id:"au",n:"der Auserwählte",d:"Die ersten sechs Bosse besiegen",t:()=>[0,1,2,3,4,5].every(i=>S.bk.includes(i)),p:()=>`${[0,1,2,3,4,5].filter(i=>S.bk.includes(i)).length}/6`},
 {id:"gl",n:"der Glücksritter",d:"10 Würfelpartien in der Taverne gewinnen",t:()=>(S.tavW||0)>=10,p:()=>`${Math.min(S.tavW||0,10)}/10`},
 {id:"lg",n:"der Legendäre",d:"Alle zwölf Bosse besiegen",t:()=>S.bk.length>=12,p:()=>`${S.bk.length}/12`}];
+// Fähigkeiten: id, Name, Stufe, Einsätze (99 = unbegrenzt), Stärke, Treffsicherheit, Effekt, Animation (vx), self = Animation beim Spieler
 const SK=[
-{n:"Schwerthieb",lv:1,pp:99,pw:1,acc:95,d:"Solider Standardangriff"},
-{n:"Schildstoß",lv:2,pp:8,pw:.8,acc:95,fx:"stun",d:"40 % Betäubung"},
-{n:"Kräftiger Schlag",lv:3,pp:6,pw:1.6,acc:80,d:"Mächtig, aber ungenau"},
-{n:"Kriegsruf",lv:4,pp:4,pw:0,acc:100,fx:"buff",d:"Schaden +50 % (3 Runden)"},
-{n:"Blutiger Schnitt",lv:5,pp:5,pw:.7,acc:95,fx:"bleed",d:"Blutung für 3 Runden"},
-{n:"Eiserne Haltung",lv:6,pp:4,pw:0,acc:100,fx:"guard",d:"Schaden −50 % (3 Runden)"},
-{n:"Wirbelsturm",lv:8,pp:3,pw:2.2,acc:85,d:"Sehr stark"},
-{n:"Drachenschlag",lv:10,pp:2,pw:3.2,acc:90,d:"Legendärer Hieb"},
-{n:"Sternenhieb",lv:12,pp:3,pw:3.8,acc:90,d:"Himmlischer Treffer"},
-{n:"Heiliges Licht",lv:14,pp:3,pw:0,acc:100,fx:"heal",d:"Heilt 35 % der max. LP"},
-{n:"Weltenspalter",lv:18,pp:2,pw:5,acc:85,d:"Zerschmettert alles"}];
+{id:"hieb",n:"Schwerthieb",lv:1,pp:99,pw:1,acc:95,vx:"slash",d:"Solider Grundangriff – immer verfügbar"},
+{id:"stoss",n:"Schildstoß",lv:2,pp:8,pw:.8,acc:95,fx:"stun",ch:.4,vx:"bash",d:"40 % Betäubung"},
+{id:"kraft",n:"Kräftiger Schlag",lv:3,pp:6,pw:1.6,acc:80,vx:"heavy",d:"Mächtig, aber ungenau"},
+{id:"ruf",n:"Kriegsruf",lv:4,pp:4,pw:0,acc:100,fx:"buff",vx:"roar",self:1,d:"Schaden +50 % (3 Runden)"},
+{id:"blut",n:"Blutiger Schnitt",lv:5,pp:5,pw:.7,acc:95,fx:"bleed",vx:"bleed",d:"Blutung für 3 Runden"},
+{id:"halt",n:"Eiserne Haltung",lv:6,pp:4,pw:0,acc:100,fx:"guard",vx:"guard",self:1,d:"Schaden −50 % (3 Runden)"},
+{id:"doppel",n:"Doppelschlag",lv:7,pp:5,pw:.75,acc:92,hits:2,vx:"heavy",d:"Zwei schnelle Hiebe"},
+{id:"wirbel",n:"Wirbelsturm",lv:8,pp:3,pw:2.2,acc:85,vx:"whirl",d:"Sehr stark"},
+{id:"gift",n:"Giftklinge",lv:9,pp:5,pw:.8,acc:95,fx:"poison",vx:"poison",d:"Vergiftet den Gegner (stapelbar)"},
+{id:"drache",n:"Drachenschlag",lv:10,pp:2,pw:3.2,acc:90,vx:"dragon",d:"Legendärer Hieb"},
+{id:"feuer",n:"Flammenhieb",lv:11,pp:4,pw:1.2,acc:92,fx:"burn",vx:"fire",d:"Setzt den Gegner in Brand"},
+{id:"stern",n:"Sternenhieb",lv:12,pp:3,pw:3.8,acc:90,vx:"star",d:"Himmlischer Treffer"},
+{id:"vampir",n:"Vampirhieb",lv:13,pp:4,pw:1.4,acc:92,life:.5,vx:"bleed",d:"Heilt dich um 50 % des Schadens"},
+{id:"licht",n:"Heiliges Licht",lv:14,pp:3,pw:0,acc:100,fx:"heal",vx:"heal",self:1,d:"Heilt 35 % der max. LP"},
+{id:"furcht",n:"Einschüchtern",lv:15,pp:3,pw:0,acc:100,fx:"weak",vx:"roar",d:"Gegnerschaden −30 % (3 Runden)"},
+{id:"bohr",n:"Durchbohren",lv:16,pp:4,pw:1.8,acc:95,fx:"pierce",vx:"slash",d:"Ignoriert Rüstung und Deckung"},
+{id:"laeut",n:"Läuterung",lv:17,pp:3,pw:0,acc:100,fx:"cleanse",vx:"heal",self:1,d:"Heilt Gift und Brand, +15 % LP"},
+{id:"welten",n:"Weltenspalter",lv:18,pp:2,pw:5,acc:85,vx:"world",d:"Zerschmettert alles"},
+{id:"hagel",n:"Klingenhagel",lv:20,pp:3,pw:.6,acc:90,hits:4,vx:"bleed",d:"Vier Treffer in Folge"},
+{id:"richt",n:"Hinrichtung",lv:22,pp:2,pw:2,acc:90,fx:"exec",vx:"world",d:"Unter 35 % LP: zweieinhalbfacher Schaden"},
+{id:"atem",n:"Zweiter Atem",lv:24,pp:2,pw:0,acc:100,fx:"regen",vx:"heal",self:1,d:"Heilt 4 Runden je 8 % der max. LP"},
+{id:"donner",n:"Donnerschlag",lv:26,pp:3,pw:2.4,acc:90,fx:"stun",ch:.5,vx:"star",d:"Stark, 50 % Betäubung"},
+{id:"phoenix",n:"Phönixflamme",lv:28,pp:2,pw:3,acc:90,fx:"burn",life:.25,vx:"fire",d:"Brand und 25 % Lebensraub"},
+{id:"zorn",n:"Götterzorn",lv:30,pp:1,pw:7,acc:90,crit:1,vx:"world",d:"Immer kritisch – der stärkste Hieb"}];
+const SK_MAX=6;
+const SKD=id=>SK.find(s=>s.id===id);
+const knowSk=id=>{const s=SKD(id);return !!s&&s.lv<=lvl()};
+const eqSk=()=>["hieb",...(S.sk||[]).filter(knowSk)];
 const IT=[{k:"h",n:"Heiltrank",p:15,d:"+40 LP",e:"🧪"},{k:"H",n:"Großer Heiltrank",p:40,d:"+100 LP",e:"⚗️"},{k:"x",n:"Elixier des Lebens",p:90,d:"+200 LP",e:"🍶"},{k:"k",n:"Kraft-Elixier",p:25,d:"Schaden +50 % (3 Runden)",e:"💥"},{k:"g",n:"Gegengift",p:20,d:"Heilt Gift und Brand",e:"💊"},{k:"e",n:"Eisenhaut-Trank",p:25,d:"Schaden −50 % (3 Runden)",e:"🛡️"},{k:"a",n:"Äthertrank",p:35,d:"+3 Einsätze für alle Fähigkeiten",e:"🔷"},{k:"A",n:"Großer Äthertrank",p:90,d:"Füllt alle Fähigkeiten ganz auf",e:"💠"}];
 // ---- Turm-Kulissen: alle 5 Etagen (nach jedem Turm-Boss) eine neue, bedrohlichere Ebene ----
 const TIER=[["Eingangshalle","Fackeln flackern an den alten Mauern."],["Verliese","Ketten klirren in der feuchten Dunkelheit."],["Kristallhöhle","Eisige Kristalle glühen in unheimlichem Licht."],["Lavahallen","Glühende Lava brodelt unter deinen Füßen."],["Geisterhallen","Gespenstische Flammen tanzen zwischen zerbrochenen Säulen."],["Sturmspitze","Blitze zucken um die Turmspitze, der Sturm heult."],["Schattenreich","Aus der Finsternis starren dich unzählige Augen an."],["Weltenriss","Die Wirklichkeit selbst zerbricht um dich herum."]];

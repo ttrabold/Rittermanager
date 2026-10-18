@@ -231,21 +231,40 @@ Wer sehr knapp gewinnt oder ganz ohne Kratzer siegt, kommt einigen [Titeln](#tit
 
 ## Fähigkeiten
 
-Neue Fähigkeiten schaltest du automatisch frei, wenn du die nötige Stufe erreichst:
+Bis Stufe 30 lernst du **24 Fähigkeiten**, aber du kannst immer nur **6 gleichzeitig anlegen**. Welche du mitnimmst, entscheidest du unter **📜 Fähigkeiten verwalten** auf dem Burgbildschirm.
 
-| Stufe | Fähigkeit | Wirkung | Einsätze |
+- Der **Schwerthieb** ist dein Grundangriff. Er ist immer dabei, zählt nicht zu den 6 Plätzen und lässt sich beliebig oft einsetzen.
+- Lernst du eine neue Fähigkeit und hast noch einen freien Platz, wird sie automatisch angelegt. Sonst kannst du sie selbst gegen eine andere tauschen.
+- Im Kampf stehen dir nur die angelegten Fähigkeiten zur Verfügung. **Äthertränke** laden ebenfalls nur diese auf.
+
+> 💡 Stell deine Auswahl auf den Gegner ein: Gegen Bosse lohnen sich Einschüchtern, Durchbohren und Hinrichtung, im Turm Vampirhieb und Zweiter Atem, gegen Gift- und Feuergegner die Läuterung.
+
+| Stufe | Fähigkeit | Wirkung | Einsätze pro Kampf |
 |---|---|---|---|
-| 1 | Schwerthieb | Solider Standardangriff | beliebig |
-| 2 | Schildstoß | Leichter Schaden, 40 % Chance auf Betäubung | 8× |
+| 1 | Schwerthieb | Solider Grundangriff | unbegrenzt |
+| 2 | Schildstoß | Leichter Schaden, 40 % Betäubung | 8× |
 | 3 | Kräftiger Schlag | Starker Treffer, aber ungenau | 6× |
 | 4 | Kriegsruf | Dein Schaden steigt 3 Runden lang um 50 % | 4× |
 | 5 | Blutiger Schnitt | Der Gegner blutet 3 Runden lang | 5× |
 | 6 | Eiserne Haltung | Du nimmst 3 Runden lang nur halben Schaden | 4× |
+| 7 | Doppelschlag | Zwei schnelle Hiebe | 5× |
 | 8 | Wirbelsturm | Sehr starker Angriff | 3× |
+| 9 | Giftklinge | Vergiftet den Gegner, stapelbar | 5× |
 | 10 | Drachenschlag | Legendärer Hieb | 2× |
+| 11 | Flammenhieb | Setzt den Gegner in Brand | 4× |
 | 12 | Sternenhieb | Himmlischer Treffer | 3× |
+| 13 | Vampirhieb | Heilt dich um 50 % des Schadens | 4× |
 | 14 | Heiliges Licht | Heilt 35 % deiner maximalen LP | 3× |
+| 15 | Einschüchtern | Gegnerschaden 3 Runden lang −30 % | 3× |
+| 16 | Durchbohren | Ignoriert Rüstung und Deckung | 4× |
+| 17 | Läuterung | Heilt Gift und Brand, +15 % LP | 3× |
 | 18 | Weltenspalter | Zerschmettert alles | 2× |
+| 20 | Klingenhagel | Vier Treffer in Folge | 3× |
+| 22 | Hinrichtung | Hat der Gegner unter 35 % LP: zweieinhalbfacher Schaden | 2× |
+| 24 | Zweiter Atem | Heilt 4 Runden lang je 8 % deiner LP | 2× |
+| 26 | Donnerschlag | Stark, 50 % Betäubung | 3× |
+| 28 | Phönixflamme | Brand und 25 % Lebensraub | 2× |
+| 30 | Götterzorn | Immer kritisch, der stärkste Hieb | 1× |
 
 ---
 
@@ -304,6 +323,12 @@ In Abenteuern, Turnieren und im Turm triffst du auf verschiedene Gegnertypen:
 | **Feuerritter** | Setzt dich mit dem Brandschlag in Flammen 🔥 |
 | **Panzerritter** | Viele LP und dicke Rüstung, betäubt mit dem Hammer 💫 |
 | **Bogenschütze** | Wenig LP, schießt aber hart, vor allem mit dem Pfeilhagel |
+
+Gegner können **Männer oder Frauen** sein, du triffst also auch auf Ritterinnen, Räuberinnen und Bogenschützinnen. Ihre Ausrüstung hängt von ihrer Stufe ab. Räuber und Bogenschützen tragen leichtere Rüstungen, Panzerritter schwere.
+
+**Verzauberte Gegner:** Ab Stufe 6 tragen manche Gegner verzauberte Waffen und Rüstungen, ab Stufe 20 alle. Das siehst du an ihren leuchtenden Waffen und Rüstungen, und es steht zu Kampfbeginn im Text. Die Gegenstände wirken auch bei ihnen:
+- Waffen können dich in **Brand setzen, vergiften oder lähmen**, öfter **kritisch** treffen oder ihnen **LP rauben**.
+- Rüstungen geben ihnen **mehr LP**, lassen sie **regenerieren** oder **ausweichen**. Manche machen sie **brandimmun**.
 
 ---
 

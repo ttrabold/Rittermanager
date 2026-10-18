@@ -1,6 +1,5 @@
 // Ritter Manager – Grafik: Ritter- und Boss-Modelle, Waffen-/Rüstungseffekte, Hintergründe, Kampfeffekte
 const pk=()=>knight(S.w,S.a,S.s,false,null,eq("w")?eq("w").c:null,eq("a")?eq("a").c:null,S.ew,S.ea,S.sex==="f");
-const SKFX=["slash","bash","heavy","roar","bleed","guard","whirl","dragon","star","heal","world"];
 const VX={
 slash:c=>`<svg class="${c}" viewBox="0 0 120 120"><path class="sl" d="M14 14L106 106"/></svg>`,
 bash:c=>`<span class="fly">🛡️</span><span class="ring ${c}"></span>`,

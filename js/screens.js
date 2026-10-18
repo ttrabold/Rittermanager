@@ -82,7 +82,7 @@ function home(){musicSet("home");if(QN.length){msg+="<br>"+QN.join("<br>");QN=[]
  <button onclick="TV.rum=rnd(0,99);tavern()">🍺 Taverne<small>Würfelpoker · noch ${tavLeft()} heute</small></button>
  <button onclick="rebirth()" ${S.boss<BOSS.length?"disabled":""}>🌟 Wiedergeburt<small>${S.boss<BOSS.length?"nach allen Bossen":"Neustart mit Bonus"}</small></button>
  <button onclick="newDay()">🌙 Schlafen<small>Erträge · neuer Tag</small></button></div>
- <div class="card"><h3>📜 Fähigkeiten</h3>${SK.map(s=>`<div class="row"><span>${s.lv<=lvl()?"":"🔒 "}${s.n}</span><span class="mut">${s.lv<=lvl()?s.d:"ab Stufe "+s.lv}</span></div>`).join("")}<div class="mut" style="margin-top:6px">Tränke: ${IT.map(t=>t.e+" "+S.it[t.k]).join("  ")}</div></div>
+ <div class="card"><h3>📜 Fähigkeiten <span class="mut">(${(S.sk||[]).filter(knowSk).length}/${SK_MAX} angelegt)</span></h3><div class="mut">${eqSk().map(id=>SKD(id).n).join(" · ")}</div>${SK.some(x=>x.id!=="hieb"&&knowSk(x.id)&&!(S.sk||[]).includes(x.id))&&(S.sk||[]).length<SK_MAX?'<div style="margin-top:4px">⚠️ Du hast freie Plätze!</div>':""}<div class="grid"><button style="grid-column:1/-1" onclick="skillsScr()">📜 Fähigkeiten verwalten<small>${SK.filter(x=>knowSk(x.id)).length}/${SK.length} gelernt</small></button></div><div class="mut" style="margin-top:6px">Tränke: ${IT.map(t=>t.e+" "+S.it[t.k]).join("  ")}</div></div>
  <p class="mut" style="text-align:center"><a href="#" onclick="if(confirm('Spiel wirklich zurücksetzen?')){S=fresh();save();msg='Ein neues Abenteuer beginnt!';home()}return false" style="color:var(--mut)">Neu starten</a></p>`;
 }
 function work(){
@@ -102,3 +102,15 @@ function shop(){musicSet("home");
 function buy(k,i){const L={w:W,a:A,s:SH}[k];if(S.gold<L[i][1])return;S.gold-=L[i][1];S[k]=i;sfx("coin");msg=`Gekauft: <b>${L[i][0]}</b>!`;save();shop();}
 
 function buyIt(k){const t=IT.find(x=>x.k===k),p=ip(t.p);if(S.gold<p)return;S.gold-=p;S.it[k]++;sfx("coin");save();shop()}
+
+// ---- Fähigkeiten verwalten: höchstens 6 angelegt, der Schwerthieb ist immer dabei ----
+function skEq(id){const sk=S.sk=S.sk||[];if(!knowSk(id)||id==="hieb"||sk.includes(id)||sk.length>=SK_MAX)return;sk.push(id);sfx("buff");save();skillsScr()}
+function skUn(id){S.sk=(S.sk||[]).filter(x=>x!==id);sfx("click");save();skillsScr()}
+function skillsScr(){musicSet("hall");const sk=(S.sk||[]).filter(knowSk),pp=s=>s.pp>=99?"unbegrenzt":s.pp+"× pro Kampf";
+ const row=(s,btn)=>`<div class="row"><span><b>${s.n}</b> <span class="mut">· ${pp(s)}</span><br><span class="mut">${s.d}</span></span>${btn}</div>`;
+ app.innerHTML=`<div class="top"><b>📜 Fähigkeiten</b><span>${sk.length}/${SK_MAX} angelegt</span></div>
+ <div class="msg" data-quiet>Du kannst bis zu <b>${SK_MAX} Fähigkeiten</b> anlegen, die du im Kampf einsetzt. Der <b>Schwerthieb</b> ist als Grundangriff immer dabei. Neue Fähigkeiten lernst du beim Stufenaufstieg.</div>
+ <div class="card"><h3>⚔️ Im Kampf verfügbar</h3>${row(SKD("hieb"),'<span class="mut">immer</span>')}
+ ${Array.from({length:SK_MAX},(_,k)=>{const id=sk[k];return id?row(SKD(id),`<button onclick="skUn('${id}')">Ablegen</button>`):`<div class="row"><span class="mut">— freier Platz ${k+1} —</span></div>`}).join("")}</div>
+ <div class="card"><h3>📖 Alle Fähigkeiten</h3>${SK.filter(s=>s.id!=="hieb").map(s=>knowSk(s.id)?row(s,sk.includes(s.id)?'<span class="mut">✔ angelegt</span>':`<button ${sk.length>=SK_MAX?"disabled":""} onclick="skEq('${s.id}')">${sk.length>=SK_MAX?"Plätze voll":"Anlegen"}</button>`):`<div class="row"><span>🔒 <b>${s.n}</b><br><span class="mut">${s.d}</span></span><span class="mut">ab Stufe ${s.lv}</span></div>`).join("")}</div>
+ <div class="grid"><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`;window.scrollTo(0,0)}

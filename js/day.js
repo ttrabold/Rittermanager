@@ -144,11 +144,11 @@ function newDay(){if(document.getElementById("night"))return;
   if(Object.keys(g).length)lines.push(`${b.e} ${b.n}: ${yTxt(g)}`)}
  const had=BLD.some(b=>b.id!=="kaserne"&&S.bld[b.id]);
  S.day++;S.en=enMax();let r=Math.random()*EVT.reduce((a,e)=>a+e[0],0),ev=EVT[0];for(const e of EVT){if(r<e[0]){ev=e;break}r-=e[0]}
- const evT=ev[1]();S.enStart=S.en;qGen();msg=evT;save();
+ const lvL=[];const evT=ev[1]();levelCheck(lvL);S.enStart=S.en;qGen();msg=evT;save();
  const facT=fac===1?`Du hast gestern ${used} Energie genutzt – <b>volle Erträge</b>.`:fac?`Du hast gestern nur ${used} Energie genutzt – <b>halbe Erträge</b>.`:`Du hast gestern kaum etwas getan (${used} Energie) – <b>keine Erträge</b>.`;
  nightShow(`<h3>🌙 Die Nacht zu Tag ${S.day}</h3>
   <div class="row"><span><b>🏗️ Erträge deiner Burg</b><br><span class="mut">${had?facT+"<br>"+(lines.join("<br>")||"–"):'Noch keine Gebäude. <a href="#" onclick="nightClose(castleScr);return false" style="color:var(--acc)">Burg ausbauen</a>'}</span></span></div>
-  <div class="row"><span><b>☀️ Am Morgen</b><br>${evT}</span></div>
+  <div class="row"><span><b>☀️ Am Morgen</b><br>${evT}${lvL.length?"<br>"+lvL.join("<br>"):""}</span></div>
   <div class="row"><span><b>📅 ${wday(S.day)} ${MOONS[moonIx(S.day)]}</b>${dayTags(S.day).map(t=>"<br>"+t).join("")}</span></div>
   <div class="row"><span><b>📜 Neue Aufträge</b><br>${S.q.list.map(q=>"▫️ "+q.txt+` <span class="mut">(${rTxt(q.r)})</span>`).join("<br>")}</span></div>`)}
 function nightShow(rep){const fast=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches,el=document.createElement("div");el.id="night";el.className="night"+(fast?" fast":"");
