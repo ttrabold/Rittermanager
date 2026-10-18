@@ -132,6 +132,31 @@ Unter **🏗️ Burgausbau** errichtest du Gebäude mit Gold und Materialien. Ba
 | 🔮 Arkanturm | 5 | 1 Arkankristall pro Stufe, ab Stufe 4 auch Feuerblüten |
 | 💰 Schatzkammer | 5 | 30 Gold pro Stufe |
 
+### Gebäude, die mitwachsen
+
+Jedes Gebäude verändert mit jeder Stufe sein Aussehen, in der Burgszene und als großes Bild im Burgausbau:
+
+- **⛺ Kaserne:** vom Zelt mit Waffengestell zum Fachwerk-Kasernenhaus mit Lagerfeuer
+- **🌿 Kräutergarten:** vom ersten Beet über Zaun, Blumen und Giftpilze mit Vogelscheuche bis zum leuchtenden Gewächshaus
+- **⛏️ Mine:** vom einfachen Stollen über Lore, Laterne und Mithril-Erz bis zum Förderturm mit leuchtenden Erzadern
+- **🔮 Arkanturm:** vom Kristall auf dem Sockel bis zum hohen Turm mit Runenbändern, kreisendem Ring und Lichtstrahl in den Himmel
+- **💰 Schatzkammer:** von der Truhe über das Steinhaus bis zur goldenen Kuppel mit Säulen und Münzbergen
+
+### Deine Burg wächst mit
+
+Auch die Burg selbst wird mit jedem Ausbau prächtiger. Entscheidend ist die **Summe aller Gebäudestufen**:
+
+| Ausbaustufen | Burg | Aussehen |
+|---|---|---|
+| 0 | Wehrhof | zwei kleine Türme und ein einfaches Tor |
+| 2 | Burg | Fenster, Fallgitter und rote Banner |
+| 5 | Feste | höhere Mauern und Türme, äußere Wehrmauern |
+| 9 | Festung | ein mächtiger Bergfried in der Mitte, Fahnen auf allen Türmen |
+| 14 | Zitadelle | helle Steine, spitze Turmdächer, goldverziertes Tor |
+| 19 | Königsburg | blaue Dächer mit goldenen Zierspitzen und warm erleuchtete Fenster |
+
+Im Burgausbau siehst du, welche Stufe deine Burg gerade hat und ab wann die nächste kommt.
+
 Die Baukosten steigen mit jeder Stufe. Hohe Stufen brauchen Mithrilerz, die letzte auch eine Drachenschuppe. Die Kaserne wirkt unabhängig davon, wie fleißig du warst.
 
 ---

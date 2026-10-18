@@ -305,7 +305,24 @@ const TBGS=[
  <path d="M0 188H600V220H0Z" fill="#120420"/><path d="M0 188H600" stroke="#e040fb" stroke-width="2" style="filter:drop-shadow(0 0 5px #e040fb)"/>
  <path class="tw" d="M80 220l30-20 20 8 30-16M380 220l20-14 30 6 26-20 40 12" stroke="#e040fb" stroke-width="2" fill="none"/>`)];
 const TBG=t=>TBGS[t]();
-const castle=`<svg class="castle" viewBox="0 0 100 90"><g fill="#8d8473" stroke="#0003"><rect x="10" y="30" width="22" height="60"/><rect x="68" y="30" width="22" height="60"/><rect x="28" y="48" width="44" height="42"/><path d="M8 30h26v-8h-5v4h-4v-4h-4v4h-4v-4h-5zM66 30h26v-8h-5v4h-4v-4h-4v4h-4v-4h-5z"/></g><path d="M42 90v-18q8-12 16 0v18z" fill="#4a3a28"/><path d="M50 22v-14l12 4-12 4" fill="#c0221f"/><g fill="#ffcf6b" style="opacity:var(--star)"><rect x="18" y="40" width="5" height="8" rx="2"/><rect x="77" y="40" width="5" height="8" rx="2"/><rect x="47" y="56" width="6" height="7" rx="2"/></g></svg>`;
+// Burgmodell wächst mit dem Burgausbau (Summe aller Gebäudestufen)
+const CSTAGE=[[0,"Wehrhof"],[2,"Burg"],[5,"Feste"],[9,"Festung"],[14,"Zitadelle"],[19,"Königsburg"]];
+const bldSum=()=>Object.values(S.bld||{}).reduce((a,b)=>a+b,0);
+const cStage=()=>{const t=bldSum();let k=0;CSTAGE.forEach((c,i)=>{if(t>=c[0])k=i});return k};
+function castleSvg(){const k=cStage(),st=k>=4?"#a39a88":"#8d8473",rf=k>=5?"#1f3c88":"#7a1d1d",gd="#d4a017",lit=`style="opacity:${k>=3?"calc(.45 + var(--star)*.55)":"var(--star)"}"`,o=[];
+ const cren=(x,y,w)=>{let p=`M${x} ${y}`;for(let c=0;c<w;c+=8)p+=`h4v-4h4v4`;return `<path d="${p}V${y+2}H${x}Z" fill="${st}" stroke="#0003"/>`};
+ const tower=(x,top,w)=>`<rect x="${x}" y="${top}" width="${w}" height="${120-top}" fill="${st}" stroke="#0003"/>`+(k>=4?`<path d="M${x-3} ${top}L${x+w/2} ${top-22}L${x+w+3} ${top}Z" fill="${rf}" stroke="#0004"/>${k>=5?`<circle cx="${x+w/2}" cy="${top-23}" r="2.2" fill="${gd}"/>`:""}`:cren(x,top,w));
+ const flag=(x,y,c)=>`<path d="M${x} ${y}v-14" stroke="#5b3a1c" stroke-width="1.5"/><path class="wv" d="M${x} ${y-14}h11l-3 3.5 3 3.5h-11z" fill="${c}"/>`;
+ if(k>=3)o.push(tower(55,k>=5?30:38,30)+`<rect x="66" y="${k>=5?48:56}" width="8" height="10" rx="4" fill="#ffcf6b" ${lit}/>`+(k>=4?"":flag(70,38,"#c0221f")));
+ if(k>=2)o.push(`<path d="M0 120V96h22v24ZM118 120V96h22v24Z" fill="${st}" stroke="#0003"/>`+cren(0,96,22)+cren(118,96,22));
+ const tt=k>=4?42:k>=2?52:60;
+ o.push(tower(18,tt,24),tower(98,tt,24));
+ o.push(`<rect x="38" y="${k>=2?66:72}" width="64" height="${k>=2?54:48}" fill="${st}" stroke="#0003"/>`+cren(38,k>=2?66:72,64));
+ o.push(`<path d="M58 120v-22q12-16 24 0v22z" fill="#4a3a28"/>`+(k>=1?`<path d="M62 120v-20M66 120v-24M70 120v-25M74 120v-24M78 120v-20M58 106h24M58 113h24" stroke="#2a1f14" stroke-width="1.2"/>`:"")+(k>=4?`<path d="M58 120v-22q12-16 24 0v22" fill="none" stroke="${gd}" stroke-width="1.5"/>`:""));
+ o.push(`<g fill="#ffcf6b" ${lit}><rect x="27" y="${tt+12}" width="6" height="9" rx="3"/><rect x="107" y="${tt+12}" width="6" height="9" rx="3"/>${k>=1?`<rect x="27" y="${tt+30}" width="6" height="9" rx="3"/><rect x="107" y="${tt+30}" width="6" height="9" rx="3"/>`:""}${k>=2?`<rect x="46" y="80" width="5" height="8" rx="2.5"/><rect x="89" y="80" width="5" height="8" rx="2.5"/>`:""}</g>`);
+ if(k>=1)o.push([44,90].map(x=>`<path class="wv" d="M${x} ${k>=2?70:76}h8v18l-4-3-4 3z" fill="#8b1e1e" stroke="#0004"/><circle cx="${x+4}" cy="${k>=2?78:84}" r="2" fill="${gd}"/>`).join(""));
+ o.push(k>=4?flag(30,tt-22,"#c0221f")+flag(110,tt-22,"#c0221f")+flag(70,(k>=5?30:38)-22,gd):k>=3?flag(30,tt,"#c0221f")+flag(110,tt,"#c0221f"):flag(70,k>=2?66:72,"#c0221f"));
+ return `<svg class="castle" viewBox="0 -14 140 134" style="height:${84+k*9}px" aria-label="Burg: ${CSTAGE[k][1]}">${o.join("")}</svg>`}
 const TREE=(x,y,k)=>`<path d="M${x} ${y-20*k}l${7*k} ${11*k}h${-3*k}l${6*k} ${9*k}h${-20*k}l${6*k} ${-9*k}h${-3*k}z" style="fill:var(--tree)"/>`;
 const BG=`<svg class="bg" viewBox="0 0 600 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
 <defs><radialGradient id="bgl"><stop offset="0" style="stop-color:var(--glow);stop-opacity:.75"/><stop offset="1" style="stop-color:var(--glow);stop-opacity:0"/></radialGradient>
