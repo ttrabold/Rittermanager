@@ -388,7 +388,7 @@ Für besondere Leistungen bekommst du **Titel**. Einen davon kannst du tragen. E
 
 - **✏️ Umbenennen**: Klicke auf den Stift neben deinem Namen und gib einen neuen Namen ein (bis zu 20 Zeichen).
 - **♂️ / ♀️ Ritter oder Ritterin**: Ein Klick auf das Symbol neben deinem Namen wechselt zwischen Ritter und Ritterin. Aussehen, Rang und Titel passen sich an.
-- **🎵 Musik / 🔊 Sound**: Die Knöpfe unten rechts schalten Musik und Soundeffekte ein oder aus.
+- **🎵 Musik / 🔊 Sound**: Die Knöpfe unten rechts schalten Musik und Soundeffekte ein oder aus. Die Musik passt sich der Situation an: ruhig auf der Burg, Hammerschläge in der Schmiede, Fanfaren im Turnier, Trommeln im Kampf und ein düsterer Chor bei Bossen. Gerät ein Boss in Rage, wird die Musik schneller. Bei knappen Lebenspunkten hörst du deinen Herzschlag.
 - **Hell / Dunkel**: Das Spiel folgt der Einstellung deines Geräts. Im dunklen Modus spielt es nachts unter Sternen und Mond.
 - **Speichern**: Dein Fortschritt wird automatisch in deinem Browser gespeichert. Auf einem anderen Gerät oder in einem anderen Browser beginnst du von vorn. Wenn du die Browserdaten löschst, ist der Spielstand weg.
 - **Neu starten**: Ganz unten auf dem Burgbildschirm kannst du deinen Spielstand zurücksetzen. Das kann nicht rückgängig gemacht werden.
