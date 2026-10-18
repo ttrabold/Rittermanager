@@ -21,12 +21,13 @@ Willkommen, edler Ritter (oder edle Ritterin)! Hier erfährst du alles, was du �
 15. [Verzauberte Ausrüstung](#verzauberte-ausrüstung)
 16. [Materialien und Händler](#materialien-und-händler)
 17. [Berufe – die Werkstatt](#berufe--die-werkstatt)
-18. [Der Endlose Turm](#der-endlose-turm)
-19. [Wiedergeburt](#wiedergeburt)
-20. [Ränge](#ränge)
-21. [Titel](#titel)
-22. [Einstellungen und Spielstand](#einstellungen-und-spielstand)
-23. [Tipps für Einsteiger](#tipps-für-einsteiger)
+18. [Die Taverne](#die-taverne)
+19. [Der Endlose Turm](#der-endlose-turm)
+20. [Wiedergeburt](#wiedergeburt)
+21. [Ränge](#ränge)
+22. [Titel](#titel)
+23. [Einstellungen und Spielstand](#einstellungen-und-spielstand)
+24. [Tipps für Einsteiger](#tipps-für-einsteiger)
 
 ---
 
@@ -44,7 +45,7 @@ Auf dem Burgbildschirm siehst du:
 - **Dein Ritter** vor der Burg, mit der Ausrüstung, die er gerade trägt
 - **Deine Werte**: Stärke, Ausdauer, Geschick, Energie, Gold, Ruhm, Titel und Stufe
 - **Die Nachrichtenzeile**: Sie sagt dir, was zuletzt passiert ist.
-- **Die Aktionsknöpfe**: Arbeiten, Abenteuer, Markt, Händler, Werkstatt, Inventar, Turnier, Turm, Bosskampf, Vollmond-Jagd, Burgausbau, Wiedergeburt und Schlafen
+- **Die Aktionsknöpfe**: Arbeiten, Abenteuer, Markt, Händler, Werkstatt, Inventar, Turnier, Turm, Bosskampf, Vollmond-Jagd, Burgausbau, Taverne, Wiedergeburt und Schlafen
 - **Kalender und Tagesaufträge** oberhalb der Szene und unter der Nachrichtenzeile
 - **Deine Fähigkeiten und Tränke** ganz unten
 
@@ -90,7 +91,7 @@ Gute Ereignisse sind häufiger als schlechte. Je höher deine Stufe, desto grö�
 
 ### Tagesaufträge
 
-Jeden Morgen bekommst du **drei Aufträge**, zum Beispiel „Gewinne 2 Kämpfe“, „Braue einen Trank“, „Lande 3 kritische Treffer“ oder „Schaffe 2 Turm-Etagen“. Du siehst sie auf dem Burgbildschirm.
+Jeden Morgen bekommst du **drei Aufträge**, zum Beispiel „Gewinne 2 Kämpfe“, „Braue einen Trank“, „Lande 3 kritische Treffer“, „Schaffe 2 Turm-Etagen“ oder „Gewinne eine Würfelpartie“. Du siehst sie auf dem Burgbildschirm.
 
 - Alle drei Aufträge lassen sich mit der Energie eines Tages schaffen.
 - Jeder erfüllte Auftrag bringt sofort seine Belohnung: Gold, Materialien oder Tränke.
@@ -493,6 +494,47 @@ Du setzt **Runen** in jede Waffe oder Rüstung aus deinem Inventar ein. Anlegen 
 
 ---
 
+## Die Taverne
+
+In der **🍺 Taverne „Zum Goldenen Humpen“** spielst du **Würfelpoker** um Gold. Dazu läuft eine fröhliche Kneipenmusik, und der Wirt erzählt dir Gerüchte, die nützliche Tipps enthalten.
+
+### So geht's
+1. Wähle einen **Gegner** und deinen **Einsatz**.
+2. Du und dein Gegner werft je **5 Würfel**.
+3. **Tippe die Würfel an**, die du neu werfen willst (sie werden rot markiert), und wirf einmal nach. Du kannst auch alle behalten.
+4. Danach wirft dein Gegner nach. Er sieht dabei, was du hast.
+5. Die bessere Kombination gewinnt.
+
+| Rang | Kombination | Beispiel |
+|---|---|---|
+| 1 | Fünfling | ⚅⚅⚅⚅⚅ |
+| 2 | Vierling | ⚃⚃⚃⚃⚀ |
+| 3 | Full House | ⚂⚂⚂⚄⚄ |
+| 4 | Große Straße | ⚁⚂⚃⚄⚅ |
+| 5 | Kleine Straße | ⚀⚁⚂⚃⚄ |
+| 6 | Drilling | ⚄⚄⚄⚀⚁ |
+| 7 | Zwei Paare | ⚁⚁⚃⚃⚅ |
+| 8 | Ein Paar | ⚅⚅⚀⚂⚃ |
+| 9 | Nichts | – |
+
+Bei gleicher Kombination entscheiden die höheren Augen, etwa ein Paar Sechsen gegen ein Paar Zweien.
+
+**Gewinn:** Ein Sieg bringt deinen Einsatz zurück plus den gleichen Betrag. Gewinnst du mit einem **Vierling**, zahlt der Gegner das **Anderthalbfache**, mit einem **Fünfling** das **Dreifache**. Bei völligem Gleichstand bekommst du deinen Einsatz zurück.
+
+### Die Gegner
+| Gegner | Einsätze | Spielweise | Verfügbar |
+|---|---|---|---|
+| 🍺 Bauer Gustl | 10 / 25 | wirft planlos nach, leicht zu schlagen | sofort |
+| 🎲 Spielerin Rosalind | 25 / 50 / 100 | solide und überlegt | ab Stufe 3 |
+| 🗡️ Söldner Brakk | 50 / 100 / 250 | gierig, jagt immer die ganz große Kombination | ab Stufe 6 |
+| 🎩 Graf von Würfelstein | 100 / 250 / 500 | rechnet genau aus, was er braucht, um dich zu schlagen | ab Rang Baron |
+
+Du kannst **höchstens 5 Partien pro Tag** spielen. Gegen Gustl lohnt sich das Würfeln fast immer. Gegen die anderen hält es sich mit gutem Nachwerfen etwa die Waage, es ist eher Nervenkitzel als Goldesel.
+
+> 💡 Behalte Paare und Drillinge, wirf den Rest neu. Mit vier Würfeln einer Straße (z. B. 2-3-4-5) lohnt es sich, nur den fünften neu zu werfen.
+
+---
+
 ## Der Endlose Turm
 
 Ab dem dritten besiegten Boss steht dir der Endlose Turm offen. Ein Besuch kostet 4 Energie.
@@ -589,6 +631,7 @@ Für besondere Leistungen bekommst du **Titel**. Einen davon kannst du tragen. E
 | der Nachtbrecher / die Nachtbrecherin | Schattenkaiser Nyx besiegen |
 | der Weltenretter / die Weltenretterin | Den Weltenfresser besiegen |
 | der/die Auserwählte | Die ersten sechs Bosse besiegen |
+| der Glücksritter / die Glücksritterin | 10 Würfelpartien in der Taverne gewinnen |
 | der/die Legendäre | Alle zwölf Bosse besiegen |
 
 ---

@@ -147,3 +147,8 @@ svg.vP{transform:scaleX(-1)}
 .nsun{left:50%;bottom:-60px;margin-left:-27px;animation:nsun 1.4s 1.7s forwards}@keyframes nsun{0%{opacity:0;transform:translateY(0)}100%{opacity:1;transform:translateY(-38vh)}}
 .nrep{position:relative;max-width:520px;width:100%;margin:auto;animation:nrep .5s}@keyframes nrep{from{opacity:0;transform:translateY(20px)}}
 .night.fast,.night.fast *{animation-duration:.01s!important;animation-delay:0s!important}
+.dice{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:4px 0 8px}
+.die{width:52px;height:52px;cursor:pointer;transition:transform .15s}.die.sel{transform:translateY(-7px)}
+.die.roll{animation:droll .55s ease-out backwards}@keyframes droll{0%{transform:rotate(-220deg) scale(.4) translateY(-24px);opacity:0}70%{transform:rotate(12deg) scale(1.06)}100%{transform:none;opacity:1}}
+.tav{display:flex;justify-content:space-around;align-items:flex-end}.tav .tvk{position:relative;z-index:2}.tav svg.k{height:140px;margin-bottom:4px}
+@media (prefers-reduced-motion:reduce){.die.roll{animation:none}}

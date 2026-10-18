@@ -79,8 +79,9 @@ function home(){musicSet("home");if(QN.length){msg+="<br>"+QN.join("<br>");QN=[]
  ${BOSS[S.boss]?`<button class="p" style="grid-column:1/-1" onclick="startBoss()" ${S.en<3||S.ruhm<BOSS[S.boss].req?"disabled":""}>👑 Bosskampf<small>${S.ruhm<BOSS[S.boss].req?"ab "+BOSS[S.boss].req+" Ruhm":BOSS[S.boss].n}</small></button>`:`<button disabled style="grid-column:1/-1">👑 Alle Bosse besiegt</button>`}
  ${isFull(S.day)&&S.moonDone!==S.day?`<button class="p" style="grid-column:1/-1;background:#3949ab;border-color:#3949ab" onclick="startMoon()" ${S.en<3?"disabled":""}>🌕 Vollmond-Jagd<small>3 Energie · nur heute Nacht · ein Versuch</small></button>`:""}
  <button onclick="castleScr()">🏗️ Burgausbau<small>Gebäude & Erträge</small></button>
+ <button onclick="TV.rum=rnd(0,99);tavern()">🍺 Taverne<small>Würfelpoker · noch ${tavLeft()} heute</small></button>
  <button onclick="rebirth()" ${S.boss<BOSS.length?"disabled":""}>🌟 Wiedergeburt<small>${S.boss<BOSS.length?"nach allen Bossen":"Neustart mit Bonus"}</small></button>
- <button onclick="newDay()" style="grid-column:1/-1">🌙 Schlafen<small>Erträge einsammeln · neuer Tag</small></button></div>
+ <button onclick="newDay()">🌙 Schlafen<small>Erträge · neuer Tag</small></button></div>
  <div class="card"><h3>📜 Fähigkeiten</h3>${SK.map(s=>`<div class="row"><span>${s.lv<=lvl()?"":"🔒 "}${s.n}</span><span class="mut">${s.lv<=lvl()?s.d:"ab Stufe "+s.lv}</span></div>`).join("")}<div class="mut" style="margin-top:6px">Tränke: ${IT.map(t=>t.e+" "+S.it[t.k]).join("  ")}</div></div>
  <p class="mut" style="text-align:center"><a href="#" onclick="if(confirm('Spiel wirklich zurücksetzen?')){S=fresh();save();msg='Ein neues Abenteuer beginnt!';home()}return false" style="color:var(--mut)">Neu starten</a></p>`;
 }

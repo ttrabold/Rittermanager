@@ -55,7 +55,8 @@ const QT=[
  {id:"potion",n:()=>"Trinke im Kampf einen Trank",g:()=>1,e:()=>0,f:1},
  {id:"buy",n:x=>`Kaufe ${x} Materialien beim Händler`,g:()=>2,e:()=>0},
  {id:"tower",n:x=>`Schaffe ${x} Turm-Etagen`,g:()=>rnd(2,3),e:()=>4,f:1,ok:()=>S.tunl},
- {id:"tour",n:x=>`Gewinne ${x} Turnierrunden`,g:()=>2,e:()=>4,f:1}];
+ {id:"tour",n:x=>`Gewinne ${x} Turnierrunden`,g:()=>2,e:()=>4,f:1},
+ {id:"dice",n:()=>"Gewinne eine Würfelpartie in der Taverne",g:()=>1,e:()=>0}];
 function qRew(){const r=Math.random(),L=lvl();
  if(r<.4)return {g:25+L*6};
  if(r<.75){const k=["ez","le","hk","gp","fb","ak"][rnd(0,5)],n=k==="ak"||k==="fb"?rnd(1,2):rnd(2,3),m={[k]:n};if(L>=8&&Math.random()<.3)m.mi=1;return {m}}

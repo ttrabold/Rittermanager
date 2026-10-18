@@ -22,6 +22,7 @@ function sfx(n){if(!AU.sfx)return;const c=ac();if(!c)return;const t=c.currentTim
  case"fall":noise(t,.35,.3);tone(110,t,.4,"sine",.35,D,40);break;
  case"night":[784,659,523,392].forEach((f,i)=>tone(f,t+i*.28,.9,"sine",.07));break;
  case"morning":tone(620,t,.18,"triangle",.08,D,980);tone(980,t+.18,.25,"triangle",.07,D,760);arp([523,659,784,1047],.14);break;
+ case"dice":for(let k=0;k<6;k++)noise(t+k*.045+Math.random()*.02,.03,.18);tone(1400,t+.3,.05,"square",.03);break;
  case"gong":tone(98,t,3,"sine",.28);tone(147,t,2.5,"sine",.12);tone(196,t,2,"triangle",.06);tone(49,t,3.5,"sine",.2);noise(t,.5,.06);break;
  case"boom":noise(t,.8,.35);tone(80,t,.9,"sawtooth",.2,D,30);tone(660,t+.05,.6,"triangle",.08,D,1320);break;}}
 // ---- Musik-Engine: Synth mit Hall, Instrumenten und Stücken je Situation ----
@@ -53,6 +54,7 @@ const M_HOME=mel(`74 . . 72 74 . 77 . 76 . 74 . 72 . . . 74 . 72 . 70 . 69 . 67 
 const M_BAT=mel(`62 . 65 . 69 . 67 65 64 . 62 . 57 . . . 62 . 65 . 70 . 69 67 69 . . . 67 . 64 . 62 . 65 . 69 . 74 . 72 . 69 . 65 . . . 67 . 70 . 74 . 72 70 69 . 67 . 64 . 61 .`);
 const M_TOUR=mel(`62 . 62 66 69 . . . 71 . 69 . 67 . . . 69 . 66 . 64 . 66 . 62 . . . . . . . 69 . 69 74 . 73 71 . 69 . 66 . 71 . . . 67 . 69 . 71 . 73 . 74 . . . 73 . . .`);
 const M_BOSS=mel(`52 . . . 53 . . . 52 . . . 48 . . . 47 . . . 48 . 52 . 50 . . . . . . . 52 . 55 . 53 . 52 . 53 . 57 . 55 . 53 . 55 . 59 . 57 . 55 . 53 . . . 52 . . .`);
+const M_TAV=mel(`67 71 74 71 67 71 74 79 76 74 72 71 72 76 79 76 74 72 71 69 66 69 74 72 71 69 67 71 67 . . . 64 67 71 67 64 67 71 76 72 76 79 76 72 76 79 76 74 78 81 78 74 72 71 69 67 71 74 79 67 . . .`);
 const lead=(M,st,t,e,o,tr)=>{const i=st%64,m=M[i];if(m)nt(t,m+(tr||0),e*melLen(M,i)*.92,o)};
 const TR={
  home:{bpm:76,ch:["Dm","C","Bb","C","Dm","F","C","A"],p(st,t,e){const i=st%8,ch=C[this.ch[(st>>3)%8]];
@@ -75,6 +77,12 @@ const TR={
   if(i===0||i===4)drum(t,.28,110,55,.3);if([2,6].includes(i)||(i===7&&st%16===15))nz(t,.12,.06,1800,0,.3);if(i===5)nz(t,.06,.035,1800);
   if(i===0||i===4)nt(t,ch[0]-12,e*3,BASS);if(i===2||i===6)ch.forEach(m=>nt(t,m+12,e*.7,{...STR,v:.025}));
   if(!i)ch.forEach(m=>nt(t,m,e*7.5,{...PAD,v:.02}));lead(M_TOUR,st,t,e,{...BRASS,v:.055},12)}},
+tavern:{bpm:132,ch:["G","C","D","G","Em","C","D","G"],p(st,t,e){const i=st%8,ch=C[this.ch[(st>>3)%8]];
+  if(i===0||i===4){nt(t,ch[0]-12,e*1.5,{...BASS,v:.1});drum(t,.14,120,60,.15)}
+  if(i===2||i===6){ch.forEach(m=>nt(t,m+12,e*.8,{...LUTE,v:.04}));nz(t,.08,.04,6000,1)}
+  if(i%2)nz(t,.03,.012,7000,1);
+  lead(M_TAV,st,t,e,{...FLUTE,v:.05});
+  if(!i)nzp(t,e*11,.02,500,"bandpass",1,.4);if(Math.random()<.04)nt(t,rnd(96,100),.05,{w:"sine",a:.002,r:.4,v:.02,s:.6})}},
  tower:{get bpm(){return [104,88,100,112,84,132,76,120][twTier()]},p(st,t,e){const i=st%8,bar=st>>3,tr=twTier(),CH=(...n)=>C[n[bar%n.length]];let ch;
   switch(tr){
   case 1:ch=CH("Dm","Bb","Gm","A");if(!i){ch.forEach(m=>nt(t,m-12,e*7.8,{...PAD,f:450,v:.028}));nt(t,ch[0]-24,e*7.8,{w:"sine",a:.5,r:1,v:.09})}

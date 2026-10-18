@@ -73,6 +73,7 @@ const TT=[
 {id:"b10",n:"der Nachtbrecher",d:"Schattenkaiser Nyx besiegen",t:()=>S.bk.includes(10),p:()=>""},
 {id:"b11",n:"der Weltenretter",d:"Den Weltenfresser besiegen",t:()=>S.bk.includes(11),p:()=>""},
 {id:"au",n:"der Auserwählte",d:"Die ersten sechs Bosse besiegen",t:()=>[0,1,2,3,4,5].every(i=>S.bk.includes(i)),p:()=>`${[0,1,2,3,4,5].filter(i=>S.bk.includes(i)).length}/6`},
+{id:"gl",n:"der Glücksritter",d:"10 Würfelpartien in der Taverne gewinnen",t:()=>(S.tavW||0)>=10,p:()=>`${Math.min(S.tavW||0,10)}/10`},
 {id:"lg",n:"der Legendäre",d:"Alle zwölf Bosse besiegen",t:()=>S.bk.length>=12,p:()=>`${S.bk.length}/12`}];
 const SK=[
 {n:"Schwerthieb",lv:1,pp:99,pw:1,acc:95,d:"Solider Standardangriff"},
