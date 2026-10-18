@@ -1,0 +1,2 @@
+// Ritter Manager – Start
+home();
