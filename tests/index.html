@@ -38,7 +38,7 @@ t("Bestiarium füllt sich",()=>{hero(20);S.bst={};setup(mk(10,ET[3]));win();ok((
 t("Legendäre Aufwertung bis +10",()=>{hero(30);for(let n=0;n<10;n++){S.en=9;upgrade("w"+S.w)}ok(S.up["w"+S.w]===10,"Stufe "+S.up["w"+S.w])});
 t("Verzierungen, Söldner, Tavernenrunde",()=>{hero(30);S.bk=[0,1,2];for(const d of DECO)decoBuy(d.id);ok(S.deco.length===DECO.length);home();castleScr();mercHire();ok(S.merc===1);S.boss=2;S.ruhm=1e6;startBoss();ok(F.merc===1&&!S.merc);tavRound();ok(S.round===S.day)});
 t("Wiedergeburt mit Segen",()=>{hero(50);S.boss=12;rebirth();doRebirth("slot");ok(skMax()===7&&S.star===1&&lvl()===1);S.boss=12;doRebirth("gold");ok(blessV("gold")===1)});
-t("Nacht: Erträge, Aufträge, Animation",()=>{hero(20);S.bld={kaserne:1,garten:2,mine:2,arkan:1,schatz:1};S.en=S.enStart-5;const g=S.gold;newDay();ok(S.gold>g,"keine Schatzkammer-Erträge");nightClose(home)});
+t("Nacht: Erträge, Aufträge, Animation",()=>{hero(20);S.bld={kaserne:1,garten:2,mine:2,arkan:1,schatz:1};S.en=S.enStart-5;const h=S.mat.hk;newDay();ok(S.mat.hk>=h+4,"keine Garten-Erträge");nightClose(home)});
 t("Export / Import",()=>{hero(12);S.name="Exporttest";const str=expStr(),d=impParse(str);ok(d.name==="Exporttest");let bad=false;try{impParse("Quatsch")}catch(e){bad=true}ok(bad,"ungültiger Text akzeptiert")});
 t("Taverne: Partie spielen",()=>{hero(20);S.tav=null;TV.o="gustl";TV.bet=10;tvStart();tvSel(0);tvRoll();ok(TV.ph==="done")});
 t("Werkstatt: brauen, schmieden, Rune",()=>{hero(20);brew("h");forge("c1");rune("r1","w"+S.w);ok((S.ru["w"+S.w]||[]).includes("r1"))});
