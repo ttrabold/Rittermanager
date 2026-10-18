@@ -100,6 +100,20 @@ svg.vP{transform:scaleX(-1)}
 @keyframes spn{0%{transform:rotate(0);opacity:0}20%{opacity:1}100%{transform:rotate(360deg);opacity:0}}
 .mt{font-weight:bold;font-size:20px;color:#fff;text-shadow:0 1px 3px #000;animation:ri 1s calc(var(--d) + .2s) forwards}
 .tl{font-size:11px;color:var(--mut);font-style:italic}
+.fk{transform-box:fill-box;transform-origin:50% 100%;animation:fk .4s ease-in-out infinite alternate}
+@keyframes fk{from{transform:scale(1,.7) rotate(-5deg);opacity:.85}to{transform:scale(1.1,1.25) rotate(5deg);opacity:1}}
+.tw{animation:tw 1s ease-in-out infinite alternate}
+@keyframes tw{from{opacity:.15}to{opacity:1}}
+.dr{animation:dr2 1.4s ease-in infinite}
+@keyframes dr2{0%{transform:translateY(0);opacity:1}100%{transform:translateY(28px);opacity:0}}
+.fl2{animation:fl2 2s ease-out infinite}
+@keyframes fl2{0%{transform:translateY(0) scale(.8);opacity:.9}100%{transform:translateY(-34px) scale(1.4);opacity:0}}
+.rot{transform-box:fill-box;transform-origin:center;animation:rot 3s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+.pl{animation:pl 1.6s ease-in-out infinite alternate}
+@keyframes pl{from{opacity:.08}to{opacity:.4}}
+.wv{transform-box:fill-box;transform-origin:100% 0;animation:wv 1.2s ease-in-out infinite alternate}
+@keyframes wv{from{transform:skewX(-6deg)}to{transform:skewX(8deg)}}
 </style>
 </head>
 <body>
@@ -175,7 +189,7 @@ const eq=k=>EI.find(x=>x.id===S[k==="w"?"ew":"ea"]);
 const fxv=k=>{let v=0;for(const s of["ew","ea"]){const i=EI.find(x=>x.id===S[s]);if(i&&i.fx[k])v+=i.fx[k]}return v};
 const wBon=()=>{const e=eq("w");return e?e.b:W[S.w][2]};
 const aBon=()=>{const e=eq("a");return e?e.b:A[S.a][2]};
-const pk=()=>knight(S.w,S.a,S.s,false,null,eq("w")?eq("w").c:null,eq("a")?eq("a").c:null);
+const pk=()=>knight(S.w,S.a,S.s,false,null,eq("w")?eq("w").c:null,eq("a")?eq("a").c:null,S.ew,S.ea);
 function giveE(id,l){const it=EI.find(x=>x.id===id);if(S.own.includes(id)){S.gold+=100;l.push(`Du besitzt ${it.n} schon: +100 Gold.`);return}S.own.push(id);const k=it.s==="w"?"ew":"ea",cur=it.s==="w"?wBon():aBon(),auto=it.b>cur;if(auto)S[k]=id;l.push(`✨ <b>Verzauberte Beute: ${it.n}</b> (${it.d})${auto?" – angelegt!":" – in der Schmiede anlegbar."}`)}
 function tourLoot(l){const p=["fl","fz","sb","mo","wp","wm"].filter(id=>!S.own.includes(id));if(p.length)giveE(p[rnd(0,p.length-1)],l);else{S.gold+=150;l.push("Alle Turnierschätze besitzt du schon: +150 Gold!")}}
 function towerLoot(l){const p=["t1","t2","t3","t4"].filter(id=>!S.own.includes(id));if(p.length)giveE(p[rnd(0,p.length-1)],l);else{S.gold+=300;l.push("Alle Turmschätze besitzt du schon: +300 Gold!")}}
@@ -233,6 +247,42 @@ function titles(){musicSet("home");app.innerHTML=`<div class="top"><b>🎖️ Ti
  <div class="card"><div class="row"><span>Kein Titel</span><button ${S.title?"":'class="p"'} onclick="setTitle(null)">${S.title?"Wählen":"Aktiv"}</button></div>
  ${TT.map(x=>{const own=S.tt.includes(x.id),on=S.title===x.id;return `<div class="row"><span>${own?"":"🔒 "}<b>${x.n}</b><br><span class="mut">${x.d}</span></span>${own?`<button ${on?'class="p"':""} onclick="setTitle('${x.id}')">${on?"Getragen":"Tragen"}</button>`:`<span class="mut">${x.p()}</span>`}</div>`}).join("")}</div>
  <div class="grid"><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`}
+const fm=(x,y,s,c,d)=>`<path class="fk" style="animation-delay:${d}s" d="M${x} ${y}q${-5*s} ${-12*s} 0 ${-26*s}q${9*s} ${11*s} 0 ${26*s}z" fill="${c}"/>`;
+const ST=(x,y,c,d)=>`<path class="tw" style="animation-delay:${d}s" d="M${x} ${y-5}l1.6 3.4 3.4 1.6-3.4 1.6-1.6 3.4-1.6-3.4-3.4-1.6 3.4-1.6z" fill="${c}"/>`;
+const FIRE=(a,b)=>[[103,92,1],[112,80,1],[103,66,1.1],[112,52,1.1],[103,38,1],[112,26,1],[107.5,14,1.3]].map((p,i)=>fm(p[0],p[1],p[2],i%2?a:b,i*.07)+fm(p[0],p[1],p[2]*.55,"#fff3a0",i*.07+.05)).join("")+`<circle class="fl2" cx="108" cy="20" r="2" fill="${b}"/><circle class="fl2" style="animation-delay:.7s" cx="102" cy="40" r="1.6" fill="${a}"/><circle class="fl2" style="animation-delay:1.3s" cx="114" cy="30" r="1.8" fill="${b}"/>`;
+const ICE=[[113,76,124,66,114,86],[113,50,123,42,114,62],[102,64,92,56,102,76],[102,38,93,30,102,50]].map(p=>`<polygon points="${p[0]},${p[1]} ${p[2]},${p[3]} ${p[4]},${p[5]}" fill="#e8fbff" stroke="#7fd6ff"/>`).join("")+ST(120,30,"#fff",0)+ST(92,70,"#fff",.4)+ST(118,90,"#bfefff",.8);
+const BOLT=[0,1].map(i=>`<path class="tw" style="animation-delay:${i*.35}s" d="M${99+i*16} 92l7-12-6-2 9-14-6-2 8-16" stroke="#fff27a" fill="none" stroke-width="2.4" stroke-linejoin="round"/>`).join("")+ST(96,40,"#fff",.2)+ST(120,60,"#fff27a",.5);
+const DRIP=[[106,40,0],[111,64,.5],[103,82,1]].map(p=>`<path class="dr" style="animation-delay:${p[2]}s" d="M${p[0]} ${p[1]}q-3 5 0 7q3-2 0-7z" fill="#7ed957"/>`).join("")+`<circle class="tw" cx="108" cy="30" r="2" fill="#d6ffb8"/>`;
+const SMOKE=c=>[[100,60,0],[115,40,.6],[104,24,1.2],[114,80,.9]].map(p=>`<ellipse class="fl2" style="animation-delay:${p[2]}s" cx="${p[0]}" cy="${p[1]}" rx="5" ry="7" fill="${c}" opacity=".55"/>`).join("");
+const SPARK=ST(98,30,"#ffd54a",0)+ST(118,48,"#fff",.3)+ST(97,70,"#fff27a",.6)+ST(119,84,"#ffd54a",.9)+ST(108,8,"#fff",.5);
+const LAVA=`<path d="M107 92l3-14-3-10 4-12-2-10" stroke="#ff7a00" stroke-width="2" fill="none" class="tw"/>`;
+const CLOCK=`<g class="rot"><circle cx="107.5" cy="56" r="15" fill="none" stroke="#e056fd" stroke-width="2" stroke-dasharray="3 4"/></g><path d="M107.5 56V47M107.5 56l6 3" stroke="#fff" stroke-width="2"/>`;
+const BL={wide:"M101 96V28L107.5 4L114 28V96Z",straight:"M104 96V22L107.5 6L111 22V96Z",curved:"M104 96V30Q104 14 113 5Q113 30 111 96Z",fang:"M103 96V30Q104 14 110 4Q115 20 112 40L111 96Z",dagger:"M104 96V52L107.5 36L111 52V96Z",jagged:"M104 96V24L106 18L105 12L108 7L109 15L111 22V96Z"};
+const VIS={
+fl:{b:"wide",f:"#ff8a2b",e:"#ffe08a",g:"#ff6a00",fx:()=>FIRE("#ff5a00","#ffb300")},
+fz:{b:"straight",f:"#bfefff",e:"#fff",g:"#7fd6ff",fx:()=>ICE},
+sb:{b:"wide",f:"#fff27a",e:"#fff",g:"#fff27a",fx:()=>BOLT},
+gz:{b:"curved",f:"#7ed957",e:"#2e7d32",g:"#7ed957",fx:()=>DRIP},
+ss:{b:"jagged",f:"#4b2a7a",e:"#b57bff",g:"#8e44ad",fx:()=>SMOKE("#6c3fa0")},
+dz:{b:"fang",f:"#d32f2f",e:"#ffd54a",g:"#ff3b1f",fx:()=>FIRE("#ff3b1f","#ffd000")+`<circle cx="107.5" cy="92" r="3" fill="#ffd000"/>`},
+fk:{b:"wide",f:"#aee8ff",e:"#fff",g:"#4fc3ff",fx:()=>FIRE("#2ea8ff","#b3ecff")},
+ls:{b:"curved",f:"#7d3c98",e:"#b9ffd0",g:"#7dffb0",fx:()=>SMOKE("#7dffb0")},
+az:{b:"jagged",f:"#2b0a0a",e:"#ff3b00",g:"#ff3b00",fx:()=>FIRE("#b71c1c","#ff6d00")+LAVA},
+t1:{b:"wide",f:"#fff27a",e:"#fff",g:"#ffd54a",fx:()=>SPARK},
+t3:{b:"dagger",f:"#f3a6ff",e:"#fff",g:"#e056fd",fx:()=>CLOCK}};
+const weaponSvg=id=>{const v=VIS[id];return `<g style="filter:drop-shadow(0 0 5px ${v.g})"><path d="${BL[v.b]}" fill="${v.f}" stroke="${v.e}" stroke-width="1.5"/><path d="M107.5 10V92" stroke="${v.e}" stroke-width="1" opacity=".6"/>${v.fx()}</g><circle cx="107.5" cy="97" r="3" fill="${v.g}" stroke="#0006"/>`};
+const AV={
+mo:b=>b?`<circle class="pl" cx="61" cy="88" r="64" fill="#cfd8ff"/>`:`<path d="M60 68a12 12 0 1 0 9 20a9 9 0 1 1-9-20z" fill="#eef"/>`+ST(82,66,"#fff",0)+ST(40,100,"#fff",.6),
+wp:b=>b?"":`<ellipse cx="34" cy="64" rx="13" ry="9" fill="#6bbf6b" stroke="#0004"/><ellipse cx="88" cy="64" rx="13" ry="9" fill="#6bbf6b" stroke="#0004"/><polygon points="26,60 34,46 40,60" fill="#8fe08f"/><polygon points="82,60 88,46 96,60" fill="#8fe08f"/>`,
+wm:b=>b?`<path class="wv" d="M40 62Q10 90 18 140L48 118Z" fill="#9de0c4" opacity=".9"/>`:`<path class="tw" d="M4 70h22M0 90h26M6 110h20" stroke="#d6fff0" stroke-width="2" stroke-linecap="round"/>`,
+rm:b=>b?`<path class="wv" d="M40 62Q12 92 20 138L48 118Z" fill="#6b4a2b"/>`:`<path d="M44 58Q61 44 78 58L72 68H50Z" fill="#6b4a2b"/>`,
+sp:b=>b?`<circle class="pl" cx="61" cy="88" r="60" fill="#6c3fa0"/>`:SMOKE("#6c3fa0").replace(/cx="(\d+)" cy="(\d+)"/g,(m,x,y)=>`cx="${x-60}" cy="${+y+60}"`),
+ds:b=>b?`<path d="M38 66L0 34L12 68L2 88L38 92Z" fill="#8a2a00"/><path d="M84 66L116 40L108 70L116 88L84 92Z" fill="#8a2a00"/>`:[0,1,2].map(r=>[0,1,2,3].map(c=>`<path d="M${42+c*11+(r%2)*5} ${68+r*12}q5 8 10 0" fill="none" stroke="#ffb74d" stroke-width="2"/>`).join("")).join("")+fm(34,64,.8,"#ff6d00",0)+fm(88,64,.8,"#ff6d00",.2),
+fr:b=>b?`<circle class="pl" cx="61" cy="88" r="60" fill="#7fd6ff"/>`:`<polygon points="22,66 30,44 42,64" fill="#e8fbff" stroke="#7fd6ff"/><polygon points="80,64 92,44 100,66" fill="#e8fbff" stroke="#7fd6ff"/>`+ST(20,40,"#fff",0)+ST(100,38,"#fff",.5),
+lm:b=>b?`<path d="M38 100L28 144L94 144L84 100Z" fill="#5b2c6f" opacity=".95"/>`:[[34,116,0],[88,116,.5],[61,128,1]].map(p=>`<ellipse class="fl2" style="animation-delay:${p[2]}s" cx="${p[0]}" cy="${p[1]}" rx="5" ry="8" fill="#7dffb0" opacity=".7"/>`).join(""),
+ar:b=>b?`<circle class="pl" cx="61" cy="88" r="62" fill="#ff1a00"/>`:`<path d="M46 30Q36 14 40 4Q50 16 52 28Z" fill="#2b0a0a" stroke="#ff3b00"/><path d="M76 30Q86 14 82 4Q72 16 70 28Z" fill="#2b0a0a" stroke="#ff3b00"/><rect x="52" y="39" width="20" height="5" rx="2" fill="#ff2a00"/><ellipse cx="34" cy="64" rx="12" ry="9" fill="#2b0a0a" stroke="#ff3b00"/><ellipse cx="88" cy="64" rx="12" ry="9" fill="#2b0a0a" stroke="#ff3b00"/>`,
+t2:b=>b?"":`<ellipse cx="32" cy="64" rx="16" ry="11" fill="#b0b8c0" stroke="#0004"/><ellipse cx="90" cy="64" rx="16" ry="11" fill="#b0b8c0" stroke="#0004"/><rect x="46" y="68" width="30" height="34" fill="#dfe5ea" opacity=".5"/>`,
+t4:b=>b?`<circle class="pl" cx="61" cy="88" r="60" fill="#ffd54a"/>`:`<ellipse class="pl" cx="61" cy="20" rx="17" ry="5" fill="none" stroke="#ffd54a" stroke-width="3"/><path d="M61 66l8 10-8 18-8-18z" fill="#ffd54a" stroke="#fff"/>`};
 const SK=[
 {n:"Schwerthieb",lv:1,pp:99,pw:1,acc:95,d:"Solider Standardangriff"},
 {n:"Schildstoß",lv:2,pp:8,pw:.8,acc:95,fx:"stun",d:"40 % Betäubung"},
@@ -258,10 +308,10 @@ const app=document.getElementById("app");
 const rank=()=>{let r=RANKS[0][1];for(const x of RANKS)if(S.ruhm>=x[0])r=x[1];return r};
 const maxhp=()=>40+S.au*6+lvl()*4+fxv("hp");
 
-function knight(w,a,s,flip,plume,ow,oa){
+function knight(w,a,s,flip,plume,ow,oa,wi,ai){
  const wc=ow||WC[w],ac=oa||AC[a],helm=a>0||oa?ac:"#e0b48a",pl=plume||(a>=3||oa?"#c0221f":null);
  return `<svg class="k" viewBox="0 0 130 160" ${flip?'style="transform:scaleX(-1)"':''}>
- <ellipse cx="62" cy="152" rx="34" ry="5" fill="#0003"/>
+ <ellipse cx="62" cy="152" rx="34" ry="5" fill="#0003"/>${ai&&AV[ai]?AV[ai](1):""}
  <rect x="44" y="104" width="13" height="44" rx="4" fill="${a>0||oa?ac:'#5b4636'}"/><rect x="65" y="104" width="13" height="44" rx="4" fill="${a>0||oa?ac:'#5b4636'}"/>
  <rect x="40" y="144" width="19" height="7" rx="3" fill="#3a2a1c"/><rect x="63" y="144" width="19" height="7" rx="3" fill="#3a2a1c"/>
  <rect x="36" y="58" width="50" height="50" rx="9" fill="${ac}" stroke="#0004"/>
@@ -269,8 +319,8 @@ function knight(w,a,s,flip,plume,ow,oa){
  <circle cx="61" cy="42" r="17" fill="${helm}" stroke="#0004"/>
  ${a>0||oa?'<rect x="52" y="39" width="20" height="5" rx="2" fill="#1b1b1b"/>':'<circle cx="55" cy="40" r="2" fill="#222"/><circle cx="67" cy="40" r="2" fill="#222"/><path d="M55 49q6 4 12 0" stroke="#7a4a2a" fill="none"/>'}
  ${pl?`<path d="M61 25q-4-14 12-12q-8 4-4 12z" fill="${pl}"/>`:''}
- <rect x="84" y="66" width="22" height="10" rx="5" fill="${ac}"/>
- <rect x="104" y="20" width="7" height="78" rx="2" fill="${wc}" stroke="#0005"/><polygon points="104,20 111,20 107.5,8" fill="${wc}" stroke="#0005"/>
+ ${ai&&AV[ai]?AV[ai](0):""}<rect x="84" y="66" width="22" height="10" rx="5" fill="${ac}"/>
+ ${wi&&VIS[wi]?weaponSvg(wi):`<rect x="104" y="20" width="7" height="78" rx="2" fill="${wc}" stroke="#0005"/><polygon points="104,20 111,20 107.5,8" fill="${wc}" stroke="#0005"/>`}
  <rect x="97" y="94" width="21" height="6" rx="2" fill="#7a4a1c"/><rect x="105" y="100" width="5" height="12" fill="#5b3a1c"/>
  ${s>0?`<path d="M14 66h30v22q0 18-15 26q-15-8-15-26z" fill="${SC[s]}" stroke="#0006" stroke-width="2"/><path d="M29 70v40M17 82h24" stroke="#fff6" stroke-width="3"/>`:''}
  </svg>`}
