@@ -8,6 +8,24 @@ Die Seite selbst ist nicht im Repo, die Texte werden von Hand auf itch.io übern
 
 (Gleich wie `meta.title` in `js/lang/en.js` und die Manifeste halten. Deutsch: „Sir Grindalot – Vom Knappen zur Legende“.)
 
+## Genre
+
+Role Playing
+
+## Tags (itch.io erlaubt höchstens 10)
+
+Medieval, Knights, Fantasy, Turn-based Combat, Loot, Crafting, Boss battle, Management, Singleplayer, Dice
+
+Reserve zum Austauschen: Casual, Incremental, Character Customization, Story Rich
+
+## Weitere Felder
+
+- Kind of project: HTML (Upload: das ZIP aus dem Release, „This file will be played in the browser“)
+- Platforms: als Browser-Spiel, mobile-freundlich anhaken
+- Languages: English, German
+- Inputs: Mouse, Touchscreen, Keyboard
+- Accessibility: Text-to-speech (optionale Sprachausgabe)
+
 ## Kurzbeschreibung (Short description)
 
 Rise from squire to legend – a medieval browser role-playing game.
