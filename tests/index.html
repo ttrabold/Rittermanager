@@ -98,8 +98,8 @@ test("Sprachen: gleiche Schlüssel in allen Sprachdateien",()=>{const miss=[];co
 test("Sprachen: Daten haben Texte",()=>{for(const L of[EI,SK,IT,MAT,TT,RU,COMP,DECO,BLESS,FEAT,BLD,TAVO])for(const x of L)ok(typeof x.n==="string"&&x.n,"ohne Namen: "+(x.id||x.k));
  for(const b of[...BOSS,...ET,WOLF,MIMIC,RIVT])ok(b.mv.every(m=>typeof m[0]==="string"&&m.length===5),"Angriff ohne Namen: "+b.n);ok(RIVAL.every(r=>r.pre&&r.win&&r.lose),"Rivale");ok(EVTS.every(v=>v.t&&v.txt()&&v.ch.every(c=>c.l())),"Ereignisse")});
 test("Sprachen: Beute und Aufträge ohne gespeicherten Text",()=>{hero(20);const g=genItem(30,1,"w","axt");S.gear.push(g);const n=g.n;g.n="X";g.d="Y";gearClean();ok(itm(g.id).n===n&&itm(g.id).d===fxDesc(g.fx),"Beutetext nicht neu gebildet");
- qGen();ok(S.q.list.every(q=>!q.txt),"Auftragstext gespeichert");questCard();ok(questCard().includes(qTxt(S.q.list[0])),"Auftragstext fehlt");
- S.buffs=[{k:"dmg",v:.2,n:3}];home();ok(document.getElementById("app").innerHTML.includes(t("buff.dmg")),"Segen ohne Namen")});
+ qGen();S.q.list.forEach(q=>q.txt="ALTTEXT");ok(questCard().includes(qTxt(S.q.list[0]))&&!questCard().includes("ALTTEXT"),"Auftragstext nicht aus der Sprachdatei");
+ S.buffs=[{k:"dmg",v:.2,n:3,name:"ALTTEXT"}];home();ok(document.getElementById("app").innerHTML.includes(t("buff.dmg")),"Segen ohne Namen")});
 test("Sprachen: Umschalter auf der Burg",()=>{hero(5);home();const l=Object.keys(LANGS).filter(x=>x!==LANG);ok(l.every(x=>document.getElementById("app").innerHTML.includes(`setLang('${x}')`)),"Umschalter fehlt")});
 if(LANG!=="de")test("Sprachen: keine deutschen Texte ("+LANG+")",()=>{const bad=[],chk=w=>{const h=document.getElementById("app").innerText,m=h.match(/.{0,30}[äöüÄÖÜß].{0,30}/);if(m)bad.push(w+": "+m[0])};
  hero(30);S.boss=12;S.q=null;for(const[w,f]of[["home",home],["shop",shop],["inv",inv],["trader",trader],["castle",castleScr],["titles",titles],["skills",skillsScr],["save",saveScr],["comp",compScr],["best",()=>{S.bst=Object.fromEntries(BST.map(x=>[x.k,{s:1,w:1}]));bestScr()}],["tavern",()=>{TV.ph="bet";tavern()}],["rebirth",rebirth]])

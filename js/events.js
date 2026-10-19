@@ -8,7 +8,7 @@ const mimicSvg=()=>BSV(`<g class="br"><path d="M28 150h76l-4-48H32z" fill="#8d5a
 const MIMIC=loc1("mimic",{hp:1.6,atk:1.2,def:1.2,tint:"#8d5a2b",mv:[[1.2,90,"",4],[.9,92,"stun",2],[1.8,72,"",2]]});
 let EVN=null;
 const gainTxt=o=>Object.entries(o).filter(([,v])=>v).map(([k,v])=>k==="g"?`+${v} <i class=coin></i>`:k==="r"?`+${v} ${t("st.ruhm")}`:k==="x"?`+${v} ${t("st.xp")}`:k in S.it?`${IT.find(x=>x.k===k).e} +${v}`:`${MT(k).e} +${v}`).join(", ");
-// Segen (S.buffs) speichern nur ihre Art k; der Name kommt aus der Sprachdatei
+// Segen (S.buffs): angezeigt wird der Name zur Art k aus der Sprachdatei; das gespeicherte name ist nur für ältere Versionen da
 const bname=b=>t("buff."+b.k);
 function evGive(o){for(const[k,v]of Object.entries(o)){if(k==="g")S.gold+=v;else if(k==="r")S.ruhm+=v;else if(k==="x")S.exp+=v;else if(k in S.it)S.it[k]+=v;else S.mat[k]+=v}}
 const EVTS=[
@@ -17,8 +17,8 @@ const EVTS=[
       {l:"<i class=coin></i> ",ok:()=>S.gold>=10,f:()=>{S.gold-=10;const r={r:5+lvl()};evGive(r);return t("ev.wand.r1",gainTxt(r))}},
       {f:()=>t("ev.wand.r2")}]},
  {id:"schrein",e:"⛩️",
-  ch:[{l:()=>`<i class=coin></i> ${t("ev.schrein.l0",20+lvl()*5)}`,ok:()=>S.gold>=20+lvl()*5,f:()=>{S.gold-=20+lvl()*5;(S.buffs=S.buffs||[]).push({k:"dmg",v:.2,n:3});return t("ev.schrein.r0")}},
-      {l:"🙏 ",f:()=>{if(Math.random()<.35){(S.buffs=S.buffs||[]).push({k:"crit",v:.1,n:2});return t("ev.schrein.r1")}return t("ev.schrein.r1b")}},
+  ch:[{l:()=>`<i class=coin></i> ${t("ev.schrein.l0",20+lvl()*5)}`,ok:()=>S.gold>=20+lvl()*5,f:()=>{S.gold-=20+lvl()*5;(S.buffs=S.buffs||[]).push({k:"dmg",v:.2,n:3,name:t("buff.dmg")});return t("ev.schrein.r0")}},
+      {l:"🙏 ",f:()=>{if(Math.random()<.35){(S.buffs=S.buffs||[]).push({k:"crit",v:.1,n:2,name:t("buff.crit")});return t("ev.schrein.r1")}return t("ev.schrein.r1b")}},
       {f:()=>t("ev.schrein.r2")}]},
  {id:"falle",e:"🕳️",
   ch:[{l:"🤸 ",f:()=>{const p=Math.min(.9,.45+S.ge*.015);if(Math.random()<p){const r={g:30+lvl()*8};if(Math.random()<.4)r.h=1;evGive(r);return t("ev.falle.r0",gainTxt(r))}const x=Math.min(S.gold,10+lvl()*3);S.gold-=x;return t("ev.falle.r0b",x)}},
@@ -37,7 +37,7 @@ const EVTS=[
   ch:[{l:"🔦 ",f:()=>{if(Math.random()<.45)return {fight:()=>{const e=mk(Math.max(1,lvl()+1),ET[0]);e.evGold=15+lvl()*5;e.intro=t("ev.ruine.fight")+"<br>";return e}};const r={x:15+lvl()*4};if(Math.random()<.5)r.a=1;else r.g=20+lvl()*5;evGive(r);return t("ev.ruine.r0",gainTxt(r))}},
       {f:()=>t("ev.ruine.r1")}]},
  {id:"wahrsager",e:"🔮",
-  ch:[{l:"<i class=coin></i> ",ok:()=>S.gold>=15,f:()=>{S.gold-=15;(S.buffs=S.buffs||[]).push({k:"gold",v:.25,n:3});return t("ev.wahrsager.r0",RUMORS[rnd(0,RUMORS.length-1)].replace(/[„“”"]/g,""))}},
+  ch:[{l:"<i class=coin></i> ",ok:()=>S.gold>=15,f:()=>{S.gold-=15;(S.buffs=S.buffs||[]).push({k:"gold",v:.25,n:3,name:t("buff.gold")});return t("ev.wahrsager.r0",RUMORS[rnd(0,RUMORS.length-1)].replace(/[„“”"]/g,""))}},
       {f:()=>t("ev.wahrsager.r1")}]},
  {id:"duell",e:"🤺",
   ch:[{l:"⚔️ ",f:()=>({fight:()=>{const e=mk(Math.max(1,lvl()+1),ET[0]);e.honor=true;e.intro=t("ev.duell.fight")+"<br>";return e}})},

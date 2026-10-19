@@ -108,11 +108,11 @@ const rTxt=r=>r.g?`<i class=coin></i>${r.g}`:r.m?yTxt(r.m):Object.entries(r.it).
 function rGive(r){if(r.g)S.gold+=r.g;if(r.m)for(const k in r.m)S.mat[k]+=r.m[k];if(r.it)for(const k in r.it)S.it[k]+=r.it[k]}
 function qGen(){let list;
  for(let t=0;t<40;t++){const pool=QT.filter(q=>!q.ok||q.ok()).sort(()=>Math.random()-.5).slice(0,3);
-  list=pool.map(q=>{const goal=q.g();return {id:q.id,goal,p:0,done:false,r:qRew(),e:q.e(goal),f:q.f}});
+  list=pool.map(q=>{const goal=q.g();return {id:q.id,goal,p:0,done:false,r:qRew(),txt:q.n(goal),e:q.e(goal),f:q.f}});  // txt nur für ältere Versionen (Live-Seite teilt den Speicher), angezeigt wird qTxt
   const fight=list.filter(q=>q.f),need=list.reduce((a,q)=>a+q.e,0)+(fight.length&&!fight.some(q=>q.e)?2:0);
   if(need<=enMax())break}
  S.q={day:S.day,list:list.map(({e,f,...q})=>q),bonus:false}}
-// Auftragstext immer neu aus der Sprachdatei (alte Stände hatten den Text gespeichert)
+// Auftragstext immer neu aus der Sprachdatei; das gespeicherte txt ist nur für ältere Versionen da
 const qTxt=q=>{const d=QT.find(x=>x.id===q.id);return d?d.n(q.goal):q.txt||""};
 function qProg(id,n,l){if(!has("quests")||!S.q||S.q.day!==S.day)return;const out=l||QN;
  for(const q of S.q.list)if(q.id===id&&!q.done){q.p=Math.min(q.goal,q.p+(n||1));if(q.p>=q.goal){q.done=true;rGive(q.r);sfx("coin");out.push(`📜 <b>${t("q.done")}</b> ${qTxt(q)} → ${rTxt(q.r)}`)}}
