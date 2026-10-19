@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Baut dist/ritter-itch.zip nur aus den Dateien, die das Spiel zur Laufzeit wirklich lädt.
+# Baut dist/sir-grindalot.zip nur aus den Dateien, die das Spiel zur Laufzeit wirklich lädt.
 # Liste wird aus index.html und den Manifesten abgeleitet, nichts ist fest verdrahtet.
 # Dazu kommen alle Sprachvarianten (manifest*.webmanifest, ANLEITUNG*.md), die das Spiel je nach Sprache nachlädt.
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
-OUT="${1:-dist/ritter-itch.zip}"
+OUT="${1:-dist/sir-grindalot.zip}"
 
 # Übersetzungen prüfen (gleiche Schlüssel, Manifeste passend), sonst kein ZIP
 node scripts/i18n-check.js
