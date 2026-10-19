@@ -13,11 +13,16 @@ function simRun(maxDay,seedLog){
    if(f.php<f.pmax*.5&&av.includes("licht")){useSkill("licht");continue}
    let b="hieb",bv=0;for(const id of av){const s=SKD(id);if(!s.pw)continue;let v=s.pw*(s.hits||1)*s.acc*(s.crit?1.5:1);if(s.fx==="exec"&&f.ehp<f.emax*.35)v*=2.5;if(!f.boss&&s.pp<99&&f.emax<400)v*=.3;if(v>bv){bv=v;b=id}}useSkill(b)}
   if(F&&F.over&&F.ko==="p")deaths++};
+ // Beutel aufräumen wie ein Spieler: alles Nicht-Angelegte einzeln zerlegen (auch Aufgewertetes, das salvageAll auslässt)
+ const tidy=all=>{if(!all&&!bagFull())return;for(const it of bagItems())salvage(it.id)};
  const evAI=()=>{if(!EVN)return;const ch=EVN.ev.ch;let i=ch.findIndex(c=>!c.ok||c.ok());evPick(i<0?ch.length-1:i);if(F&&!F.over)fightAI();EVN=null};
  for(let day=1;day<=maxDay&&S.boss<BOSS.length;day++){
   const before=new Set(S.unl);
   if(has("craft"))for(const key of invItems().filter(isEq)){const u=(S.up[key]||0)+1;if(u<=maxUp()){const c=upCost(kinfo(key).s,u);if(hasM(c)&&S.gold>=upGold(u)+100&&S.en>2)upgrade(key)}}
+  let en0=-1;
   while(S.en>0){
+   // Sicherung: Jede Runde muss Energie kosten, sonst würde die Schleife ewig laufen
+   if(S.en===en0){(T.haenger=T.haenger||[]).push(day);break}en0=S.en;tidy();
    const b=BOSS[S.boss];
    if(has("boss")&&b&&S.ruhm>=b.req&&S.en>=3&&lvl()>=b.L-1){if(S.gold>mercCost()*3&&!S.merc)mercHire();bossTries++;startBoss();fightAI();if(F.ko==="p"){bossFails++;T.bf=T.bf||{};T.bf[S.boss+1]=(T.bf[S.boss+1]||0)+1}else T.boss[S.boss]=day;continue}
    if(rivalReady()&&S.en>=3){startRival();fightAI();if(F.ko==="e")T.rival[S.rv]=day;continue}
@@ -30,7 +35,7 @@ function simRun(maxDay,seedLog){
   if(has("burg")){for(const bd of BLD){const lv=S.bld[bd.id];if(lv<bd.max){const c=bCost(bd,lv+1);if(S.gold>=c.g+400&&has("craft"))for(const k in c.m)while(S.mat[k]<c.m[k]&&S.gold>=MT(k).p+c.g+200){S.gold-=MT(k).p;S.mat[k]++}if(hasM(c.m)&&S.gold>=c.g+200)build(bd.id)}}for(const d of DECO)if(!hasDeco(d.id)&&(!d.ok||d.ok())&&S.gold>d.g*3)decoBuy(d.id)}
   if(has("kasse")&&S.gold>=kasseCost()*2)kasseGive();
   if(has("comp")){for(const c of COMP)if(!(S.comp||[]).includes(c.id)&&c.ok()&&S.gold>c.price*2){compBuy(c.id)}S.cmp=(S.comp||[]).includes("knappe")?"knappe":S.cmp}
-  for(const it of bagItems().sort((a,b)=>b.b-a.b)){const c=eq(it.s),cb=c?c.b:it.s==="w"?W[S.w][2]:it.s==="a"?A[S.a][2]:SH[S.s][2];if(it.b>cb)equipE(it.id)}for(let r=0;r<4;r++)salvageAll(r);
+  for(const it of bagItems().sort((a,b)=>b.b-a.b)){const c=eq(it.s),cb=c?c.b:it.s==="w"?W[S.w][2]:it.s==="a"?A[S.a][2]:SH[S.s][2];if(it.b>cb)equipE(it.id)}tidy(true);
   gearBuy();potionsBuy();
   for(const f of S.unl)if(!before.has(f))T.unl[f]=day;
   T.lvl[day]=lvl();
@@ -39,4 +44,4 @@ function simRun(maxDay,seedLog){
  fight=of;nightShow=oNS;
  const L=T.lvl,dayOfLvl=n=>{for(const d in L)if(L[d]>=n)return +d;return null};
  return {tage:Object.keys(L).length,stufe:lvl(),bosse:S.boss,tode:deaths,bossVersuche:bossTries,bossNiederlagen:bossFails,
-  freischaltung:T.unl,bossTag:T.boss,rivaleTag:T.rival,stufeTag:Object.fromEntries([2,4,6,8,10,12,15,18,20,25,30,40,50].map(n=>[n,dayOfLvl(n)])),gold:S.gold,ruhm:S.ruhm,gebaeude:bldSum(),ds:S.mat.ds,leder:S.mat.le,bossFehl:T.bf||{},beute:{w:(eq("w")||{}).b,a:(eq("a")||{}).b,sh:(eq("sh")||{}).b,r:[S.ew,S.ea,S.es].map(id=>(itm(id)||{}).r)}}}
+  freischaltung:T.unl,bossTag:T.boss,rivaleTag:T.rival,stufeTag:Object.fromEntries([2,4,6,8,10,12,15,18,20,25,30,40,50].map(n=>[n,dayOfLvl(n)])),gold:S.gold,ruhm:S.ruhm,gebaeude:bldSum(),ds:S.mat.ds,leder:S.mat.le,bossFehl:T.bf||{},haenger:T.haenger||[],beute:{w:(eq("w")||{}).b,a:(eq("a")||{}).b,sh:(eq("sh")||{}).b,r:[S.ew,S.ea,S.es].map(id=>(itm(id)||{}).r)}}}

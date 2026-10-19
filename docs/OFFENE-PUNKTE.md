@@ -33,7 +33,6 @@ Aus der unabhängigen Prüfung, bewusst aufgeschoben:
 
 ## Balance
 
-- [ ] **`simRun` hängt ab etwa Tag 60–90** (Browser reagiert nicht mehr). Gilt auch für den Stand vor i18n (v14), bis Tag 60 läuft alles in ~150 ms. Vermutlich räumt die Simulation den vollen Beutel nicht auf, und Turm/Turnier/Boss bleiben gesperrt. In `tests/sim.js` den Beutel leeren (`salvageAll`) oder die Schleife absichern.
 
 - [ ] **Beim echten Spielen prüfen, ob das Spiel mit Zufallsbeute zu leicht geworden ist.** Die Simulation verliert nur noch 2–8 Bosskämpfe, vorher waren es 8–27. Stellschrauben in `genItem`: Grundwert-Faktoren, Seltenheitsbonus und Turm-Bonus (`lvl()+Etage/10` in `js/combat.js`).
 - [ ] **Vulkanus (Boss 3)** ist in manchen Simulationsläufen eine starke Hürde, mit bis zu ~50 Niederlagen in einem Ausreißer. Das gab es schon vor den Änderungen.
