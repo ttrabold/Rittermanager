@@ -61,3 +61,26 @@ Grab your sword. The kingdom isn't going to save itself.
 ## Prototyp-Hinweis auf Deutsch (falls gebraucht)
 
 > 🚧 **Prototyp** – Fehler und Balance-Änderungen möglich, Spielstände können brechen. Sichere deinen Ritter regelmäßig im Spiel unter 💾 Spielstände → „Als Datei speichern“. Die aktuelle Versionsnummer steht dort ebenfalls.
+
+## Bilder
+
+Alle in `docs/itch/`, aufgenommen im englischen Spiel mit doppelter Auflösung:
+
+- **Cover image:** `cover.png` (1260×1000, also 630×500 in doppelter Auflösung, wie von itch empfohlen). Quelle: `cover.html` im Browser öffnen (Fenster 630×500, Pixeldichte 2) und abfotografieren.
+- **Screenshots** in dieser Reihenfolge hochladen:
+  1. `01-boss.png` – Bosskampf gegen die Hexenkönigin
+  2. `02-castle.png` – ausgebaute Königsburg mit Tagesaufträgen
+  3. `03-loot.png` – Zufallsbeute in vier Seltenheiten mit Vergleich
+  4. `04-tavern.png` – Würfelpoker in der Taverne
+  5. `05-tower.png` – Endloser Turm, Lavahallen, Turm-Boss in Rage
+  6. `06-castle-building.png` – Burgausbau
+  7. `07-bestiary.png` – Bestiarium mit den Bossen
+
+## Einbettung (Embed options)
+
+- Embed in page, Manually set size: **600 × 860 px**
+- Mobile friendly, Orientation **Portrait**
+- Automatically start on page load: an
+- Fullscreen button: an
+- **Enable scrollbars: an** (sonst lassen sich lange Bildschirme nicht scrollen)
+- SharedArrayBuffer: aus

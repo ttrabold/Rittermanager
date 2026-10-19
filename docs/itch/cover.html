@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>cover</title>
+<link rel="stylesheet" href="../../css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@600&display=block" rel="stylesheet">
+<style>
+ html,body{margin:0;padding:0;background:#000;max-width:none}
+ #snd,#app{display:none!important}
+ #cover{position:relative;width:630px;height:500px;overflow:hidden;background:#1a0b05}
+ #cover .bg{position:absolute;inset:0;width:100%;height:100%}
+ .shade{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 35%,rgba(0,0,0,.65) 100%),linear-gradient(rgba(0,0,0,.55),transparent 38%,transparent 70%,rgba(0,0,0,.6));z-index:1}
+ .hero{position:absolute;left:28px;bottom:6px;z-index:3;filter:drop-shadow(0 0 18px rgba(140,200,255,.35))}
+ .hero svg.k{height:300px}
+ .foe{position:absolute;right:6px;bottom:4px;z-index:2;filter:drop-shadow(0 0 22px rgba(255,90,20,.55))}
+ .foe svg.k{height:330px}
+ .title{position:absolute;left:0;right:0;top:26px;text-align:center;z-index:4}
+ .title h1{margin:0;font-family:"Cinzel Decorative",Georgia,serif;font-weight:900;font-size:66px;line-height:1;letter-spacing:1px;
+  background:linear-gradient(#fff6c8 0%,#ffd45a 45%,#d98a12 70%,#ffe9a0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 3px 0 #3a1500) drop-shadow(0 0 14px rgba(255,150,40,.55))}
+ .title p{margin:10px 0 0;font-family:Cinzel,Georgia,serif;font-weight:600;font-size:19px;letter-spacing:6px;color:#f3e2b8;text-shadow:0 2px 6px #000,0 0 10px rgba(0,0,0,.8)}
+ .sw{position:absolute;left:50%;top:136px;transform:translateX(-50%);z-index:4;font-size:26px;filter:drop-shadow(0 2px 4px #000)}
+</style></head>
+<body><div id="app"></div>
+<script>
+ // Tests-Speicher: echten localStorage nicht anfassen
+ (()=>{const m={ritter_lang:"en"};Object.defineProperty(window,"localStorage",{value:{getItem:k=>k in m?m[k]:null,setItem:(k,v)=>{m[k]=String(v)},removeItem:k=>{delete m[k]}},configurable:true})})();
+</script>
+<script>
+ const R="../../js/",F0=["i18n","lang/de","lang/en","util","data","state","audio","speech","unlock","art","professions","weapons","loot","day","tavern","screens","combat","help","companions","events","story","endgame","bestiary"];
+ for(const f of F0)document.write(`<script src="${R}${f}.js"><\/script>`);
+</script>
+<div id="cover"></div>
+<script>
+ AU.mus=false;AU.sfx=false;
+ S=fresh();S.exp=expFor(40);S.w=4;S.a=4;S.s=3;S.wc="schwert";
+ const w=genItem(48,3,"w","schwert");w.c="#7fd6ff";S.gear.push(w);S.ew=w.id;
+ const a=genItem(48,3,"a");a.c="#ffd45a";S.gear.push(a);S.ea=a.id;
+ const sh=genItem(48,3,"sh");sh.c="#ffd45a";S.gear.push(sh);S.es=sh.id;
+ // Glutfunken (fester Zufall, damit das Bild reproduzierbar ist)
+ let seed=7;const rr=()=>(seed=(seed*9301+49297)%233280)/233280;
+ const embers=Array.from({length:46},()=>{const x=rr()*630,y=170+rr()*330,r=.8+rr()*2.4;return `<circle cx="${x}" cy="${y}" r="${r}" fill="${rr()<.5?"#ffb347":"#ff6a1a"}" opacity="${.45+rr()*.5}"/>`}).join("");
+ const fx=`<svg style="position:absolute;inset:0;z-index:2" width="630" height="500" viewBox="0 0 630 500">
+  <defs><radialGradient id="lava" cx="50%" cy="100%" r="70%"><stop offset="0" stop-color="#ff6a00" stop-opacity=".55"/><stop offset="1" stop-color="#ff6a00" stop-opacity="0"/></radialGradient>
+  <linearGradient id="breath" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#fff3a0"/><stop offset=".35" stop-color="#ffb000"/><stop offset=".75" stop-color="#ff4d00" stop-opacity=".85"/><stop offset="1" stop-color="#ff2a00" stop-opacity="0"/></linearGradient>
+  <filter id="blur"><feGaussianBlur stdDeviation="3"/></filter><filter id="glow"><feGaussianBlur stdDeviation="1.5"/></filter></defs>
+  <rect x="0" y="300" width="630" height="200" fill="url(#lava)"/>
+  <g filter="url(#blur)"><path d="M372 212 C 330 190, 290 205, 250 228 C 285 236, 320 248, 372 228 Z" fill="url(#breath)"/>
+  <path d="M370 218 C 340 210, 300 222, 268 236 C 300 238, 330 240, 370 226 Z" fill="#fff6c0" opacity=".8"/></g>
+  <g filter="url(#glow)">${embers}</g></svg>`;
+ document.getElementById("cover").innerHTML=TBG(3)+`<div class="shade"></div>${fx}<div class="foe">${bossSvg(2)}</div><div class="hero">${pk()}</div>
+  <div class="title"><h1>Sir Grindalot</h1><p>FROM SQUIRE TO LEGEND</p></div>`;
+</script>
+</body></html>
