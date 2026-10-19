@@ -17,6 +17,12 @@ Sir Grindalot – From Squire to Legend is now playable for the very first time.
 
 You start as a humble squire with a wooden sword and nothing but rags. Every day gives you a handful of energy, and how you spend it is up to you: work for coin, ride out on adventures, enter tournaments, brew potions, build up your castle – and slowly, stubbornly, grind your way up from squire to Immortal Legend.
 
+## A father-and-son project
+
+Sir Grindalot is developed in close collaboration with my 9-year-old son. He's the lead play-tester, the toughest balance critic and the source of many of the game's ideas – from which bosses the knight has to face to what a proper castle needs. A lot of features exist simply because he asked "Papa, can we add…?" and the answer was yes.
+
+So if you enjoy the game, half the credit goes to him. And if you leave a comment, he'll be reading it too. 😊
+
 ## What's in this first version
 
 • 12 bosses, each with their own story – from a bandit captain all the way to the World Eater
