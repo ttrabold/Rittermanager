@@ -1,7 +1,7 @@
 // Ritter Manager – Sprachen: Auswahl, Textabruf t(…) und Texte für Datentabellen. Die Texte stehen in js/lang/<sprache>.js
 const I18N={},LANGS={de:"Deutsch",en:"English"};
-// Spielversion = ?v=N an der Skript-URL in index.html (wird bei jeder Auslieferung erhöht); ohne ?v= (Tests, lokal) „dev“
-const VERSION=((document.currentScript&&/[?&]v=(\d+)/.exec(document.currentScript.src))||[])[1]||"dev";
+// Spielversion (Semantic Versioning, z. B. 0.1.0) = ?v= an der Skript-URL in index.html; ohne ?v= (Tests, lokal) „dev“
+const VERSION=((document.currentScript&&/[?&]v=(\d+\.\d+\.\d+)/.exec(document.currentScript.src))||[])[1]||"dev";
 // Gewählte Sprache (für alle Spielstände), sonst Browser-Sprache; ?lang=en in der Adresse geht vor (für Tests)
 let LANG=(()=>{let l=null;try{l=localStorage.getItem("ritter_lang")}catch(e){}
  try{const q=new URLSearchParams(location.search).get("lang");if(q)l=q}catch(e){}

@@ -30,10 +30,12 @@ jobs:
       - name: Version bestimmen
         id: ver
         run: |
-          VER=$(grep -oE 'css/style\.css\?v=[0-9]+' index.html | grep -oE '[0-9]+$')
-          [ -n "$VER" ] || { echo "::error::Keine Version (?v=) in index.html gefunden"; exit 1; }
+          # Semantic Versioning: ?v=MAJOR.MINOR.PATCH in index.html, CACHE in sw.js muss gleich sein
+          VER=$(grep -oE 'css/style\.css\?v=[^"]+' index.html | sed 's/.*?v=//')
+          [[ "$VER" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error::Version in index.html ist kein X.Y.Z: '$VER'"; exit 1; }
+          grep -q "\"ritter-v${VER}\"" sw.js || { echo "::error::CACHE in sw.js passt nicht zu Version $VER"; exit 1; }
           echo "ver=$VER" >> "$GITHUB_OUTPUT"
-          echo "tag=v${VER}-build${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
+          echo "tag=v${VER}" >> "$GITHUB_OUTPUT"
           echo "zip=dist/sir-grindalot-v${VER}.zip" >> "$GITHUB_OUTPUT"
 
       - name: ZIP bauen (prüft vorher die Übersetzungen)
@@ -48,10 +50,12 @@ jobs:
           PRE: ${{ inputs.prerelease }}
         run: |
           SHORT="${GITHUB_SHA::7}"
+          # Ein Release pro Version: gibt es den Tag schon, zuerst die Version erhöhen
+          if gh release view "$TAG" >/dev/null 2>&1; then echo "::error::Release $TAG gibt es schon – Version in index.html und sw.js erhöhen"; exit 1; fi
           if [ "$PRE" = "true" ]; then FLAG=--prerelease; else FLAG=--latest; fi
           URL=$(gh release create "$TAG" "$ZIP" \
             --target "$GITHUB_SHA" \
-            --title "Sir Grindalot – Version ${VER} (Build ${GITHUB_RUN_NUMBER})" \
+            --title "Sir Grindalot ${TAG}" \
             --notes "HTML5-ZIP für itch.io aus Commit ${SHORT}. Auf itch.io hochladen und „This file will be played in the browser“ anhaken." \
             --generate-notes \
             $FLAG)

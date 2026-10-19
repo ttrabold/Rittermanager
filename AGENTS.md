@@ -29,8 +29,8 @@ Code-Kommentare, Commit-Nachrichten und Docs sind Deutsch. Das Spiel selbst ist 
 ## Aufbau
 
 ```
-index.html          lädt alle Skripte in fester Reihenfolge, ?v=N an jeder URL
-sw.js               Service-Worker, Konstante CACHE = "ritter-vN"
+index.html          lädt alle Skripte in fester Reihenfolge, ?v=X.Y.Z an jeder URL
+sw.js               Service-Worker, Konstante CACHE = "ritter-vX.Y.Z"
 css/style.css
 js/*.js             Spiellogik, klassische Skripte (keine ES-Module)
 js/i18n.js          Sprachwahl, t(), loc() – lädt als erstes
@@ -65,7 +65,8 @@ Behaupte nie, etwas funktioniere, ohne die Testseite wirklich geladen zu haben. 
 
 ## Veröffentlichen
 
-- **Cache-Version erhöhen** bei jeder Änderung an ausgelieferten Dateien: `?v=N` an allen Einträgen in `index.html` und `CACHE` in `sw.js`, beide auf dieselbe Zahl. Sonst sehen Spieler alte Dateien. Die im Spiel angezeigte Version (`VERSION`, Spielstand-Bildschirm „Über das Spiel“) wird aus diesem `?v=` gelesen, es gibt keine weitere Stelle zum Hochzählen.
+- **Version erhöhen** bei jeder Änderung an ausgelieferten Dateien, nach Semantic Versioning (`MAJOR.MINOR.PATCH`): `?v=X.Y.Z` an allen Einträgen in `index.html` und `CACHE = "ritter-vX.Y.Z"` in `sw.js`, beide gleich. Solange das Spiel ein Prototyp ist, bleibt MAJOR bei 0: neue Funktionen oder Balance-Änderungen → MINOR (0.2.0), reine Fehlerbehebungen → PATCH (0.1.1). 1.0.0 erst, wenn Spielstände dauerhaft stabil bleiben sollen. Sonst sehen Spieler alte Dateien. Die im Spiel angezeigte Version (`VERSION`, Spielstand-Bildschirm „Über das Spiel“) und der Release-Tag (`vX.Y.Z`) werden aus diesem `?v=` gelesen, es gibt keine weitere Stelle zum Hochzählen.
+- **Release für itch.io:** GitHub → Actions → „Release (itch.io-Artefakt)“. Pro Version gibt es genau ein Release; existiert der Tag schon, bricht der Workflow ab, dann zuerst die Version erhöhen. Der Workflow prüft auch, dass `index.html` und `sw.js` dieselbe Version haben.
 - **itch.io-Seite:** Prototyp-Hinweis und Kurzbeschreibung stehen in `docs/itch-seite.md` und werden von Hand auf itch.io übernommen.
 - Größere Änderungen zuerst ins Test-Repo: `git push test <branch>:main`, dann in der Vorschau prüfen. Erst nach Bestätigung per Fast-Forward nach `main` und `git push origin main`.
 - Test-Vorschau und Live-Seite teilen sich denselben Origin und damit denselben `localStorage`. Dort nie Speicherstände löschen oder überschreiben. Zerstörende Tests nur per `file://` oder `localhost`.

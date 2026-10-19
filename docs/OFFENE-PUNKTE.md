@@ -1,6 +1,6 @@
 # Offene Punkte
 
-Stand: 19.10.2026, nach dem Update „Übersetzungen (Deutsch/Englisch)“ (live mit Version v16).
+Stand: 19.10.2026, nach dem Update „Übersetzungen (Deutsch/Englisch)“ (live mit Version 0.1.0; davor intern v14–v18).
 
 ## Zufallsbeute – Feinschliff
 
@@ -24,7 +24,7 @@ Aus der unabhängigen Prüfung, bewusst aufgeschoben:
 - [ ] **Test „Alle Bosse besiegbar (Ablauf)“** hängt davon ab, dass der Beutel nicht überläuft. Besser den Beutel in der Schleife leeren.
 - [ ] **`findLastIndex`** in `rarRoll` braucht Safari 15.4 oder neuer. Zur Sicherheit durch eine einfache Schleife ersetzen.
 
-## Übersetzungen (i18n, Version v15)
+## Übersetzungen (i18n)
 
 - [ ] **Englische Texte beim echten Spielen gegenlesen**, vor allem Kampflog, Ereignisse und Anleitung. Ton und Begriffe (HP, XP, Fame) einmal durchgehen.
 - [ ] **Veralteter Text** „mit Pokal und Turnierschatz“ (Freischaltung Turnier) steht jetzt in beiden Sprachdateien (`feat.tour`).
@@ -46,4 +46,4 @@ Aus der unabhängigen Prüfung, bewusst aufgeschoben:
 
 - Größere Änderungen erst ins Test-Repo: `git push test <branch>:main`, Vorschau unter https://ttrabold.github.io/Rittermanager-test/.
 - Tests: `tests/index.html` im Browser öffnen. Balance: `tests/sim.js` auf der Testseite laden und `simRun(400)` aufrufen.
-- Nach Änderungen `?v=` in `index.html` und `CACHE` in `sw.js` erhöhen.
+- Nach Änderungen die Version erhöhen (Semantic Versioning, `?v=X.Y.Z` in `index.html` und `CACHE` in `sw.js`, siehe AGENTS.md).
