@@ -1,4 +1,4 @@
-# ⚔️ Ritter Manager – Spielanleitung
+# ⚔️ Sir Grindalot – Spielanleitung
 
 Willkommen, edler Ritter (oder edle Ritterin)! Hier erfährst du alles, was du über das Spiel wissen musst.
 

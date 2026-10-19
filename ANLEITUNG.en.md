@@ -1,4 +1,4 @@
-# ⚔️ Ritter Manager – Game Guide
+# ⚔️ Sir Grindalot – Game Guide
 
 Welcome, noble knight (or noble dame)! Here you'll find everything you need to know about the game.
 

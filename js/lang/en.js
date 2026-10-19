@@ -1,7 +1,7 @@
 // Ritter Manager – Texte auf Englisch. Schlüssel identisch mit de.js halten. Funktionen bekommen Zahlen/Namen aus dem Spiel.
 I18N.en={
  // ---- Page head and app manifest (the manifest file must match name/short_name/description/lang, checked by scripts/i18n-check.js) ----
- meta:{title:"Ritter Manager",short:"Ritter",desc:"Rise from squire to legend – a medieval browser role-playing game.",manifest:"manifest.en.webmanifest"},
+ meta:{title:"Sir Grindalot – From Squire to Legend",short:"Sir Grindalot",desc:"Rise from squire to legend – a medieval browser role-playing game.",manifest:"manifest.en.webmanifest"},
  // ---- General ----
  locale:"en-GB",
  pct:v=>v+"%",pctU:"%",
@@ -42,7 +42,7 @@ I18N.en={
   exT:"Back up & transfer",exD:"Export the active save as a file or text – as a backup or to continue on another device.",file:"Save as file",text:"Copy as text",
   ph:"Paste exported text here …",loadF:"Load file",imp:"Import text",impQ:n=>`Really load into slot ${n}?`,newMsg:"A new adventure begins!",
   inField:"The text is in the field below.",copied:"Copied to the clipboard – and in the field below.",saving:"Saving file.",saveFail:"Saving as a file didn't work – use “Copy as text”.",
-  invalid:"That is not a valid Ritter Manager save.",about:"About the game",ver:v=>"Version "+v,
+  invalid:"That is not a valid Sir Grindalot save.",about:"About the game",ver:v=>"Version "+v,
   proto:"Prototype: bugs and balance changes are possible, and saves may break with new versions. Back up your knight regularly with “Save as file”.",found:(n,d,s)=>`Found: <b>${n}</b>, day ${d}. The active slot ${s} will be overwritten!`},
  ago:{now:"just now",min:m=>`${m} min. ago`,h:h=>`${h} h ago`,d:d=>`${d} days ago`},
  // ---- Calendar, castle, quests, night ----
