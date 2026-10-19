@@ -1,5 +1,7 @@
 // Ritter Manager – Texte auf Englisch. Schlüssel identisch mit de.js halten. Funktionen bekommen Zahlen/Namen aus dem Spiel.
 I18N.en={
+ // ---- Page head and app manifest (the manifest file must match name/short_name/description/lang, checked by scripts/i18n-check.js) ----
+ meta:{title:"Ritter Manager",short:"Ritter",desc:"Rise from squire to legend – a medieval browser role-playing game.",manifest:"manifest.en.webmanifest"},
  // ---- General ----
  locale:"en-GB",
  pct:v=>v+"%",pctU:"%",
@@ -73,7 +75,7 @@ I18N.en={
   fled:"You flee! No fame, but no loss either.",fledM:"You fled.",fleeFail:"Escape failed!",eSkip:n=>`${n} is stunned and loses a turn.`,
   eGuard:"The enemy takes cover. 🛡️",dodge:"You dodge!",took:d=>`You take ${d} damage.`,wBurn:"The enchanted weapon sets you on fire! 🔥",
   wPois:"The enchanted weapon poisons you! ☠️",wStun:"The enchanted weapon paralyses you! ❄️",eLife:(n,h)=>`${n} drains ${h} HP.`,pPois:"You are poisoned! ☠️",pBurn:"You are burning! 🔥",
-  pStun:"You are stunned! 💫",dot:{bleed:(n,d)=>`${n} bleeds: ${d} damage.`,burn:(n,d)=>`${n} burns: ${d} damage.`,poison:(n,d)=>`${n} suffers from poison: ${d} damage.`},
+  pStun:"You are stunned! 💫",boss:"BOSS",dot:{bleed:(n,d)=>`${n} bleeds: ${d} damage.`,burn:(n,d)=>`${n} burns: ${d} damage.`,poison:(n,d)=>`${n} suffers from poison: ${d} damage.`},
   eRegen:(n,h)=>`${n} regenerates ${h} HP.`,rage:n=>`<b>${n} flies into a rage!</b> 😡`,armRegen:h=>`Your armour heals you for ${h} HP. 🌙`,pPoisT:d=>`Poison: ${d} damage. ☠️`,
   pBurnT:d=>`Burn: ${d} damage. 🔥`,breath:h=>`Second wind: +${h} HP. 💗`,pSkip:"You are stunned and lose your turn!",
   // Highlighting in the combat log: damage red, healing green

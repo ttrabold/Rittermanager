@@ -1,5 +1,7 @@
 // Ritter Manager – Texte auf Deutsch. Schlüssel identisch mit en.js halten. Funktionen bekommen Zahlen/Namen aus dem Spiel.
 I18N.de={
+ // ---- Seitenkopf und App-Manifest (Manifest-Datei muss name/short_name/description/lang hiervon übernehmen, scripts/i18n-check.js prüft das) ----
+ meta:{title:"Ritter Manager",short:"Ritter",desc:"Werde vom Knappen zur Legende – ein mittelalterliches Browser-Rollenspiel.",manifest:"manifest.webmanifest"},
  // ---- Allgemein ----
  locale:"de-DE",
  pct:v=>v+" %",pctU:"&nbsp;%",
@@ -73,7 +75,7 @@ I18N.de={
   fled:"Du ergreifst die Flucht! Kein Ruhm, aber auch kein Verlust.",fledM:"Du bist geflohen.",fleeFail:"Flucht gescheitert!",eSkip:n=>`${n} ist betäubt und setzt aus.`,
   eGuard:"Der Gegner geht in Deckung. 🛡️",dodge:"Du weichst aus!",took:d=>`Du erleidest ${d} Schaden.`,wBurn:"Die verzauberte Waffe setzt dich in Brand! 🔥",
   wPois:"Die verzauberte Waffe vergiftet dich! ☠️",wStun:"Die verzauberte Waffe lähmt dich! ❄️",eLife:(n,h)=>`${n} saugt ${h} LP auf.`,pPois:"Du bist vergiftet! ☠️",pBurn:"Du brennst! 🔥",
-  pStun:"Du bist betäubt! 💫",dot:{bleed:(n,d)=>`${n} blutet: ${d} Schaden.`,burn:(n,d)=>`${n} brennt: ${d} Schaden.`,poison:(n,d)=>`${n} leidet unter Gift: ${d} Schaden.`},
+  pStun:"Du bist betäubt! 💫",boss:"BOSS",dot:{bleed:(n,d)=>`${n} blutet: ${d} Schaden.`,burn:(n,d)=>`${n} brennt: ${d} Schaden.`,poison:(n,d)=>`${n} leidet unter Gift: ${d} Schaden.`},
   eRegen:(n,h)=>`${n} regeneriert ${h} LP.`,rage:n=>`<b>${n} gerät in Rage!</b> 😡`,armRegen:h=>`Deine Rüstung heilt dich um ${h} LP. 🌙`,pPoisT:d=>`Gift: ${d} Schaden. ☠️`,
   pBurnT:d=>`Verbrennung: ${d} Schaden. 🔥`,breath:h=>`Zweiter Atem: +${h} LP. 💗`,pSkip:"Du bist betäubt und verlierst deinen Zug!",
   // Hervorhebung im Kampftext: Schaden rot, Heilung grün

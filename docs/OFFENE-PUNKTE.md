@@ -1,6 +1,6 @@
 # Offene Punkte
 
-Stand: 19.10.2026, nach dem Update „Übersetzungen (Deutsch/Englisch)“ (live mit Version v15).
+Stand: 19.10.2026, nach dem Update „Übersetzungen (Deutsch/Englisch)“ (live mit Version v16).
 
 ## Zufallsbeute – Feinschliff
 
@@ -27,7 +27,6 @@ Aus der unabhängigen Prüfung, bewusst aufgeschoben:
 ## Übersetzungen (i18n, Version v15)
 
 - [ ] **Englische Texte beim echten Spielen gegenlesen**, vor allem Kampflog, Ereignisse und Anleitung. Ton und Begriffe (HP, XP, Fame) einmal durchgehen.
-- [ ] **`manifest.webmanifest` und `<meta name="description">`** sind nur deutsch. Bei installierter App bleibt der Name „Ritter Manager“ ohnehin gleich.
 - [ ] **Veralteter Text** „mit Pokal und Turnierschatz“ (Freischaltung Turnier) steht jetzt in beiden Sprachdateien (`feat.tour`).
 
 ## Balance

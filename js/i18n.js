@@ -16,3 +16,6 @@ const loc1=(sec,o)=>(loc(sec,[o],()=>"")[0]);
 function setLang(l){if(!(l in LANGS)||l===LANG)return;try{localStorage.setItem("ritter_lang",l)}catch(e){}if(typeof save==="function")save();
  const u=new URL(location.href);if(u.searchParams.has("lang")){u.searchParams.delete("lang");location.replace(u.href)}else location.reload()}
 document.documentElement.lang=LANG;
+// Seitentitel, Beschreibung, App-Titel und Manifest in der aktiven Sprache (läuft beim Start, nachdem die Sprachdateien geladen sind)
+function i18nHead(){const m=t("meta"),q=s=>document.querySelector(s),set=(s,v)=>{const e=q(s);if(e)e.setAttribute("content",v)};
+ document.title=m.title;set('meta[name="description"]',m.desc);set('meta[name="apple-mobile-web-app-title"]',m.short);const l=q('link[rel="manifest"]');if(l)l.setAttribute("href",m.manifest)}
