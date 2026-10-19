@@ -1,0 +1,31 @@
+name: Release (itch.io-Artefakt)
+
+# Nur manuell startbar (GitHub → Actions → „Release (itch.io-Artefakt)" → Run workflow).
+# Baut das itch.io-ZIP und legt ein GitHub-Release damit an.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: ZIP bauen (prüft vorher die Übersetzungen)
+        run: bash scripts/itch-zip.sh dist/ritter-itch.zip
+
+      - name: Release anlegen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          SHORT="${GITHUB_SHA::7}"
+          VER=$(grep -oE 'css/style\.css\?v=[0-9]+' index.html | grep -oE '[0-9]+$')
+          TAG="v${VER}-build${GITHUB_RUN_NUMBER}"
+          gh release create "$TAG" dist/ritter-itch.zip \
+            --target "$GITHUB_SHA" \
+            --title "Version ${VER} (Build ${GITHUB_RUN_NUMBER}, ${SHORT})" \
+            --notes "Automatisches Release für itch.io (HTML5-ZIP) aus Commit ${SHORT}." \
+            --prerelease
