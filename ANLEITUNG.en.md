@@ -856,6 +856,7 @@ For special achievements you earn **titles**. You can wear one of them. It appea
 - **💾 Save slots**: at the very bottom of the castle screen you manage up to **3 saves**, for example for different knights or dames. For each slot you see name, rank, level, day, gold and when you last played. You can **load** a slot, **start new** on an empty slot or **delete** a slot. Deleting must be confirmed a second time and can't be undone. The game always saves automatically to the active slot.
 - **📤 Back up & transfer**: on the save screen you can **save the active save as a file** or **copy it as text** and **import** it again later, for example on another device. That way your knight isn't lost even if you clear your browser data.
 - **📱 Install as an app**: via the browser menu (e.g. “Add to Home Screen” or “Install app”) the game becomes an app with its own icon. Once loaded, it can also be played **offline**.
+- **ℹ️ Version**: the version number is shown at the bottom of the save screen. The game is a **prototype**: bugs and balance changes are possible, and saves may break with new versions. So back up your knight regularly with “Save as file”.
 - **💡 Tips**: the first time you open a new feature, a short tip card explains the essentials.
 - **Expand and collapse stats**: tap the summary line with level, energy, gold and fame to see all stats. Music, sound, voice and language settings apply to all slots.
 

@@ -140,6 +140,7 @@ function saveScr(){musicSet("hall");save();
  <div class="grid"><button onclick="document.getElementById('impf').click()">📂 ${t("sv.loadF")}</button><button ${impArm?'class="p"':""} onclick="impText()">${impArm?t("sv.impQ",SLOT):"📥 "+t("sv.imp")}</button></div>
  <input id="impf" type="file" accept=".txt,.json,text/plain" hidden onchange="impFile(this)">
  ${impMsg?`<div class="msg">${impMsg}</div>`:""}</div>
+ <div class="card"><h3>ℹ️ ${t("sv.about")}</h3><div><b>Ritter Manager</b> · ${t("sv.ver",VERSION)}</div><div class="mut" style="margin-top:4px">🚧 ${t("sv.proto")}</div></div>
  <div class="grid"><button style="grid-column:1/-1" onclick="slotDel=0;impArm=0;impMsg='';expBuf='';home()">${t("c.back")}</button></div>`}
 function slotLoad(n){save();try{localStorage.setItem("ritter_slot",String(n))}catch(e){}location.reload()}
 function slotWipe(n){slotDel=0;try{localStorage.removeItem(slotKey(n))}catch(e){}if(n===SLOT){S=fresh();unlCheck();S.lvl0=1;S.sk=[];qGen();msg=t("sv.newMsg");save()}saveScr()}

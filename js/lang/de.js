@@ -42,7 +42,8 @@ I18N.de={
   exT:"Sichern & übertragen",exD:"Exportiere den aktiven Spielstand als Datei oder Text – zum Sichern oder um auf einem anderen Gerät weiterzuspielen.",file:"Als Datei speichern",text:"Als Text kopieren",
   ph:"Exportierten Text hier einfügen …",loadF:"Datei laden",imp:"Text importieren",impQ:n=>`Wirklich in Platz ${n} laden?`,newMsg:"Ein neues Abenteuer beginnt!",
   inField:"Der Text steht im Feld unten.",copied:"In die Zwischenablage kopiert – und unten im Feld.",saving:"Datei wird gespeichert.",saveFail:"Speichern als Datei hat nicht geklappt – nutze „Als Text kopieren“.",
-  invalid:"Das ist kein gültiger Rittermanager-Spielstand.",found:(n,d,s)=>`Gefunden: <b>${n}</b>, Tag ${d}. Der aktive Platz ${s} wird überschrieben!`},
+  invalid:"Das ist kein gültiger Rittermanager-Spielstand.",about:"Über das Spiel",ver:v=>"Version "+v,
+  proto:"Prototyp: Fehler und Balance-Änderungen sind möglich, Spielstände können mit neuen Versionen brechen. Sichere deinen Ritter regelmäßig mit „Als Datei speichern“.",found:(n,d,s)=>`Gefunden: <b>${n}</b>, Tag ${d}. Der aktive Platz ${s} wird überschrieben!`},
  ago:{now:"gerade eben",min:m=>`vor ${m} Min.`,h:h=>`vor ${h} Std.`,d:d=>`vor ${d} Tagen`},
  // ---- Kalender, Burgausbau, Aufträge, Nacht ----
  cal:{wd:["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"],day:"Tag",soon:"Demnächst",inD:n=>`in ${n} T.`,
