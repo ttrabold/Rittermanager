@@ -1,7 +1,7 @@
 // Ritter Manager – Tag und Nacht: Burgausbau, Tagesaufträge, Kalender, Vollmond-Jagd, Schlafanimation
 
 // ---- Kalender ----
-const WD=["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
+const WD=t("cal.wd");
 const MOONS=["🌑","🌒","🌓","🌔","🌕","🌖","🌗","🌘"];
 const wday=d=>WD[(d-1)%7];
 const isMarket=d=>(d-1)%7===5;
@@ -12,34 +12,35 @@ const untilDay=(d,test)=>{for(let k=0;k<14;k++)if(test(d+k))return k;return 99};
 const mp=p=>isMarket(S.day)&&has("cal")?Math.round(p*.7):p;   // Händlerpreis (Markttag −30 %)
 const ip=p=>isMarket(S.day)&&has("cal")?Math.round(p*.75):p;  // Trankpreis (Markttag −25 %)
 const tourFee=()=>isTourDay(S.day)&&has("cal")?0:20;
-function dayTags(d){const t=[];if(isMarket(d))t.push("🛒 <b>Markttag</b>: Händler −30 %, Tränke −25 %");if(isTourDay(d))t.push("🏟️ <b>Turniertag</b>: keine Gebühr, doppelte Siegprämie");if(isFull(d))t.push("🌕 <b>Vollmond</b>: Der Werwolf jagt heute Nacht!");return t}
-function calLine(){const d=S.day,t=dayTags(d),nx=[];
- if(!isMarket(d))nx.push(`🛒 in ${untilDay(d,isMarket)} T.`);if(!isTourDay(d))nx.push(`🏟️ in ${untilDay(d,isTourDay)} T.`);if(!isFull(d))nx.push(`🌕 in ${untilDay(d,isFull)} T.`);
- return `<div class="mut" style="margin:-2px 0 8px">📅 ${wday(d)}, Tag ${d} · ${MOONS[moonIx(d)]}${t.length?"<br>"+t.join("<br>"):""}<br><span style="font-size:12px">Demnächst: ${nx.join(" · ")}</span></div>`}
+function dayTags(d){const o=[];if(isMarket(d))o.push("🛒 "+t("cal.market"));if(isTourDay(d))o.push("🏟️ "+t("cal.tour"));if(isFull(d))o.push("🌕 "+t("cal.full"));return o}
+function calLine(){const d=S.day,tg=dayTags(d),nx=[];
+ if(!isMarket(d))nx.push("🛒 "+t("cal.inD",untilDay(d,isMarket)));if(!isTourDay(d))nx.push("🏟️ "+t("cal.inD",untilDay(d,isTourDay)));if(!isFull(d))nx.push("🌕 "+t("cal.inD",untilDay(d,isFull)));
+ return `<div class="mut" style="margin:-2px 0 8px">📅 ${wday(d)}, ${t("cal.day")} ${d} · ${MOONS[moonIx(d)]}${tg.length?"<br>"+tg.join("<br>"):""}<br><span style="font-size:12px">${t("cal.soon")}: ${nx.join(" · ")}</span></div>`}
 
 // ---- Burgausbau ----
 const BLD=[
- {id:"kaserne",n:"Kaserne",e:"⛺",max:2,g:300,d:"Mehr Energie am Morgen",y:lv=>({en:lv})},
- {id:"garten",n:"Kräutergarten",e:"🌿",max:5,g:60,d:"Heilkraut, später Giftpilze",y:lv=>({hk:2*lv,gp:Math.max(0,lv-2)})},
- {id:"mine",n:"Mine",e:"⛏️",max:5,g:80,d:"Eisenerz, später Mithril",y:lv=>({ez:2*lv,mi:Math.max(0,lv-2)})},
- {id:"arkan",n:"Arkanturm",e:"🔮",max:5,g:120,d:"Arkankristalle, später Feuerblüten",y:lv=>({ak:lv,fb:Math.max(0,lv-3)})},
- {id:"schatz",n:"Schatzkammer",e:"💰",max:5,g:100,d:"Gold",y:lv=>({g:30*lv})}];
+ {id:"kaserne",e:"⛺",max:2,g:300,y:lv=>({en:lv})},
+ {id:"garten",e:"🌿",max:5,g:60,y:lv=>({hk:2*lv,gp:Math.max(0,lv-2)})},
+ {id:"mine",e:"⛏️",max:5,g:80,y:lv=>({ez:2*lv,mi:Math.max(0,lv-2)})},
+ {id:"arkan",e:"🔮",max:5,g:120,y:lv=>({ak:lv,fb:Math.max(0,lv-3)})},
+ {id:"schatz",e:"💰",max:5,g:100,y:lv=>({g:30*lv})}];
+loc("bld",BLD);
 const bCost=(b,n)=>{const m=b.id==="kaserne"?{ez:6*n,le:6*n,mi:2*n}:{ez:3*n,le:2*n};if(b.id!=="kaserne"&&n>=3)m.mi=n-2;if(b.id!=="kaserne"&&n>=5)m.ds=1;return {m,g:b.g*n*n}};
 const enMax=()=>6+((S.bld||{}).kaserne||0)+(S.cmp==="ross"?1:0);
 const yTxt=y=>Object.entries(y).filter(([k,v])=>v>0).map(([k,v])=>k==="g"?`<i class=coin></i>${v}`:k==="en"?`⚡+${v}`:`${MT(k).e}${v}`).join(" ")||"–";
 function build(id){const b=BLD.find(x=>x.id===id),lv=S.bld[id];if(lv>=b.max)return;const c=bCost(b,lv+1);if(!hasM(c.m)||S.gold<c.g)return;
- const k0=cStage();S.gold-=c.g;for(const k in c.m)S.mat[k]-=c.m[k];S.bld[id]++;sfx("level");cNote=`${b.e} <b>${b.n}</b> ist jetzt auf Stufe ${S.bld[id]}!`+(cStage()>k0?`<br>🏰 <b>Deine Burg wächst zur ${CSTAGE[cStage()][1]}!</b>`:"");msg=cNote;save();castleScr()}
+ const k0=cStage();S.gold-=c.g;for(const k in c.m)S.mat[k]-=c.m[k];S.bld[id]++;sfx("level");cNote=t("cs.built",b.e,b.n,S.bld[id])+(cStage()>k0?`<br>🏰 <b>${t("cs.grow",CSTAGE[cStage()][1])}</b>`:"");msg=cNote;save();castleScr()}
 let cNote="";
 function castleScr(){musicSet("home");
- app.innerHTML=`<div class="top"><b>🏗️ Burgausbau</b><span><i class=coin></i> ${S.gold}</span></div>
+ app.innerHTML=`<div class="top"><b>🏗️ ${t("cs.t")}</b><span><i class=coin></i> ${S.gold}</span></div>
  <div class="scene">${BG}${bldSvg()}${decoSvg()}${castleSvg()}${pk()}</div>
  ${hintBox("burg")}
- <div class="msg" data-quiet>🏰 Deine Burg: <b>${CSTAGE[cStage()][1]}</b> (Stufe ${cStage()}/5)${cStage()<5?` – nächste Stufe „${CSTAGE[cStage()+1][1]}“ ab ${CSTAGE[cStage()+1][0]} Ausbaustufen (du hast ${bldSum()}).`:" – prächtiger geht es nicht!"}<br>Gebäude liefern <b>jede Nacht</b> Erträge. Volle Erträge gibt es, wenn du am Tag mindestens <b>4 Energie</b> genutzt hast, halbe ab 2. Wer nur faulenzt, bekommt nichts.</div>
+ <div class="msg" data-quiet>🏰 ${t("cs.stage",CSTAGE[cStage()][1],cStage())}${cStage()<5?t("cs.next",CSTAGE[cStage()+1][1],CSTAGE[cStage()+1][0],bldSum()):t("cs.max")}<br>${t("cs.info")}</div>
  <div class="card"><div style="margin-bottom:6px">${matRow()}</div>${BLD.map(b=>{const lv=S.bld[b.id],c=lv<b.max?bCost(b,lv+1):null;
-  return `<div class="row"><span style="display:flex;gap:10px;align-items:center">${bThumb(b.id,lv)}<span>${b.e} <b>${b.n}</b> <span class="mut">Stufe ${lv}/${b.max}</span><br><span class="mut">${b.d} · jetzt: ${lv?yTxt(b.y(lv)):"–"}${c?` → ${yTxt(b.y(lv+1))}<br>Kosten: ${costH(c.m,c.g)}`:" · voll ausgebaut"}</span></span></span>${c?`<button ${hasM(c.m)&&S.gold>=c.g?"":"disabled"} onclick="build('${b.id}')">${lv?"Ausbauen":"Bauen"}</button>`:'<span class="mut">✔</span>'}</div>`}).join("")}</div>
- <div class="card"><h3>✨ Verzierungen</h3><div class="mut">Schmücke deine Burg – jede Verzierung bringt einmalig Ruhm.</div>${DECO.map(d=>`<div class="row"><span>${d.e} <b>${d.n}</b> <span class="mut">+${d.r} Ruhm</span><br><span class="mut">${d.d}${d.ok&&!d.ok()?" · 🔒 "+d.lk:""}</span></span>${hasDeco(d.id)?'<span class="mut">✔</span>':d.ok&&!d.ok()?"":`<button ${S.gold<d.g?"disabled":""} onclick="decoBuy('${d.id}')">${d.g} <i class=coin></i></button>`}</div>`).join("")}</div>
+  return `<div class="row"><span style="display:flex;gap:10px;align-items:center">${bThumb(b.id,lv)}<span>${b.e} <b>${b.n}</b> <span class="mut">${t("st.lvl")} ${lv}/${b.max}</span><br><span class="mut">${b.d} · ${t("cs.now")}: ${lv?yTxt(b.y(lv)):"–"}${c?` → ${yTxt(b.y(lv+1))}<br>${t("c.cost")}: ${costH(c.m,c.g)}`:" · "+t("cs.full")}</span></span></span>${c?`<button ${hasM(c.m)&&S.gold>=c.g?"":"disabled"} onclick="build('${b.id}')">${lv?t("cs.up"):t("cs.build")}</button>`:'<span class="mut">✔</span>'}</div>`}).join("")}</div>
+ <div class="card"><h3>✨ ${t("cs.deco")}</h3><div class="mut">${t("cs.decoD")}</div>${DECO.map(d=>`<div class="row"><span>${d.e} <b>${d.n}</b> <span class="mut">+${d.r} ${t("st.ruhm")}</span><br><span class="mut">${d.d}${d.ok&&!d.ok()?" · 🔒 "+d.lk:""}</span></span>${hasDeco(d.id)?'<span class="mut">✔</span>':d.ok&&!d.ok()?"":`<button ${S.gold<d.g?"disabled":""} onclick="decoBuy('${d.id}')">${d.g} <i class=coin></i></button>`}</div>`).join("")}</div>
  ${cNote?`<div class="msg">${cNote}</div>`:""}
- <div class="grid"><button onclick="trader()">🛒 Händler</button><button onclick="home()">← Zurück zur Burg</button></div>`;cNote=""}
+ <div class="grid"><button onclick="trader()">🛒 ${t("tr.t")}</button><button onclick="home()">${t("c.back")}</button></div>`;cNote=""}
 // Gebäude in der Burgszene – jedes entwickelt sich mit seiner Stufe
 const BV={
  arkan:l=>{const x=76,h=l>=2?18+l*12:0,top=192-h,o=[];
@@ -89,16 +90,16 @@ function bldSvg(){const B=S.bld||{},o=["arkan","kaserne","garten","mine","schatz
 // ---- Tagesaufträge ----
 let QN=[];
 const QT=[
- {id:"win",n:x=>`Gewinne ${x} Kämpfe`,g:()=>rnd(2,3),e:x=>2*x,f:1},
- {id:"work",n:x=>`Arbeite ${x}-mal`,g:()=>2,e:x=>x},
- {id:"craft",ok:()=>has("craft"),n:x=>x>1?`Stelle ${x} Dinge in der Werkstatt her`:"Stelle etwas in der Werkstatt her",g:()=>rnd(1,2),e:x=>x},
- {id:"crit",n:x=>`Lande ${x} kritische Treffer`,g:()=>3,e:()=>0,f:1},
- {id:"skill",n:x=>`Setze ${x}-mal eine Spezialfähigkeit ein`,g:()=>rnd(3,4),e:()=>0,f:1,ok:()=>has("skills")},
- {id:"potion",n:()=>"Trinke im Kampf einen Trank",g:()=>1,e:()=>0,f:1},
- {id:"buy",ok:()=>has("craft"),n:x=>`Kaufe ${x} Materialien beim Händler`,g:()=>2,e:()=>0},
- {id:"tower",n:x=>`Schaffe ${x} Turm-Etagen`,g:()=>rnd(2,3),e:()=>4,f:1,ok:()=>has("tower")},
- {id:"tour",ok:()=>has("tour"),n:x=>`Gewinne ${x} Turnierrunden`,g:()=>2,e:()=>4,f:1},
- {id:"dice",ok:()=>has("tavern"),n:()=>"Gewinne eine Würfelpartie in der Taverne",g:()=>1,e:()=>0}];
+ {id:"win",n:x=>t("q.win",x),g:()=>rnd(2,3),e:x=>2*x,f:1},
+ {id:"work",n:x=>t("q.work",x),g:()=>2,e:x=>x},
+ {id:"craft",ok:()=>has("craft"),n:x=>t("q.craft",x),g:()=>rnd(1,2),e:x=>x},
+ {id:"crit",n:x=>t("q.crit",x),g:()=>3,e:()=>0,f:1},
+ {id:"skill",n:x=>t("q.skill",x),g:()=>rnd(3,4),e:()=>0,f:1,ok:()=>has("skills")},
+ {id:"potion",n:x=>t("q.potion",x),g:()=>1,e:()=>0,f:1},
+ {id:"buy",ok:()=>has("craft"),n:x=>t("q.buy",x),g:()=>2,e:()=>0},
+ {id:"tower",n:x=>t("q.tower",x),g:()=>rnd(2,3),e:()=>4,f:1,ok:()=>has("tower")},
+ {id:"tour",ok:()=>has("tour"),n:x=>t("q.tour",x),g:()=>2,e:()=>4,f:1},
+ {id:"dice",ok:()=>has("tavern"),n:x=>t("q.dice",x),g:()=>1,e:()=>0}];
 function qRew(){const r=Math.random(),L=lvl();
  if(r<.4)return {g:25+L*6};
  if(r<.75){const k=["ez","le","hk","gp","fb","ak"][rnd(0,5)],n=k==="ak"||k==="fb"?rnd(1,2):rnd(2,3),m={[k]:n};if(L>=8&&Math.random()<.3)m.mi=1;return {m}}
@@ -107,26 +108,28 @@ const rTxt=r=>r.g?`<i class=coin></i>${r.g}`:r.m?yTxt(r.m):Object.entries(r.it).
 function rGive(r){if(r.g)S.gold+=r.g;if(r.m)for(const k in r.m)S.mat[k]+=r.m[k];if(r.it)for(const k in r.it)S.it[k]+=r.it[k]}
 function qGen(){let list;
  for(let t=0;t<40;t++){const pool=QT.filter(q=>!q.ok||q.ok()).sort(()=>Math.random()-.5).slice(0,3);
-  list=pool.map(q=>{const goal=q.g();return {id:q.id,goal,p:0,done:false,r:qRew(),txt:q.n(goal),e:q.e(goal),f:q.f}});
+  list=pool.map(q=>{const goal=q.g();return {id:q.id,goal,p:0,done:false,r:qRew(),e:q.e(goal),f:q.f}});
   const fight=list.filter(q=>q.f),need=list.reduce((a,q)=>a+q.e,0)+(fight.length&&!fight.some(q=>q.e)?2:0);
   if(need<=enMax())break}
  S.q={day:S.day,list:list.map(({e,f,...q})=>q),bonus:false}}
+// Auftragstext immer neu aus der Sprachdatei (alte Stände hatten den Text gespeichert)
+const qTxt=q=>{const d=QT.find(x=>x.id===q.id);return d?d.n(q.goal):q.txt||""};
 function qProg(id,n,l){if(!has("quests")||!S.q||S.q.day!==S.day)return;const out=l||QN;
- for(const q of S.q.list)if(q.id===id&&!q.done){q.p=Math.min(q.goal,q.p+(n||1));if(q.p>=q.goal){q.done=true;rGive(q.r);sfx("coin");out.push(`📜 <b>Auftrag erfüllt:</b> ${q.txt} → ${rTxt(q.r)}`)}}
+ for(const q of S.q.list)if(q.id===id&&!q.done){q.p=Math.min(q.goal,q.p+(n||1));if(q.p>=q.goal){q.done=true;rGive(q.r);sfx("coin");out.push(`📜 <b>${t("q.done")}</b> ${qTxt(q)} → ${rTxt(q.r)}`)}}
  if(!S.q.bonus&&S.q.list.every(q=>q.done)){S.q.bonus=true;const L=lvl(),r={g:60+L*10,it:{a:1},m:{}};
   for(let i=0;i<2;i++){const k=["ez","le","hk","gp","fb","ak"][rnd(0,5)];r.m[k]=(r.m[k]||0)+2}if(L>=15&&Math.random()<.3)r.m.ds=1;
-  rGive(r);sfx("level");out.push(`🎁 <b>Alle Tagesaufträge erledigt!</b> Bonus-Truhe: ${rTxt({g:r.g})} ${rTxt({it:r.it})} ${yTxt(r.m)}`)}}
+  rGive(r);sfx("level");out.push(`🎁 <b>${t("q.allDone")}</b> ${t("q.chest")}: ${rTxt({g:r.g})} ${rTxt({it:r.it})} ${yTxt(r.m)}`)}}
 function questCard(){if(!S.q)return "";const L=S.q.list,d=L.filter(q=>q.done).length;
- return `<div class="card"><h3>📜 Tagesaufträge <span class="mut">(${d}/${L.length})</span></h3>${L.map(q=>`<div class="row"><span>${q.done?"✅":"▫️"} ${q.txt} <span class="mut">${q.p}/${q.goal}</span></span><span class="mut" style="white-space:nowrap">${rTxt(q.r)}</span></div>`).join("")}
- <div class="mut" style="margin-top:6px">🎁 Bonus-Truhe für alle drei: ${S.q.bonus?"✔ erhalten":"noch offen"}</div></div>`}
+ return `<div class="card"><h3>📜 ${t("q.t")} <span class="mut">(${d}/${L.length})</span></h3>${L.map(q=>`<div class="row"><span>${q.done?"✅":"▫️"} ${qTxt(q)} <span class="mut">${q.p}/${q.goal}</span></span><span class="mut" style="white-space:nowrap">${rTxt(q.r)}</span></div>`).join("")}
+ <div class="mut" style="margin-top:6px">🎁 ${t("q.bonus")}: ${S.q.bonus?t("q.got"):t("q.open")}</div></div>`}
 
 // ---- Vollmond-Werwolf ----
-const WOLF={n:"Vollmond-Werwolf",hp:2.1,atk:1.05,def:1,tint:"#5d4037",mv:[["Klauenhieb",1.1,92,"",4],["Wundbiss",.9,90,"poison",3],["Mondgeheul",0,100,"guard",1],["Sprungangriff",1.7,78,"stun",2]]};
-EI.push({id:"mw",n:"Mondsichel",s:"w",b:15,c:"#cfd8e6",fx:{crit:.12,life:.08},d:"+12 % Krit, 8 % Lebensraub"},{id:"wf",n:"Wolfspelz",s:"a",b:9,c:"#6d5a4a",fx:{dodge:8,regen:3},d:"+8 % Ausweichen, heilt 3 LP/Runde"});
+const WOLF=loc1("wolf",{hp:2.1,atk:1.05,def:1,tint:"#5d4037",mv:[[1.1,92,"",4],[.9,90,"poison",3],[0,100,"guard",1],[1.7,78,"stun",2]]});
+EI.push(...loc("ei",[{id:"mw",s:"w",b:15,c:"#cfd8e6",fx:{crit:.12,life:.08}},{id:"wf",s:"a",b:9,c:"#6d5a4a",fx:{dodge:8,regen:3}}]));
 VIS.mw={b:"curved",f:"#e3e9f2",e:"#fff",g:"#9fb4d8",fx:()=>SPARK};
 AV.wf=b=>b?`<path class="wv" d="M40 62Q12 96 18 144L50 120Z" fill="#6d5a4a" stroke="#0004"/>`:`<path d="M42 60q5-9 9-1q5-9 10-1q5-9 10-1q5-9 9 1l-4 7H46Z" fill="#8d7b68" stroke="#0004"/>`;
 function startMoon(){if(!has("cal")||!isFull(S.day)||S.moonDone===S.day||S.en<3)return;S.en-=3;S.moonDone=S.day;const e=mk(Math.max(2,lvl()),WOLF,true);e.moon=true;setup(e)}
-function moonLoot(l){lootGive("moon",lvl(),l);S.it.a++;S.mat.ak+=2;l.push("Dazu: 🔷 Äthertrank und 💎 Arkankristall ×2.")}
+function moonLoot(l){lootGive("moon",lvl(),l);S.it.a++;S.mat.ak+=2;l.push(t("moon.extra"))}
 const wolfSvg=()=>BSV(`<circle class="pl" cx="62" cy="70" r="58" fill="#cfd8e6"/>
  <path class="sway" d="M44 112Q20 120 14 100" stroke="#5d4037" stroke-width="9" fill="none" stroke-linecap="round"/>
  <path d="M44 104Q36 124 42 146h14l2-26ZM74 106Q86 126 80 146H66l-2-26Z" fill="#6d4c41" stroke="#0005"/><path d="M40 146l3 6 3-6 3 6 3-6M64 146l3 6 3-6 3 6 3-6" stroke="#eee" stroke-width="2" fill="none"/>
@@ -147,14 +150,14 @@ function newDay(){if(document.getElementById("night"))return;
  const had=BLD.some(b=>b.id!=="kaserne"&&S.bld[b.id]);
  S.day++;S.en=enMax();let r=Math.random()*EVT.reduce((a,e)=>a+e[0],0),ev=EVT[0];for(const e of EVT){if(r<e[0]){ev=e;break}r-=e[0]}
  const lvL=[];const evT=ev[1]();levelCheck(lvL);unlCheck(lvL);S.enStart=S.en;qGen();msg=evT;save();
- const facT=fac===1?`Du hast gestern ${used} Energie genutzt – <b>volle Erträge</b>.`:fac?`Du hast gestern nur ${used} Energie genutzt – <b>halbe Erträge</b>.`:`Du hast gestern kaum etwas getan (${used} Energie) – <b>keine Erträge</b>.`;
- nightShow(`<h3>🌙 Die Nacht zu Tag ${S.day}</h3>
-  ${has("burg")?`<div class="row"><span><b>🏗️ Erträge deiner Burg</b><br><span class="mut">${had?facT+"<br>"+(lines.join("<br>")||"–"):'Noch keine Gebäude. <a href="#" onclick="nightClose(castleScr);return false" style="color:var(--acc)">Burg ausbauen</a>'}</span></span></div>`:""}
-  <div class="row"><span><b>☀️ Am Morgen</b><br>${evT}${lvL.length?"<br>"+lvL.join("<br>"):""}</span></div>
+ const facT=t(fac===1?"nt.full":fac?"nt.half":"nt.none",used);
+ nightShow(`<h3>🌙 ${t("nt.t",S.day)}</h3>
+  ${has("burg")?`<div class="row"><span><b>🏗️ ${t("nt.yield")}</b><br><span class="mut">${had?facT+"<br>"+(lines.join("<br>")||"–"):`${t("nt.noBld")} <a href="#" onclick="nightClose(castleScr);return false" style="color:var(--acc)">${t("nt.build")}</a>`}</span></span></div>`:""}
+  <div class="row"><span><b>☀️ ${t("nt.morning")}</b><br>${evT}${lvL.length?"<br>"+lvL.join("<br>"):""}</span></div>
   ${has("cal")?`<div class="row"><span><b>📅 ${wday(S.day)} ${MOONS[moonIx(S.day)]}</b>${dayTags(S.day).map(t=>"<br>"+t).join("")}</span></div>`:""}
-  ${has("quests")?`<div class="row"><span><b>📜 Neue Aufträge</b><br>${S.q.list.map(q=>"▫️ "+q.txt+` <span class="mut">(${rTxt(q.r)})</span>`).join("<br>")}</span></div>`:""}`)}
+  ${has("quests")?`<div class="row"><span><b>📜 ${t("nt.quests")}</b><br>${S.q.list.map(q=>"▫️ "+qTxt(q)+` <span class="mut">(${rTxt(q.r)})</span>`).join("<br>")}</span></div>`:""}`)}
 function nightShow(rep){const fast=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches,el=document.createElement("div");el.id="night";el.className="night"+(fast?" fast":"");
  el.innerHTML=`<div class="nsky">${Array.from({length:18},(_,i)=>`<i style="left:${(i*53)%100}%;top:${(i*29)%45}%;animation-delay:${.4+(i%5)*.1}s"></i>`).join("")}<span class="nmoon">🌙</span><span class="nzz">Z z z</span><span class="nsun">☀️</span></div>
- <div class="card nrep" hidden>${rep}<div class="grid"><button class="p" style="grid-column:1/-1" onclick="nightClose(home)">☀️ Auf in den Tag!</button></div></div>`;
- document.body.appendChild(el);sfx("night");setTimeout(()=>sfx("morning"),fast?50:1900);setTimeout(()=>{const r=el.querySelector(".nrep");if(r){r.hidden=false;say(r.innerText.replace(/Auf in den Tag!/,""))}},fast?100:2700)}
+ <div class="card nrep" hidden>${rep}<div class="grid"><button class="p" style="grid-column:1/-1" onclick="nightClose(home)">☀️ ${t("nt.go")}</button></div></div>`;
+ document.body.appendChild(el);sfx("night");setTimeout(()=>sfx("morning"),fast?50:1900);setTimeout(()=>{const r=el.querySelector(".nrep");if(r){r.hidden=false;say(r.innerText.replace(t("nt.go"),""))}},fast?100:2700)}
 function nightClose(go){const el=document.getElementById("night");if(el)el.remove();go()}

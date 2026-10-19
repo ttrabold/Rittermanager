@@ -1,10 +1,11 @@
 // Ritter Manager – Begleiter: ein aktiver Begleiter steht neben dem Ritter und hilft passiv
 
 const COMP=[
- {id:"knappe",n:"Knappe Lukas",e:"🧒",price:250,ok:()=>true,d:"Reicht dir einmal pro Kampf einen Trank, wenn deine LP unter 30 % fallen (+25 % LP)."},
- {id:"hund",n:"Jagdhund Bello",e:"🐕",price:400,ok:()=>true,d:"Findet nach Siegen zusätzliche Materialien und manchmal Gold."},
- {id:"falke",n:"Falke Sturmfeder",e:"🦅",price:900,ok:()=>(S.bk||[]).length>=2,lk:"nach dem 2. Boss",d:"+5 % Krit-Chance und greift manchmal selbst an."},
- {id:"ross",n:"Schlachtross Donner",e:"🐎",price:2000,ok:()=>(S.bk||[]).length>=4,lk:"nach dem 4. Boss",d:"+1 Energie jeden Morgen."}];
+ {id:"knappe",e:"🧒",price:250,ok:()=>true},
+ {id:"hund",e:"🐕",price:400,ok:()=>true},
+ {id:"falke",e:"🦅",price:900,ok:()=>(S.bk||[]).length>=2},
+ {id:"ross",e:"🐎",price:2000,ok:()=>(S.bk||[]).length>=4}];
+loc("comp",COMP);
 const compV=k=>S.cmp==="falke"&&k==="crit"?.05:0;
 const COMPV={
  knappe:`<ellipse cx="30" cy="58" rx="11" ry="2.5" fill="#0003"/><rect x="24" y="40" width="5" height="16" fill="#5b4636"/><rect x="31" y="40" width="5" height="16" fill="#5b4636"/><path d="M21 26h18l2 16H19z" fill="#2e7d32" stroke="#0004"/><circle cx="30" cy="19" r="8" fill="#e0b48a" stroke="#0004"/><path d="M22 17q8-10 16 0z" fill="#8a4b22"/><path d="M21 15h18l-3-4H24z" fill="#c0392b"/><circle cx="27" cy="19" r="1.2"/><circle cx="33" cy="19" r="1.2"/><path d="M39 30l6 6" stroke="#2e7d32" stroke-width="4" stroke-linecap="round"/><rect x="43" y="33" width="6" height="9" rx="2" fill="#e53935" stroke="#0005"/><rect x="44.5" y="31" width="3" height="3" fill="#8d6e63"/>`,
@@ -15,12 +16,12 @@ const compSvg=(id,h)=>id&&COMPV[id]?`<svg class="cmp" viewBox="0 0 60 60" style=
 function compBuy(id){const c=COMP.find(x=>x.id===id);S.comp=S.comp||[];if(S.comp.includes(id)||!c.ok()||S.gold<c.price)return;S.gold-=c.price;S.comp.push(id);S.cmp=id;sfx("level");save();compScr()}
 function compSet(id){S.cmp=S.cmp===id?null:id;sfx("buff");save();compScr()}
 function compScr(){musicSet("home");const own=S.comp||[];
- app.innerHTML=`<div class="top"><b>🐾 Begleiter</b><span><i class=coin></i> ${S.gold}</span></div>
+ app.innerHTML=`<div class="top"><b>🐾 ${t("cp.t")}</b><span><i class=coin></i> ${S.gold}</span></div>
  <div class="scene" style="height:170px">${BG}<div style="display:flex;align-items:flex-end;gap:4px;position:relative;z-index:2">${compSvg(S.cmp,70)}${pk()}</div></div>
  ${hintBox("comp")}
- <div class="msg" data-quiet>Ein Begleiter steht dir zur Seite und hilft dir mit seiner Fähigkeit. Du kannst mehrere besitzen, aber immer nur <b>einen</b> mitnehmen.</div>
- <div class="card">${COMP.map(c=>{const has=own.includes(c.id),act=S.cmp===c.id;return `<div class="row"><span style="display:flex;gap:10px;align-items:center"><span class="bthumb" style="display:flex;align-items:flex-end;justify-content:center">${compSvg(c.id,60)}</span><span><b>${c.e} ${c.n}</b>${act?' <span class="mut">(dabei)</span>':""}<br><span class="mut">${c.d}${!has&&!c.ok()?" · 🔒 "+c.lk:""}</span></span></span>${has?`<button ${act?'class="p"':""} onclick="compSet('${c.id}')">${act?"Dabei":"Mitnehmen"}</button>`:c.ok()?`<button ${S.gold<c.price?"disabled":""} onclick="compBuy('${c.id}')">${c.price} <i class=coin></i></button>`:""}</div>`}).join("")}</div>
- <div class="grid"><button style="grid-column:1/-1" onclick="home()">← Zurück zur Burg</button></div>`}
+ <div class="msg" data-quiet>${t("cp.intro")}</div>
+ <div class="card">${COMP.map(c=>{const has=own.includes(c.id),act=S.cmp===c.id;return `<div class="row"><span style="display:flex;gap:10px;align-items:center"><span class="bthumb" style="display:flex;align-items:flex-end;justify-content:center">${compSvg(c.id,60)}</span><span><b>${c.e} ${c.n}</b>${act?` <span class="mut">(${t("cp.with")})</span>`:""}<br><span class="mut">${c.d}${!has&&!c.ok()?" · 🔒 "+c.lk:""}</span></span></span>${has?`<button ${act?'class="p"':""} onclick="compSet('${c.id}')">${act?t("cp.withB"):t("cp.take")}</button>`:c.ok()?`<button ${S.gold<c.price?"disabled":""} onclick="compBuy('${c.id}')">${c.price} <i class=coin></i></button>`:""}</div>`}).join("")}</div>
+ <div class="grid">${backBtn()}</div>`}
 // Kampfhilfen der Begleiter
-function compTurn(f,l){if(S.cmp==="falke"&&Math.random()<.25&&f.ehp>0){const d=5+lvl()*2;f.ehp-=d;l.push(`🦅 Sturmfeder stößt herab: ${d} Schaden.`)}}
-function compRescue(f,l){if(S.cmp==="knappe"&&!f.knUsed&&f.php>0&&f.php<f.pmax*.3){f.knUsed=1;const o=f.php;f.php=Math.min(f.pmax,f.php+Math.round(f.pmax*.25));l.push(`🧒 Lukas reicht dir einen Trank: +${f.php-o} LP.`)}}
+function compTurn(f,l){if(S.cmp==="falke"&&Math.random()<.25&&f.ehp>0){const d=5+lvl()*2;f.ehp-=d;l.push("🦅 "+t("cp.falcon",d))}}
+function compRescue(f,l){if(S.cmp==="knappe"&&!f.knUsed&&f.php>0&&f.php<f.pmax*.3){f.knUsed=1;const o=f.php;f.php=Math.min(f.pmax,f.php+Math.round(f.pmax*.25));l.push("🧒 "+t("cp.squire",f.php-o))}}

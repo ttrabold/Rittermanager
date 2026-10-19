@@ -1,5 +1,5 @@
 // Ritter Manager – Spielstand: anlegen, laden, migrieren, speichern und abgeleitete Werte
-const fresh=()=>({mat:Object.fromEntries(MAT.map(m=>[m.k,0])),pr:{sm:{lv:1,xp:0},al:{lv:1,xp:0},ve:{lv:1,xp:0}},up:{},ru:{},bld:{kaserne:0,garten:0,mine:0,arkan:0,schatz:0},enStart:6,name:"Sir Kunibert",sex:"m",tcur:1,day:1,en:6,gold:20,ruhm:0,st:3,au:3,ge:3,w:0,a:0,s:0,exp:0,it:{h:2,H:0,k:0,e:0,g:0,x:0,a:0,A:0},own:[],gear:[],ew:null,ea:null,es:null,boss:0,troph:0,tt:[],title:null,crits:0,flawless:0,close:0,bk:[],star:0,tbest:0,tunl:0,wins:0,losses:0});
+const fresh=()=>({mat:Object.fromEntries(MAT.map(m=>[m.k,0])),pr:{sm:{lv:1,xp:0},al:{lv:1,xp:0},ve:{lv:1,xp:0}},up:{},ru:{},bld:{kaserne:0,garten:0,mine:0,arkan:0,schatz:0},enStart:6,name:t("name.m"),sex:"m",tcur:1,day:1,en:6,gold:20,ruhm:0,st:3,au:3,ge:3,w:0,a:0,s:0,exp:0,it:{h:2,H:0,k:0,e:0,g:0,x:0,a:0,A:0},own:[],gear:[],ew:null,ea:null,es:null,boss:0,troph:0,tt:[],title:null,crits:0,flawless:0,close:0,bk:[],star:0,tbest:0,tunl:0,wins:0,losses:0});
 const eq=k=>itm(S[k==="w"?"ew":k==="a"?"ea":"es"]);
 const ikey=k=>k==="w"?(S.ew||wKey()):k==="a"?(S.ea||"a"+S.a):(S.es||"s"+S.s);
 const upl=k=>(S.up||{})[ikey(k)]||0;
@@ -12,7 +12,7 @@ const knm=key=>{const u=(S.up||{})[key]||0,r=((S.ru||{})[key]||[]).length;return
 const iname=k=>knm(ikey(k));
 const invItems=()=>[wKey(),"a"+S.a,...(S.s?["s"+S.s]:[]),...S.own.filter(id=>EI.find(x=>x.id===id)),...(S.gear||[]).map(x=>x.id)].sort((a,b)=>(kinfo(a).s>kinfo(b).s)-(kinfo(a).s<kinfo(b).s));
 const isEq=key=>ikey("w")===key||ikey("a")===key||ikey("sh")===key;
-const gn=n=>S.sex==="f"&&n.startsWith("der ")?"die "+n.slice(4)+(/e$/.test(n)?"":"in"):n;
+const gn=n=>t("gn",n,S.sex==="f");
 const ttn=()=>{const t=TT.find(y=>y.id===S.title);return t&&gn(t.n)};
 const tl=()=>ttn()?`<div class="tl">🎖️ ${ttn()}</div>`:"";
 // Stufenkurve: höhere Stufen brauchen überproportional mehr EP (damit sich das Spiel nicht in wenigen Tagen durchspielt)
@@ -21,13 +21,14 @@ let _lvC=[-1,1];const lvl=()=>{if(_lvC[0]===S.exp)return _lvC[1];let L=1;while(e
 // Spielstand-Plätze: Platz 1 = bisheriger Speicher „ritter1“, Platz 2/3 = „ritter1_2“/„ritter1_3“
 const SLOTS=3,slotKey=n=>n===1?"ritter1":"ritter1_"+n;
 let SLOT=1;try{SLOT=Math.min(SLOTS,Math.max(1,+localStorage.getItem("ritter_slot")||1))}catch(e){}
-let S=fresh(),msg="Willkommen, edler Ritter! Verdiene Gold, bestehe Abenteuer und steige auf – dabei wirst du automatisch stärker.",F=null;
+let S=fresh(),msg=t("welcome"),F=null;
 try{const x=localStorage.getItem(slotKey(SLOT));if(x)S=Object.assign(fresh(),JSON.parse(x));}catch(e){}
 function migrate(){S.it=Object.assign({h:0,H:0,k:0,e:0,g:0,x:0,a:0,A:0},S.it);S.sex=S.sex==="f"?"f":"m";S.bld=Object.assign({kaserne:0,garten:0,mine:0,arkan:0,schatz:0},S.bld);S.enStart=S.enStart||6;S.tcur=S.tcur||1;S.mat=Object.assign(Object.fromEntries(MAT.map(m=>[m.k,0])),S.mat);S.pr=Object.assign({sm:{lv:1,xp:0},al:{lv:1,xp:0},ve:{lv:1,xp:0}},S.pr);S.up=S.up||{};S.ru=S.ru||{};S.star=S.star||0;S.tbest=S.tbest||0;S.tunl=S.tunl||((S.boss||0)>=3?1:0);S.own=S.own||[];S.ew=S.ew||null;S.ea=S.ea||null;S.boss=S.boss||0;S.troph=S.troph||0;
-S.name=String(S.name).replace(/[<>&"'`]/g,"").trim().slice(0,20)||"Sir Kunibert";S.tt=S.tt||[];S.title=S.title||null;S.crits=S.crits||0;S.flawless=S.flawless||0;S.close=S.close||0;S.bk=S.bk||Array.from({length:S.boss||0},(_,i)=>i);S.gear=Array.isArray(S.gear)?S.gear:[];S.es=S.es||null;if(typeof gearClean==="function")gearClean()}
+S.name=String(S.name).replace(/[<>&"'`]/g,"").trim().slice(0,20)||t("name.m");S.tt=S.tt||[];S.title=S.title||null;S.crits=S.crits||0;S.flawless=S.flawless||0;S.close=S.close||0;S.bk=S.bk||Array.from({length:S.boss||0},(_,i)=>i);S.gear=Array.isArray(S.gear)?S.gear:[];S.es=S.es||null;if(typeof gearClean==="function")gearClean()}
 migrate();
 const save=()=>{try{S.ts=Date.now();S.xpv=2;localStorage.setItem(slotKey(SLOT),JSON.stringify(S))}catch(e){}};
 const app=document.getElementById("app");
-const rank=()=>{let r=RANKS[0][1];for(const x of RANKS)if(S.ruhm>=x[0])r=x[1];return S.sex==="f"?RANKF[r]||r:r};
+const rankOf=(ruhm,sex)=>{let r=RANKS[0];for(const x of RANKS)if(ruhm>=x[0])r=x;return r[sex==="f"?2:1]};
+const rank=()=>rankOf(S.ruhm,S.sex);
 const maxhp=()=>Math.round((40+S.au*6+lvl()*4+fxv("hp"))*(1+.1*blessV("hp")));
 

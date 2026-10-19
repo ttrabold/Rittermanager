@@ -1,29 +1,28 @@
 // Ritter Manager – Waffenarten: jede Art mit eigener Wirkung, eigenen Modellen und 5 Stufen im Markt
 
 const WCAT={
- schwert:{n:"Schwert",e:"🗡️",dmg:1,acc:3,crit:.05,d:"Ausgewogen: +3 Treffsicherheit, +5 % Krit"},
- axt:{n:"Axt",e:"🪓",dmg:1,acc:-5,bleed:.15,d:"15 % Blutung, aber −5 Treffsicherheit"},
- keule:{n:"Keule",e:"🔨",dmg:.95,armor:.3,stun:.1,d:"Ignoriert 30 % Rüstung, 10 % Betäubung, aber −5 % Schaden"},
- helle:{n:"Hellebarde",e:"🔱",dmg:1,reach:.25,d:"+25 % Schaden, solange der Gegner über 70 % LP hat"},
- bogen:{n:"Bogen",e:"🏹",dmg:1,acc:8,crit:.12,d:"+8 Treffsicherheit, +12 % Krit"},
- stab:{n:"Zauberstab",e:"🪄",dmg:.9,magic:1,armor:.5,d:"Zauberkraft aus Stärke und Geschick, ignoriert 50 % Rüstung"},
- dolch:{n:"Dolch",e:"🔪",dmg:.95,crit:.15,dbl:.3,d:"−5 % Schaden, +15 % Krit, 30 % Doppelstich"}};
-const WNAMES={schwert:W.map(x=>x[0]),axt:["Holzfälleraxt","Eisenaxt","Streitaxt","Doppelaxt","Drachenaxt"],keule:["Knüppel","Eisenkeule","Morgenstern","Kriegshammer","Drachenhammer"],
- helle:["Speer","Eisenspeer","Hellebarde","Glefe","Drachenhellebarde"],bogen:["Kurzbogen","Jagdbogen","Langbogen","Kompositbogen","Drachenbogen"],
- stab:["Holzstab","Eichenstab","Kristallstab","Runenstab","Drachenstab"],dolch:["Messer","Eisendolch","Stahldolch","Parierdolch","Drachenkralle"]};
+ schwert:{e:"🗡️",dmg:1,acc:3,crit:.05},
+ axt:{e:"🪓",dmg:1,acc:-5,bleed:.15},
+ keule:{e:"🔨",dmg:.95,armor:.3,stun:.1},
+ helle:{e:"🔱",dmg:1,reach:.25},
+ bogen:{e:"🏹",dmg:1,acc:8,crit:.12},
+ stab:{e:"🪄",dmg:.9,magic:1,armor:.5},
+ dolch:{e:"🔪",dmg:.95,crit:.15,dbl:.3}};
+for(const k in WCAT)Object.assign(WCAT[k],t("wcat."+k));
+const WNAMES=Object.assign({schwert:W.map(x=>x[0])},t("wnames"));
 const wPrice=(cat,i)=>i===0&&cat!=="schwert"?15:W[i][1];
 const wKey=()=>!S.wc||S.wc==="schwert"?"w"+S.w:`w:${S.wc}:${S.w}`;
 const eqCat=()=>{const e=eq("w");return e?(e.cat||"schwert"):(S.wc||"schwert")};
 const wcat=()=>WCAT[eqCat()]||WCAT.schwert;
-function buyW(cat,i){const p=wPrice(cat,i);if(S.gold<p||(S.wc||"schwert")===cat&&S.w===i)return;S.gold-=p;S.wc=cat;S.w=i;sfx("coin");msg=`Gekauft: <b>${WNAMES[cat][i]}</b>!`;save();shop()}
+function buyW(cat,i){const p=wPrice(cat,i);if(S.gold<p||(S.wc||"schwert")===cat&&S.w===i)return;S.gold-=p;S.wc=cat;S.w=i;sfx("coin");msg=t("shop.bought",WNAMES[cat][i]);save();shop()}
 // Neue verzauberte Waffen der anderen Arten (in der Werkstatt schmiedbar)
-EI.push(
- {id:"x1",n:"Runenaxt",s:"w",cat:"axt",b:12,c:"#90caf9",fx:{crit:.06,stun:.08},d:"+6 % Krit, 8 % Lähmung",cr:1},
- {id:"x2",n:"Donnerkeule",s:"w",cat:"keule",b:15,c:"#fff176",fx:{stun:.15},d:"15 % Lähmung",cr:1},
- {id:"x3",n:"Sturmhellebarde",s:"w",cat:"helle",b:17,c:"#80deea",fx:{crit:.1},d:"+10 % Krit",cr:1},
- {id:"x4",n:"Elfenbogen",s:"w",cat:"bogen",b:16,c:"#a5d6a7",fx:{crit:.12,poison:.15},d:"+12 % Krit, 15 % Gift",cr:1},
- {id:"x5",n:"Erzmagierstab",s:"w",cat:"stab",b:20,c:"#ce93d8",fx:{burn:.2,life:.06},d:"20 % Brand, 6 % Lebensraub",cr:1},
- {id:"x6",n:"Schattendolch",s:"w",cat:"dolch",b:15,c:"#7e57c2",fx:{crit:.12,poison:.2},d:"+12 % Krit, 20 % Gift",cr:1});
+EI.push(...loc("ei",[
+ {id:"x1",s:"w",cat:"axt",b:12,c:"#90caf9",fx:{crit:.06,stun:.08},cr:1},
+ {id:"x2",s:"w",cat:"keule",b:15,c:"#fff176",fx:{stun:.15},cr:1},
+ {id:"x3",s:"w",cat:"helle",b:17,c:"#80deea",fx:{crit:.1},cr:1},
+ {id:"x4",s:"w",cat:"bogen",b:16,c:"#a5d6a7",fx:{crit:.12,poison:.15},cr:1},
+ {id:"x5",s:"w",cat:"stab",b:20,c:"#ce93d8",fx:{burn:.2,life:.06},cr:1},
+ {id:"x6",s:"w",cat:"dolch",b:15,c:"#7e57c2",fx:{crit:.12,poison:.2},cr:1}]));
 SMI.push({id:"x1",lv:4,m:{ez:8,le:2},g:40},{id:"x2",lv:5,m:{ez:10,mi:2},g:60},{id:"x6",lv:6,m:{ez:5,gp:4,ak:1},g:60},{id:"x3",lv:7,m:{ez:8,mi:4,ak:1},g:90},{id:"x4",lv:7,m:{le:8,gp:3,hk:3},g:90},{id:"x5",lv:8,m:{ak:6,fb:4,mi:2},g:120});
 SMI.sort((a,b)=>a.lv-b.lv);
 // Waffenmodelle (Hand des Ritters bei 107.5/105.5). col = Metall/Farbe, g = Leuchtfarbe verzauberter Waffen

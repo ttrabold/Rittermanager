@@ -16,10 +16,10 @@ stun:c=>`<span class="spin ${c}">💫</span>`,
 flash:c=>`<span class="flash"></span>`,
 star:c=>`<svg class="${c}" viewBox="0 0 120 120"><path class="sl" d="M60 4L60 116"/><path class="sl b" d="M4 60L116 60"/></svg><span class="blast ${c}">🌟</span><span class="flash"></span>`,
 world:c=>`<svg class="${c}" viewBox="0 0 120 120"><path class="sl r" d="M10 10L110 110"/><path class="sl r b" d="M110 10L10 110"/><path class="sl r c" d="M60 4L60 116"/></svg><span class="flash fire"></span><span class="blast ${c}">💥</span>`,
-miss:c=>`<span class="mt ${c}">Daneben!</span>`,
-dodge:c=>`<span class="mt ${c}">Ausgewichen!</span>`,
+miss:c=>`<span class="mt ${c}">${t("vx.miss")}</span>`,
+dodge:c=>`<span class="mt ${c}">${t("vx.dodge")}</span>`,
 ko:c=>`<span class="soul ${c}">${c==="vP"?"💫":"👻"}</span><span class="kot ${c}">K.O.</span>`,
-bko:c=>`<span class="flash" style="animation-delay:1.2s"></span><span class="ring ${c}" style="animation-delay:1.3s"></span><span class="ring red r2 ${c}" style="animation-delay:1.55s"></span><span class="blast ${c}" style="animation-delay:1.4s">✨</span><span class="kot ${c}" style="animation-delay:2.1s;font-size:19px">BESIEGT!</span>`};
+bko:c=>`<span class="flash" style="animation-delay:1.2s"></span><span class="ring ${c}" style="animation-delay:1.3s"></span><span class="ring red r2 ${c}" style="animation-delay:1.55s"></span><span class="blast ${c}" style="animation-delay:1.4s">✨</span><span class="kot ${c}" style="animation-delay:2.1s;font-size:19px">${t("vx.beaten")}</span>`};
 const VXH=f=>(f.vfx||[]).map(v=>`<div class="vfx" style="--d:${v[2]?1.1:0}s">${VX[v[0]](v[1])}</div>`).join("");
 const fm=(x,y,s,c,d)=>`<path class="fk" style="animation-delay:${d}s" d="M${x} ${y}q${-5*s} ${-12*s} 0 ${-26*s}q${9*s} ${11*s} 0 ${26*s}z" fill="${c}"/>`;
 const ST=(x,y,c,d)=>`<path class="tw" style="animation-delay:${d}s" d="M${x} ${y-5}l1.6 3.4 3.4 1.6-3.4 1.6-1.6 3.4-1.6-3.4-3.4-1.6 3.4-1.6z" fill="${c}"/>`;
@@ -231,7 +231,7 @@ const BOSSV=[
  ${[.14,.24,.34,.44,.56,.66,.76,.86].map(t=>{const x=32+70*t,yt=92+32*t*(1-t),yb=92+96*t*(1-t);return `<path d="M${x-3} ${yt}L${x} ${yt+6}L${x+3} ${yt}Z" fill="#f5f5dc"/><path d="M${x-3} ${yb}L${x} ${yb-5}L${x+3} ${yb}Z" fill="#f5f5dc"/>`}).join("")}</g>`,52)];
 const bossSvg=i=>BOSSV[i]?BOSSV[i]():knight(4,4,3,true,BOSS[i].tint);
 const ttier=n=>Math.min(TIER.length-1,Math.floor((n-1)/5));
-const towerIntro=n=>{const t=ttier(n),T=TIER[t];return `🗼 <b>Etage ${n} – ${T[0]}</b><br>`+((n-1)%5===0&&n>1?`<i>Die Luft wird schwerer … ${T[1]}</i><br>`:"")};
+const towerIntro=n=>{const T=TIER[ttier(n)];return `🗼 <b>${t("tw.floor")} ${n} – ${T[0]}</b><br>`+((n-1)%5===0&&n>1?`<i>${t("tw.deeper",T[1])}</i><br>`:"")};
 const SV=(defs,body)=>`<svg class="bg" viewBox="0 0 600 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><defs>${defs}</defs>${body}</svg>`;
 const LG=(id,a,b)=>`<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
 const RG=(id,c)=>`<radialGradient id="${id}"><stop offset="0" stop-color="${c}" stop-opacity=".7"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient>`;
@@ -305,7 +305,7 @@ const TBGS=[
  <path class="tw" d="M80 220l30-20 20 8 30-16M380 220l20-14 30 6 26-20 40 12" stroke="#e040fb" stroke-width="2" fill="none"/>`)];
 const TBG=t=>TBGS[t]();
 // Burgmodell wächst mit dem Burgausbau (Summe aller Gebäudestufen)
-const CSTAGE=[[0,"Wehrhof"],[2,"Burg"],[5,"Feste"],[9,"Festung"],[14,"Zitadelle"],[19,"Königsburg"]];
+const CSTAGE=[0,2,5,9,14,19].map((n,i)=>[n,t("cs.stages")[i]]);
 const bldSum=()=>Object.values(S.bld||{}).reduce((a,b)=>a+b,0);
 const cStage=()=>{const t=bldSum();let k=0;CSTAGE.forEach((c,i)=>{if(t>=c[0])k=i});return k};
 function castleSvg(){const k=cStage(),st=k>=4?"#a39a88":"#8d8473",rf=k>=5?"#1f3c88":"#7a1d1d",gd="#d4a017",lit=`style="opacity:${k>=3?"calc(.45 + var(--star)*.55)":"var(--star)"}"`,o=[];
@@ -322,7 +322,7 @@ function castleSvg(){const k=cStage(),st=k>=4?"#a39a88":"#8d8473",rf=k>=5?"#1f3c
  if(k>=1)o.push([44,90].map(x=>`<path class="wv" d="M${x} ${k>=2?70:76}h8v18l-4-3-4 3z" fill="#8b1e1e" stroke="#0004"/><circle cx="${x+4}" cy="${k>=2?78:84}" r="2" fill="${gd}"/>`).join(""));
  o.push(k>=4?flag(30,tt-22,"#c0221f")+flag(110,tt-22,"#c0221f")+flag(70,(k>=5?30:38)-22,gd):k>=3?flag(30,tt,"#c0221f")+flag(110,tt,"#c0221f"):flag(70,k>=2?66:72,"#c0221f"));
  if(typeof hasDeco==="function"){if(hasDeco("banner"))o.push([24,104].map(x=>`<path class="wv" d="M${x} ${tt+4}h12v26l-6-5-6 5z" fill="#d4a017" stroke="#7a5a00"/><circle cx="${x+6}" cy="${tt+14}" r="3" fill="#8b1e1e"/>`).join(""));if(hasDeco("schaedel"))o.push(`<path d="M60 ${k>=2?62:68}q10-12 20 0q2 8-4 10h-12q-6-2-4-10z" fill="#efebe9" stroke="#5d4037"/><circle cx="65" cy="${k>=2?62:68}" r="2" fill="#c62828"/><circle cx="75" cy="${k>=2?62:68}" r="2" fill="#c62828"/><path d="M58 ${k>=2?60:66}l-6-8M82 ${k>=2?60:66}l6-8" stroke="#efebe9" stroke-width="3"/>`)}
- return `<svg class="castle" viewBox="0 -14 140 134" style="height:${84+k*9}px" aria-label="Burg: ${CSTAGE[k][1]}">${o.join("")}</svg>`}
+ return `<svg class="castle" viewBox="0 -14 140 134" style="height:${84+k*9}px" aria-label="${t("cs.aria",CSTAGE[k][1])}">${o.join("")}</svg>`}
 const TREE=(x,y,k)=>`<path d="M${x} ${y-20*k}l${7*k} ${11*k}h${-3*k}l${6*k} ${9*k}h${-20*k}l${6*k} ${-9*k}h${-3*k}z" style="fill:var(--tree)"/>`;
 const BG=`<svg class="bg" viewBox="0 0 600 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
 <defs><radialGradient id="bgl"><stop offset="0" style="stop-color:var(--glow);stop-opacity:.75"/><stop offset="1" style="stop-color:var(--glow);stop-opacity:0"/></radialGradient>

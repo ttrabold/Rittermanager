@@ -3,94 +3,108 @@
 <link rel="stylesheet" href="../css/style.css">
 <script>
 // Echte Spielstände nie anfassen: localStorage durch einen Speicher im Arbeitsspeicher ersetzen
-(()=>{const m={};const mem={getItem:k=>k in m?m[k]:null,setItem:(k,v)=>{m[k]=String(v)},removeItem:k=>{delete m[k]},clear:()=>{for(const k in m)delete m[k]},key:i=>Object.keys(m)[i]||null,get length(){return Object.keys(m).length}};
+(()=>{const m={ritter_lang:"de"};  // Tests laufen deutsch, ?lang=en für Englisch
+const mem={getItem:k=>k in m?m[k]:null,setItem:(k,v)=>{m[k]=String(v)},removeItem:k=>{delete m[k]},clear:()=>{for(const k in m)delete m[k]},key:i=>Object.keys(m)[i]||null,get length(){return Object.keys(m).length}};
  Object.defineProperty(window,"localStorage",{value:mem,configurable:true})})();
 // Keine Seitenreloads und keine echten Downloads im Test
 window.__reloads=0;
 </script></head>
 <body><div id="app"></div>
-<script src="../js/util.js"></script><script src="../js/data.js"></script><script src="../js/state.js"></script><script src="../js/audio.js"></script><script src="../js/speech.js"></script><script src="../js/unlock.js"></script><script src="../js/art.js"></script><script src="../js/professions.js"></script><script src="../js/weapons.js"></script><script src="../js/loot.js"></script><script src="../js/day.js"></script><script src="../js/tavern.js"></script><script src="../js/screens.js"></script><script src="../js/combat.js"></script><script src="../js/help.js"></script><script src="../js/companions.js"></script><script src="../js/events.js"></script><script src="../js/story.js"></script><script src="../js/endgame.js"></script><script src="../js/bestiary.js"></script><script src="../js/main.js"></script>
+<script src="../js/i18n.js"></script><script src="../js/lang/de.js"></script><script src="../js/lang/en.js"></script><script src="../js/util.js"></script><script src="../js/data.js"></script><script src="../js/state.js"></script><script src="../js/audio.js"></script><script src="../js/speech.js"></script><script src="../js/unlock.js"></script><script src="../js/art.js"></script><script src="../js/professions.js"></script><script src="../js/weapons.js"></script><script src="../js/loot.js"></script><script src="../js/day.js"></script><script src="../js/tavern.js"></script><script src="../js/screens.js"></script><script src="../js/combat.js"></script><script src="../js/help.js"></script><script src="../js/companions.js"></script><script src="../js/events.js"></script><script src="../js/story.js"></script><script src="../js/endgame.js"></script><script src="../js/bestiary.js"></script><script src="../js/main.js"></script>
 <pre id="out" style="position:fixed;inset:0;overflow:auto;margin:0;padding:12px;background:#111;color:#eee;font:13px monospace;z-index:999"></pre>
 <script>
 const R=[];let fails=0;
-function t(name,fn){try{fn();R.push("✅ "+name)}catch(e){fails++;R.push("❌ "+name+" – "+(e&&e.message||e))}}
+function test(name,fn){try{fn();R.push("✅ "+name)}catch(e){fails++;R.push("❌ "+name+" – "+(e&&e.message||e))}}
 const ok=(c,m)=>{if(!c)throw new Error(m||"Bedingung nicht erfüllt")};
 AU.mus=false;AU.sfx=false;TTS.on=false;speechSynthesis&&speechSynthesis.cancel&&(speechSynthesis.speak=()=>{});
 const newGame=()=>{S=fresh();unlCheck();S.lvl0=1;S.sk=[];qGen();F=null};
 const hero=L=>{newGame();S.exp=expFor(L);S.st=S.au=S.ge=3+L-1;S.lvl0=L;S.unl=FEAT.map(f=>f.id);S.tunl=1;S.sk=SK.filter(s=>s.id!=="hieb"&&s.lv<=L).slice(-6).map(s=>s.id);S.gold=99999;S.en=99;Object.keys(S.mat).forEach(k=>S.mat[k]=50);S.pr={sm:{lv:10,xp:0},al:{lv:10,xp:0},ve:{lv:10,xp:0}}};
 const win=()=>{let n=0;while(!F.over&&n++<300){F.ehp=0;enemyTurn([])}ok(F.over,"Kampf endet nicht")};
 
-t("Neues Spiel: nur Grundknöpfe",()=>{newGame();home();const b=[...document.querySelectorAll(".grid button")].map(x=>x.textContent);ok(b.length===4,"erwartet 4 Knöpfe, gefunden "+b.length)});
-t("Freischaltungen in Reihenfolge",()=>{newGame();const got=[];for(let L=2;L<=20;L++){S.exp=expFor(L);const l=[];levelCheck(l);unlCheck(l);l.filter(x=>x.includes("🔓")).forEach(()=>got.push(L))}ok(got.length>=11,"nur "+got.length+" Freischaltungen")});
-t("Alle Bildschirme rendern",()=>{hero(30);for(const f of[home,shop,inv,trader,castleScr,titles,skillsScr,saveScr,compScr,bestScr,()=>{TV.ph="bet";tavern()}])f();for(const w of["sm","al","ve"]){wsTab=w;workshop()}});
-t("Abenteuer gewinnen",()=>{hero(10);startFight();if(EVN){EVN=null;setup(mk(10,ET[0]))}win();ok(F.ko==="e")});
-t("Schnellkampf",()=>{hero(15);EVN=null;setup(mk(12,ET[2]));quickFight();ok(F.over||F.log.includes("stoppt"),"Schnellkampf endet nicht")});
-t("Tastenkürzel",()=>{hero(15);setup(mk(12,ET[0]));const o=F.ehp;document.dispatchEvent(new KeyboardEvent("keydown",{key:"1"}));ok(F.ehp<o||F.log.includes("daneben")||F.log.includes("weicht"),"Taste 1 ohne Wirkung")});
-t("Alle Fähigkeiten einsetzbar",()=>{hero(30);for(const s of SK){S.sk=s.id==="hieb"?[]:[s.id];setup(mk(30,ET[0]));F.ehp=F.emax=1e6;useSkill(s.id);ok(!F.log.includes("undefined"),s.id)}});
-t("Alle Bosse besiegbar (Ablauf)",()=>{hero(50);for(let i=0;i<BOSS.length;i++){S.boss=i;S.ruhm=1e6;S.en=9;startBoss();win()}ok(S.boss===BOSS.length,"Bossfortschritt "+S.boss);ok(F.epi===1,"Epilog-Knopf fehlt");epilogScr()});
-t("Turnier mit 3 Runden",()=>{hero(20);startTour();win();nextTour();win();nextTour();win();ok(S.troph===1,"kein Pokal")});
-t("Turm: Etagen, Verlassen, Niederlage",()=>{hero(30);startTower();win();nextTour();win();leaveTower();ok(S.tcur===3,"tcur "+S.tcur);S.en=9;startTower();F.php=0;F.php=1;F.pb.burn=5;F.eb.stun=1;useSkill("hieb");let n=0;while(!F.over&&n++<50){F.php=1;F.pb.burn=5;F.eb.stun=1;useSkill("hieb")}ok(S.tcur===1,"Reset nach Niederlage");ok((S.hall||[]).length===1,"Ruhmeshalle leer")});
-t("Vollmond-Werwolf",()=>{hero(20);S.day=5;const n=S.gear.length;startMoon();win();ok(S.gear.length===n+1&&!S.own.includes("mw"),"Mondbeute")});
-t("Rivale: alle 7 Duelle",()=>{hero(45);for(let k=0;k<7;k++){S.en=9;startRival();win()}ok(S.rv===7,"rv "+S.rv);ok(S.own.includes("nk"),"Neidklinge fehlt")});
-t("Alle Ereignisse und Entscheidungen",()=>{hero(20);for(const ev of EVTS)for(let i=0;i<ev.ch.length;i++){S.it.h=5;S.gold=9999;EVN={ev,res:null};F=null;evScr();evPick(i);if(F&&!F.over)win()}});
-t("Begleiter kaufen und wirken",()=>{hero(20);S.bk=[0,1,2,3];for(const c of COMP)compBuy(c.id);ok(S.comp.length===4);S.cmp=null;compSet("ross");ok(enMax()===7);S.cmp="falke";setup(mk(20,ET[0]));F.ehp=F.emax=1e6;for(let k=0;k<30;k++)useSkill("hieb");S.cmp="knappe";setup(mk(20,ET[0]));F.ehp=F.emax=1e6;F.atk=0;F.fx={};F.php=Math.round(F.pmax*.2);enemyTurn([]);ok(F.knUsed===1,"Knappe hilft nicht")});
-t("Bestiarium füllt sich",()=>{hero(20);S.bst={};setup(mk(10,ET[3]));win();ok((S.bst.et3||{}).w===1);bestScr()});
-t("Legendäre Aufwertung bis +10",()=>{hero(30);for(let n=0;n<10;n++){S.en=9;upgrade("w"+S.w)}ok(S.up["w"+S.w]===10,"Stufe "+S.up["w"+S.w])});
+test("Neues Spiel: nur Grundknöpfe",()=>{newGame();home();const b=[...document.querySelectorAll(".grid button")].map(x=>x.textContent);ok(b.length===4,"erwartet 4 Knöpfe, gefunden "+b.length)});
+test("Freischaltungen in Reihenfolge",()=>{newGame();const got=[];for(let L=2;L<=20;L++){S.exp=expFor(L);const l=[];levelCheck(l);unlCheck(l);l.filter(x=>x.includes("🔓")).forEach(()=>got.push(L))}ok(got.length>=11,"nur "+got.length+" Freischaltungen")});
+test("Alle Bildschirme rendern",()=>{hero(30);for(const f of[home,shop,inv,trader,castleScr,titles,skillsScr,saveScr,compScr,bestScr,()=>{TV.ph="bet";tavern()}])f();for(const w of["sm","al","ve"]){wsTab=w;workshop()}});
+test("Abenteuer gewinnen",()=>{hero(10);startFight();if(EVN){EVN=null;setup(mk(10,ET[0]))}win();ok(F.ko==="e")});
+test("Schnellkampf",()=>{hero(15);EVN=null;setup(mk(12,ET[2]));quickFight();ok(F.over||F.log.includes(t("cb.qStop")),"Schnellkampf endet nicht")});
+test("Tastenkürzel",()=>{hero(15);setup(mk(12,ET[0]));const o=F.ehp;document.dispatchEvent(new KeyboardEvent("keydown",{key:"1"}));ok(F.ehp<o||F.log.includes(t("cb.miss"))||F.log.includes(t("cb.eDodge",F.name)),"Taste 1 ohne Wirkung")});
+test("Alle Fähigkeiten einsetzbar",()=>{hero(30);for(const s of SK){S.sk=s.id==="hieb"?[]:[s.id];setup(mk(30,ET[0]));F.ehp=F.emax=1e6;useSkill(s.id);ok(!F.log.includes("undefined"),s.id)}});
+test("Alle Bosse besiegbar (Ablauf)",()=>{hero(50);for(let i=0;i<BOSS.length;i++){S.boss=i;S.ruhm=1e6;S.en=9;startBoss();win()}ok(S.boss===BOSS.length,"Bossfortschritt "+S.boss);ok(F.epi===1,"Epilog-Knopf fehlt");epilogScr()});
+test("Turnier mit 3 Runden",()=>{hero(20);startTour();win();nextTour();win();nextTour();win();ok(S.troph===1,"kein Pokal")});
+test("Turm: Etagen, Verlassen, Niederlage",()=>{hero(30);startTower();win();nextTour();win();leaveTower();ok(S.tcur===3,"tcur "+S.tcur);S.en=9;startTower();F.php=0;F.php=1;F.pb.burn=5;F.eb.stun=1;useSkill("hieb");let n=0;while(!F.over&&n++<50){F.php=1;F.pb.burn=5;F.eb.stun=1;useSkill("hieb")}ok(S.tcur===1,"Reset nach Niederlage");ok((S.hall||[]).length===1,"Ruhmeshalle leer")});
+test("Vollmond-Werwolf",()=>{hero(20);S.day=5;const n=S.gear.length;startMoon();win();ok(S.gear.length===n+1&&!S.own.includes("mw"),"Mondbeute")});
+test("Rivale: alle 7 Duelle",()=>{hero(45);for(let k=0;k<7;k++){S.en=9;startRival();win()}ok(S.rv===7,"rv "+S.rv);ok(S.own.includes("nk"),"Neidklinge fehlt")});
+test("Alle Ereignisse und Entscheidungen",()=>{hero(20);for(const ev of EVTS)for(let i=0;i<ev.ch.length;i++){S.it.h=5;S.gold=9999;EVN={ev,res:null};F=null;evScr();evPick(i);if(F&&!F.over)win()}});
+test("Begleiter kaufen und wirken",()=>{hero(20);S.bk=[0,1,2,3];for(const c of COMP)compBuy(c.id);ok(S.comp.length===4);S.cmp=null;compSet("ross");ok(enMax()===7);S.cmp="falke";setup(mk(20,ET[0]));F.ehp=F.emax=1e6;for(let k=0;k<30;k++)useSkill("hieb");S.cmp="knappe";setup(mk(20,ET[0]));F.ehp=F.emax=1e6;F.atk=0;F.fx={};F.php=Math.round(F.pmax*.2);enemyTurn([]);ok(F.knUsed===1,"Knappe hilft nicht")});
+test("Bestiarium füllt sich",()=>{hero(20);S.bst={};setup(mk(10,ET[3]));win();ok((S.bst.et3||{}).w===1);bestScr()});
+test("Legendäre Aufwertung bis +10",()=>{hero(30);for(let n=0;n<10;n++){S.en=9;upgrade("w"+S.w)}ok(S.up["w"+S.w]===10,"Stufe "+S.up["w"+S.w])});
 const WFX=["burn","poison","stun","crit","life"],AFX=["hp","regen","dodge","noburn"];
-t("Zufallsbeute: Generator",()=>{newGame();for(const il of[8,50])for(let r=0;r<4;r++)for(let i=0;i<30;i++){const it=genItem(il,r);
+test("Zufallsbeute: Generator",()=>{newGame();for(const il of[8,50])for(let r=0;r<4;r++)for(let i=0;i<30;i++){const it=genItem(il,r);
   ok(Object.keys(it.fx).length===r+1,`r${r}: ${Object.keys(it.fx).length} Effekte`);ok(["w","a","sh"].includes(it.s),"Slot "+it.s);
   ok((it.s==="w"?WFX:AFX).length&&Object.keys(it.fx).every(k=>(it.s==="w"?WFX:AFX).includes(k)),"falscher Effekt "+Object.keys(it.fx));
   if(it.s==="w")ok(it.cat in WCAT,"Waffenart "+it.cat);ok(it.b>=1,"Grundwert "+it.b);ok(Object.values(it.fx).every(v=>v>0&&!isNaN(v)),"Effektwert "+JSON.stringify(it.fx));
   ok(it.d===fxDesc(it.fx),"Beschreibung");ok(it.r===r&&it.gen===1&&/^g\d+$/.test(it.id),"Felder")}
- ok(genItem(30,3,"w","axt").cat==="axt","Waffenart vorgegeben");ok(genItem(30,0,"sh").s==="sh","Slot vorgegeben");ok(itm("fl").n==="Flammenklinge","itm EI");
+ ok(genItem(30,3,"w","axt").cat==="axt","Waffenart vorgegeben");ok(genItem(30,0,"sh").s==="sh","Slot vorgegeben");ok(itm("fl").n===t("ei.fl.n"),"itm EI");
  const g=genItem(20,1);S.gear.push(g);ok(itm(g.id)===g,"itm gear");ok(rarRoll([0,0,0,1])===3&&rarRoll([1,0,0,0])===0,"rarRoll")});
 const gearAdd=(il,r,s,cat)=>{const it=genItem(il,r,s,cat);S.gear.push(it);return it};
-t("Zufallsbeute: Schild-Slot",()=>{hero(30);S.s=3;const base=sBon();const it=gearAdd(30,1,"sh");equipE(it.id);ok(S.es===it.id,"nicht angelegt");ok(sBon()===it.b,"sBon "+sBon());
+test("Zufallsbeute: Schild-Slot",()=>{hero(30);S.s=3;const base=sBon();const it=gearAdd(30,1,"sh");equipE(it.id);ok(S.es===it.id,"nicht angelegt");ok(sBon()===it.b,"sBon "+sBon());
  for(const k in it.fx)ok(fxv(k)>=it.fx[k],"Effekt "+k+" fehlt");ok(enemyAct.toString().includes("sBon()"),"Gegnerschaden ohne sBon");equipE(it.id);ok(!S.es&&sBon()===base,"ablegen")});
-t("Zufallsbeute: Aufwerten und Runen",()=>{hero(30);const w=gearAdd(30,0,"w","bogen"),sh=gearAdd(30,0,"sh");equipE(w.id);equipE(sh.id);ok(eqCat()==="bogen","Waffenart");
+test("Zufallsbeute: Aufwerten und Runen",()=>{hero(30);const w=gearAdd(30,0,"w","bogen"),sh=gearAdd(30,0,"sh");equipE(w.id);equipE(sh.id);ok(eqCat()==="bogen","Waffenart");
  const wb=wBon(),sb=sBon();upgrade(w.id);upgrade(sh.id);ok(S.up[w.id]===1&&S.up[sh.id]===1,"nicht aufgewertet");ok(wBon()===wb+2&&sBon()===sb+1,"Bonus "+wBon()+"/"+sBon());
  const hp=fxv("hp");rune("r6",sh.id);ok((S.ru[sh.id]||[]).includes("r6"),"Rune nicht auf Schild");ok(fxv("hp")===hp+15,"Rune wirkt nicht");ok(invItems().includes(sh.id)&&invItems().includes(w.id),"invItems")});
-t("Alter Spielstand ohne gear/es",()=>{S=Object.assign(fresh(),{own:["fl"],ew:"fl",exp:expFor(10)});delete S.gear;delete S.es;migrate();ok(Array.isArray(S.gear)&&S.es===null,"Migration");
+test("Alter Spielstand ohne gear/es",()=>{S=Object.assign(fresh(),{own:["fl"],ew:"fl",exp:expFor(10)});delete S.gear;delete S.es;migrate();ok(Array.isArray(S.gear)&&S.es===null,"Migration");
  ok(eq("w").id==="fl","alte Waffe");inv();ok(!/undefined|NaN/.test(document.getElementById("app").innerHTML),"undefined/NaN im Inventar")});
-t("Wiedergeburt behält Zufallsbeute",()=>{hero(50);S.s=3;const it=gearAdd(40,2,"sh");equipE(it.id);S.up.s3=2;S.up[it.id]=1;const n=S.gear.length;S.boss=BOSS.length;doRebirth("gold");
+test("Wiedergeburt behält Zufallsbeute",()=>{hero(50);S.s=3;const it=gearAdd(40,2,"sh");equipE(it.id);S.up.s3=2;S.up[it.id]=1;const n=S.gear.length;S.boss=BOSS.length;doRebirth("gold");
  ok(S.gear.length===n&&S.es===it.id,"Beute weg");ok(S.up.s3===undefined,"Marktschild-Aufwertung bleibt");ok(S.up[it.id]===1,"Aufwertung der Beute weg")});
-t("Zufallsbeute: Quellen",()=>{hero(30);S.ruhm=1e6;const own=S.own.length;let n=S.gear.length;startBoss();win();ok(S.gear.length===n+2,"Story-Boss: "+(S.gear.length-n));ok(S.own.length===own,"feste Beute vergeben");
+test("Zufallsbeute: Quellen",()=>{hero(30);S.ruhm=1e6;const own=S.own.length;let n=S.gear.length;startBoss();win();ok(S.gear.length===n+2,"Story-Boss: "+(S.gear.length-n));ok(S.own.length===own,"feste Beute vergeben");
  n=S.gear.length;tourLoot([]);ok(S.gear.length===n+1,"Turnier");n=S.gear.length;moonLoot([]);ok(S.gear.length===n+1&&S.gear[n].r>=1,"Mond");
  n=S.gear.length;S.tunl=1;S.tcur=10;startTower();win();ok(S.gear.length===n+1&&S.gear[n].r>=1,"Turm Etage 10");n=S.gear.length;F=null;S.tcur=7;startTower();win();ok(S.gear.length===n,"Turm Etage 7 ohne Beute")});
-t("Zufallsbeute: Auto-Anlegen",()=>{hero(30);S.ew=null;const l=[];const a=lootGive("boss",60,l);if(a.s==="w")ok(S.ew===a.id,"leerer Slot nicht belegt");
+test("Zufallsbeute: Auto-Anlegen",()=>{hero(30);S.ew=null;const l=[];const a=lootGive("boss",60,l);if(a.s==="w")ok(S.ew===a.id,"leerer Slot nicht belegt");
  const w=gearAdd(30,0,"w");equipE(w.id);for(let i=0;i<10;i++)lootGive("boss",60,[]);ok(S.ew===w.id,"angelegte Beute ersetzt");ok(l.join("").includes(a.n),"Meldung")});
-t("Zufallsbeute: Zerlegen",()=>{hero(30);const it=gearAdd(30,3,"a");S.up[it.id]=2;const m={...S.mat};ok(salvage(it.id),"zerlegen fehlgeschlagen");
+test("Zufallsbeute: Zerlegen",()=>{hero(30);const it=gearAdd(30,3,"a");S.up[it.id]=2;const m={...S.mat};ok(salvage(it.id),"zerlegen fehlgeschlagen");
  ok(S.mat.ds===m.ds+1&&S.mat.mi===m.mi+2,"Ertrag 🟠");ok(S.mat.le===m.le+3&&S.mat.ez===m.ez+1,"Rückgabe Aufwertung "+(S.mat.le-m.le)+"/"+(S.mat.ez-m.ez));ok(!itm(it.id)&&S.up[it.id]===undefined,"noch da");
  const e=gearAdd(30,0,"w");equipE(e.id);ok(!salvage(e.id)&&itm(e.id),"angelegtes zerlegt");const g1=gearAdd(30,0,"a"),b1=gearAdd(30,1,"a");const k=salvageAll(0);ok(k===1&&!itm(g1.id)&&itm(b1.id)&&itm(e.id),"salvageAll")});
-t("Zufallsbeute: Beutel voll",()=>{hero(30);S.tunl=1;F=null;for(let i=0;i<=BAG;i++)gearAdd(30,0);ok(bagFull(),"nicht voll");const en=S.en;startTower();startTour();ok(S.en===en,"trotz vollem Beutel gestartet");
- home();ok(document.getElementById("app").innerHTML.includes("Beutel voll"),"Hinweis fehlt");salvageAll(0);ok(!bagFull(),"aufräumen")});
-t("Zufallsbeute: Vergleich",()=>{hero(30);const a=gearAdd(30,1,"w"),b=gearAdd(60,1,"w");equipE(a.id);const h=cmpHtml(b);ok(/[▲▼]/.test(h),"kein Vergleich: "+h)});
-t("Zufallsbeute: Export behält Beute",()=>{hero(20);gearAdd(20,2,"sh");const d=impParse(expStr());ok(d.gear.length===S.gear.length&&d.gear[0].id===S.gear[0].id,"Beute fehlt im Export")});
-t("Zufallsbeute: Inventar",()=>{hero(30);for(let r=0;r<4;r++)gearAdd(30,r);inv();const h=document.getElementById("app").innerHTML;
- ok(h.includes("Beutel (4/20)"),"Beutel-Titel");ok(h.includes("Alles 🟢 zerlegen")&&h.includes("Alles 🔵 zerlegen"),"Sammelknöpfe");ok(/[▲▼]/.test(h),"Vergleich");ok(!/undefined|NaN/.test(h),"undefined/NaN");
- const z=[...document.querySelectorAll("button")].find(b=>b.textContent.trim()==="Zerlegen");ok(z,"Zerlegen-Knopf");z.click();ok(S.gear.length===3,"nicht zerlegt");
- const a=[...document.querySelectorAll("button")].find(b=>b.textContent.trim()==="Anlegen");a.click();ok(S.ew||S.ea||S.es,"nicht angelegt");inv();ok(document.getElementById("app").innerHTML.includes("Beutel (2/20)"),"angelegt zählt noch")});
-t("Import: ungültige Beute wird bereinigt",()=>{newGame();const good=genItem(20,1,"w","axt");S.gear=[good,{id:"g99",n:"<img src=x onerror=alert(1)>",s:"w",cat:"axt",b:5,c:"red;x",fx:{crit:.1},d:"<b>",r:1,il:5,gen:1},{id:"g5",n:"Kaputt",s:"w",cat:"axt",b:5,c:"#fff",fx:{},d:"",r:7,il:5,gen:1},{id:"x');alert(1);('",n:"A",s:"zz",b:1,fx:{},r:0}];S.gid=1;
+test("Zufallsbeute: Beutel voll",()=>{hero(30);S.tunl=1;F=null;for(let i=0;i<=BAG;i++)gearAdd(30,0);ok(bagFull(),"nicht voll");const en=S.en;startTower();startTour();ok(S.en===en,"trotz vollem Beutel gestartet");
+ home();ok(document.getElementById("app").innerHTML.includes(t("hg.bagFull")),"Hinweis fehlt");salvageAll(0);ok(!bagFull(),"aufräumen")});
+test("Zufallsbeute: Vergleich",()=>{hero(30);const a=gearAdd(30,1,"w"),b=gearAdd(60,1,"w");equipE(a.id);const h=cmpHtml(b);ok(/[▲▼]/.test(h),"kein Vergleich: "+h)});
+test("Zufallsbeute: Export behält Beute",()=>{hero(20);gearAdd(20,2,"sh");const d=impParse(expStr());ok(d.gear.length===S.gear.length&&d.gear[0].id===S.gear[0].id,"Beute fehlt im Export")});
+test("Zufallsbeute: Inventar",()=>{hero(30);for(let r=0;r<4;r++)gearAdd(30,r);inv();const h=document.getElementById("app").innerHTML;
+ ok(h.includes(t("gear.bag")+" (4/20)"),"Beutel-Titel");ok(h.includes(t("gear.salvAll","🟢"))&&h.includes(t("gear.salvAll","🔵")),"Sammelknöpfe");ok(/[▲▼]/.test(h),"Vergleich");ok(!/undefined|NaN/.test(h),"undefined/NaN");
+ const z=[...document.querySelectorAll("button")].find(b=>b.textContent.trim()===t("gear.salvB"));ok(z,"Zerlegen-Knopf");z.click();ok(S.gear.length===3,"nicht zerlegt");
+ const a=[...document.querySelectorAll("button")].find(b=>b.textContent.trim()===t("c.equip"));a.click();ok(S.ew||S.ea||S.es,"nicht angelegt");inv();ok(document.getElementById("app").innerHTML.includes(t("gear.bag")+" (2/20)"),"angelegt zählt noch")});
+test("Import: ungültige Beute wird bereinigt",()=>{newGame();const good=genItem(20,1,"w","axt");S.gear=[good,{id:"g99",n:"<img src=x onerror=alert(1)>",s:"w",cat:"axt",b:5,c:"red;x",fx:{crit:.1},d:"<b>",r:1,il:5,gen:1},{id:"g5",n:"Kaputt",s:"w",cat:"axt",b:5,c:"#fff",fx:{},d:"",r:7,il:5,gen:1},{id:"x');alert(1);('",n:"A",s:"zz",b:1,fx:{},r:0}];S.gid=1;
  migrate();ok(S.gear.length===2,"ungültige nicht entfernt: "+S.gear.length);const e=S.gear.find(x=>x.id==="g99");ok(e&&!/[<>]/.test(e.n)&&/^#[0-9a-f]{3,8}$/i.test(e.c)&&e.d===fxDesc(e.fx),"nicht bereinigt");ok(S.gid>=99,"gid "+S.gid);
  inv();ok(!document.getElementById("app").innerHTML.includes("<img src=x"),"HTML eingeschleust")});
-t("Sammel-Zerlegen schont Aufgewertetes",()=>{hero(30);const a=gearAdd(30,1,"w"),b=gearAdd(30,1,"a"),c=gearAdd(30,1,"sh");S.up[a.id]=1;S.ru[b.id]=["r6"];ok(salvageAll(1)===1&&itm(a.id)&&itm(b.id)&&!itm(c.id),"falsch zerlegt")});
-t("Inventar springt beim Aufräumen nicht nach oben",()=>{hero(30);const a=gearAdd(30,0),b=gearAdd(30,0);let top=0;const o=window.scrollTo;window.scrollTo=(x,y)=>{if(!y)top++};try{invSalv(a.id);equipE(b.id)}finally{window.scrollTo=o}ok(top===0,"springt nach oben")});
-t("Kriegskasse: ab Boss 6, einmal am Tag",()=>{newGame();S.exp=expFor(30);S.lvl0=30;S.gold=99999;unlCheck();ok(!has("kasse"),"zu früh frei");S.boss=6;unlCheck();ok(has("kasse"),"nicht frei");home();ok(document.body.innerHTML.includes("Kriegskasse"),"Knopf fehlt");
+test("Sammel-Zerlegen schont Aufgewertetes",()=>{hero(30);const a=gearAdd(30,1,"w"),b=gearAdd(30,1,"a"),c=gearAdd(30,1,"sh");S.up[a.id]=1;S.ru[b.id]=["r6"];ok(salvageAll(1)===1&&itm(a.id)&&itm(b.id)&&!itm(c.id),"falsch zerlegt")});
+test("Inventar springt beim Aufräumen nicht nach oben",()=>{hero(30);const a=gearAdd(30,0),b=gearAdd(30,0);let top=0;const o=window.scrollTo;window.scrollTo=(x,y)=>{if(!y)top++};try{invSalv(a.id);equipE(b.id)}finally{window.scrollTo=o}ok(top===0,"springt nach oben")});
+test("Kriegskasse: ab Boss 6, einmal am Tag",()=>{newGame();S.exp=expFor(30);S.lvl0=30;S.gold=99999;unlCheck();ok(!has("kasse"),"zu früh frei");S.boss=6;unlCheck();ok(has("kasse"),"nicht frei");home();ok(document.getElementById("app").innerHTML.includes(t("hg.kasse")),"Knopf fehlt");
  const g=S.gold,r=S.ruhm;kasseGive();ok(S.gold===g-kasseCost()&&S.ruhm===r+kasseRuhm(),"Tausch falsch");kasseGive();ok(S.gold===g-kasseCost(),"zweimal am Tag");S.day++;kasseGive();ok(S.gold===g-2*kasseCost(),"neuer Tag geht nicht");
  S.day++;S.gold=kasseCost()-1;kasseGive();ok(S.kasse!==S.day,"ohne genug Gold")});
-t("Taschendiebe: höchstens fester Betrag",()=>{hero(20);S.gold=100000;EVT[EVT.length-1][1]();ok(S.gold===100000-(50+lvl()*15),"Diebstahl nicht gedeckelt");S.gold=500;EVT[EVT.length-1][1]();ok(S.gold===450,"10 % bei wenig Gold")});
-t("Drachenschuppen: Turm nur jede 10. Etage",()=>{hero(30);const ds=()=>S.mat.ds;let a=ds();dropMat({boss:true,tower:5,et:"Ritter",lvl:30},[]);ok(ds()===a,"Etage 5 gab Schuppe");dropMat({boss:true,tower:10,et:"Ritter",lvl:30},[]);ok(ds()===a+1,"Etage 10 ohne Schuppe");a=ds();dropMat({boss:true,et:"Ritter",lvl:30},[]);ok(ds()>=a+1,"Story-Boss ohne Schuppe")});
-t("Verzierungen, Söldner, Tavernenrunde",()=>{hero(30);S.bk=[0,1,2];for(const d of DECO)decoBuy(d.id);ok(S.deco.length===DECO.length);home();castleScr();mercHire();ok(S.merc===1);S.boss=2;S.ruhm=1e6;startBoss();ok(F.merc===1&&!S.merc);tavRound();ok(S.round===S.day)});
-t("Wiedergeburt mit Segen",()=>{hero(50);S.boss=12;rebirth();doRebirth("slot");ok(skMax()===7&&S.star===1&&lvl()===1);S.boss=12;doRebirth("gold");ok(blessV("gold")===1)});
-t("Nacht: Erträge, Aufträge, Animation",()=>{hero(20);S.bld={kaserne:1,garten:2,mine:2,arkan:1,schatz:1};S.en=S.enStart-5;const h=S.mat.hk;newDay();ok(S.mat.hk>=h+4,"keine Garten-Erträge");nightClose(home)});
-t("Export / Import",()=>{hero(12);S.name="Exporttest";const str=expStr(),d=impParse(str);ok(d.name==="Exporttest");let bad=false;try{impParse("Quatsch")}catch(e){bad=true}ok(bad,"ungültiger Text akzeptiert")});
-t("Taverne: Partie spielen",()=>{hero(20);S.tav=null;TV.o="gustl";TV.bet=10;tvStart();tvSel(0);tvRoll();ok(TV.ph==="done")});
-t("Werkstatt: brauen, schmieden, Rune",()=>{hero(20);brew("h");forge("c1");rune("r1","w"+S.w);ok((S.ru["w"+S.w]||[]).includes("r1"))});
-t("Hinweiskarten",()=>{hero(20);S.hints={};inv();ok(document.querySelector(".hint"));hintOk("inv",document.querySelector(".hint button"));inv();ok(!document.querySelector(".hint"))});
-t("Keine 'undefined'/'NaN' im Burgbildschirm",()=>{hero(25);home();const tx=document.body.innerText;ok(!/undefined|NaN/.test(tx),"gefunden")});
-t("Waffenarten: kaufen, Wirkung, Modelle",()=>{hero(20);for(const c of Object.keys(WCAT)){buyW(c,2);ok(eqCat()===c,c);setup(mk(20,ET[0]));F.ehp=F.emax=1e6;useSkill("hieb");ok(!F.log.includes("NaN"),c+" NaN");ok(pk().length>500,c+" Modell")}home();inv();shop()});
-t("Gegner mit Waffenarten und Magier",()=>{hero(25);const cats=new Set();for(let k=0;k<200;k++){const e=mk(25,ET[rnd(0,ET.length-1)]);cats.add(e.look.wcat);if(e.look.wi){const it=EI.find(x=>x.id===e.look.wi);ok((it.cat||"schwert")===e.look.wcat,"Waffe passt nicht")}enemyKn(e)}ok(cats.size>=6,"nur "+cats.size+" Arten")});
-t("Upgrades auf Nicht-Schwert",()=>{hero(20);buyW("axt",3);upgrade(wKey());ok(S.up["w:axt:3"]===1);ok(iname("w").includes("+1"))});
+test("Taschendiebe: höchstens fester Betrag",()=>{hero(20);S.gold=100000;EVT[EVT.length-1][1]();ok(S.gold===100000-(50+lvl()*15),"Diebstahl nicht gedeckelt");S.gold=500;EVT[EVT.length-1][1]();ok(S.gold===450,"10 % bei wenig Gold")});
+test("Drachenschuppen: Turm nur jede 10. Etage",()=>{hero(30);const ds=()=>S.mat.ds;let a=ds();dropMat({boss:true,tower:5,et:"Ritter",lvl:30},[]);ok(ds()===a,"Etage 5 gab Schuppe");dropMat({boss:true,tower:10,et:"Ritter",lvl:30},[]);ok(ds()===a+1,"Etage 10 ohne Schuppe");a=ds();dropMat({boss:true,et:"Ritter",lvl:30},[]);ok(ds()>=a+1,"Story-Boss ohne Schuppe")});
+test("Verzierungen, Söldner, Tavernenrunde",()=>{hero(30);S.bk=[0,1,2];for(const d of DECO)decoBuy(d.id);ok(S.deco.length===DECO.length);home();castleScr();mercHire();ok(S.merc===1);S.boss=2;S.ruhm=1e6;startBoss();ok(F.merc===1&&!S.merc);tavRound();ok(S.round===S.day)});
+test("Wiedergeburt mit Segen",()=>{hero(50);S.boss=12;rebirth();doRebirth("slot");ok(skMax()===7&&S.star===1&&lvl()===1);S.boss=12;doRebirth("gold");ok(blessV("gold")===1)});
+test("Nacht: Erträge, Aufträge, Animation",()=>{hero(20);S.bld={kaserne:1,garten:2,mine:2,arkan:1,schatz:1};S.en=S.enStart-5;const h=S.mat.hk;newDay();ok(S.mat.hk>=h+4,"keine Garten-Erträge");nightClose(home)});
+test("Export / Import",()=>{hero(12);S.name="Exporttest";const str=expStr(),d=impParse(str);ok(d.name==="Exporttest");let bad=false;try{impParse("Quatsch")}catch(e){bad=true}ok(bad,"ungültiger Text akzeptiert")});
+test("Taverne: Partie spielen",()=>{hero(20);S.tav=null;TV.o="gustl";TV.bet=10;tvStart();tvSel(0);tvRoll();ok(TV.ph==="done")});
+test("Werkstatt: brauen, schmieden, Rune",()=>{hero(20);brew("h");forge("c1");rune("r1","w"+S.w);ok((S.ru["w"+S.w]||[]).includes("r1"))});
+test("Hinweiskarten",()=>{hero(20);S.hints={};inv();ok(document.querySelector(".hint"));hintOk("inv",document.querySelector(".hint button"));inv();ok(!document.querySelector(".hint"))});
+test("Keine 'undefined'/'NaN' im Burgbildschirm",()=>{hero(25);home();const tx=document.body.innerText;ok(!/undefined|NaN/.test(tx),"gefunden")});
+test("Waffenarten: kaufen, Wirkung, Modelle",()=>{hero(20);for(const c of Object.keys(WCAT)){buyW(c,2);ok(eqCat()===c,c);setup(mk(20,ET[0]));F.ehp=F.emax=1e6;useSkill("hieb");ok(!F.log.includes("NaN"),c+" NaN");ok(pk().length>500,c+" Modell")}home();inv();shop()});
+test("Gegner mit Waffenarten und Magier",()=>{hero(25);const cats=new Set();for(let k=0;k<200;k++){const e=mk(25,ET[rnd(0,ET.length-1)]);cats.add(e.look.wcat);if(e.look.wi){const it=EI.find(x=>x.id===e.look.wi);ok((it.cat||"schwert")===e.look.wcat,"Waffe passt nicht")}enemyKn(e)}ok(cats.size>=6,"nur "+cats.size+" Arten")});
+test("Upgrades auf Nicht-Schwert",()=>{hero(20);buyW("axt",3);upgrade(wKey());ok(S.up["w:axt:3"]===1);ok(iname("w").includes("+1"))});
+// ---- Sprachen ----
+test("Sprachen: gleiche Schlüssel in allen Sprachdateien",()=>{const miss=[];const walk=(a,b,p)=>{if(typeof a!=="object"||!a||a instanceof RegExp)return;for(const k in a){if(!(k in b))miss.push(p+k);else walk(a[k],b[k],p+k+".")}};
+ for(const l of Object.keys(LANGS)){ok(I18N[l],"Sprachdatei fehlt: "+l);walk(I18N.de,I18N[l],l+": ");walk(I18N[l],I18N.de,"de ← "+l+": ")}ok(!miss.length,miss.slice(0,5).join(", "))});
+test("Sprachen: Daten haben Texte",()=>{for(const L of[EI,SK,IT,MAT,TT,RU,COMP,DECO,BLESS,FEAT,BLD,TAVO])for(const x of L)ok(typeof x.n==="string"&&x.n,"ohne Namen: "+(x.id||x.k));
+ for(const b of[...BOSS,...ET,WOLF,MIMIC,RIVT])ok(b.mv.every(m=>typeof m[0]==="string"&&m.length===5),"Angriff ohne Namen: "+b.n);ok(RIVAL.every(r=>r.pre&&r.win&&r.lose),"Rivale");ok(EVTS.every(v=>v.t&&v.txt()&&v.ch.every(c=>c.l())),"Ereignisse")});
+test("Sprachen: Beute und Aufträge ohne gespeicherten Text",()=>{hero(20);const g=genItem(30,1,"w","axt");S.gear.push(g);const n=g.n;g.n="X";g.d="Y";gearClean();ok(itm(g.id).n===n&&itm(g.id).d===fxDesc(g.fx),"Beutetext nicht neu gebildet");
+ qGen();ok(S.q.list.every(q=>!q.txt),"Auftragstext gespeichert");questCard();ok(questCard().includes(qTxt(S.q.list[0])),"Auftragstext fehlt");
+ S.buffs=[{k:"dmg",v:.2,n:3}];home();ok(document.getElementById("app").innerHTML.includes(t("buff.dmg")),"Segen ohne Namen")});
+test("Sprachen: Umschalter auf der Burg",()=>{hero(5);home();const l=Object.keys(LANGS).filter(x=>x!==LANG);ok(l.every(x=>document.getElementById("app").innerHTML.includes(`setLang('${x}')`)),"Umschalter fehlt")});
+if(LANG!=="de")test("Sprachen: keine deutschen Texte ("+LANG+")",()=>{const bad=[],chk=w=>{const h=document.getElementById("app").innerText,m=h.match(/.{0,30}[äöüÄÖÜß].{0,30}/);if(m)bad.push(w+": "+m[0])};
+ hero(30);S.boss=12;S.q=null;for(const[w,f]of[["home",home],["shop",shop],["inv",inv],["trader",trader],["castle",castleScr],["titles",titles],["skills",skillsScr],["save",saveScr],["comp",compScr],["best",()=>{S.bst=Object.fromEntries(BST.map(x=>[x.k,{s:1,w:1}]));bestScr()}],["tavern",()=>{TV.ph="bet";tavern()}],["rebirth",rebirth]])
+  {f();chk(w)}for(const w of["sm","al","ve"]){wsTab=w;workshop();chk(w)}for(let i=0;i<20;i++){setup(mk(20,ET[i%ET.length]));F.ehp=F.emax=1e6;for(let k=0;k<5;k++)useSkill(eqSk()[k%eqSk().length]);fight();chk("fight")}
+ for(const ev of EVTS){EVN={ev,res:null};evScr();chk("ev "+ev.id)}ok(!bad.length,bad.slice(0,4).join(" | "))});
 document.getElementById("out").textContent=`Rittermanager – automatische Tests\n${R.length-fails}/${R.length} bestanden\n\n`+R.join("\n");
 window.__testResult={total:R.length,fails,lines:R};
 </script></body></html>

@@ -848,6 +848,7 @@ Für besondere Leistungen bekommst du **Titel**. Einen davon kannst du tragen. E
 
 - **✏️ Umbenennen**: Klicke auf den Stift neben deinem Namen und gib einen neuen Namen ein (bis zu 20 Zeichen).
 - **♂️ / ♀️ Ritter oder Ritterin**: Ein Klick auf das Symbol neben deinem Namen wechselt zwischen Ritter und Ritterin. Aussehen, Rang und Titel passen sich an.
+- **🌐 Sprache**: Ganz unten auf dem Burgbildschirm, neben den Spielständen, wechselst du zwischen Deutsch und English. Beim ersten Start richtet sich die Sprache nach deinem Browser. Die Einstellung gilt für alle Plätze, dein Spielstand bleibt dabei erhalten.
 - **🎵 Musik / 🔊 Sound**: Die Knöpfe unten rechts schalten Musik und Soundeffekte ein oder aus. Die Musik passt sich der Situation an: ruhig auf der Burg, Hammerschläge in der Werkstatt, Fanfaren im Turnier, Trommeln im Kampf und ein düsterer Chor bei Bossen. Gerät ein Boss in Rage, wird die Musik schneller. Bei knappen Lebenspunkten hörst du deinen Herzschlag.
 - **🗣️ Stimme**: Der dritte Knopf unten rechts schaltet die **Sprachausgabe** ein oder aus. Ist sie an, werden neue Meldungen vorgelesen: Nachrichten auf der Burg, der Kampfverlauf, die Gerüchte des Wirts, Würfelergebnisse und der Nachtbericht. Welche Stimme spricht, hängt von deinem Gerät und Browser ab. Die Sprachausgabe startet erst, nachdem du einmal irgendwo geklickt hast.
 - **Hell / Dunkel**: Das Spiel folgt der Einstellung deines Geräts. Im dunklen Modus spielt es nachts unter Sternen und Mond.
@@ -856,7 +857,7 @@ Für besondere Leistungen bekommst du **Titel**. Einen davon kannst du tragen. E
 - **📤 Sichern & übertragen**: Im Spielstand-Bildschirm kannst du den aktiven Spielstand **als Datei speichern** oder **als Text kopieren** und später wieder **importieren**, zum Beispiel auf einem anderen Gerät. So geht dein Ritter auch nicht verloren, wenn du die Browserdaten löschst.
 - **📱 Als App installieren**: Über das Browsermenü (z. B. „Zum Startbildschirm hinzufügen“ oder „App installieren“) wird das Spiel zur App mit eigenem Icon. Einmal geladen, lässt es sich auch **ohne Internet** spielen.
 - **💡 Tipps**: Beim ersten Öffnen einer neuen Funktion erklärt dir eine kurze Tippkarte das Wichtigste.
-- **Werte ein- und ausklappen**: Tippe auf die Kurzzeile mit Stufe, Energie, Gold und Ruhm, um alle Werte zu sehen. Musik-, Sound- und Stimmeinstellungen gelten für alle Plätze.
+- **Werte ein- und ausklappen**: Tippe auf die Kurzzeile mit Stufe, Energie, Gold und Ruhm, um alle Werte zu sehen. Musik-, Sound-, Stimm- und Spracheinstellungen gelten für alle Plätze.
 
 > 💡 Verlässt du einen laufenden Kampf, etwa durch Neuladen der Seite, ist der Kampf verloren. Die eingesetzte Energie und getrunkene Tränke sind dann weg.
 

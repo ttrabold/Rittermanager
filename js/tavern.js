@@ -2,12 +2,13 @@
 
 const TAV_LIMIT=5;
 const TAVO=[
- {id:"gustl",n:"Bauer Gustl",e:"🍺",bets:[10,25],ai:0,col:"#8d6e63",d:"Wirft planlos nach. Ideal zum Üben.",ok:()=>true},
- {id:"rosa",n:"Spielerin Rosalind",e:"🎲",bets:[25,50,100],ai:1,col:"#ad1457",d:"Spielt solide und überlegt.",ok:()=>lvl()>=3,lk:"ab Stufe 3"},
- {id:"brakk",n:"Söldner Brakk",e:"🗡️",bets:[50,100,250],ai:2,col:"#455a64",d:"Gierig – jagt immer die ganz große Kombination.",ok:()=>lvl()>=6,lk:"ab Stufe 6"},
- {id:"graf",n:"Graf von Würfelstein",e:"🎩",bets:[100,250,500],ai:3,col:"#4a148c",d:"Ein Meister. Er wirft als Letzter – und rechnet genau.",ok:()=>S.ruhm>=400,lk:"ab Rang Baron"}];
-const HANDS=["Nichts","Ein Paar","Zwei Paare","Drilling","Kleine Straße","Große Straße","Full House","Vierling","Fünfling"];
-const RUMORS=["„Der Werwolf kommt alle acht Nächte. Wer kein Gegengift dabeihat, bereut es.“","„Am Samstag verkauft der Händler alles billiger – merk dir das!“","„Sonntags zahlt der Turniermeister doppelt. Gierige Ritter warten darauf.“","„Ein Kräutergarten macht dich nie wieder arm an Heiltränken.“","„Der Graf von Würfelstein hat noch nie freiwillig verloren …“","„Im Turm gehen dir irgendwann die Kräfte aus. Äthertränke, mein Freund!“","„Brakk setzt alles auf eine Karte. Manchmal geht das gut, meistens nicht.“","„Runen bleiben am Gegenstand, auch wenn du ihn ablegst.“","„Die Eiskönigin friert dich ein. Ein Eisenhaut-Trank hilft.“","„Wer fleißig ist, dem wirft die Burg nachts mehr ab.“"];
+ {id:"gustl",e:"🍺",bets:[10,25],ai:0,col:"#8d6e63",ok:()=>true},
+ {id:"rosa",e:"🎲",bets:[25,50,100],ai:1,col:"#ad1457",ok:()=>lvl()>=3},
+ {id:"brakk",e:"🗡️",bets:[50,100,250],ai:2,col:"#455a64",ok:()=>lvl()>=6},
+ {id:"graf",e:"🎩",bets:[100,250,500],ai:3,col:"#4a148c",ok:()=>S.ruhm>=400}];
+loc("tav.opp",TAVO);
+const HANDS=t("tav.hands");
+const RUMORS=t("tav.rumors");
 let TV={o:"gustl",bet:10,ph:"bet",p:[],e:[],sel:[],res:null,rum:0};
 const d6=()=>rnd(1,6);
 function hand(d){const c=[0,0,0,0,0,0,0];d.forEach(x=>c[x]++);const g=[1,2,3,4,5,6].filter(f=>c[f]).sort((a,b)=>c[b]-c[a]||b-a),n=g.map(f=>c[f]),s=[...d].sort().join("");
@@ -26,7 +27,7 @@ function keepBest(d,target){let best=null,bv=-1;
  for(let m=0;m<32;m++){const keep=d.map((_,i)=>!!(m>>i&1));let w=0;for(let k=0;k<60;k++){const c=cmpH(hand(reroll(d,keep)),target);w+=c>0?1:c===0?.5:0}if(w>bv){bv=w;best=keep}}return best}
 function oppKeep(ai,d,target){if(ai===0)return d.map(()=>Math.random()<.5);if(ai===3)return keepBest(d,target);return keepSolid(d,ai===2)}
 const DIE_P={1:[[50,50]],2:[[28,28],[72,72]],3:[[28,28],[50,50],[72,72]],4:[[28,28],[72,28],[28,72],[72,72]],5:[[28,28],[72,28],[50,50],[28,72],[72,72]],6:[[28,26],[72,26],[28,50],[72,50],[28,74],[72,74]]};
-const dieSvg=(v,opp,sel,i,roll)=>`<svg class="die${sel?" sel":""}${roll?" roll":""}" style="animation-delay:${i*.06}s" viewBox="0 0 100 100" ${opp?"":`onclick="tvSel(${i})" role="button" aria-label="Würfel ${v}${sel?", wird neu geworfen":""}"`}><rect x="6" y="6" width="88" height="88" rx="18" fill="${opp?"#e8d5b5":"#fffaf0"}" stroke="${sel?"#c0221f":"#0006"}" stroke-width="${sel?7:3}"/>${DIE_P[v].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="9" fill="${v===1?"#c0221f":"#2d2417"}"/>`).join("")}</svg>`;
+const dieSvg=(v,opp,sel,i,roll)=>`<svg class="die${sel?" sel":""}${roll?" roll":""}" style="animation-delay:${i*.06}s" viewBox="0 0 100 100" ${opp?"":`onclick="tvSel(${i})" role="button" aria-label="${t("tav.dieA",v,sel)}"`}><rect x="6" y="6" width="88" height="88" rx="18" fill="${opp?"#e8d5b5":"#fffaf0"}" stroke="${sel?"#c0221f":"#0006"}" stroke-width="${sel?7:3}"/>${DIE_P[v].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="9" fill="${v===1?"#c0221f":"#2d2417"}"/>`).join("")}</svg>`;
 const tavLeft=()=>TAV_LIMIT-((S.tav&&S.tav.day===S.day)?S.tav.n:0);
 const TAVBG=`<svg class="bg" viewBox="0 0 600 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><defs><linearGradient id="tvw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1a10"/><stop offset="1" stop-color="#5a3a22"/></linearGradient><radialGradient id="tvf"><stop offset="0" stop-color="#ffb74d" stop-opacity=".7"/><stop offset="1" stop-color="#ffb74d" stop-opacity="0"/></radialGradient></defs>
  <rect width="600" height="220" fill="url(#tvw)"/>${Array.from({length:13},(_,i)=>`<path d="M${i*48} 0V188" stroke="#0004" stroke-width="2"/>`).join("")}
@@ -39,22 +40,22 @@ const TAVBG=`<svg class="bg" viewBox="0 0 600 220" preserveAspectRatio="xMidYMax
 function tavern(){musicSet("tavern");const o=TAVO.find(x=>x.id===TV.o),left=tavLeft(),opp=knight(2,0,0,true,null,null,null,null,null,o.id==="rosa",o.col);
  let body="";
  if(TV.ph==="bet"){if(!o.bets.includes(TV.bet))TV.bet=o.bets[0];
-  body=`<h3>🎲 Würfelpoker</h3><div class="mut">Beide werfen 5 Würfel. Du darfst einmal beliebige Würfel neu werfen, dann der Gegner. Die bessere Kombination gewinnt den Einsatz. Vierling zahlt das Anderthalbfache, Fünfling das Dreifache. Höchstens 5 Partien pro Tag.</div>
-  <h3>Gegner</h3>${TAVO.map(x=>`<div class="row"><span>${x.e} <b>${x.n}</b> <span class="mut">${x.bets.join("/")} <i class=coin></i></span><br><span class="mut">${x.ok()?x.d:"🔒 "+x.lk}</span></span>${x.ok()?`<button ${x.id===TV.o?'class="p"':""} onclick="TV.o='${x.id}';tavern()">${x.id===TV.o?"Gewählt":"Wählen"}</button>`:""}</div>`).join("")}
-  <h3>Einsatz gegen ${o.n}</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${o.bets.map(b=>`<button ${b===TV.bet?'class="p"':""} ${S.gold<b?"disabled":""} onclick="TV.bet=${b};tavern()">${b} <i class=coin></i></button>`).join("")}</div>
-  <div class="grid"><button class="p" style="grid-column:1/-1" ${left<1||S.gold<TV.bet?"disabled":""} onclick="tvStart()">🎲 Würfeln<small>${left<1?"Für heute genug gespielt – komm morgen wieder":`Einsatz ${TV.bet} <i class=coin></i> · heute noch ${left} Partie${left>1?"n":""}`}</small></button></div>`}
+  body=`<h3>🎲 ${t("tav.poker")}</h3><div class="mut">${t("tav.rules")}</div>
+  <h3>${t("tav.opps")}</h3>${TAVO.map(x=>`<div class="row"><span>${x.e} <b>${x.n}</b> <span class="mut">${x.bets.join("/")} <i class=coin></i></span><br><span class="mut">${x.ok()?x.d:"🔒 "+x.lk}</span></span>${x.ok()?`<button ${x.id===TV.o?'class="p"':""} onclick="TV.o='${x.id}';tavern()">${x.id===TV.o?t("tav.chosen"):t("c.choose")}</button>`:""}</div>`).join("")}
+  <h3>${t("tav.betVs",o.n)}</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${o.bets.map(b=>`<button ${b===TV.bet?'class="p"':""} ${S.gold<b?"disabled":""} onclick="TV.bet=${b};tavern()">${b} <i class=coin></i></button>`).join("")}</div>
+  <div class="grid"><button class="p" style="grid-column:1/-1" ${left<1||S.gold<TV.bet?"disabled":""} onclick="tvStart()">🎲 ${t("tav.roll")}<small>${left<1?t("tav.enough"):t("tav.betS",TV.bet,left)}</small></button></div>`}
  else{const hp=hand(TV.p),he=hand(TV.e),done=TV.ph==="done";
   body=`<h3>${o.e} ${o.n} <span class="mut">${HANDS[he[0]]}</span></h3><div class="dice">${TV.e.map((v,i)=>dieSvg(v,1,0,i,TV.rollE)).join("")}</div>
-  <h3>Du <span class="mut">${HANDS[hp[0]]}</span></h3><div class="dice">${TV.p.map((v,i)=>dieSvg(v,0,TV.sel[i],i,TV.rollP)).join("")}</div>
-  ${done?`<div class="msg" style="font-size:16px">${TV.res}</div><div class="grid"><button class="p" ${tavLeft()<1||S.gold<TV.bet?"disabled":""} onclick="tvStart()">🎲 Nochmal<small>${TV.bet} <i class=coin></i> · noch ${tavLeft()} heute</small></button><button onclick="TV.ph='bet';tavern()">Gegner / Einsatz</button></div>`
-  :`<div class="mut" style="margin-top:4px">Tippe die Würfel an, die du <b>neu werfen</b> willst.</div><div class="grid"><button class="p" onclick="tvRoll()">${TV.sel.some(Boolean)?`🎲 ${TV.sel.filter(Boolean).length} Würfel neu werfen`:"✋ Alle behalten"}</button><button onclick="TV.sel=TV.sel.map(()=>false);tavern()">Auswahl löschen</button></div>`}`}
- app.innerHTML=`<div class="top"><b>🍺 Zum Goldenen Humpen</b><span><i class=coin></i> ${S.gold}</span></div>
+  <h3>${t("tav.you")} <span class="mut">${HANDS[hp[0]]}</span></h3><div class="dice">${TV.p.map((v,i)=>dieSvg(v,0,TV.sel[i],i,TV.rollP)).join("")}</div>
+  ${done?`<div class="msg" style="font-size:16px">${TV.res}</div><div class="grid"><button class="p" ${tavLeft()<1||S.gold<TV.bet?"disabled":""} onclick="tvStart()">🎲 ${t("tav.again")}<small>${t("tav.againS",TV.bet,tavLeft())}</small></button><button onclick="TV.ph='bet';tavern()">${t("tav.oppBet")}</button></div>`
+  :`<div class="mut" style="margin-top:4px">${t("tav.tap")}</div><div class="grid"><button class="p" onclick="tvRoll()">${TV.sel.some(Boolean)?"🎲 "+t("tav.reroll",TV.sel.filter(Boolean).length):"✋ "+t("tav.keep")}</button><button onclick="TV.sel=TV.sel.map(()=>false);tavern()">${t("tav.clear")}</button></div>`}`}
+ app.innerHTML=`<div class="top"><b>🍺 ${t("tav.name")}</b><span><i class=coin></i> ${S.gold}</span></div>
  <div class="scene tav">${TAVBG}<div class="tvk">${pk()}</div><div class="tvk">${opp}</div></div>
  ${hintBox("tavern")}
- <div class="msg">🧔 Der Wirt raunt: <i>${RUMORS[TV.rum%RUMORS.length]}</i>${TV.note?`<br>${TV.note}<br><i>${RUMORS[(TV.rum+1)%RUMORS.length]}</i>`:""}</div>
+ <div class="msg">🧔 ${t("tav.host")}: <i>${RUMORS[TV.rum%RUMORS.length]}</i>${TV.note?`<br>${TV.note}<br><i>${RUMORS[(TV.rum+1)%RUMORS.length]}</i>`:""}</div>
  <div class="card">${body}</div>
- <div class="mut" style="text-align:center;margin-top:6px">Würfelsiege: ${S.tavW||0} · Gewinn/Verlust gesamt: ${(S.tavG||0)>=0?"+":""}${S.tavG||0} <i class=coin></i></div>
- <div class="grid"><button ${S.round===S.day||S.gold<roundCost()?"disabled":""} style="grid-column:1/-1" onclick="tavRound()">🍻 Eine Runde für alle ausgeben<small>${S.round===S.day?"heute schon spendiert":roundCost()+" Gold · bringt Ruhm"}</small></button><button style="grid-column:1/-1" onclick="TV.ph='bet';TV.note='';home()">← Zurück zur Burg</button></div>`;TV.rollP=TV.rollE=false}
+ <div class="mut" style="text-align:center;margin-top:6px">${t("tav.wins")}: ${S.tavW||0} · ${t("tav.net")}: ${(S.tavG||0)>=0?"+":""}${S.tavG||0} <i class=coin></i></div>
+ <div class="grid"><button ${S.round===S.day||S.gold<roundCost()?"disabled":""} style="grid-column:1/-1" onclick="tavRound()">🍻 ${t("tav.round")}<small>${S.round===S.day?t("tav.roundDone"):t("tav.roundS",roundCost())}</small></button><button style="grid-column:1/-1" onclick="TV.ph='bet';TV.note='';home()">${t("c.back")}</button></div>`;TV.rollP=TV.rollE=false}
 function tvStart(){const o=TAVO.find(x=>x.id===TV.o);if(!o.ok()||tavLeft()<1||S.gold<TV.bet)return;
  S.gold-=TV.bet;S.tav=S.tav&&S.tav.day===S.day?S.tav:{day:S.day,n:0};S.tav.n++;save();
  TV.p=Array.from({length:5},d6);TV.e=Array.from({length:5},d6);TV.sel=[0,0,0,0,0].map(()=>false);TV.ph="pick";TV.rollP=TV.rollE=true;sfx("dice");tavern()}
@@ -64,7 +65,7 @@ function tvRoll(){if(TV.ph!=="pick")return;const o=TAVO.find(x=>x.id===TV.o);
  const keep=oppKeep(o.ai,TV.e,hand(TV.p));if(keep.some(k=>!k)){TV.e=reroll(TV.e,keep);TV.rollE=true;setTimeout(()=>sfx("dice"),350)}
  const hp=hand(TV.p),he=hand(TV.e),c=cmpH(hp,he),l=[];TV.ph="done";TV.sel=[];TV.rum++;
  if(c>0){const m=hp[0]===8?3:hp[0]===7?1.5:1,w=Math.round(TV.bet*m);S.gold+=TV.bet+w;S.tavW=(S.tavW||0)+1;S.tavG=(S.tavG||0)+w;
-  TV.res=`🏆 <b>Gewonnen!</b> ${HANDS[hp[0]]} schlägt ${HANDS[he[0]]}. +${w} <i class=coin></i>${m>1?` (×${m}-Bonus!)`:""}`;setTimeout(()=>sfx("win"),500);qProg("dice",1,l);checkTitles(l)}
- else if(c===0){S.gold+=TV.bet;TV.res=`🤝 <b>Unentschieden</b> – beide ${HANDS[hp[0]]}. Du bekommst deinen Einsatz zurück.`}
- else{S.tavG=(S.tavG||0)-TV.bet;TV.res=`💀 <b>Verloren.</b> ${HANDS[he[0]]} schlägt ${HANDS[hp[0]]}. −${TV.bet} <i class=coin></i>`;setTimeout(()=>sfx("lose"),500)}
+  TV.res=t("tav.won",HANDS[hp[0]],HANDS[he[0]],w,m);setTimeout(()=>sfx("win"),500);qProg("dice",1,l);checkTitles(l)}
+ else if(c===0){S.gold+=TV.bet;TV.res=t("tav.draw",HANDS[hp[0]])}
+ else{S.tavG=(S.tavG||0)-TV.bet;TV.res=t("tav.lost",HANDS[he[0]],HANDS[hp[0]],TV.bet);setTimeout(()=>sfx("lose"),500)}
  if(l.length)TV.res+="<br>"+l.join("<br>");save();tavern()}

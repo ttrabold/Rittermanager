@@ -133,7 +133,7 @@ function musicSet(m){AU.want=m;if(AU.unlocked&&AU.mus&&AU.mode!==m)musicStart()}
 function toggleM(){AU.mus=!AU.mus;auSave();if(AU.mus){AU.unlocked=true;ac();musicStart()}else musicStop();updSnd()}
 function toggleS(){AU.sfx=!AU.sfx;auSave();updSnd();if(AU.sfx)sfx("coin")}
 function updSnd(){document.getElementById("mb").className=AU.mus?"":"off";document.getElementById("sb").className=AU.sfx?"":"off"}
-const sd=document.createElement("div");sd.id="snd";sd.innerHTML=`<button id="mb" onclick="toggleM()" aria-label="Musik an oder aus">🎵 Musik</button><button id="sb" onclick="toggleS()" aria-label="Sound an oder aus">🔊 Sound</button>`;document.body.appendChild(sd);updSnd();
+const sd=document.createElement("div");sd.id="snd";sd.innerHTML=`<button id="mb" onclick="toggleM()" aria-label="${t("au.musA")}">🎵 ${t("au.mus")}</button><button id="sb" onclick="toggleS()" aria-label="${t("au.sfxA")}">🔊 ${t("au.sfx")}</button>`;document.body.appendChild(sd);updSnd();
 document.addEventListener("pointerdown",()=>{if(AU.unlocked)return;AU.unlocked=true;ac();if(AU.mus)musicStart()});
 document.addEventListener("visibilitychange",()=>{if(!AU.ctx)return;if(document.hidden)AU.ctx.suspend();else if(AU.unlocked)AU.ctx.resume()});
 document.addEventListener("click",e=>{const b=e.target.closest("button");if(b&&!b.closest("#snd")&&!b.disabled)sfx("click")});
