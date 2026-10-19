@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>itch art</title>
+<!-- itch.io-Bilder aus den Spielgrafiken: art.html#banner (960×280), #bg (1920×1080), #embed (600×860).
+     Im Browser mit genau dieser Fenstergröße und Pixeldichte 2 öffnen und abfotografieren (dunkles Farbschema). -->
+<link rel="stylesheet" href="../../css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@600&display=block" rel="stylesheet">
+<style>
+ html,body{margin:0;padding:0;background:#000;max-width:none}
+ #snd,#app{display:none!important}
+ .art{position:relative;overflow:hidden;background:#0d0a12}
+ .art .bg{position:absolute;inset:0;width:100%;height:100%}
+ .layer{position:absolute}
+ .k{filter:drop-shadow(0 0 16px rgba(140,200,255,.3))}
+ .bk svg.k{height:var(--h);margin:0;display:block}
+ h1.t{margin:0;font-family:"Cinzel Decorative",Georgia,serif;font-weight:900;line-height:1;letter-spacing:1px;
+  background:linear-gradient(#fff6c8 0%,#ffd45a 45%,#d98a12 70%,#ffe9a0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 3px 0 #3a1500) drop-shadow(0 0 14px rgba(255,150,40,.5))}
+ p.s{margin:8px 0 0;font-family:Cinzel,Georgia,serif;font-weight:600;letter-spacing:6px;color:#f3e2b8;text-shadow:0 2px 6px #000,0 0 10px rgba(0,0,0,.8)}
+</style></head>
+<body><div id="app"></div>
+<script>
+ // Eigener Speicher: echten localStorage nicht anfassen
+ (()=>{const m={ritter_lang:"en"};Object.defineProperty(window,"localStorage",{value:{getItem:k=>k in m?m[k]:null,setItem:(k,v)=>{m[k]=String(v)},removeItem:k=>{delete m[k]}},configurable:true})})();
+ const R="../../js/",F0=["i18n","lang/de","lang/en","util","data","state","audio","speech","unlock","art","professions","weapons","loot","day","tavern","screens","combat","help","companions","events","story","endgame","bestiary"];
+ for(const f of F0)document.write(`<script src="${R}${f}.js"><\/script>`);
+</script>
+<div id="out"></div>
+<script>
+ AU.mus=false;AU.sfx=false;
+ // Ritter in legendärer Ausrüstung, ausgebaute Burg
+ S=fresh();S.exp=expFor(40);S.w=4;S.a=4;S.s=3;S.wc="schwert";S.bld={kaserne:2,garten:5,mine:5,arkan:5,schatz:5};S.deco=["banner","laterne","brunnen","statue","schaedel"];
+ for(const[s,c,k]of[["w","#7fd6ff","ew"],["a","#ffd45a","ea"],["sh","#ffd45a","es"]]){const it=genItem(48,3,s,s==="w"?"schwert":undefined);it.c=c;S.gear.push(it);S[k]=it.id}
+ let seed=11;const rr=()=>(seed=(seed*9301+49297)%233280)/233280;
+ const sparks=(w,h,n,y0,cols)=>Array.from({length:n},()=>`<circle cx="${rr()*w}" cy="${y0+rr()*(h-y0)}" r="${.8+rr()*2.2}" fill="${cols[rr()*cols.length|0]}" opacity="${.35+rr()*.55}"/>`).join("");
+ const svgFx=(w,h,inner)=>`<svg class="layer" style="inset:0;z-index:2" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><defs><filter id="gl"><feGaussianBlur stdDeviation="1.4"/></filter><filter id="bl"><feGaussianBlur stdDeviation="3"/></filter></defs>${inner}</svg>`;
+ const title=(size,sub)=>`<h1 class="t" style="font-size:${size}px">Sir Grindalot</h1><p class="s" style="font-size:${Math.round(size*.29)}px">FROM SQUIRE TO LEGEND</p>`;
+ // Größe per CSS-Variable (ein zweites style-Attribut am SVG würde die Spiegelung der Bosse verwerfen)
+ const big=(svg,h)=>`<div class="bk" style="--h:${h}px">${svg}</div>`;
+ const V={
+  // Banner 960×280: Nachtpanorama, Titel links, Ritter + Burg rechts, Drache dahinter
+  banner:()=>{const W=960,H=280;return `<div class="art" style="width:${W}px;height:${H}px">${BG}
+   <div class="layer" style="inset:0;z-index:1;background:linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.35) 45%,rgba(0,0,0,0) 70%),linear-gradient(transparent 70%,rgba(0,0,0,.45))"></div>
+   ${svgFx(W,H,`<g filter="url(#gl)">${sparks(W,H,40,20,["#fff6c8","#ffd45a","#cfe6ff"])}</g>`)}
+   <div class="layer" style="right:-40px;bottom:6px;z-index:1;opacity:.75;filter:brightness(.8)">${castleSvg().replace('class="castle"','class="castle" style="position:static;height:200px"')}</div>
+   <div class="layer" style="right:30px;bottom:0;z-index:2;filter:drop-shadow(0 0 18px rgba(255,90,20,.55))">${big(bossSvg(2),260)}</div>
+   <div class="layer" style="right:255px;bottom:2px;z-index:3">${big(pk(),235)}</div>
+   <div class="layer" style="left:40px;top:84px;z-index:4">${title(52)}</div></div>`},
+  // Seitenhintergrund 1920×1080: dunkle Lavahalle, Bosse gedimmt an den Rändern, Mitte ruhig für den itch-Inhalt
+  bg:()=>{const W=1920,H=1080;return `<div class="art" style="width:${W}px;height:${H}px">${TBG(3)}
+   <div class="layer" style="inset:0;z-index:1;background:radial-gradient(ellipse 34% 60% at 50% 45%,rgba(8,4,2,.92),rgba(8,4,2,.82) 60%,rgba(8,4,2,.55) 100%)"></div>
+   ${svgFx(W,H,`<g filter="url(#gl)">${sparks(W,H,140,80,["#ffb347","#ff6a1a","#ffd45a"])}</g>`)}
+   <div class="layer" style="left:-30px;bottom:0;z-index:2;transform:scaleX(-1);filter:brightness(.55) drop-shadow(0 0 34px rgba(255,90,20,.55))">${big(bossSvg(2),660)}</div>
+   <div class="layer" style="right:-10px;bottom:0;z-index:2;filter:brightness(.5) drop-shadow(0 0 34px rgba(160,60,255,.55))">${big(bossSvg(7),620)}</div></div>`},
+  // Hintergrund hinter dem Spielfenster 600×860: Hochformat-Poster
+  embed:()=>{const W=600,H=860;return `<div class="art" style="width:${W}px;height:${H}px">${BG.replace('preserveAspectRatio="xMidYMax slice"','preserveAspectRatio="xMidYMax slice" style="height:100%"')}
+   <div class="layer" style="inset:0;z-index:1;background:linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.15) 35%,rgba(0,0,0,0) 60%,rgba(0,0,0,.55))"></div>
+   ${svgFx(W,H,`<g filter="url(#gl)">${sparks(W,H,50,0,["#fff6c8","#ffd45a","#cfe6ff"])}</g>`)}
+   <div class="layer" style="right:-20px;bottom:40px;z-index:2">${castleSvg().replace('class="castle"','class="castle" style="position:static;height:300px"')}</div>
+   <div class="layer" style="left:20px;bottom:10px;z-index:3">${big(pk(),400)}</div>
+   <div class="layer" style="left:0;right:0;top:70px;text-align:center;z-index:4">${title(62)}</div></div>`}};
+ document.getElementById("out").innerHTML=(V[location.hash.slice(1)]||V.banner)();
+</script>
+</body></html>

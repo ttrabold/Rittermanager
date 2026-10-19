@@ -76,6 +76,15 @@ Alle in `docs/itch/`, aufgenommen im englischen Spiel mit doppelter Auflösung:
   6. `06-castle-building.png` – Burgausbau
   7. `07-bestiary.png` – Bestiarium mit den Bossen
 
+## Seitengestaltung (Edit theme)
+
+Quelle für alle drei: `docs/itch/art.html` mit `#banner`, `#bg` oder `#embed` öffnen (Fenstergröße wie angegeben, dunkles Farbschema) und abfotografieren.
+
+- **Banner:** `banner.png` (960×280 in doppelter Auflösung). Titel links, Ritter gegen Vulkanus, Burg im Hintergrund.
+- **Background:** `background.png` (1920×1080). Dunkle Lavahalle, Drache und Hexe an den Rändern; die Mitte bleibt ruhig für die Inhaltsspalte. Bei itch „Fit to page“ oder „cover“ wählen, nicht kacheln.
+- **Embed background:** `embed-bg.png` (600×860 in doppelter Auflösung, genau die Größe des Spielfensters). Die Mitte ist frei für den „Run game“-Knopf.
+- Passende Theme-Farben: Hintergrund `#140c08`, Text `#f3e2b8`, Links/Knöpfe `#ffb000`, Inhaltsfläche `#1e1611`.
+
 ## Einbettung (Embed options)
 
 - Embed in page, Manually set size: **600 × 860 px**
