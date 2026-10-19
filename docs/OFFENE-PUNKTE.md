@@ -33,7 +33,6 @@ Aus der unabhängigen Prüfung, bewusst aufgeschoben:
 
 ## Balance
 
-
 - [ ] **Beim echten Spielen prüfen, ob das Spiel mit Zufallsbeute zu leicht geworden ist.** Die Simulation verliert nur noch 2–8 Bosskämpfe, vorher waren es 8–27. Stellschrauben in `genItem`: Grundwert-Faktoren, Seltenheitsbonus und Turm-Bonus (`lvl()+Etage/10` in `js/combat.js`).
 - [ ] **Vulkanus (Boss 3)** ist in manchen Simulationsläufen eine starke Hürde, mit bis zu ~50 Niederlagen in einem Ausreißer. Das gab es schon vor den Änderungen.
 - [ ] **Schilde** sind ein dritter verzauberter Platz mit zusätzlicher Stärke. Beobachten, ob das zu viel ist.
