@@ -163,3 +163,12 @@ svg.vP{transform:scaleX(-1)}
 .fs .fcmp{position:absolute;left:104px;bottom:-2px;z-index:3}
 .bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
 .bcard{border:1px solid var(--line);border-radius:10px;padding:6px;background:var(--bg);text-align:center}.bcard .bimg{height:100px;display:flex;justify-content:center;align-items:flex-end}.bcard svg.k{transform:none!important}
+
+/* Fundstücke mit mehreren Effekten: Partikel und Klingenfarbe wechseln der Reihe nach (2 Effekte 5 s, 3 Effekte 7,5 s) */
+.fxc2{animation:fxc2 5s infinite backwards}.fxc3{animation:fxc3 7.5s infinite backwards}
+@keyframes fxc2{0%{opacity:0}5%,45%{opacity:1}50%,100%{opacity:0}}
+@keyframes fxc3{0%{opacity:0}4%,29%{opacity:1}33%,100%{opacity:0}}
+.blc2{animation:blc2 5s infinite}.blc3{animation:blc3 7.5s infinite}
+@keyframes blc2{0%,40%{fill:var(--c0)}50%,90%{fill:var(--c1)}100%{fill:var(--c0)}}
+@keyframes blc3{0%,26%{fill:var(--c0)}33%,59%{fill:var(--c1)}66%,92%{fill:var(--c2)}100%{fill:var(--c0)}}
+@media (prefers-reduced-motion:reduce){.fxc2,.fxc3,.blc2,.blc3{animation:none}}

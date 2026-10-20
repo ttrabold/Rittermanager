@@ -65,12 +65,12 @@ const GFX={
 const genGlow=it=>`style="filter:drop-shadow(0 0 ${3+it.r*2.5}px ${it.c})"`;
 // Effekte eines Fundstücks: stärkster zuerst, höchstens drei
 const genKs=it=>[it.m,...Object.keys(it.fx)].filter((k,i,a)=>it.fx[k]&&a.indexOf(k)===i&&GFX[k]).slice(0,3);
-// Klinge mit Farbverlauf: erster Effekt an der Spitze, letzter am Heft
-const genBlade=it=>{const ks=genKs(it);if(ks.length<2)return null;const id="gb"+it.id;return {id,defs:`<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1">${ks.map((k,i)=>`<stop offset="${ks.length>1?i/(ks.length-1):0}" stop-color="${LFX[k].c}"/>`).join("")}</linearGradient></defs>`}};
-// Jeder Effekt hat eine eigene Zone der Waffe (Spitze → Heft bzw. Reihenfolge der Punkte), Partikel 1,5-fach
+// Klinge wechselt mit den Effekten durch (CSS-Variablen --c0…, Animation blc2/blc3)
+const genBlade=it=>{const ks=genKs(it);return ks.length<2?null:{cls:"blc"+ks.length,st:ks.map((k,i)=>`--c${i}:${LFX[k].c}`).join(";")}};
+// Mehrere Effekte wechseln der Reihe nach durch (fxc2/fxc3, je ca. 2,5 s sichtbar), jeder über die ganze Waffe, Partikel 1,5-fach
 const genFx=it=>{const pts=GPTS[it.cat]||GPTS.schwert,ks=genKs(it),K=ks.length,n=pts.length;
  const cx=Math.min(108,pts.reduce((a,p)=>a+p[0],0)/n),cy=pts.reduce((a,p)=>a+p[1],0)/n,big=(x,y,h)=>`<g transform="translate(${x} ${y}) scale(1.5) translate(${-x} ${-y})">${h}</g>`;
- return pts.map((p,i)=>{const z=Math.min(K-1,Math.floor(i*K/n)),k=ks[(it.cat==="schwert"||it.cat==="dolch")?K-1-z:z];return big(p[0],p[1],GFX[k](p[0],p[1],i))}).join("")
+ return ks.map((k,j)=>`<g ${K>1?`class="fxc${K}" style="animation-delay:${j*2.5}s"`:""}>${pts.map((p,i)=>big(p[0],p[1],GFX[k](p[0],p[1],i))).join("")}</g>`).join("")
   +(it.r>=2?`<circle class="pl" cx="${cx}" cy="${cy}" r="${it.r>=3?30:24}" fill="${it.c}" opacity=".22"/>`+(it.cat==="schwert"||it.cat==="dolch"?`<path class="glow" d="M107.5 ${it.cat==="dolch"?56:16}V${it.cat==="dolch"?94:88}" stroke="${it.c}" stroke-width="2" opacity=".85"/>`:""):"")
   +(it.r>=3?`<g class="rot"><circle cx="${cx}" cy="${cy}" r="19" fill="none" stroke="${it.c}" stroke-width="1.8" stroke-dasharray="3 4"/></g>`+ST(cx-14,cy-16,"#fff",.2)+ST(cx+15,cy+14,"#fff",.7):"")};
 const AV={
@@ -130,7 +130,7 @@ function knight(w,a,s,flip,plume,ow,oa,wi,ai,fem,robe,wcat){
  ${head}${plm}
  ${av(0)}
  ${limb(fem?"M82 66Q97 80 105 101":"M85 66Q98 80 105 101",ac)}${arm?`<circle cx="96" cy="82" r="${fem?3.8:4.5}" fill="${ac}" stroke="${ln}"/>`:""}
- ${wcat&&wcat!=="schwert"?catSvg(wcat,w,ow,wi&&(itm(wi)||{}).c):`${wi&&VIS[wi]?weaponSvg(wi):`${gb?gb.defs:""}<g ${wi&&(itm(wi)||{}).gen?genGlow(itm(wi)):""}><path d="M104 96V20L107.5 8L111 20V96Z" fill="${gb?`url(#${gb.id})`:wc}" stroke="${wi&&(itm(wi)||{}).gen?itm(wi).c:"#0005"}" stroke-width="${wi&&(itm(wi)||{}).gen?1.6:1}"/><path d="M107.5 14V94" stroke="#fff7"/></g>`}
+ ${wcat&&wcat!=="schwert"?catSvg(wcat,w,ow,wi&&(itm(wi)||{}).c):`${wi&&VIS[wi]?weaponSvg(wi):`<g ${wi&&(itm(wi)||{}).gen?genGlow(itm(wi)):""}><path d="M104 96V20L107.5 8L111 20V96Z" fill="${wc}" ${gb?`class="${gb.cls}" style="${gb.st}"`:""} stroke="${wi&&(itm(wi)||{}).gen?itm(wi).c:"#0005"}" stroke-width="${wi&&(itm(wi)||{}).gen?1.6:1}"/><path d="M107.5 14V94" stroke="#fff7"/></g>`}
  <path d="M96 94h23q2 3 0 6h-23q-2-3 0-6z" fill="#7a4a1c" stroke="#0004"/><rect x="105" y="100" width="5" height="12" fill="#5b3a1c"/><circle cx="107.5" cy="114" r="3" fill="#d4a017" stroke="#0005"/>`}
  ${wi&&(itm(wi)||{}).gen?genFx(itm(wi)):""}
  <circle cx="107.5" cy="105.5" r="${fem?5.2:6}" fill="${arm?ac:sk}" stroke="#0006"/><path d="M102.5 103.5h10M102.5 107h10" stroke="#0003"/>
