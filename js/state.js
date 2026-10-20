@@ -7,7 +7,7 @@ const fxv=k=>{let v=0;for(const s of["ew","ea","es"]){const i=itm(S[s]);if(i&&!i
 const wBon=()=>{const e=eq("w");return (e?e.b:W[S.w][2])+upl("w")*2};
 const aBon=()=>{const e=eq("a");return (e?e.b:A[S.a][2])+upl("a")};
 const sBon=()=>{const e=eq("sh");return (e?e.b:SH[S.s][2])+upl("sh")};
-const kinfo=key=>{const e=itm(key);if(e)return {s:e.s,n:(e.gen?RAR[e.r].e+" ":e.cr?"⚒️ ":"✨ ")+e.n,b:e.b,cat:e.cat};if(/^s\d$/.test(key)){const x=SH[+key[1]]||SH[0];return {s:"sh",n:x[0],b:x[2]}}if(key.startsWith("w:")){const[,c,i]=key.split(":");return {s:"w",n:(WNAMES[c]||WNAMES.schwert)[+i],b:W[+i][2],cat:c}}const t=key[0],L=t==="w"?W:A,x=L[+key.slice(1)]||L[0];return {s:t,n:x[0],b:x[2]}};
+const kinfo=key=>{const e=itm(key);if(e)return {s:e.s,n:(e.gen?(e.u?"✦":RAR[e.r].e)+" ":e.cr?"⚒️ ":"✨ ")+e.n,b:e.b,cat:e.cat};if(/^s\d$/.test(key)){const x=SH[+key[1]]||SH[0];return {s:"sh",n:x[0],b:x[2]}}if(key.startsWith("w:")){const[,c,i]=key.split(":");return {s:"w",n:(WNAMES[c]||WNAMES.schwert)[+i],b:W[+i][2],cat:c}}const t=key[0],L=t==="w"?W:A,x=L[+key.slice(1)]||L[0];return {s:t,n:x[0],b:x[2]}};
 const knm=key=>{const u=(S.up||{})[key]||0,r=((S.ru||{})[key]||[]).length;return kinfo(key).n+(u?" +"+u:"")+(r?" "+"✦".repeat(r):"")};
 const iname=k=>knm(ikey(k));
 const invItems=()=>[wKey(),"a"+S.a,...(S.s?["s"+S.s]:[]),...S.own.filter(id=>EI.find(x=>x.id===id)),...(S.gear||[]).map(x=>x.id)].sort((a,b)=>(kinfo(a).s>kinfo(b).s)-(kinfo(a).s<kinfo(b).s));

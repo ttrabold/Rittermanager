@@ -279,14 +279,16 @@ u_phoenix:c=>`<span class="flash fire"></span><span class="rise ${c}">🔥🔥�
 u_storm:c=>`<span class="aura ${c}">🌩️</span><span class="flash" style="background:#90caf9"></span>`,
 u_morph:c=>`<span class="flash" style="background:#e040fb"></span><span class="aura ${c}">🌀</span>`});
 // ---- Enthüllung: Blitz schlägt in die Truhe, Deckel springt auf, die Waffe dreht sich heraus, Name und Effekt schlagen ein ----
-function uniqueReveal(it){if(typeof document==="undefined"||!document.body)return;const old=document.getElementById("ureveal");if(old)old.remove();
- const d=UNIQ.find(x=>x.id===it.u),el=document.createElement("div");el.id="ureveal";
+let uRevClose=null;
+function uniqueReveal(it){if(typeof document==="undefined"||!document.body)return;const q=Array.isArray(it)?it.slice():[it];if(!q.length)return;if(uRevClose)uRevClose(true);const cur=q.shift();
+ const d=UNIQ.find(x=>x.id===cur.u),el=document.createElement("div");el.id="ureveal";
  el.innerHTML=`<div class="ur-st"><div class="ur-bgl"></div><svg class="ur-bolt" viewBox="0 0 100 300" preserveAspectRatio="none"><path d="M54 0L38 90L62 96L30 190L52 196L40 300" stroke="#fff" stroke-width="5" fill="none"/><path d="M54 0L38 90L62 96L30 190L52 196L40 300" stroke="#8ad4ff" stroke-width="12" fill="none" opacity=".6"/></svg>
   <div class="ur-beam"></div>
-  <div class="ur-w">${uniqBig(it.u)}</div>
+  <div class="ur-w">${uniqBig(cur.u)}</div>
   <svg class="ur-chest" viewBox="0 0 200 150"><path d="M20 60h160v80H20z" fill="#5a3a1c" stroke="#1c1008" stroke-width="4"/><path d="M20 90h160M60 60v80M140 60v80" stroke="#8a8a8a" stroke-width="5"/><rect x="88" y="84" width="24" height="26" rx="4" fill="#c9971a" stroke="#5d4a2c" stroke-width="3"/><g class="ur-lid"><path d="M14 62Q14 12 100 12Q186 12 186 62Z" fill="#6a4624" stroke="#1c1008" stroke-width="4"/><path d="M60 14v48M140 14v48" stroke="#8a8a8a" stroke-width="5"/></g></svg>
-  <div class="ur-t"><b>✦ ${t("ux.tag")}</b><span>${it.n}</span></div>
-  <div class="ur-e">${d.ef.map(k=>`<div><b>${t("ue.nm."+k)}</b><br>${t("ue.d."+k,uPct(k,it))}</div>`).join("")}</div>
+  <div class="ur-t"><b>✦ ${t("ux.tag")}</b><span>${cur.n}</span></div>
+  <div class="ur-e">${d.ef.map(k=>`<div><b>${t("ue.nm."+k)}</b><br>${t("ue.d."+k,uPct(k,cur))}</div>`).join("")}</div>
   <button class="p ur-b">${t("ux.reveal")}</button><div class="ur-fl"></div></div>`;
- const close=()=>{el.remove();document.removeEventListener("keydown",key,true)},key=e=>{if(e.key==="Enter"||e.key==="Escape"||e.key===" "){e.preventDefault();e.stopPropagation();close()}};
- el.querySelector("button").onclick=close;document.addEventListener("keydown",key,true);document.body.appendChild(el)}
+ // close(true) = nur aufräumen (neues Overlay ersetzt dieses); sonst schließen und ggf. das nächste zeigen
+ const close=rep=>{el.remove();document.removeEventListener("keydown",key,true);if(uRevClose===close)uRevClose=null;if(rep!==true&&q.length)uniqueReveal(q)},key=e=>{if(e.key==="Enter"||e.key==="Escape"||e.key===" "){e.preventDefault();e.stopPropagation();close()}};
+ uRevClose=close;el.querySelector("button").onclick=()=>close();document.addEventListener("keydown",key,true);document.body.appendChild(el)}

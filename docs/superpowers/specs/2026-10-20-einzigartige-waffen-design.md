@@ -32,7 +32,7 @@ Ziel: **21 einzigartige Waffen**, drei je Waffenart. Jede hat ein eigenes, impos
 
 ## Darf nicht passieren
 
-- Alte Spielstände brechen. **Test-Vorschau und Live-Seite teilen denselben Speicher**, und eine ältere Version (0.2.2) prüft beim Laden alle Funde in `gearClean()`. Ein Fund ohne gültigen Standardeffekt in `fx` wird dort **gelöscht**. Ein einzigartiges Stück muss deshalb so gespeichert werden, dass die alte Version es behält (z. B. mit einem unauffälligen Platzhalter-Eintrag in `fx`, den die neue Version ignoriert). Die neue Version darf diesen Platzhalter nicht als Krit o. ä. werten.
+- Alte Spielstände brechen. **Test-Vorschau und Live-Seite teilen denselben Speicher**, und eine ältere Version (0.2.2) prüft beim Laden alle Funde in `gearClean()`. Ein Fund ohne gültigen Standardeffekt in `fx` wird dort **gelöscht**. Ein einzigartiges Stück muss deshalb so gespeichert werden, dass die alte Version es behält (z. B. mit einem Platzhalter-Eintrag `fx:{crit:.01+Index·0,0001}`, den die neue Version ignoriert. Die ältere Version streift das Feld `u` beim Laden ab, behält aber `fx`; die neue erkennt die Waffe am Index im Platzhalter wieder). Die neue Version darf diesen Platzhalter nicht als Krit o. ä. werten.
 - Einzigartige Waffen machen Kämpfe unschaffbar oder trivial. Die Stärke soll etwa **eine Stufe über Legendär** liegen und durch die Simulation geprüft werden.
 - Ein Effekt kann den Kampf endlos machen (Zeitriss, Phoenixherz, Wiederkehr) oder tödliche Schleifen bauen (Blutdurst darf nie töten).
 - Die Enthüllung blockiert Tests, Schnellkampf oder die Simulation (sie darf nur bei sichtbarem Bildschirm erscheinen und muss sich schließen lassen).
@@ -86,7 +86,7 @@ Alle Chancen und Stärken wachsen mit der Gegenstandsstufe `il` (Anteil `t = min
 | **Verwandlung** | Unter 50 % LP verwandelt sich die Waffe (anderes Bild): +35 %→+50 % Schaden und +15 % Krit bis Kampfende. |
 | **Laserstrahl** | Chance 20 %→35 % je Angriff: ein Energiestrahl trifft zusätzlich (80 % Schaden, ignoriert Rüstung) mit Strahl-Animation. |
 
-Bei Waffen mit zwei Effekten sind beide Chancen und Werte um etwa ein Viertel kleiner. Alle Zahlen stellt der Bauende mit der Simulation so ein, dass die Waffe etwa eine Stufe über Legendär liegt.
+Bei Waffen mit zwei Effekten sind beide Chancen und Werte um 15 % kleiner (Faktor 0,85). Alle Zahlen stellt der Bauende mit der Simulation so ein, dass die Waffe etwa eine Stufe über Legendär liegt.
 
 ## Festlegungen aus der Selbstprüfung (meine Entscheidungen)
 
@@ -101,7 +101,7 @@ Bei Waffen mit zwei Effekten sind beide Chancen und Werte um etwa ein Viertel kl
 
 ## Grundwerte und Skalierung
 
-- Grundschaden `b` wie bei einem Legendären der gleichen Gegenstandsstufe, etwa 10 % höher.
+- Grundschaden `b` wie bei einem Legendären der gleichen Gegenstandsstufe, nach der Balance-Messung etwa 35 % höher (Faktor 1,35 statt 1,1).
 - Gegenstandsstufe `il` wie bei den gewürfelten Fundstücken je Quelle (Turm: `lvl()+Etage/10`, Boss: Stufe des Bosses, Turnier und Sondergegner: `lvl()`).
 - Aufwerten und Runen wirken wie bei allen Fundstücken. Zerlegen gibt wie ein Legendäres, dazu zusätzlich 1 Arkankristall.
 
@@ -155,3 +155,12 @@ Bei Waffen mit zwei Effekten sind beide Chancen und Werte um etwa ein Viertel kl
 - Ob die Zeichnungen einzeln im Code oder als Daten stehen, und wie die kleine Fassung abgeleitet wird.
 - Reihenfolge der Umsetzung (Vorschlag: Daten und Beute, Effekte und Animationen, Aussehen der 21 Waffen, Enthüllung, Balance, Doku).
 - Namen und Texte der 17 nicht abgenommenen Waffen im Stil der vorhandenen Spieltexte.
+
+## Nachträge nach der Prüfung des gesamten Branches
+
+- Der Platzhalter trägt den Index der Waffe (`uMark`), damit die Kennung nach dem Durchlauf durch eine ältere Version wiederhergestellt wird (`uFromMark`).
+- Zusatzschaden der Waffen läuft über `tbHits` (Diener und Spiegelschild von Turm-Bossen gelten auch für ihn).
+- Enthüllungen werden in einer Reihe gezeigt (z. B. zwei Funde am Turniertag).
+- Blutdurst kostet mindestens 1 LP je Zug (nie unter 1 LP).
+- Wirkt nur im Kampf: das verwandelte Aussehen wird nach dem Kampf nicht mehr gezeigt.
+- Bekannt, nicht geändert: Stirbt der Gegner durch Spiegelklinge im selben Zug, in dem der Spieler stirbt, zählt es als Niederlage. `raw=tot+f.def` für Blitzkette/Laser ist eine Näherung.

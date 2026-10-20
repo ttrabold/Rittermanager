@@ -134,7 +134,7 @@ function knight(w,a,s,flip,plume,ow,oa,wi,ai,fem,robe,wcat){
  ${head}${plm}
  ${av(0)}
  ${limb(fem?"M82 66Q97 80 105 101":"M85 66Q98 80 105 101",ac)}${arm?`<circle cx="96" cy="82" r="${fem?3.8:4.5}" fill="${ac}" stroke="${ln}"/>`:""}
- ${wi&&(itm(wi)||{}).u&&UNIQV[itm(wi).u]?uniqSmall(itm(wi).u,typeof F!=="undefined"&&F&&F.uq&&F.uq.mo?1:0):wcat&&wcat!=="schwert"?genTint(catSvg(wcat,w,ow,wi&&(itm(wi)||{}).c),ow||WC[w],gb,wcat):`${wi&&VIS[wi]?weaponSvg(wi):`<g ${wi&&(itm(wi)||{}).gen?genGlow(itm(wi)):""}><path d="M104 96V20L107.5 8L111 20V96Z" fill="${wc}" ${gb?`class="${gb.cls}" style="${gb.st}"`:""} stroke="${wi&&(itm(wi)||{}).gen?itm(wi).c:"#0005"}" stroke-width="${wi&&(itm(wi)||{}).gen?1.6:1}"/><path d="M107.5 14V94" stroke="#fff7"/></g>`}
+ ${wi&&(itm(wi)||{}).u&&UNIQV[itm(wi).u]?uniqSmall(itm(wi).u,typeof F!=="undefined"&&F&&!F.over&&F.uq&&F.uq.mo?1:0):wcat&&wcat!=="schwert"?genTint(catSvg(wcat,w,ow,wi&&(itm(wi)||{}).c),ow||WC[w],gb,wcat):`${wi&&VIS[wi]?weaponSvg(wi):`<g ${wi&&(itm(wi)||{}).gen?genGlow(itm(wi)):""}><path d="M104 96V20L107.5 8L111 20V96Z" fill="${wc}" ${gb?`class="${gb.cls}" style="${gb.st}"`:""} stroke="${wi&&(itm(wi)||{}).gen?itm(wi).c:"#0005"}" stroke-width="${wi&&(itm(wi)||{}).gen?1.6:1}"/><path d="M107.5 14V94" stroke="#fff7"/></g>`}
  <path d="M96 94h23q2 3 0 6h-23q-2-3 0-6z" fill="#7a4a1c" stroke="#0004"/><rect x="105" y="100" width="5" height="12" fill="#5b3a1c"/><circle cx="107.5" cy="114" r="3" fill="#d4a017" stroke="#0005"/>`}
  ${wi&&(itm(wi)||{}).gen&&!itm(wi).u?genFx(itm(wi)):""}
  <circle cx="107.5" cy="105.5" r="${fem?5.2:6}" fill="${arm?ac:sk}" stroke="#0006"/><path d="M102.5 103.5h10M102.5 107h10" stroke="#0003"/>

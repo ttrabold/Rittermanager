@@ -54,16 +54,16 @@ function fight(){if(QUICK)return;
  <div class="ps ${f.hP?"hit late":""}">${dm("p")}<div class="lg ${f.lP?"lungeP":""}"><div class="kw ${f.ko==="p"?"koP":f.ko==="e"?"cheer":""}">${pk()}</div></div>${S.cmp?`<div class="fcmp">${compSvg(S.cmp,44)}</div>`:""}</div>
  <div class="box pb"><b>${S.name}</b> <span class="mut">${t("cb.lv")}${lvl()}</span>${tl()} ${ic(f.pb,{buff:"💥",guard:"🛡️",poison:"☠️",burn:"🔥",stun:"💫",regen:"💗"})}${bar(f.php,f.pmax,"#2e8b57")}<span class="mut">${Math.max(0,f.php)}/${f.pmax}</span></div>${VXH(f)}</div>
  <div class="msg">${f.log}</div><div class="grid">${ui}</div>`;
- if(f.reveal){const r=f.reveal;f.reveal=null;uniqueReveal(r)}
+ if(f.reveal&&f.reveal.length){const r=f.reveal;f.reveal=null;uniqueReveal(r)}
 }
 // Kampftext: eine Zeile pro Aktion, Schaden rot, Heilung grün
 const fmtLine=x=>x.replace(t("cb.reDmg"),'<b class="dn">$1</b>$2').replace(t("cb.reHeal"),'$1 <b class="hn">$2</b>');
 function fin(l){F.log=l.map(x=>`<div class="ll">${fmtLine(x)}</div>`).join("");F.menu="main";if(!QUICK)fight()}
 function useSkill(id){
- const f=F,s=SKD(id);if(!s||!eqSk().includes(id)||tbSealed(id))return;const l=[t("cb.uses",S.name,s.n)];uMorphCheck(f,l);
+ const f=F,s=SKD(id);if(!s||!eqSk().includes(id)||tbSealed(id))return;const l=[t("cb.uses",S.name,s.n)];
  if(s.pp<99){if(f.pp[id]<1)return;f.pp[id]--}
  if(id!=="hieb")qProg("skill",1,l);
- f.anim="";f.dmg="";f.hE=0;f.hP=0;f.lP=s.pw>0?1:0;f.lE=0;f.vfx=[];
+ f.anim="";f.dmg="";f.hE=0;f.hP=0;f.lP=s.pw>0?1:0;f.lE=0;f.vfx=[];uMorphCheck(f,l);
  const wk=wcat();
  if(Math.random()*100>=s.acc+(s.pw>0?(wk.acc||0):0)){l.push(t("cb.miss"));sfx("miss");f.vfx.push(["miss","vE",0])}
  else if(s.pw>0&&f.fx&&Math.random()*100<(f.fx.dodge||0)){l.push(t("cb.eDodge",f.name));sfx("miss");f.vfx.push(["dodge","vE",0])}

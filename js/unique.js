@@ -21,12 +21,14 @@ const uDef=it=>UNIQ.find(x=>x.id===it.u);
 function uVal(k,it){const v=UVAL[k],t=Math.max(0,Math.min(1,(it.il-1)/49)),d=uDef(it);return (v[0]+(v[1]-v[0])*t)*(d&&d.ef.length>1?.85:1)}
 const uPct=(k,it)=>Math.round(uVal(k,it)*100);
 function uDesc(it){const d=uDef(it);return d.ef.map(k=>t("ue.nm."+k)+": "+t("ue.d."+k,uPct(k,it))).join(" · ")}
-// Fund: Grundschaden etwa 10 % über einem Legendären gleicher Stufe; Platzhalter-fx, damit eine ältere Version das Stück nicht löscht
+// Platzhalter-Effekt: trägt den Index der Waffe (Krit .01 + Index·0,0001). Eine ältere Version streift das Feld u ab, behält aber fx und kann so wiedererkannt werden
+const uMark=i=>Math.round((.01+i*1e-4)*1e4)/1e4,uFromMark=g=>{const ks=Object.keys(g.fx||{});if(g.s!=="w"||g.r!==3||ks.length!==1||ks[0]!=="crit")return null;const i=Math.round((+g.fx.crit-.01)*1e4);return i>=0&&i<UNIQ.length&&UNIQ[i].cat===g.cat&&Math.abs(+g.fx.crit-uMark(i))<1e-9&&+g.fx.crit<.0125?UNIQ[i].id:null};
+// Fund: Grundschaden etwa 35 % über einem Legendären gleicher Stufe; Platzhalter-fx (siehe uMark), damit eine ältere Version das Stück nicht löscht
 function genUnique(id,il){il=Math.max(1,Math.round(il));const d=UNIQ.find(x=>x.id===id);
- const it={id:"g"+(S.gid=(S.gid||0)+1),s:"w",cat:d.cat,b:Math.max(1,Math.round((4+il*1.5)*1.09*1.35)),c:UCOL[d.ef[0]],fx:{crit:.01},r:3,il,gen:1,u:id};return genText(it)}
+ const it={id:"g"+(S.gid=(S.gid||0)+1),s:"w",cat:d.cat,b:Math.max(1,Math.round((4+il*1.5)*1.09*1.35)),c:UCOL[d.ef[0]],fx:{crit:uMark(UNIQ.indexOf(d))},r:3,il,gen:1,u:id};return genText(it)}
 // Beutewurf je Quelle: bei Erfolg ersetzt der Fund die normale Beute; true/Stück zurück
 function uniqueRoll(src,il,l){if(Math.random()>=UCH[src])return null;const d=UNIQ[Math.floor(Math.random()*UNIQ.length)],it=genUnique(d.id,il);(S.gear=S.gear||[]).push(it);
- const auto=!S.ew&&it.b>slotBase("w");if(auto)S.ew=it.id;if(typeof F!=="undefined"&&F)F.reveal=it;
+ const auto=!S.ew&&it.b>slotBase("w");if(auto)S.ew=it.id;if(typeof F!=="undefined"&&F)F.reveal=(F.reveal||[]).concat([it]);
  l.push(`✦ <b style="color:#ffb300">${t("ux.found",it.n)}</b> (+${it.b} ⚔️, ${it.d})${auto?t("cb.autoEq"):t("gear.inBag")}`);return it}
 gearClean();
 // ---- Kampf: Zustand F.uq={bl Blutdurst-Stapel, ph Phoenixherz benutzt, mo Verwandlung aktiv} ----
@@ -36,7 +38,7 @@ const uBloodMax=.5;
 function uDmgMul(f){const e=uEq();if(!e||!f.uq)return 1;let m=1;if(uHas("blood"))m*=1+Math.min(uBloodMax,f.uq.bl*uVal("blood",e));if(f.uq.mo)m*=1+uVal("morph",e);return m}
 const uCritB=f=>f.uq&&f.uq.mo?.15:0;
 // Zusatzschaden nach einem Treffer; löst selbst keine weiteren Effekte aus
-function uOnHit(f,tot,crit,l){const e=uEq();if(!e||!f.uq||f.ehp<=0)return;let add=0;if(uHas("pierce"))f.vfx.push(["u_pierce","vE",0]);const raw=tot+f.def,hit=(k,x)=>{x=Math.max(1,Math.round(x));add+=x;f.ehp-=x;l.push(t("ue.log."+k,x));f.vfx.push(["u_"+k,"vE",0])};
+function uOnHit(f,tot,crit,l){const e=uEq();if(!e||!f.uq||f.ehp<=0)return;let add=0;if(uHas("pierce"))f.vfx.push(["u_pierce","vE",0]);const raw=tot+f.def,hit=(k,x)=>{x=Math.max(1,Math.round(x));add+=x;f.ehp-=tbHits(f,[x],l);l.push(t("ue.log."+k,x));f.vfx.push(["u_"+k,"vE",0])};
  if(uHas("dbl")&&Math.random()<uVal("dbl",e))hit("dbl",tot*.7);
  if(uHas("ret")&&Math.random()<uVal("ret",e))hit("ret",tot*.8);
  if(uHas("laser")&&Math.random()<uVal("laser",e))hit("laser",raw*.8);
@@ -50,7 +52,7 @@ function uStart(f){const e=uEq();if(!e)return;if(uHas("storm")){f.pb.buff=3;f.lo
 // Verwandlung: unter halben LP, einmal je Kampf
 function uMorphCheck(f,l){if(uHas("morph")&&f.uq&&!f.uq.mo&&f.php<f.pmax/2){f.uq.mo=1;l.push(t("ue.log.morph"));f.vfx.push(["u_morph","vP",0])}}
 // Zugbeginn des Gegners: Blutdurst kostet LP (nie tödlich)
-function uTurnStart(f,l){if(uHas("blood")&&f.uq.bl>0){const c=Math.min(Math.round(f.pmax*.01),f.php-1);if(c>0){f.php-=c;l.push(t("ue.log.blood",c))}}}
+function uTurnStart(f,l){if(uHas("blood")&&f.uq.bl>0){const c=Math.min(Math.max(1,Math.round(f.pmax*.01)),f.php-1);if(c>0){f.php-=c;l.push(t("ue.log.blood",c))}}}
 // Zeitriss: true = der Gegner setzt diesen Zug aus
 function uTime(f,l){const e=uEq();if(uHas("time")&&!f.eb.stun&&Math.random()<uVal("time",e)){l.push(t("ue.log.time",f.name));f.vfx.push(["u_time","vE",0]);return true}return false}
 // Spiegelklinge: Teil des erlittenen Schadens geht zurück
