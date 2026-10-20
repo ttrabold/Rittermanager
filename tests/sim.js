@@ -7,7 +7,7 @@ function simRun(maxDay,seedLog){
  const fightAI=()=>{let t=0;while(F&&!F.over&&t++<120){const f=F;
    if(f.php<f.pmax*.35){const k=["x","H","h"].find(k=>S.it[k]>0);if(k){useItem(k);continue}}
    if((f.pb.burn||f.pb.poison)&&S.it.g&&f.php<f.pmax*.55){useItem("g");continue}
-   const av=eqSk().filter(id=>f.pp[id]>0);
+   const av=eqSk().filter(id=>f.pp[id]>0&&!tbSealed(id));
    if(f.boss&&f.pb.buff===0&&av.includes("ruf")){useSkill("ruf");continue}
    if(f.boss&&!f.eb.weak&&av.includes("furcht")){useSkill("furcht");continue}
    if(f.php<f.pmax*.5&&av.includes("licht")){useSkill("licht");continue}

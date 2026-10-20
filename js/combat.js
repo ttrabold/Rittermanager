@@ -30,7 +30,7 @@ function setup(e,tour,keep){
  F=Object.assign({php:keep?keep.php:maxhp(),pmax:maxhp(),menu:"main",anim:"",dmg:"",hE:0,hP:0,lP:0,lE:0,vfx:[],over:false,next:false,tour:tour||0,pp:keep?keep.pp:null,ts:tbState(),pb:{buff:0,guard:0,poison:0,burn:0,stun:0,regen:0},eb:{bleed:0,burn:0,poison:0,ps:0,stun:0,guard:0,weak:0},log:(e.tower?towerIntro(e.tower):"")+(e.boss&&e.bi>=0&&!e.tower?`📜 <i>${LORE[e.bi][0]}</i><br>`:"")+(e.intro||"")+((S.buffs||[]).length?`✨ ${t("cb.active")}: ${S.buffs.map(b=>bname(b)+" ("+b.n+")").join(", ")}<br>`:"")+(e.moon?`🌕 <i>${t("cb.howl")}</i><br>`:"")+(ttn()?t("cb.enters",S.name+" "+ttn())+"<br>":"")+(e.boss?t("cb.bossIn",e.name):t("cb.foeIn"))},e);
  if(!F.pp){F.pp={};SK.forEach(s=>F.pp[s.id]=s.pp)}
  if(e.boss&&e.bi>=0&&!e.tower&&S.merc){F.merc=1;S.merc=0;F.log+="<br>🗡️ "+t("cb.mercIn")}
- bSeen(F);save();fight();
+ tbStart(F);bSeen(F);save();fight();
 }
 function startFight(){if(S.en<2)return;S.en-=2;if(evMaybe())return;setup(mk(Math.max(1,lvl()+rnd(-1,1)),ET[rnd(0,ET.length-1)]))}
 function startTour(){const fee=tourFee();if(bagFull()||S.en<4||S.gold<fee)return;S.en-=4;S.gold-=fee;setup(mk(Math.max(1,lvl()),ET[rnd(0,ET.length-1)]),1)}
@@ -49,7 +49,7 @@ function fight(){if(QUICK)return;
  else ui=`<button class="p" onclick="fmenu('skills')">⚔️ ${t("cb.fight")}<small>${t("cb.key","K")}</small></button><button onclick="fmenu('items')">🎒 ${t("inv.pot")}<small>${t("cb.key","T")}</small></button>${canQuick()?`<button style="grid-column:1/-1" onclick="quickFight()">⚡ ${t("cb.quick")}<small>${t("cb.quickS")}</small></button>`:""}${f.tower?`<button onclick="leaveTower()" style="grid-column:1/-1">🏳️ ${t("tw.leaveB")}</button>`:f.boss||f.tour?"":`<button onclick="flee()" style="grid-column:1/-1">🏃 ${t("cb.flee")}</button>`}`;
  const dm=(w)=>{const v=w==="e"?f.hE:f.hP;return v?`<span class="dmg ${w==="p"?"late":""}" style="left:30px">-${v}</span>`:""};
  app.innerHTML=`<div class="scene fs">${f.tower?TBG(ttier(f.tower)):BG}
- <div class="box eb"><b>${f.name}</b> <span class="mut">${t("cb.lv")}${f.lvl}${f.tour?" · "+t("hg.tour")+" "+f.tour+"/3":""}${f.tower?" · "+t("tw.floor")+" "+f.tower:""}${f.boss?" · "+t("cb.boss"):""}</span> ${ic(f.eb,{bleed:"🩸",burn:"🔥",poison:"☠️",stun:"💫",guard:"🛡️",weak:"😨"})}${f.ts.arm?"⚡":""}${f.ts.rf?"🪞":""}${bar(f.ehp,f.emax,"#c0392b")}<span class="mut">${Math.max(0,f.ehp)}/${f.emax}</span></div>
+ <div class="box eb"><b>${f.name}</b> <span class="mut">${t("cb.lv")}${f.lvl}${f.tour?" · "+t("hg.tour")+" "+f.tour+"/3":""}${f.tower?" · "+t("tw.floor")+" "+f.tower:""}${f.boss?" · "+t("cb.boss"):""}</span> ${ic(f.eb,{bleed:"🩸",burn:"🔥",poison:"☠️",stun:"💫",guard:"🛡️",weak:"😨"})}${f.ts.arm?"⚡":""}${f.ts.rf?"🪞":""}${tbMi(f)?` 🐾×${tbMi(f)} <small class="mut">(${f.ts.mi.filter(h=>h>0).join("/")})</small>`:""}${bar(f.ehp,f.emax,"#c0392b")}<span class="mut">${Math.max(0,f.ehp)}/${f.emax}</span></div>
  <div class="es ${f.boss?"big":""} ${f.hE?"hit":""}">${dm("e")}<div class="lg ${f.lE?"lungeE":""}"><div class="kw ${f.ko==="e"?(f.boss?"koB":"koE"):f.ko==="p"?"cheerE":""}">${f.moon?wolfSvg():f.mimic?mimicSvg():f.tbi>=0?(f.cyc?`<div style="filter:brightness(.55) saturate(1.4)">${tbossSvg(f.tbi,f.ts&&f.ts.ph)}</div>`:tbossSvg(f.tbi,f.ts&&f.ts.ph)):f.boss&&f.bi>=0?bossSvg(f.bi):enemyKn(f)}</div></div></div>
  <div class="ps ${f.hP?"hit late":""}">${dm("p")}<div class="lg ${f.lP?"lungeP":""}"><div class="kw ${f.ko==="p"?"koP":f.ko==="e"?"cheer":""}">${pk()}</div></div>${S.cmp?`<div class="fcmp">${compSvg(S.cmp,44)}</div>`:""}</div>
  <div class="box pb"><b>${S.name}</b> <span class="mut">${t("cb.lv")}${lvl()}</span>${tl()} ${ic(f.pb,{buff:"💥",guard:"🛡️",poison:"☠️",burn:"🔥",stun:"💫",regen:"💗"})}${bar(f.php,f.pmax,"#2e8b57")}<span class="mut">${Math.max(0,f.php)}/${f.pmax}</span></div>${VXH(f)}</div>
@@ -125,12 +125,13 @@ function enemyAct(l,fm){
 }
 function enemyTurn(l){
  const f=F;
- if(f.ehp<=0)return endFight(true,l);
+ if(f.ehp<=0&&!tbRevive(f,l))return endFight(true,l);
  f.eb.guard=0;tbTick(f);
- for(const[k,d,e]of[["bleed",4+f.lvl,"🩸"],["burn",6+f.lvl,"🔥"],["poison",(4+f.lvl)*Math.max(1,f.eb.ps),"☠️"]])if(f.eb[k]>0){f.ehp-=d;f.eb[k]--;if(k==="poison"&&!f.eb.poison)f.eb.ps=0;l.push(t("cb.dot."+k,f.name,d)+" "+e);if(f.ehp<=0)return endFight(true,l)}
- compTurn(f,l);mercTurn(f,l);if(f.ehp<=0)return endFight(true,l);
+ for(const[k,d,e]of[["bleed",4+f.lvl,"🩸"],["burn",6+f.lvl,"🔥"],["poison",(4+f.lvl)*Math.max(1,f.eb.ps),"☠️"]])if(f.eb[k]>0){f.ehp-=d;f.eb[k]--;if(k==="poison"&&!f.eb.poison)f.eb.ps=0;l.push(t("cb.dot."+k,f.name,d)+" "+e);if(f.ehp<=0&&!tbRevive(f,l))return endFight(true,l)}
+ compTurn(f,l);mercTurn(f,l);if(f.ehp<=0&&!tbRevive(f,l))return endFight(true,l);
+ tbPre(f,l);
  if(f.fx&&f.fx.regen&&f.ehp<f.emax){const o=f.ehp;f.ehp=Math.min(f.emax,f.ehp+Math.round(f.fx.regen*(1+f.lvl/20)));l.push(t("cb.eRegen",f.name,f.ehp-o))}
- if(f.boss&&!f.enr&&f.ehp<f.emax/2){f.enr=true;f.atk*=1.3;l.push(t("cb.rage",f.name))}
+ if(f.boss&&!f.enr&&!(f.tr&&f.tr.phase)&&f.ehp<f.emax/2){f.enr=true;f.atk*=1.3;l.push(t("cb.rage",f.name))}
  if(!tbAct(f,l))enemyAct(l);
  const rg=fxv("regen");if(rg&&f.php<f.pmax){f.php=Math.min(f.pmax,f.php+rg);l.push(t("cb.armRegen",rg))}
  if(f.pb.poison>0){const d=2+Math.floor(f.lvl/2);f.took=1;f.php-=d;f.pb.poison--;l.push(t("cb.pPoisT",d))}
