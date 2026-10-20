@@ -27,11 +27,12 @@ Welcome, noble knight (or noble dame)! Here you'll find everything you need to k
 21. [Companions](#companions)
 22. [Bestiary](#bestiary)
 23. [The Endless Tower](#the-endless-tower)
-24. [Rebirth](#rebirth)
-25. [Ranks](#ranks)
-26. [Titles](#titles)
-27. [Settings and saves](#settings-and-saves)
-28. [Tips for beginners](#tips-for-beginners)
+24. [Unique weapons](#unique-weapons)
+25. [Rebirth](#rebirth)
+26. [Ranks](#ranks)
+27. [Titles](#titles)
+28. [Settings and saves](#settings-and-saves)
+29. [Tips for beginners](#tips-for-beginners)
 
 ---
 
@@ -817,6 +818,64 @@ Some tower bosses are also immune to fire or poison, drain your life or dodge of
 | 100 | The Tower Lord | 🐾 🌀 💀 |
 
 ---
+
+## Unique weapons
+
+On top of the rolled finds there are **21 unique weapons**, three per weapon type. They have **no** ordinary enchantments like burn or poison but a special effect of their own (the strongest even have two), their own look, and a reveal when you find one: lightning strikes a chest, the weapon floats out, and its name and effect slam into view.
+
+**Where they drop** (each time instead of the normal loot of that source):
+
+| Source | Chance |
+|---|---|
+| 🗼 Tower boss (every 5th floor) | 8% |
+| 👹 Boss fight | 8% |
+| 🏆 Tournament win | 4% |
+| 📦 Mimic | 10% |
+| 🐺 Full-moon werewolf | 10% |
+
+You can find a weapon **several times**. It grows with the **item level** at the find: base damage and the strength of the effect rise with the level, so a later find is better than an early one. Upgrades and runes work as with other finds. Salvaging gives an extra arcane crystal.
+
+| Type | Weapon | Effect |
+|---|---|---|
+| Sword | Thunderfang | Chain Lightning |
+| Sword | Chronos Blade | Time Rift |
+| Sword | Mercybringer | Mercy Strike |
+| Axe | Bloodthirst | Bloodlust |
+| Axe | Skullsplitter | Armour Breaker |
+| Axe | Twin Axe | Double Strike |
+| Club | Phoenix Hammer | Phoenix Heart |
+| Club | Worldbreaker | Armour Breaker + Mercy Strike |
+| Club | Quaker | Storm Call |
+| Halberd | Stormherald | Storm Call |
+| Halberd | Soulcatcher | Soul Drain |
+| Halberd | Mirror Spear | Mirror Blade |
+| Bow | Return | Return |
+| Bow | Starfall | Laser Beam |
+| Bow | Hunter's End | Double Strike + Mercy Strike |
+| Staff | Sun Laser | Laser Beam |
+| Staff | Soulspinner | Soul Drain |
+| Staff | Shapeshifter Staff | Transformation |
+| Dagger | Twinfang | Double Strike |
+| Dagger | Shadowstab | Time Rift |
+| Dagger | Illusion Mirror | Mirror Blade |
+
+**The effects** (chances and values grow with the level, the exact numbers are shown on the weapon):
+
+- **Double Strike:** chance of a second blow with 70% damage.
+- **Time Rift:** chance that the foe skips its turn.
+- **Chain Lightning:** critical hits leap over as lightning and ignore armour.
+- **Soul Drain:** chance per hit to regain a skill point.
+- **Bloodlust:** every hit raises your damage (up to +50%), but you lose 1% of your max HP each round, never below 1 HP.
+- **Mirror Blade:** part of the damage you take hits the foe.
+- **Mercy Strike:** chance to finish a foe below 25% HP instantly. Bosses lose 20% of their max HP instead.
+- **Armour Breaker:** ignores armour and guard.
+- **Return:** chance of a returning blow with 80% damage.
+- **Phoenix Heart:** once per fight you rise again at 0 HP.
+- **Storm Call:** +50% damage for 3 rounds at the start of every fight.
+- **Transformation:** below half HP the weapon transforms: more damage and +15% crit until the end of the fight.
+- **Laser Beam:** chance of an extra energy beam with 80% damage that ignores armour.
+
+Extra hits (Double Strike, Return, Laser, Lightning) do not trigger further effects. The effects only work while the weapon is equipped; the base effect of the weapon type stays.
 
 ## Rebirth
 

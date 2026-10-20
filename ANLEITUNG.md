@@ -27,11 +27,12 @@ Willkommen, edler Ritter (oder edle Ritterin)! Hier erfährst du alles, was du �
 21. [Begleiter](#begleiter)
 22. [Bestiarium](#bestiarium)
 23. [Der Endlose Turm](#der-endlose-turm)
-24. [Wiedergeburt](#wiedergeburt)
-25. [Ränge](#ränge)
-26. [Titel](#titel)
-27. [Einstellungen und Spielstand](#einstellungen-und-spielstand)
-28. [Tipps für Einsteiger](#tipps-für-einsteiger)
+24. [Einzigartige Waffen](#einzigartige-waffen)
+25. [Wiedergeburt](#wiedergeburt)
+26. [Ränge](#ränge)
+27. [Titel](#titel)
+28. [Einstellungen und Spielstand](#einstellungen-und-spielstand)
+29. [Tipps für Einsteiger](#tipps-für-einsteiger)
 
 ---
 
@@ -817,6 +818,64 @@ Manche Turm-Bosse sind außerdem gegen Feuer oder Gift gefeit, saugen dir Leben 
 | 100 | Der Turmherr | 🐾 🌀 💀 |
 
 ---
+
+## Einzigartige Waffen
+
+Zu den gewürfelten Fundstücken kommen **21 einzigartige Waffen**, drei je Waffenart. Sie haben **keine** gewöhnlichen Verzauberungen wie Brand oder Gift, sondern einen eigenen besonderen Effekt (die stärksten sogar zwei), ein eigenes Aussehen und eine Enthüllung beim Fund: Ein Blitz schlägt in eine Truhe, die Waffe schwebt heraus, und Name und Effekt werden eingeblendet.
+
+**Wo sie fallen** (jeweils anstelle der normalen Beute dieser Quelle):
+
+| Quelle | Chance |
+|---|---|
+| 🗼 Turm-Boss (jede 5. Etage) | 8 % |
+| 👹 Boss im Bosskampf | 8 % |
+| 🏆 Turniersieg | 4 % |
+| 📦 Mimik | 10 % |
+| 🐺 Vollmond-Werwolf | 10 % |
+
+Du kannst eine Waffe **mehrfach** finden. Sie wächst mit der **Gegenstandsstufe** beim Fund: Grundschaden und Stärke des Effekts steigen mit der Stufe, ein späterer Fund ist also besser als ein früher. Aufwerten und Runen wirken wie bei anderen Fundstücken. Zerlegen gibt dazu einen Arkankristall.
+
+| Art | Waffe | Effekt |
+|---|---|---|
+| Schwert | Donnerzahn | Blitzkette |
+| Schwert | Chronosklinge | Zeitriss |
+| Schwert | Gnadenbringer | Gnadenstoß |
+| Axt | Blutdurst | Blutdurst |
+| Axt | Schädelspalter | Rüstungsbrecher |
+| Axt | Zwillingsbeil | Doppelschlag |
+| Keule | Phoenixhammer | Phoenixherz |
+| Keule | Weltenbrecher | Rüstungsbrecher + Gnadenstoß |
+| Keule | Erschütterer | Sturmruf |
+| Hellebarde | Sturmherold | Sturmruf |
+| Hellebarde | Seelenfänger | Seelenraub |
+| Hellebarde | Spiegelspeer | Spiegelklinge |
+| Bogen | Wiederkehr | Wiederkehr |
+| Bogen | Sternenfall | Laserstrahl |
+| Bogen | Jägers Ende | Doppelschlag + Gnadenstoß |
+| Stab | Sonnenlaser | Laserstrahl |
+| Stab | Seelenspinner | Seelenraub |
+| Stab | Wandelstab | Verwandlung |
+| Dolch | Zwillingsfang | Doppelschlag |
+| Dolch | Schattenstich | Zeitriss |
+| Dolch | Trugspiegel | Spiegelklinge |
+
+**Die Effekte** (Chancen und Werte wachsen mit der Stufe, die genauen Zahlen stehen bei der Waffe):
+
+- **Doppelschlag:** Chance auf einen zweiten Hieb mit 70 % Schaden.
+- **Zeitriss:** Chance, dass der Gegner seinen Zug aussetzt.
+- **Blitzkette:** Kritische Treffer springen als Blitz über und ignorieren Rüstung.
+- **Seelenraub:** Chance je Treffer, einen Fähigkeitspunkt zurückzugewinnen.
+- **Blutdurst:** Jeder Treffer erhöht den Schaden (bis +50 %), dafür verlierst du jede Runde 1 % deiner max. LP, aber nie unter 1 LP.
+- **Spiegelklinge:** Ein Teil des erlittenen Schadens trifft den Gegner.
+- **Gnadenstoß:** Chance, einen Gegner unter 25 % LP sofort zu erledigen. Bosse verlieren stattdessen 20 % ihrer max. LP.
+- **Rüstungsbrecher:** Ignoriert Rüstung und Deckung.
+- **Wiederkehr:** Chance auf einen zurückkehrenden Hieb mit 80 % Schaden.
+- **Phoenixherz:** Einmal pro Kampf stehst du bei 0 LP wieder auf.
+- **Sturmruf:** Zu Beginn jedes Kampfes +50 % Schaden für 3 Runden.
+- **Verwandlung:** Unter halben LP verwandelt sich die Waffe: mehr Schaden und +15 % Krit bis Kampfende.
+- **Laserstrahl:** Chance auf einen zusätzlichen Energiestrahl mit 80 % Schaden, der Rüstung ignoriert.
+
+Zusatztreffer (Doppelschlag, Wiederkehr, Laser, Blitz) lösen keine weiteren Effekte aus. Die Effekte wirken nur bei angelegter Waffe, die Grundwirkung der Waffenart bleibt.
 
 ## Wiedergeburt
 
