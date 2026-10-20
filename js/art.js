@@ -54,7 +54,7 @@ t1:{b:"wide",f:"#fff27a",e:"#fff",g:"#ffd54a",fx:()=>SPARK},
 t3:{b:"dagger",f:"#f3a6ff",e:"#fff",g:"#e056fd",fx:()=>CLOCK}};
 const weaponSvg=id=>{const v=VIS[id];return `<g style="filter:drop-shadow(0 0 5px ${v.g})"><path d="${BL[v.b]}" fill="${v.f}" stroke="${v.e}" stroke-width="1.5"/><path d="M107.5 10V92" stroke="${v.e}" stroke-width="1" opacity=".6"/>${v.fx()}</g><circle cx="107.5" cy="97" r="3" fill="${v.g}" stroke="#0006"/>`};
 // Fundstücke (gen): Effekte sitzen am Schlagteil der Waffe (Punkte je Waffenart), je Effekt ein eigener Stil; Leuchten und Zierde wachsen mit der Seltenheit
-const GPTS={schwert:[[107.5,86],[107.5,68],[107.5,50],[107.5,32],[107.5,14]],dolch:[[107.5,92],[107.5,78],[107.5,64],[107.5,54]],axt:[[127,58],[128,49],[122,43],[113,42]],
+const GPTS={schwert:[[107.5,88],[107.5,76],[107.5,64],[107.5,52],[107.5,40],[107.5,28],[107.5,16]],dolch:[[107.5,92],[107.5,78],[107.5,64],[107.5,54]],axt:[[127,58],[128,49],[122,43],[113,42]],
  keule:[[107.5,32],[99,42],[116,42],[107.5,52]],helle:[[107.5,15],[107.5,24],[119,26],[120,35]],bogen:[[116,86],[119,105],[116,124],[110,70]],stab:[[107.5,3],[98,12],[117,12],[107.5,22]]};
 const GFX={
  burn:(x,y,i)=>fm(x,y+2,.75,"#ff5a00",i*.13)+fm(x,y+2,.42,"#ffd54f",i*.13+.06),
@@ -63,9 +63,14 @@ const GFX={
  crit:(x,y,i)=>ST(x+(i%2?5:-5),y,"#fff6a0",i*.18)+`<circle class="tw" style="animation-delay:${i*.2}s" cx="${x}" cy="${y}" r="1.4" fill="#fff27a"/>`,
  life:(x,y,i)=>`<ellipse class="fl2" style="animation-delay:${i*.35}s" cx="${x+(i%2?3:-3)}" cy="${y}" rx="1.7" ry="2.6" fill="#e53935"/><circle class="pl" cx="${x}" cy="${y}" r="3" fill="#8e1b1b" opacity=".45"/>`};
 const genGlow=it=>`style="filter:drop-shadow(0 0 ${3+it.r*2.5}px ${it.c})"`;
-const genFx=it=>{const pts=GPTS[it.cat]||GPTS.schwert,ks=[it.m,...Object.keys(it.fx)].filter((k,i,a)=>it.fx[k]&&a.indexOf(k)===i&&GFX[k]).slice(0,3);
- const cx=Math.min(108,pts.reduce((a,p)=>a+p[0],0)/pts.length),cy=pts.reduce((a,p)=>a+p[1],0)/pts.length;
- return ks.map((k,j)=>pts.map((p,i)=>(i+j)%ks.length===0||ks.length===1?GFX[k](p[0],p[1],i):"").join("")).join("")
+// Effekte eines Fundstücks: stärkster zuerst, höchstens drei
+const genKs=it=>[it.m,...Object.keys(it.fx)].filter((k,i,a)=>it.fx[k]&&a.indexOf(k)===i&&GFX[k]).slice(0,3);
+// Klinge mit Farbverlauf: erster Effekt an der Spitze, letzter am Heft
+const genBlade=it=>{const ks=genKs(it);if(ks.length<2)return null;const id="gb"+it.id;return {id,defs:`<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1">${ks.map((k,i)=>`<stop offset="${ks.length>1?i/(ks.length-1):0}" stop-color="${LFX[k].c}"/>`).join("")}</linearGradient></defs>`}};
+// Jeder Effekt hat eine eigene Zone der Waffe (Spitze → Heft bzw. Reihenfolge der Punkte), Partikel 1,5-fach
+const genFx=it=>{const pts=GPTS[it.cat]||GPTS.schwert,ks=genKs(it),K=ks.length,n=pts.length;
+ const cx=Math.min(108,pts.reduce((a,p)=>a+p[0],0)/n),cy=pts.reduce((a,p)=>a+p[1],0)/n,big=(x,y,h)=>`<g transform="translate(${x} ${y}) scale(1.5) translate(${-x} ${-y})">${h}</g>`;
+ return pts.map((p,i)=>{const z=Math.min(K-1,Math.floor(i*K/n)),k=ks[(it.cat==="schwert"||it.cat==="dolch")?K-1-z:z];return big(p[0],p[1],GFX[k](p[0],p[1],i))}).join("")
   +(it.r>=2?`<circle class="pl" cx="${cx}" cy="${cy}" r="${it.r>=3?30:24}" fill="${it.c}" opacity=".22"/>`+(it.cat==="schwert"||it.cat==="dolch"?`<path class="glow" d="M107.5 ${it.cat==="dolch"?56:16}V${it.cat==="dolch"?94:88}" stroke="${it.c}" stroke-width="2" opacity=".85"/>`:""):"")
   +(it.r>=3?`<g class="rot"><circle cx="${cx}" cy="${cy}" r="19" fill="none" stroke="${it.c}" stroke-width="1.8" stroke-dasharray="3 4"/></g>`+ST(cx-14,cy-16,"#fff",.2)+ST(cx+15,cy+14,"#fff",.7):"")};
 const AV={
@@ -87,7 +92,7 @@ b11a:b=>b?`<circle class="pl" cx="61" cy="88" r="64" fill="#1a1a2e"/>`:ST(30,60,
 b12a:b=>b?`<circle class="pl" cx="61" cy="88" r="64" fill="#e1bee7"/>`:`<ellipse class="pl" cx="61" cy="18" rx="19" ry="5" fill="none" stroke="#fff" stroke-width="3"/><path d="M61 64l9 12-9 20-9-20z" fill="#ce93d8" stroke="#fff"/>`+ST(28,60,"#fff",0)+ST(94,60,"#fff",.5),
 t4:b=>b?`<circle class="pl" cx="61" cy="88" r="60" fill="#ffd54a"/>`:`<ellipse class="pl" cx="61" cy="20" rx="17" ry="5" fill="none" stroke="#ffd54a" stroke-width="3"/><path d="M61 66l8 10-8 18-8-18z" fill="#ffd54a" stroke="#fff"/>`};
 function knight(w,a,s,flip,plume,ow,oa,wi,ai,fem,robe,wcat){
- const arm=a>0||!!oa,wc=ow||WC[w],ac=oa||robe||AC[a],sk="#e0b48a",pl=plume||(a>=3||oa?"#c0221f":null),ln="#0005",
+ const gb=wi&&(itm(wi)||{}).gen&&(!wcat||wcat==="schwert")?genBlade(itm(wi)):null,arm=a>0||!!oa,wc=ow||WC[w],ac=oa||robe||AC[a],sk="#e0b48a",pl=plume||(a>=3||oa?"#c0221f":null),ln="#0005",
   tab=plume||"#7a1d1d",lc=arm?ac:"#5b4636",bt=arm?"#3d3833":"#3a2a1c",hc=fem?"#8a4b22":"#5a3a1e",
   sq=fem?`<g transform="translate(61 0) scale(.8 1) translate(-61 0)">`:"<g>",av=b=>ai&&AV[ai]?sq+AV[ai](b,fem)+"</g>":"",
   lw=fem?11:13,belt=fem?84:92;
@@ -125,7 +130,7 @@ function knight(w,a,s,flip,plume,ow,oa,wi,ai,fem,robe,wcat){
  ${head}${plm}
  ${av(0)}
  ${limb(fem?"M82 66Q97 80 105 101":"M85 66Q98 80 105 101",ac)}${arm?`<circle cx="96" cy="82" r="${fem?3.8:4.5}" fill="${ac}" stroke="${ln}"/>`:""}
- ${wcat&&wcat!=="schwert"?catSvg(wcat,w,ow,wi&&(itm(wi)||{}).c):`${wi&&VIS[wi]?weaponSvg(wi):`<g ${wi&&(itm(wi)||{}).gen?genGlow(itm(wi)):""}><path d="M104 96V20L107.5 8L111 20V96Z" fill="${wc}" stroke="${wi&&(itm(wi)||{}).gen?itm(wi).c:"#0005"}" stroke-width="${wi&&(itm(wi)||{}).gen?1.6:1}"/><path d="M107.5 14V94" stroke="#fff7"/></g>`}
+ ${wcat&&wcat!=="schwert"?catSvg(wcat,w,ow,wi&&(itm(wi)||{}).c):`${wi&&VIS[wi]?weaponSvg(wi):`${gb?gb.defs:""}<g ${wi&&(itm(wi)||{}).gen?genGlow(itm(wi)):""}><path d="M104 96V20L107.5 8L111 20V96Z" fill="${gb?`url(#${gb.id})`:wc}" stroke="${wi&&(itm(wi)||{}).gen?itm(wi).c:"#0005"}" stroke-width="${wi&&(itm(wi)||{}).gen?1.6:1}"/><path d="M107.5 14V94" stroke="#fff7"/></g>`}
  <path d="M96 94h23q2 3 0 6h-23q-2-3 0-6z" fill="#7a4a1c" stroke="#0004"/><rect x="105" y="100" width="5" height="12" fill="#5b3a1c"/><circle cx="107.5" cy="114" r="3" fill="#d4a017" stroke="#0005"/>`}
  ${wi&&(itm(wi)||{}).gen?genFx(itm(wi)):""}
  <circle cx="107.5" cy="105.5" r="${fem?5.2:6}" fill="${arm?ac:sk}" stroke="#0006"/><path d="M102.5 103.5h10M102.5 107h10" stroke="#0003"/>
