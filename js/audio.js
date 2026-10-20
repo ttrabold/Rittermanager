@@ -83,7 +83,7 @@ tavern:{bpm:132,ch:["G","C","D","G","Em","C","D","G"],p(st,t,e){const i=st%8,ch=
   if(i%2)nz(t,.03,.012,7000,1);
   lead(M_TAV,st,t,e,{...FLUTE,v:.05});
   if(!i)nzp(t,e*11,.02,500,"bandpass",1,.4);if(Math.random()<.04)nt(t,rnd(96,100),.05,{w:"sine",a:.002,r:.4,v:.02,s:.6})}},
- tower:{get bpm(){return [104,88,100,112,84,132,76,120][twTier()]},p(st,t,e){const i=st%8,bar=st>>3,tr=twTier(),CH=(...n)=>C[n[bar%n.length]];let ch;
+ tower:{get bpm(){return [104,88,100,112,84,132,76,120,116,80,92,84,96,72,120,104,100,112,126,136][twTier()]},p(st,t,e){const i=st%8,bar=st>>3,tr=TWMUS[twTier()],CH=(...n)=>C[n[bar%n.length]];let ch;
   switch(tr){
   case 1:ch=CH("Dm","Bb","Gm","A");if(!i){ch.forEach(m=>nt(t,m-12,e*7.8,{...PAD,f:450,v:.028}));nt(t,ch[0]-24,e*7.8,{w:"sine",a:.5,r:1,v:.09})}
    if(!i)drum(t,.16,70,40,.5);if(i===3||(i===6&&Math.random()<.6))nt(t,ch[rnd(0,2)]+12,e*2,{...BELL,v:.03,r:1.4});break;
@@ -108,6 +108,8 @@ tavern:{bpm:132,ch:["G","C","D","G","Em","C","D","G"],p(st,t,e){const i=st%8,ch=
   if(i===0||i===3||i===6)drum(t,.42,80,38,.5);if(i===4)drum(t,.3,150,70,.3);if(rage){nz(t,.05,.03,6000,1);nt(t,ch[0]+[0,12,7,12,0,12,7,12][i],e*.5,STR)}
   if(i===2||i===6)ch.forEach(m=>nt(t,m,e*.5,{...STR,v:.035,f:1200}));lead(M_BOSS,st,t,e,{...BRASS,f:900,v:.07},12)}}};
 const twTier=()=>F&&F.tower?ttier(F.tower):0;
+// Ebenen 9–20 spielen eine der 8 Turm-Melodien (mit eigenem Tempo und eigenen Geräuschen)
+const TWMUS=[0,1,2,3,4,5,6,7,3,4,2,1,0,6,3,2,7,7,5,5];
 function nzp(t,d,v,f,type,q,s){const c=AU.ctx,src=c.createBufferSource(),fl=c.createBiquadFilter(),g=c.createGain();src.buffer=AU.nb;src.loop=true;fl.type=type||"lowpass";fl.frequency.value=f;fl.Q.value=q||.7;
  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+d*.3);g.gain.setValueAtTime(v,t+d*.7);g.gain.linearRampToValueAtTime(0,t+d);src.connect(fl);fl.connect(g);g.connect(AU.mg);if(s){const sg=c.createGain();sg.gain.value=s;g.connect(sg);sg.connect(AU.rv)}src.start(t,Math.random()*.5);src.stop(t+d+.05)}
 function glide(t,m1,m2,d,v){const c=AU.ctx,o=c.createOscillator(),g=c.createGain(),sg=c.createGain();o.type="sine";o.frequency.setValueAtTime(mtof(m1),t);o.frequency.exponentialRampToValueAtTime(mtof(m2),t+d);
@@ -122,7 +124,19 @@ function amb(tr,st,t,e){const i=st%8,bed=e*11;
  case 4:if(!i&&Math.random()<.6)nzp(t+e*rnd(0,4),e*4,.025,rnd(1800,3200),"bandpass",8,.8);if(!i)nzp(t,bed,.012,900,"bandpass",1,.6);break;
  case 5:if(!i){nzp(t,bed,.035,5000,"highpass",.7,.3);if(Math.random()<.22){nzp(t+e*2,3,.22,160,"lowpass",.7,.5);drum(t+e*2,.25,55,28,1.5)}}break;
  case 6:if(!i&&Math.random()<.4)nzp(t,e*6,.03,400,"bandpass",4,.8);if(!i)nzp(t,bed,.03,90);break;
- case 7:if(!i)glide(t,rnd(60,72),rnd(80,92),e*6,.02);if(i===4&&Math.random()<.5)glide(t,rnd(84,92),rnd(55,64),e*4,.015);break}}
+ case 7:if(!i)glide(t,rnd(60,72),rnd(80,92),e*6,.02);if(i===4&&Math.random()<.5)glide(t,rnd(84,92),rnd(55,64),e*4,.015);break;
+ case 8:if(i%2===0)nz(t,.008,.03,i%4?3500:6000,1);if(!i&&Math.random()<.3)anvil(t+e*rnd(1,6),.008);break;
+ case 9:if(!i)nzp(t,bed,.014,600,"lowpass",.7,.6);if(Math.random()<.08)nzp(t,e*.6,.03,4000,"bandpass",2,.3);if(Math.random()<.06)nt(t,rnd(84,96),.2,{w:"sine",a:.05,r:1.2,v:.012,s:.9});break;
+ case 10:if(!i)nzp(t,bed,.015,400);if(Math.random()<.15)nt(t,rnd(80,90),.06,{w:"sine",a:.002,r:.3,v:.03,s:.8});break;
+ case 11:if(!i)nzp(t,bed,.03,1100,"bandpass",6,.6);if(Math.random()<.06)nt(t,rnd(96,103),.1,{...BELL,v:.015});break;
+ case 12:if(!i)nzp(t,bed,.012,2500,"bandpass",3,.4);if(Math.random()<.25)nz(t,.02,.008,7000,1);break;
+ case 13:if(Math.random()<.12)for(let k=0;k<3;k++)nz(t+k*.05,.012,.03,2800,1);if(!i)nzp(t,bed,.03,90);break;
+ case 14:if(!i)nzp(t,bed,.05,200);if(i===0||i===4)anvil(t,.015);break;
+ case 15:if(!i)glide(t,rnd(84,88),rnd(86,92),e*6,.012);if(Math.random()<.1)nt(t,rnd(96,104),.1,{...BELL,v:.015});break;
+ case 16:if(!i)glide(t,rnd(55,64),rnd(67,74),e*7,.018);if(i===4)glide(t,rnd(79,86),rnd(72,78),e*3,.012);break;
+ case 17:if(Math.random()<.2)nt(t,rnd(98,108),.08,{w:"sine",a:.002,r:.8,v:.012,s:.9});if(!i)nzp(t,bed,.01,3000,"highpass",.7,.5);break;
+ case 18:if(!i)nzp(t+e*2,e*5,.06,180,"lowpass",.7,.4);if(Math.random()<.1)nt(t,rnd(96,104),.04,{w:"triangle",a:.001,r:.3,v:.02,s:.4});break;
+ case 19:if(!i)nzp(t,bed,.03,4000,"highpass",.7,.3);if(!i&&Math.random()<.3)nt(t,rnd(55,60),e*6,{...BELL,v:.04});break}}
 function sched(){const c=AU.ctx;if(!c||c.state!=="running"||!AU.mode)return;const T=TR[AU.mode],inF=F&&!F.over,rage=inF&&F.enr&&AU.mode==="boss",e=60/(T.bpm*(rage?1.18:1))/2;
  if(AU.next<c.currentTime)AU.next=c.currentTime+.05;
  while(AU.next<c.currentTime+.15){T.p(AU.step,AU.next,e,rage);if(inF&&F.tower)amb(twTier(),AU.step,AU.next,e);if(inF&&F.php<F.pmax*.25&&AU.step%8===0){drum(AU.next,.35,65,40,.18);drum(AU.next+.2,.25,60,38,.18)}AU.step++;AU.next+=e}

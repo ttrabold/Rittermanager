@@ -69,3 +69,99 @@ ph=>BSV(`<g class="rot" style="transform-box:fill-box;transform-origin:center">$
  ${[[52,58],[72,58],[62,64]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="1.5" fill="#b388ff"/>`).join("")}</g>
  ${ST(20,30,"#fff",0)}${ST(106,26,"#e040fb",.5)}${ST(18,130,"#b388ff",1)}`,40)];
 const tbossSvg=(i,ph)=>TBOSSV[i]?TBOSSV[i](ph?1:0):knight(4,4,3,true,TBOSS[i].tint);
+// ---- Turm-Ebenen 9–20 (Etagen 41–100), Stil wie TBGS in art.js ----
+const gear=(x,y,r,n,c,d,rev)=>`<g class="rot" style="animation-duration:${d}s;${rev?"animation-direction:reverse":""}"><polygon points="${Array.from({length:n*4},(_,k)=>{const a=k*Math.PI/(n*2),q=k%4<2?r:r*.82;return (x+q*Math.cos(a)).toFixed(1)+","+(y+q*Math.sin(a)).toFixed(1)}).join(" ")}" fill="${c}" stroke="#0006"/><circle cx="${x}" cy="${y}" r="${r*.55}" fill="none" stroke="#0004" stroke-width="${r*.12}"/><circle cx="${x}" cy="${y}" r="${r*.18}" fill="#1a1208"/></g>`;
+const DOTS=(n,c,cls,ymax,sz)=>Array.from({length:n},(_,i)=>`<circle class="${cls}" style="animation-delay:${(i*.37)%2.4}s" cx="${(i*89+31)%600}" cy="${(i*53+17)%(ymax||180)}" r="${sz?sz*(i%3?1:1.6):i%3?1:1.8}" fill="${c}"/>`).join("");
+TBGS.push(
+// 8 Uhrwerkkammern
+()=>SV(LG("t8","#1c130a","#4a3418")+RG("t8g","#ffca28"),`<rect width="600" height="220" fill="url(#t8)"/>
+ ${gear(60,60,52,10,"#8d6e3a",14)}${gear(180,80,40,9,"#a1793a",11,1)}${gear(236,140,24,7,"#b8860b",7)}${gear(420,64,44,9,"#a1793a",12,1)}${gear(500,140,30,8,"#8d6e3a",9)}${gear(300,30,24,7,"#c9a227",6)}
+ <path d="M0 150H220V160H0ZM380 100H600V110H380Z" fill="#5d4a2c" stroke="#0005"/><path d="M220 150V40H230V150ZM380 100V0H390V100Z" fill="#6d5a34"/>
+ ${[[225,40],[385,100]].map((p,i)=>`<ellipse class="fl2" style="animation-delay:${i*.8}s" cx="${p[0]}" cy="${p[1]-8}" rx="8" ry="6" fill="#eee" opacity=".35"/>`).join("")}
+ <g class="sway" style="animation-duration:1s"><path d="M300 54V130" stroke="#c9a227" stroke-width="3"/><circle cx="300" cy="136" r="10" fill="#c9a227" stroke="#5d4a2c"/></g>
+ <circle class="pl" cx="300" cy="120" r="80" fill="url(#t8g)" opacity=".5"/>
+ ${floor("#3a2c18","#c9a22733")}${[90,210,330,450,570].map(x=>`<circle cx="${x}" cy="196" r="2" fill="#c9a227"/>`).join("")}`),
+// 9 Versunkene Bibliothek
+()=>SV(LG("t9","#03202a","#0b4a52")+RG("t9g","#80deea"),`<rect width="600" height="220" fill="url(#t9)"/>
+ ${[20,140,400,520].map(x=>`<rect x="${x}" y="30" width="80" height="158" fill="#2b1d12" stroke="#0006"/>${[0,1,2,3].map(r=>`<path d="M${x} ${66+r*36}h80" stroke="#1a1008" stroke-width="5"/>`+Array.from({length:9},(_,k)=>`<rect x="${x+4+k*8.4}" y="${40+r*36+(k*7)%6}" width="6" height="${24-(k*7)%6}" fill="${["#8b1e1e","#1e5b8b","#2e7d32","#6d4c41","#b8860b"][(k+r+x)%5]}" opacity=".85"/>`).join("")).join("")}`).join("")}
+ <path d="M240 0L200 188H400L360 0Z" fill="#b2ebf2" opacity=".08"/><path d="M270 0L250 188H330L310 0Z" fill="#e0f7fa" opacity=".08"/>
+ ${[[260,70,0],[330,110,.8],[300,40,1.6]].map(b=>`<g class="hov" style="animation-delay:${b[2]}s"><path d="M${b[0]} ${b[1]}l16-6 16 6v14l-16-6-16 6z" fill="#efe3c6" stroke="#5d4037"/><path d="M${b[0]+16} ${b[1]-6}v14" stroke="#5d4037"/></g>`).join("")}
+ ${DOTS(16,"#b2ebf2","fl2",190,1.4)}<circle class="pl" cx="300" cy="100" r="120" fill="url(#t9g)" opacity=".3"/>
+ ${floor("#123a40","#80deea22")}<path d="M0 205Q150 196 300 205T600 205" stroke="#80deea" stroke-width="1" fill="none" opacity=".4"/>`),
+// 10 Pilzgrotte
+()=>SV(LG("t10","#0a1408","#2a3a1a")+RG("t10g","#b2ff59"),`<rect width="600" height="220" fill="url(#t10)"/>
+ <path d="M0 0H600V24L560 50L530 20L480 60L440 24L400 46L350 18L300 50L250 22L200 52L150 20L100 48L50 22L0 40Z" fill="#141f0c"/>
+ ${[[60,188,40,"#7cb342"],[170,188,30,"#ab47bc"],[430,188,44,"#26a69a"],[540,188,30,"#7cb342"],[300,188,20,"#ab47bc"],[230,188,14,"#26a69a"]].map((m,i)=>`<circle class="pl" style="animation-delay:${i*.4}s" cx="${m[0]}" cy="${m[1]-m[2]*1.6}" r="${m[2]*1.6}" fill="url(#t10g)" opacity=".35"/><path d="M${m[0]-m[2]*.2} ${m[1]}q${m[2]*.1} ${-m[2]} ${m[2]*.05} ${-m[2]*1.4}h${m[2]*.3}q${-m[2]*.05} ${m[2]*.4} ${m[2]*.05} ${m[2]*1.4}z" fill="#e8e0c8"/><path d="M${m[0]-m[2]} ${m[1]-m[2]*1.3}Q${m[0]} ${m[1]-m[2]*2.6} ${m[0]+m[2]} ${m[1]-m[2]*1.3}Z" fill="${m[3]}" stroke="#0005"/>${[-.5,0,.5].map(k=>`<circle cx="${m[0]+k*m[2]}" cy="${m[1]-m[2]*1.6+Math.abs(k)*m[2]*.3}" r="${m[2]*.09}" fill="#fff" opacity=".7"/>`).join("")}`).join("")}
+ ${DOTS(18,"#ccff90","fl2",170,1.2)}
+ ${floor("#1e2a12","#b2ff5922")}`),
+// 11 Gefrorene Gruft
+()=>SV(LG("t11","#06121e","#24435c")+RG("t11g","#b3e5fc"),`<rect width="600" height="220" fill="url(#t11)"/>${bricks("#b3e5fc18",6)}
+ <path d="M0 0H600V8${Array.from({length:30},(_,i)=>`L${i*20+10} ${18+(i*13)%22}L${i*20+20} 8`).join("")}V0Z" fill="#e1f5fe" opacity=".85"/>
+ ${[[180,0],[420,.5]].map(s=>`<g><path d="M${s[0]-50} 188v-34l10-10h80l10 10v34z" fill="#546e7a" stroke="#263238"/><path d="M${s[0]-40} 150h80" stroke="#90a4ae"/><path d="M${s[0]-6} 146v-24h12v24M${s[0]-14} 130h28" fill="#b0bec5" stroke="#263238"/><path d="M${s[0]-52} 156q20-8 40 0t40 0t22 0" stroke="#e1f5fe" stroke-width="4" fill="none"/></g>`).join("")}
+ <circle class="pl" cx="300" cy="110" r="100" fill="url(#t11g)" opacity=".35"/><path d="M276 140V90Q300 66 324 90V140Z" fill="#0a1a28" stroke="#81d4fa"/>
+ ${Array.from({length:14},(_,i)=>`<path class="dr" style="animation-delay:${(i*.31)%1.4}s;animation-duration:${2.4+(i%3)*.6}s" d="M${(i*43+20)%600} ${(i*29)%60}m-3 0h6m-3-3v6" stroke="#fff" stroke-width="1.4"/>`).join("")}
+ ${floor("#3a5266","#e1f5fe33")}`),
+// 12 Blutrosengarten
+()=>SV(LG("t12","#12030a","#4a0e24")+RG("t12g","#ff1744"),`<rect width="600" height="220" fill="url(#t12)"/>
+ <circle cx="470" cy="50" r="28" fill="#ffcdd2"/><circle cx="460" cy="44" r="28" fill="#2a0612" opacity=".25"/>
+ <path d="M0 188V120Q40 96 80 118Q120 90 170 116Q210 96 250 120V188ZM350 188V124Q390 98 430 120Q480 92 520 118Q560 100 600 116V188Z" fill="#1b2a14" stroke="#0a1208"/>
+ <path d="M10 150q20-20 40 0t40 0t40 0t40 0M360 150q20-20 40 0t40 0t40 0t40 0t40 0" stroke="#3e2723" stroke-width="2" fill="none"/>
+ ${[[40,130],[100,118],[150,140],[210,126],[380,132],[440,120],[500,140],[560,124],[70,160],[470,162]].map((r,i)=>`<g class="pl" style="animation-delay:${i*.2}s"><circle cx="${r[0]}" cy="${r[1]}" r="7" fill="#c2185b"/><circle cx="${r[0]}" cy="${r[1]}" r="4" fill="#880e4f"/><path d="M${r[0]-2} ${r[1]-1}q2-3 4 0" stroke="#f48fb1" fill="none"/></g>`).join("")}
+ <path d="M280 188V130h40v58" fill="#2a1a1a"/><path d="M270 130h60l-30-26z" fill="#3e2723"/>
+ ${Array.from({length:10},(_,i)=>`<ellipse class="dr" style="animation-delay:${(i*.43)%1.4}s;animation-duration:3s" cx="${(i*61+40)%600}" cy="${(i*37)%90}" rx="3" ry="2" fill="#e91e63"/>`).join("")}
+ <ellipse class="pl" cx="300" cy="200" rx="320" ry="26" fill="url(#t12g)" opacity=".35"/>${floor("#2a0a14","#ff174422")}`),
+// 13 Knochengruft
+()=>SV(LG("t13","#0c0a08","#2e2820")+RG("t13g","#ffcc80"),`<rect width="600" height="220" fill="url(#t13)"/>${bricks("#00000040",4)}
+ ${[0,1,2].map(r=>Array.from({length:12},(_,k)=>{const x=24+k*50+(r%2)*25,y=34+r*46;return `<path d="M${x-14} ${y+16}V${y}Q${x} ${y-16} ${x+14} ${y}V${y+16}Z" fill="#120e0a"/><circle cx="${x}" cy="${y+6}" r="7" fill="#d7ccc8"/><circle cx="${x-2.5}" cy="${y+5}" r="1.6" fill="#120e0a"/><circle cx="${x+2.5}" cy="${y+5}" r="1.6" fill="#120e0a"/><rect x="${x-3}" y="${y+11}" width="6" height="3" fill="#d7ccc8"/>`}).join("")).join("")}
+ ${[[150,170],[300,176],[450,170]].map((c,i)=>`<circle class="pl" cx="${c[0]}" cy="${c[1]-16}" r="44" fill="url(#t13g)" opacity=".5"/><rect x="${c[0]-4}" y="${c[1]-14}" width="8" height="18" fill="#efe6d0"/>${fm(c[0],c[1]-14,.5,"#ffb74d",i*.2)}`).join("")}
+ <g fill="#d7ccc8" stroke="#8d6e63"><path d="M40 188l40-10 4 4-40 10zM60 186l30 2 0 4-30-2zM520 188l40-12 3 4-40 12z"/><circle cx="96" cy="182" r="7"/><circle cx="508" cy="180" r="6"/></g>
+ ${floor("#3a3026","#00000040")}`),
+// 14 Himmelsschmiede
+()=>SV(LG("t14","#1e3a6e","#f6b26b")+RG("t14g","#ff9100"),`<rect width="600" height="220" fill="url(#t14)"/>
+ ${[[30,-20],[60,-55],[100,-80]].map((c,i)=>`<g class="cl" style="animation-delay:${c[1]}s;animation-duration:${50+i*15}s"><g fill="#fff" opacity=".85"><ellipse cx="0" cy="${c[0]+40}" rx="70" ry="16"/><ellipse cx="-26" cy="${c[0]+30}" rx="34" ry="16"/><ellipse cx="24" cy="${c[0]+28}" rx="36" ry="18"/></g></g>`).join("")}
+ <path d="M0 220V170Q60 150 120 166Q200 140 300 160Q400 140 480 166Q540 150 600 170V220Z" fill="#fff" opacity=".9"/>
+ <path d="M150 188l20-30h260l20 30z" fill="#6d5a34" stroke="#3e2723"/><path d="M200 158V110h40v48M360 158V100h50v58" fill="#4e342e" stroke="#2a1a10"/>
+ <circle class="pl" cx="385" cy="96" r="60" fill="url(#t14g)" opacity=".6"/>${fm(385,100,1.2,"#ff6d00",0)}${fm(385,100,.7,"#ffd54f",.1)}
+ <path d="M260 158h70v-8h-20v-14h30v-8h-90v8h30v14h-20z" fill="#455a64" stroke="#1c262b"/>
+ ${Array.from({length:10},(_,i)=>`<circle class="fl2" style="animation-delay:${i*.23}s" cx="${280+(i*13)%60}" cy="${126-(i*7)%20}" r="1.6" fill="#ffd54f"/>`).join("")}
+ <path d="M0 188H600V220H0Z" fill="#e8eef5" opacity=".7"/>`),
+// 15 Spiegelsaal
+()=>SV(LG("t15","#140c22","#3b2c4e")+RG("t15g","#e1bee7"),`<rect width="600" height="220" fill="url(#t15)"/>
+ ${[60,180,300,420,540].map((x,i)=>`<path d="M${x-34} 180V64Q${x} 20 ${x+34} 64V180Z" fill="#c9a227" stroke="#5d4a2c"/><path d="M${x-28} 176V66Q${x} 30 ${x+28} 66V176Z" fill="#9fa8da" opacity=".55"/><path class="pl" style="animation-delay:${i*.3}s" d="M${x-18} 70l12-10 4 4-14 40zM${x+6} 120l12-14 3 3-12 20z" fill="#fff" opacity=".6"/>`).join("")}
+ <g class="sway" style="animation-duration:4s"><path d="M300 0v26" stroke="#c9a227" stroke-width="2"/><path d="M270 30h60l-8 10h-44z" fill="#c9a227"/>${[276,290,310,324].map(x=>`<circle class="tw" cx="${x}" cy="44" r="2.5" fill="#fff59d"/>`).join("")}</g>
+ <circle class="pl" cx="300" cy="110" r="140" fill="url(#t15g)" opacity=".25"/>
+ <path d="M0 188H600V220H0Z" fill="#2a1f38"/><path d="M0 188H600" stroke="#e1bee7" stroke-width="1.5"/>
+ <g opacity=".25" transform="translate(0 376) scale(1 -1)">${[60,180,300,420,540].map(x=>`<path d="M${x-28} 188V176H${x+28}V188Z" fill="#9fa8da"/>`).join("")}</g>${DOTS(8,"#fff","tw",180)}`),
+// 16 Traumgefilde
+()=>SV(LG("t16","#2a1b4e","#f8bbd0")+RG("t16g","#ffffff"),`<rect width="600" height="220" fill="url(#t16)"/>${DOTS(20,"#fff","tw",120)}
+ <circle cx="110" cy="50" r="22" fill="#fffde7"/><circle cx="120" cy="44" r="20" fill="#3b2a5e" opacity=".9"/>
+ <g class="rot" style="animation-duration:30s"><path d="M300 90m-60 0a60 60 0 1 1 120 0a48 48 0 1 1 -96 0a36 36 0 1 1 72 0a24 24 0 1 1 -48 0" stroke="#fff" stroke-width="2" fill="none" opacity=".35"/></g>
+ ${[[460,90,46,0],[180,120,30,.8],[540,40,22,1.5]].map(s=>`<g class="hov" style="animation-delay:${s[3]}s"><path d="M${s[0]-s[2]} ${s[1]}h${s[2]*2}l${-s[2]*.4} ${s[2]*.7}l${-s[2]*.6} ${s[2]*.4}l${-s[2]*.6} ${-s[2]*.3}z" fill="#7e57c2" stroke="#4527a0"/><path d="M${s[0]-s[2]} ${s[1]}h${s[2]*2}" stroke="#a5d6a7" stroke-width="5"/><path d="M${s[0]} ${s[1]-2}v${-s[2]*.6}" stroke="#5d4037" stroke-width="3"/><circle cx="${s[0]}" cy="${s[1]-s[2]*.7}" r="${s[2]*.35}" fill="#f48fb1"/></g>`).join("")}
+ <circle class="pl" cx="300" cy="200" r="160" fill="url(#t16g)" opacity=".2"/>
+ <path d="M0 188Q100 176 200 188T400 188T600 188V220H0Z" fill="#ce93d8"/><path d="M0 200Q100 190 200 200T400 200T600 200" stroke="#fff" fill="none" opacity=".5"/>`),
+// 17 Sternwarte
+()=>SV(LG("t17","#02030c","#141a40")+RG("t17g","#9fa8ff"),`<rect width="600" height="220" fill="url(#t17)"/>${DOTS(40,"#fff","tw",180)}
+ <path d="M80 40L130 60L170 30L220 70M380 30L420 60L470 50L500 90L460 110" stroke="#9fa8ff" stroke-width="1" fill="none" opacity=".6"/>
+ <path class="tw" d="M520 20l-60 40" stroke="#fff" stroke-width="2" opacity=".7"/>
+ <g class="rot" style="animation-duration:40s"><circle cx="300" cy="80" r="56" fill="none" stroke="#c9a227" stroke-width="2"/><circle cx="300" cy="80" r="40" fill="none" stroke="#c9a227" stroke-dasharray="4 6"/><path d="M244 80h112M300 24v112" stroke="#c9a227"/></g><circle class="pl" cx="300" cy="80" r="16" fill="url(#t17g)"/>
+ <g><path d="M120 188l30-60h20l30 60z" fill="#37474f"/><path d="M160 130l120-70 10 16-120 70z" fill="#b8860b" stroke="#5d4a2c"/><circle cx="283" cy="66" r="10" fill="#1a237e" stroke="#b8860b" stroke-width="3"/></g>
+ <path d="M440 188V140Q500 96 560 140V188Z" fill="#263238"/><path d="M492 110h16v78h-16z" fill="#02030c"/>
+ <path d="M0 188H600V220H0Z" fill="#1c2033"/><path d="M0 188H600" stroke="#9fa8ff55" stroke-width="2"/>`),
+// 18 Goldener Hort
+()=>SV(LG("t18","#120a02","#4a3008")+RG("t18g","#ffd54f"),`<rect width="600" height="220" fill="url(#t18)"/>${bricks("#00000040",8)}
+ <circle class="pl" cx="300" cy="200" r="220" fill="url(#t18g)" opacity=".35"/>
+ <path d="M0 188Q60 120 140 150Q200 110 260 160Q330 100 400 150Q470 120 520 140Q570 130 600 160V188Z" fill="#d4a017" stroke="#8d6e00"/>
+ ${Array.from({length:40},(_,i)=>{const x=(i*47+12)%600,y=150+(i*13)%34;return `<ellipse cx="${x}" cy="${y}" rx="6" ry="3" fill="${i%3?"#ffd54f":"#ffb300"}" stroke="#8d6e00"/>`}).join("")}
+ <path d="M90 150h50v30h-50z" fill="#6d4c41" stroke="#3e2723"/><path d="M90 150q25-24 50 0" fill="#8d6e63" stroke="#3e2723"/><rect x="110" y="156" width="10" height="8" fill="#ffd54f"/>
+ <path d="M440 140l14-30 14 30-14 8z" fill="#e53935" stroke="#7f0000"/><path d="M340 120l10-20 10 20-10 6z" fill="#1e88e5" stroke="#0d47a1"/><path d="M200 150v-20l12-8 12 8v20" fill="#c9a227" stroke="#5d4a2c"/>
+ ${[[80,90],[240,60],[400,80],[520,50],[320,130],[160,120]].map((p,i)=>ST(p[0],p[1],"#fff8e1",i*.3)).join("")}
+ <g class="blink" style="animation-duration:6s"><ellipse cx="520" cy="60" rx="14" ry="8" fill="#ffab00"/><ellipse cx="520" cy="60" rx="2.5" ry="7" fill="#000"/></g>
+ <path d="M0 188H600V220H0Z" fill="#8d6e00"/><path d="M0 188H600" stroke="#ffd54f" stroke-width="2"/>`),
+// 19 Turmkrone
+()=>SV(LG("t19","#1a2a6c","#fdbb2d")+RG("t19g","#fff3e0"),`<rect width="600" height="220" fill="url(#t19)"/>
+ <g class="rot" style="animation-duration:60s">${Array.from({length:12},(_,i)=>`<path d="M300 120L${300+400*Math.cos(i*Math.PI/6)} ${120+400*Math.sin(i*Math.PI/6)}L${300+400*Math.cos(i*Math.PI/6+.12)} ${120+400*Math.sin(i*Math.PI/6+.12)}Z" fill="#fff" opacity=".07"/>`).join("")}</g>
+ <circle class="pl" cx="300" cy="130" r="70" fill="url(#t19g)"/><circle cx="300" cy="130" r="30" fill="#fff8e1"/>
+ ${[[40,-30],[80,-70]].map((c,i)=>`<g class="cl" style="animation-delay:${c[1]}s;animation-duration:${70+i*20}s"><g fill="#fff" opacity=".8"><ellipse cx="0" cy="${c[0]+60}" rx="80" ry="14"/><ellipse cx="-30" cy="${c[0]+50}" rx="36" ry="14"/></g></g>`).join("")}
+ <path d="M0 188V150h40v-20h30v20h40v-20h30v20h40v-20h30v20h180v-20h30v20h40v-20h30v20h40v-20h30v20h40V188Z" fill="#8d8170" stroke="#3e3a34"/>
+ ${[55,125,195,405,475,545].map((x,i)=>`<path d="M${x} 130V70" stroke="#5d4037" stroke-width="3"/><path class="wv" style="animation-delay:${i*.3}s" d="M${x} 72h34l-8 10 8 10h-34z" fill="${i%2?"#c9a227":"#7b1fa2"}"/>`).join("")}
+ <path d="M0 188H600V220H0Z" fill="#6d6455"/><path d="M0 188H600" stroke="#ffd54f" stroke-width="2"/>`));
