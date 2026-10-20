@@ -230,7 +230,6 @@ const BOSSV=[
  <path d="M32 92Q67 140 102 92Q67 108 32 92Z" fill="#4a0010" stroke="#000"/>
  ${[.14,.24,.34,.44,.56,.66,.76,.86].map(t=>{const x=32+70*t,yt=92+32*t*(1-t),yb=92+96*t*(1-t);return `<path d="M${x-3} ${yt}L${x} ${yt+6}L${x+3} ${yt}Z" fill="#f5f5dc"/><path d="M${x-3} ${yb}L${x} ${yb-5}L${x+3} ${yb}Z" fill="#f5f5dc"/>`}).join("")}</g>`,52)];
 const bossSvg=i=>BOSSV[i]?BOSSV[i]():knight(4,4,3,true,BOSS[i].tint);
-const tbossSvg=(i,ph)=>knight(4,4,3,true,TBOSS[i].tint);
 const ttier=n=>Math.min(TIER.length-1,Math.floor((n-1)/5));
 const towerIntro=n=>{const T=TIER[ttier(n)];return `🗼 <b>${t("tw.floor")} ${n} – ${T[0]}</b><br>`+((n-1)%5===0&&n>1?`<i>${t("tw.deeper",T[1])}</i><br>`:"")};
 const SV=(defs,body)=>`<svg class="bg" viewBox="0 0 600 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><defs>${defs}</defs>${body}</svg>`;
