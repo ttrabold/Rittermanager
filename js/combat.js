@@ -1,6 +1,6 @@
 // Ritter Manager – Kampf: Abenteuer, Turnier, Bosse, Turm, Züge, Sieg und Niederlage
 function giveE(id,l){const it=EI.find(x=>x.id===id);if(S.own.includes(id)){S.gold+=100;l.push(t("cb.dupe",it.n));return}S.own.push(id);const k=it.s==="w"?"ew":"ea",cur=it.s==="w"?wBon():aBon(),auto=it.b>cur;if(auto)S[k]=id;l.push(`✨ <b>${t("cb.ench",it.n)}</b> (${it.d})${auto?t("cb.autoEq"):t("cb.eqLater")}`)}
-function tourLoot(l){lootGive("tour",lvl(),l)}
+function tourLoot(l){if(!uniqueRoll("tour",lvl(),l))lootGive("tour",lvl(),l)}
 function equipE(id){const it=itm(id);if(!it)return;const k=it.s==="w"?"ew":it.s==="a"?"ea":"es";S[k]=S[k]===id?null:id;save();sfx("buff");inv(true)}
 function encHit(d,l){const f=F,r=Math.random(),b=fxv("burn");
  if(r<b&&!(f.fx&&f.fx.noburn)){f.eb.burn=2;l.push(t("cb.eBurn"))}
@@ -153,12 +153,12 @@ function endFight(win,l){
   S.ruhm+=r;S.gold+=g;S.exp+=x;S.wins++;if(f.php<=5)S.close++;if(!f.took)S.flawless++;l.push(t("cb.win",r,g,x));
   bWin(f);if(f.evGold){S.gold+=f.evGold;l.push(t("cb.evGold",f.evGold))}if(f.honor){S.ruhm+=r;l.push("🤺 "+t("cb.honor",r))}
   if(f.moon){moonLoot(l);msg=t("cb.moonM")}
-  else if(f.mimic){S.it.h+=2;S.mat.ak+=1;l.push(t("cb.mimicL"));msg=t("cb.mimicM")}
+  else if(f.mimic){S.it.h+=2;S.mat.ak+=1;l.push(t("cb.mimicL"));uniqueRoll("mimic",lvl(),l);msg=t("cb.mimicM")}
   else if(f.rival){}
-  else if(f.boss&&!f.tower){S.boss++;if(!S.bk.includes(S.boss-1))S.bk.push(S.boss-1);if(S.boss>=3)S.tunl=1;for(let i=0;i<2;i++)lootGive("boss",BOSS[S.boss-1].L,l);S.it.H++;S.it.g++;l.push(t("cb.bossL"));if(LORE[S.boss-1])l.push(`📜 <i>${LORE[S.boss-1][1]}</i>`);msg=t("cb.bossM",f.name);if(S.boss>=BOSS.length&&!S.epi)f.epi=1}
+  else if(f.boss&&!f.tower){S.boss++;if(!S.bk.includes(S.boss-1))S.bk.push(S.boss-1);if(S.boss>=3)S.tunl=1;const uq=uniqueRoll("boss",BOSS[S.boss-1].L,l);for(let i=0;i<(uq?1:2);i++)lootGive("boss",BOSS[S.boss-1].L,l);S.it.H++;S.it.g++;l.push(t("cb.bossL"));if(LORE[S.boss-1])l.push(`📜 <i>${LORE[S.boss-1][1]}</i>`);msg=t("cb.bossM",f.name);if(S.boss>=BOSS.length&&!S.epi)f.epi=1}
   else{if(Math.random()<.3){S.it.h++;l.push(t("cb.findH"))}msg=t("cb.beat",f.name)}
   dropMat(f,l);qProg("win",1,l);if(f.tower)qProg("tower",1,l);if(f.tour)qProg("tour",1,l);
-  if(f.tower){S.tbest=Math.max(S.tbest,f.tower);S.tcur=f.tower+1;f.next=true;l.push(t("tw.done",f.tower));if(Math.random()<.25){S.it.a++;l.push(t("tw.ether"))}if(f.tower%5===0)lootGive(f.tower%10===0?"tower10":"tower",lvl()+Math.floor(f.tower/10),l,f.tower);if(f.tower%10===0){S.it.A++;l.push(t("tw.ether2"))}}
+  if(f.tower){S.tbest=Math.max(S.tbest,f.tower);S.tcur=f.tower+1;f.next=true;l.push(t("tw.done",f.tower));if(Math.random()<.25){S.it.a++;l.push(t("tw.ether"))}if(f.tower%5===0&&!uniqueRoll("towerboss",lvl()+Math.floor(f.tower/10),l))lootGive(f.tower%10===0?"tower10":"tower",lvl()+Math.floor(f.tower/10),l,f.tower);if(f.tower%10===0){S.it.A++;l.push(t("tw.ether2"))}}
   if(f.tour){if(f.tour<3){f.next=true;l.push(t("to.round",f.tour))}else{S.troph++;tourLoot(l);S.gold+=100;S.exp+=50;S.ruhm+=30;l.push(t("to.win"));if(isTourDay(S.day)){S.gold+=100;S.exp+=50;S.ruhm+=30;tourLoot(l);l.push(t("to.day"))}msg=t("to.winM")}}
  }else{const x=Math.floor(S.gold*.1);S.gold-=x;S.ruhm=Math.max(0,S.ruhm-5);S.exp+=5;S.losses++;if(f.tower){hallAdd(f.tower-1);S.tcur=1}l.push(t("cb.lose",x));msg=f.tower?t("tw.lost",S.tbest):f.tour?t("to.out"):t("cb.loseM")}
  if(f.rival)rivalEnd(f,win,l);buffTick();
