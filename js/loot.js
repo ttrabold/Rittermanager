@@ -16,19 +16,23 @@ for(const k in LFX)Object.assign(LFX[k],{nm:t("lfx."+k+".nm"),d:v=>t("lfx."+k+".
 const itm=id=>id?EI.find(x=>x.id===id)||(S.gear||[]).find(x=>x.id===id):undefined;
 const fxDesc=fx=>Object.entries(fx).map(([k,v])=>LFX[k]?LFX[k].d(v):"").filter(Boolean).join(", ");
 const rf=(a,b)=>a+Math.random()*(b-a);
-function rarRoll(w){const sum=w.reduce((a,b)=>a+b,0);let x=Math.random()*sum;for(let i=0;i<w.length;i++){if(w[i]>0&&(x-=w[i])<0)return i}return w.findLastIndex(v=>v>0)}
+function rarRoll(w){const sum=w.reduce((a,b)=>a+b,0);let x=Math.random()*sum;for(let i=0;i<w.length;i++){if(w[i]>0&&(x-=w[i])<0)return i}let j=0;for(let i=0;i<w.length;i++)if(w[i]>0)j=i;return j}
+// Wie stark ist ein Effekt im Verhältnis zu seinem Höchstwert? (feste Effekte zählen mittel)
+const fxRel=(k,v,il,t)=>LFX[k].fix?.5:v/LFX[k].max(il,t);
 function genItem(il,r,s,cat){il=Math.max(1,Math.round(il));
  if(!s){const x=Math.random();s=x<.5?"w":x<.8?"a":"sh"}
  if(s==="w"&&!cat){const ks=Object.keys(WCAT);cat=ks[rnd(0,ks.length-1)]}
  const t=Math.min(1,il/50),pool=Object.keys(LFX).filter(k=>LFX[k].s===(s==="w"?"w":"a")).sort(()=>Math.random()-.5),fx={};
  for(const k of pool.slice(0,r+1)){const L=LFX[k],v=L.max(il,t)*(L.fix?1:rf(.7,1))*(s==="sh"?.6:1);fx[k]=L.fix?1:L.int?Math.max(1,Math.round(v)):Math.max(.01,Math.round(v*100)/100)}
  const base=s==="w"?4+il*1.5:s==="a"?2+il:4+il*.15,b=Math.max(1,Math.round(base*rf(.85,1.1)*(1+.03*r)));
- const first=Object.keys(fx)[0];
- const it={id:"g"+(S.gid=(S.gid||0)+1),s,b,c:LFX[first].c,fx,r,il,gen:1};
+ const first=Object.keys(fx).sort((a,b)=>fxRel(b,fx[b],il,t)-fxRel(a,fx[a],il,t))[0];
+ const it={id:"g"+(S.gid=(S.gid||0)+1),s,b,c:LFX[first].c,fx,r,il,gen:1,m:first};
  if(s==="w")it.cat=cat;return genText(it)}
 // Name und Beschreibung aus Art, Stufe und Effekten bilden (nicht gespeichert, damit ein Sprachwechsel wirkt)
-function genText(it){const tier=Math.min(4,Math.floor(it.il/10)),bn=it.s==="w"?WNAMES[it.cat][tier]:it.s==="a"?A[Math.max(1,tier)][0]:SH[Math.min(3,1+Math.floor(tier/2))][0];
- it.n=t("gear.name",bn,LFX[Object.keys(it.fx)[0]].suf);it.d=fxDesc(it.fx);return it}
+// Stufe einer Markttabelle (W, A, SH) nach dem Grundwert b: höchste Stufe, deren Wert nicht über b liegt
+const tierOf=(T,b)=>{let r=0;T.forEach((x,i)=>{if(x[2]<=b)r=i});return r};
+function genText(it){const bn=it.s==="w"?WNAMES[it.cat][tierOf(W,it.b)]:it.s==="a"?A[Math.max(1,tierOf(A,it.b))][0]:SH[Math.max(1,tierOf(SH,it.b))][0];
+ it.n=t("gear.name",bn,LFX[it.m&&it.fx[it.m]?it.m:Object.keys(it.fx)[0]].suf);it.d=fxDesc(it.fx);return it}
 
 // ---- Beutequellen: Seltenheitsgewichte je Quelle, Gegenstand speichern, ggf. anlegen ----
 const LOOTW={tour:()=>[60,30,9,1],boss:()=>[0,60,32,8],moon:()=>[0,75,22,3],
@@ -40,9 +44,14 @@ function lootGive(kind,il,l,n){const w=(LOOTW[kind==="tower10"?"tower":kind]||LO
  l.push(`${RAR[r].e} <b style="color:${RAR[r].c}">${t("gear.loot",r,it.n)}</b> (+${it.b} ${it.s==="w"?"⚔️":"🛡️"}, ${it.d})${cmp?"<br>"+cmp:""}${auto?t("cb.autoEq"):t("gear.inBag")}`);return it}
 
 // ---- Vergleich mit dem angelegten Teil derselben Art ----
-function cmpHtml(it){const cur=eq(it.s),cf=(cur&&cur.fx)||{},o=[],d=it.b-slotBase(it.s),pc=k=>!LFX[k]||LFX[k].int||LFX[k].fix?"":t("pctU"),sc=k=>LFX[k]&&!LFX[k].int&&!LFX[k].fix?100:1;
+// Gesamtwirkung eines Teils: gewürfelte Effekte, Runen und bei Waffen die Grundwirkung der Waffenart
+function fxAll(fx,ru,cat){const o=Object.assign({},fx);for(const r of ru||[]){const R=RU.find(x=>x.id===r);if(R)for(const k in R.fx)o[k]=(o[k]||0)+R.fx[k]}
+ if(cat){const c=WCAT[cat]||{};for(const k of["crit","stun","bleed","dbl","armor","reach","acc"])if(c[k])o[k]=(o[k]||0)+c[k];if(c.dmg&&c.dmg!==1)o.dmg=c.dmg-1}return o}
+const CMPP=["bleed","dbl","armor","reach","dmg"];
+function cmpHtml(it){const cur=eq(it.s),o=[],ib=it.b+(S.up[it.id]||0)*(it.s==="w"?2:1),d=ib-slotBase(it.s),pc=k=>LFX[k]&&!LFX[k].int&&!LFX[k].fix||k==="dodge"||CMPP.includes(k)?t("pctU"):"",sc=k=>LFX[k]&&!LFX[k].int&&!LFX[k].fix||CMPP.includes(k)?100:1,
+  nf=fxAll(it.fx,S.ru[it.id],it.s==="w"?it.cat:null),cf=fxAll((cur&&cur.fx)||{},S.ru[ikey(it.s)],it.s==="w"?eqCat():null);
  if(d)o.push(`${it.s==="w"?"⚔️":"🛡️"}&nbsp;${d>0?"▲&nbsp;+":"▼&nbsp;−"}${Math.abs(d)}`);
- for(const k of new Set([...Object.keys(it.fx),...Object.keys(cf)])){const v=Math.round(((it.fx[k]||0)-(cf[k]||0))*sc(k));if(!v)continue;const nm=LFX[k]?LFX[k].nm:k;o.push(k==="noburn"?`${nm}&nbsp;${v>0?"▲":"▼"}`:`${nm}&nbsp;${v>0?"▲&nbsp;+":"▼&nbsp;−"}${Math.abs(v)+pc(k)}`)}
+ for(const k of new Set([...Object.keys(nf),...Object.keys(cf)])){const v=Math.round(((nf[k]||0)-(cf[k]||0))*sc(k));if(!v)continue;const nm=LFX[k]?LFX[k].nm:t("cmpB."+k);o.push(k==="noburn"?`${nm}&nbsp;${v>0?"▲":"▼"}`:`${nm}&nbsp;${v>0?"▲&nbsp;+":"▼&nbsp;−"}${Math.abs(v)+pc(k)}`)}
  return o.length?`<span class="mut">${o.join(" · ")}</span>`:""}
 
 // ---- Beutel und Zerlegen ----
@@ -76,6 +85,6 @@ function gearClean(){const ok=[];for(const g of Array.isArray(S.gear)?S.gear:[])
   if(!g||typeof g!=="object"||!/^g\d+$/.test(g.id)||!["w","a","sh"].includes(g.s)||![0,1,2,3].includes(g.r)||g.s==="w"&&!(g.cat in WCAT)||ok.some(x=>x.id===g.id))continue;
   const fx={};for(const[k,v]of Object.entries(g.fx||{}))if(LFX[k]&&LFX[k].s===(g.s==="w"?"w":"a")&&+v>0)fx[k]=+v;if(!Object.keys(fx).length)continue;
   const it={id:g.id,s:g.s,b:Math.max(1,Math.round(+g.b||1)),c:/^#[0-9a-f]{3,8}$/i.test(g.c)?g.c:LFX[Object.keys(fx)[0]].c,fx,r:g.r,il:Math.max(1,Math.round(+g.il||1)),gen:1};
-  if(g.s==="w")it.cat=g.cat;ok.push(genText(it))}
+  if(g.s==="w")it.cat=g.cat;if(fx[g.m])it.m=g.m;ok.push(genText(it))}
  S.gear=ok;for(const k of["ew","ea","es"])if(S[k]&&!itm(S[k]))S[k]=null;S.gid=Math.max(+S.gid||0,...ok.map(x=>+x.id.slice(1)))}
 gearClean();

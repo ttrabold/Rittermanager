@@ -54,7 +54,7 @@ ph=>BSV(`<g class="hov"><g class="flap"><path d="M48 70Q6 40 2 90Q18 80 22 96Q30
  <path d="M54 44l5 2M64 46l5-2" stroke="#000" stroke-width="2"/><circle class="glow" cx="56" cy="48" r="1.8" fill="#fff27a"/><circle class="glow" cx="67" cy="48" r="1.8" fill="#fff27a"/><path d="M58 56l3 4 3-4z" fill="#ffb300"/></g>
  ${BOLT}`,40),
 // 7 Dein Schattenzwilling: der eigene Ritter, schwarz getönt, mit glühenden Augen
-ph=>KX(knight(S.w,S.a,S.es?3:S.s,true,"#4a148c",eq("w")?eq("w").c:null,eq("a")?eq("a").c:null,S.ew,S.ea,S.sex==="f",undefined,eqCat()).replace('style="transform:scaleX(-1)"','style="transform:scaleX(-1);filter:brightness(.3) contrast(1.3) drop-shadow(0 0 6px #7c4dff)"'),
+ph=>KX(knight(gearTier("w"),gearTier("a"),gearTier("sh"),true,"#4a148c",eq("w")?eq("w").c:null,eq("a")?eq("a").c:null,S.ew,S.ea,S.sex==="f",undefined,eqCat()).replace('style="transform:scaleX(-1)"','style="transform:scaleX(-1);filter:brightness(.3) contrast(1.3) drop-shadow(0 0 6px #7c4dff)"'),
  `<ellipse class="pl" cx="62" cy="90" rx="46" ry="62" fill="#311b92" opacity=".4"/>`,
  `<circle class="glow" cx="56" cy="40" r="2.6" fill="#e040fb"/><circle class="glow" cx="67" cy="40" r="2.6" fill="#e040fb"/>`),
 // 8 Rissbewahrer Xal'Zorr: hohe Gestalt vor einem kreisenden Riss

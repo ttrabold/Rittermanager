@@ -4,7 +4,7 @@ I18N.en={
  meta:{title:"Sir Grindalot – From Squire to Legend",short:"Sir Grindalot",desc:"Rise from squire to legend – a medieval browser role-playing game.",manifest:"manifest.en.webmanifest"},
  // ---- General ----
  locale:"en-GB",
- pct:v=>v+"%",pctU:"%",
+ pct:v=>v+"%",pctU:"%",cmpB:{bleed:"Bleed",dbl:"Double stab",armor:"Armour pierce",reach:"Halberd bonus",dmg:"Damage",acc:"Accuracy",crit:"Crit",stun:"Stun"},
  name:{m:"Sir Kunibert",f:"Dame Kunigunde",set:(n,f)=>`Your ${f?"dame":"knight"} is now called <b>${n}</b>!`},
  // English titles have no gendered forms
  gn:(n,f)=>n,

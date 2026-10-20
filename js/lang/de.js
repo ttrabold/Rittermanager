@@ -4,7 +4,7 @@ I18N.de={
  meta:{title:"Sir Grindalot – Vom Knappen zur Legende",short:"Sir Grindalot",desc:"Werde vom Knappen zur Legende – ein mittelalterliches Browser-Rollenspiel.",manifest:"manifest.webmanifest"},
  // ---- Allgemein ----
  locale:"de-DE",
- pct:v=>v+" %",pctU:"&nbsp;%",
+ pct:v=>v+" %",pctU:"&nbsp;%",cmpB:{bleed:"Blutung",dbl:"Doppelstich",armor:"Rüstung ignorieren",reach:"Hellebarden-Bonus",dmg:"Schaden",acc:"Treffsicherheit",crit:"Krit",stun:"Lähmung"},
  name:{m:"Sir Kunibert",f:"Dame Kunigunde",set:(n,f)=>`Dein${f?"e Ritterin":" Ritter"} heißt jetzt <b>${n}</b>!`},
  // Titel für Ritterinnen: „der Tapfere“ → „die Tapfere“, „der Drachentöter“ → „die Drachentöterin“
  gn:(n,f)=>f&&n.startsWith("der ")?"die "+n.slice(4)+(/e$/.test(n)?"":"in"):n,

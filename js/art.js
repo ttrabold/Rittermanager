@@ -1,5 +1,7 @@
 // Ritter Manager – Grafik: Ritter- und Boss-Modelle, Waffen-/Rüstungseffekte, Hintergründe, Kampfeffekte
-const pk=()=>knight(S.w,S.a,S.es?3:S.s,false,null,eq("w")?eq("w").c:null,eq("a")?eq("a").c:null,S.ew,S.ea,S.sex==="f",undefined,eqCat());
+// Modellstufe eines Slots: bei Fundstücken nach ihrem Wert, sonst die Marktstufe
+const gearTier=k=>{const e=eq(k);return e?Math.min(k==="sh"?3:4,tierOf(k==="w"?W:k==="a"?A:SH,e.b)):k==="w"?S.w:k==="a"?S.a:S.s};
+const pk=()=>knight(gearTier("w"),gearTier("a"),gearTier("sh"),false,null,eq("w")?eq("w").c:null,eq("a")?eq("a").c:null,S.ew,S.ea,S.sex==="f",undefined,eqCat());
 const VX={
 slash:c=>`<svg class="${c}" viewBox="0 0 120 120"><path class="sl" d="M14 14L106 106"/></svg>`,
 bash:c=>`<span class="fly">🛡️</span><span class="ring ${c}"></span>`,
@@ -108,7 +110,7 @@ function knight(w,a,s,flip,plume,ow,oa,wi,ai,fem,robe,wcat){
  ${head}${plm}
  ${av(0)}
  ${limb(fem?"M82 66Q97 80 105 101":"M85 66Q98 80 105 101",ac)}${arm?`<circle cx="96" cy="82" r="${fem?3.8:4.5}" fill="${ac}" stroke="${ln}"/>`:""}
- ${wcat&&wcat!=="schwert"?catSvg(wcat,w,ow,wi&&(itm(wi)||{}).c):`${wi&&VIS[wi]?weaponSvg(wi):`<path d="M104 96V20L107.5 8L111 20V96Z" fill="${wc}" stroke="#0005"/><path d="M107.5 14V94" stroke="#fff7"/>`}
+ ${wcat&&wcat!=="schwert"?catSvg(wcat,w,ow,wi&&(itm(wi)||{}).c):`${wi&&VIS[wi]?weaponSvg(wi):`<g ${wi&&(itm(wi)||{}).gen?`style="filter:drop-shadow(0 0 4px ${itm(wi).c})"`:""}><path d="M104 96V20L107.5 8L111 20V96Z" fill="${wc}" stroke="#0005"/><path d="M107.5 14V94" stroke="#fff7"/></g>`}
  <path d="M96 94h23q2 3 0 6h-23q-2-3 0-6z" fill="#7a4a1c" stroke="#0004"/><rect x="105" y="100" width="5" height="12" fill="#5b3a1c"/><circle cx="107.5" cy="114" r="3" fill="#d4a017" stroke="#0005"/>`}
  <circle cx="107.5" cy="105.5" r="${fem?5.2:6}" fill="${arm?ac:sk}" stroke="#0006"/><path d="M102.5 103.5h10M102.5 107h10" stroke="#0003"/>
  ${s>0?`<path d="M12 64h32v24q0 19-16 28q-16-9-16-28z" fill="${SC[s]}" stroke="#0006" stroke-width="2"/><path d="M16 68h24v20q0 15-12 22q-12-7-12-22z" fill="none" stroke="#fff4" stroke-width="1.5"/><path d="M28 70v40M16 84h24" stroke="#fff6" stroke-width="3"/><circle cx="28" cy="84" r="3.5" fill="#d4a017" stroke="#0004"/>`:""}
