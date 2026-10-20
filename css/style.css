@@ -174,3 +174,18 @@ svg.vP{transform:scaleX(-1)}
 @keyframes blc2s{0%,40%{stroke:var(--c0)}50%,90%{stroke:var(--c1)}100%{stroke:var(--c0)}}
 @keyframes blc3s{0%,26%{stroke:var(--c0)}33%,59%{stroke:var(--c1)}66%,92%{stroke:var(--c2)}100%{stroke:var(--c0)}}
 @media (prefers-reduced-motion:reduce){.fxc2,.fxc3,.blc2,.blc3{animation:none}}
+/* Einzigartige Waffen: Bewegung der großen und kleinen Zeichnungen (Namen mit u-Vorsatz, damit nichts mit den vorhandenen Klassen kollidiert) */
+.ub{display:block;width:100%;height:100%;overflow:visible}
+.ufl{animation:ufl 3.6s ease-in-out infinite alternate}.ufl2{animation:ufl 2.6s ease-in-out infinite alternate-reverse}@keyframes ufl{to{transform:translateY(-10px) rotate(1deg)}}
+.urot,.urotr{transform-box:fill-box;transform-origin:center;animation:urot 7s linear infinite}.urotr{animation-direction:reverse}@keyframes urot{to{transform:rotate(360deg)}}
+.upl{animation:upl 1.6s ease-in-out infinite alternate}@keyframes upl{from{opacity:.1}to{opacity:.32}}
+.upu{transform-box:fill-box;transform-origin:center;animation:upu 1.2s ease-in-out infinite}@keyframes upu{50%{transform:scale(1.08)}}
+.uzz{animation:uzz .45s steps(2) infinite}.uzz2{animation:uzz .31s steps(2) infinite .1s}@keyframes uzz{50%{opacity:.2}}
+.uup{animation:uup 3s linear infinite}@keyframes uup{0%{transform:translateY(40px);opacity:0}15%{opacity:1}100%{transform:translateY(-440px);opacity:0}}
+.udr{animation:udr 2.2s ease-in infinite}@keyframes udr{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(90px);opacity:0}}
+.ucharge{transform-box:fill-box;transform-origin:center;animation:ucharge 3.4s ease-in infinite}@keyframes ucharge{0%{transform:scale(.3);opacity:0}45%{transform:scale(1.2);opacity:.9}55%,100%{transform:scale(.3);opacity:0}}
+.ubeam{transform-box:fill-box;transform-origin:left;animation:ubeam 3.4s ease-in-out infinite}@keyframes ubeam{0%,50%{transform:scaleX(0);opacity:0}58%{transform:scaleX(1);opacity:1}78%{opacity:1;transform:scaleX(1)}100%{opacity:0;transform:scaleX(1)}}
+.ughost{animation:ughost 3.2s ease-in-out infinite}@keyframes ughost{0%{transform:translate(70px,0);opacity:0}20%{opacity:1}50%{transform:translate(-120px,0)}80%{opacity:1}100%{transform:translate(70px,0);opacity:0}}
+.uvein{stroke-dasharray:9 6;animation:uvein 1.2s linear infinite}@keyframes uvein{to{stroke-dashoffset:-30}}
+.uwing{transform-box:fill-box;animation:uwing 2.2s ease-in-out infinite alternate}.uwl{transform-origin:100% 50%}.uwr{transform-origin:0 50%;animation-direction:alternate-reverse}@keyframes uwing{from{transform:rotate(-5deg)}to{transform:rotate(6deg)}}
+@media (prefers-reduced-motion:reduce){.ufl,.ufl2,.urot,.urotr,.upl,.upu,.uzz,.uzz2,.uup,.udr,.ucharge,.ubeam,.ughost,.uvein,.uwing{animation:none}}
