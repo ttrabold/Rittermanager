@@ -740,7 +740,7 @@ From the third defeated boss on, the Endless Tower is open to you. A visit costs
 - You fight your way up **floor by floor**, and the foes keep getting stronger.
 - After every floor you recover **20% of your HP**. Limited skills don't refill on their own. For that you need **🔷 ether potions**.
 - With a little luck (25%) you find an **ether potion** after a floor.
-- **Every 5th floor** is guarded by a boss.
+- **Every 5th floor** is guarded by a **tower boss**. These are 20 bosses of their own that only appear in the tower, each with its own tricks (see [Tower bosses](#tower-bosses)).
 - **Every tower boss** drops a piece of [random loot](#enchanted-gear) – the higher the floor, the better.
 - **Every 10th floor** brings loot one rarity better, plus a **greater ether potion**.
 - You can **leave** the tower at any time. Next visit you continue on the floor where you stopped. You then start with full HP and fully recharged skills, but a visit costs 4 energy again.
@@ -760,9 +760,61 @@ After every tower boss you enter a new, ever more menacing level:
 | 21–25 | 👻 Ghost Halls | Green ghost flames and floating spectres |
 | 26–30 | ⛈️ Storm Spire | On the tower roof, amid lightning and rain |
 | 31–35 | 👁️ Shadow Realm | Red eyes stare from the darkness |
-| from 36 | 🌀 World Rift | Reality shatters in a cosmic vortex |
+| 36–40 | 🌀 World Rift | Reality shatters in a cosmic vortex |
+| 41–45 | ⚙️ Clockwork Chambers | Giant cogs, a swinging pendulum and steam |
+| 46–50 | 📚 Sunken Library | Bookshelves under water, drifting books |
+| 51–55 | 🍄 Mushroom Grotto | Glowing giant mushrooms and floating spores |
+| 56–60 | ❄️ Frozen Crypt | Icicles, frozen coffins and swirling snow |
+| 61–65 | 🌹 Blood Rose Garden | A red moon, thorny hedges and falling petals |
+| 66–70 | 💀 Bone Crypt | Walls full of skulls and flickering candles |
+| 71–75 | 🔨 Sky Forge | A glowing forge above the clouds |
+| 76–80 | 🪞 Hall of Mirrors | Tall mirrors and a swaying chandelier |
+| 81–85 | 🌙 Dreamlands | Floating islands in the twilight |
+| 86–90 | 🔭 Observatory | Telescope, star charts and a turning astrolabe |
+| 91–95 | 💰 Golden Hoard | Mountains of gold, and an eye blinking in the dark |
+| 96–100 | 👑 Tower Crown | The top of the tower at sunrise |
 
-Every level has its **own music and soundscape**: crackling torches, dripping water and rattling chains, singing crystals, rumbling lava, whispering ghosts, rain and thunder, a menacing drone in the Shadow Realm and cosmic sounds in the World Rift. When you enter a new level, a deep gong sounds.
+**After floor 100** the tower starts over, but as a **shadow run**: the same levels, only darker, and the same bosses as stronger **shadow bosses** (e.g. "Shadow Gatekeeper Ironbeard"). Every further hundred makes them stronger still.
+
+Every level has its **own music and soundscape**: crackling torches, dripping water and rattling chains, singing crystals, rumbling lava, whispering ghosts, rain and thunder, a menacing drone in the Shadow Realm and cosmic sounds in the World Rift. When you enter a new level, a deep gong sounds. The levels from floor 41 on sound different too: ticking clockwork, rustling pages, howling icy wind, rattling bones, anvil strikes and twinkling stars.
+
+### Tower bosses
+
+Every tower boss has at least one **trick**. It announces it in the fight log, and there is always an answer to it. Higher up the bosses have two or three tricks.
+
+| Trick | What happens | What helps |
+|---|---|---|
+| ⚡ **Wind-up** | The boss winds up and hits for sure with tremendous force on its next turn. | **Guard** (Iron Stance or an Ironskin Potion) absorbs most of it, a **stun** breaks the blow. |
+| 🐾 **Minions** | The boss calls minions. Your direct hits land on them first, and every minion attacks you. | Multi-hits clear them fast. **Poison, burn and bleeding** still hit the boss. |
+| 🪞 **Mirror shield** | For two turns the boss throws half of your direct damage back at you. | Wait it out: heal, guard, buff. Damage over time is not reflected. |
+| 🌀 **Transformation** | At half HP the boss transforms, heals a little and fights with new, stronger attacks. | Save skills and potions for the second half. |
+| 💀 **Rebirth** | Once per fight the boss rises again at 0 HP. | Don't use everything up too early. |
+| 🔒 **Seal** | A curse locks one of your skills for two turns (never the basic attack). | Use other skills. An **antidote** or **Purification** breaks the seal. |
+
+Some tower bosses are also immune to fire or poison, drain your life or dodge often. All tower bosses you have met appear in the **bestiary** under "Tower bosses".
+
+| Floor | Tower boss | Tricks |
+|---|---|---|
+| 5 | Gatekeeper Ironbeard | ⚡ |
+| 10 | Jailer Grimbold | 🐾 |
+| 15 | Crystal Golem | 🪞, poison-proof |
+| 20 | Magma Wyrm Embermaw | 🌀, fireproof |
+| 25 | The Grey Widow | 🔒, life drain |
+| 30 | Storm Harpy Shriektalon | ⚡, dodges |
+| 35 | Your Shadow Twin | 🪞 |
+| 40 | Riftwarden Xal'Zorr | 🐾 (twice) |
+| 45 | Clockwork Colossus | ⚡ 🪞 |
+| 50 | The Faceless Librarian | 🔒 🐾 |
+| 55 | Spore Mother | 🐾, poison |
+| 60 | Frost Wyrm Glacierfang | 🌀 ⚡ |
+| 65 | Countess of Blood Roses | 🪞, life drain |
+| 70 | Bone King Ossarion | 💀 🐾 |
+| 75 | Forge Titan Anvilor | ⚡ 🌀, fireproof |
+| 80 | The Mirror Queen | 🪞 🔒, dodges |
+| 85 | Nightmare Weaver | 🔒 🌀 |
+| 90 | Stargazer Astralon | ⚡ 🐾 |
+| 95 | Elder Dragon Aurelion | 🌀 ⚡, fireproof |
+| 100 | The Tower Lord | 🐾 🌀 💀 |
 
 ---
 
