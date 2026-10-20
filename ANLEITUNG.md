@@ -740,7 +740,7 @@ Ab dem dritten besiegten Boss steht dir der Endlose Turm offen. Ein Besuch koste
 - Du kämpfst dich **Etage für Etage** nach oben, und die Gegner werden immer stärker.
 - Nach jeder Etage erholst du dich um **20 % deiner LP**. Begrenzte Fähigkeiten füllen sich nicht von selbst wieder auf. Dafür brauchst du **🔷 Äthertränke**.
 - Mit etwas Glück (25 %) findest du nach einer Etage einen **Äthertrank**.
-- **Jede 5. Etage** bewacht ein Boss.
+- **Jede 5. Etage** bewacht ein **Turm-Boss**. Das sind 20 eigene Bosse, die es nur im Turm gibt, jeder mit eigenen Tricks (siehe [Turm-Bosse](#turm-bosse)).
 - **Jeder Turm-Boss** lässt ein Stück [Zufallsbeute](#verzauberte-ausrüstung) fallen, und je höher die Etage, desto besser.
 - **Jede 10. Etage** bringt eine Seltenheit bessere Beute und dazu einen **Großen Äthertrank**.
 - Du kannst den Turm jederzeit **verlassen**. Beim nächsten Besuch geht es auf der Etage weiter, auf der du aufgehört hast. Du startest dann mit vollen LP und voll aufgeladenen Fähigkeiten, ein Besuch kostet aber wieder 4 Energie.
@@ -760,9 +760,61 @@ Nach jedem Turm-Boss betrittst du eine neue, immer bedrohlichere Ebene:
 | 21–25 | 👻 Geisterhallen | Grüne Geisterflammen und schwebende Gespenster |
 | 26–30 | ⛈️ Sturmspitze | Auf dem Turmdach, mitten in Blitz und Regen |
 | 31–35 | 👁️ Schattenreich | Rote Augen starren aus der Finsternis |
-| ab 36 | 🌀 Weltenriss | Die Wirklichkeit zerbricht in einem kosmischen Strudel |
+| 36–40 | 🌀 Weltenriss | Die Wirklichkeit zerbricht in einem kosmischen Strudel |
+| 41–45 | ⚙️ Uhrwerkkammern | Riesige Zahnräder, ein schwingendes Pendel und Dampf |
+| 46–50 | 📚 Versunkene Bibliothek | Bücherregale unter Wasser, treibende Bücher |
+| 51–55 | 🍄 Pilzgrotte | Leuchtende Riesenpilze und schwebende Sporen |
+| 56–60 | ❄️ Gefrorene Gruft | Eiszapfen, vereiste Särge und Schneegestöber |
+| 61–65 | 🌹 Blutrosengarten | Roter Mond, Dornenhecken und fallende Blütenblätter |
+| 66–70 | 💀 Knochengruft | Wände voller Schädel und flackernde Kerzen |
+| 71–75 | 🔨 Himmelsschmiede | Eine glühende Esse über den Wolken |
+| 76–80 | 🪞 Spiegelsaal | Hohe Spiegel und ein schwankender Kronleuchter |
+| 81–85 | 🌙 Traumgefilde | Schwebende Inseln im Zwielicht |
+| 86–90 | 🔭 Sternwarte | Fernrohr, Sternkarten und ein kreisendes Astrolabium |
+| 91–95 | 💰 Goldener Hort | Berge von Gold, und im Dunkeln blinzelt ein Auge |
+| 96–100 | 👑 Turmkrone | Die Turmspitze im Sonnenaufgang |
 
-Jede Ebene hat ihre **eigene Musik und Geräuschkulisse**: knisternde Fackeln, tropfendes Wasser und klirrende Ketten, singende Kristalle, grollende Lava, flüsternde Geister, Regen und Donner, ein bedrohliches Dröhnen im Schattenreich und kosmische Klänge im Weltenriss. Betrittst du eine neue Ebene, ertönt ein tiefer Gong.
+**Nach Etage 100** beginnt der Turm von vorn, aber als **Schatten-Durchlauf**: dieselben Ebenen, nur dunkler, und dieselben Bosse als stärkere **Schatten-Bosse** (z. B. „Torwächter Eisenbart (Schatten)“). Jeder weitere Hunderter macht sie noch stärker.
+
+Jede Ebene hat ihre **eigene Musik und Geräuschkulisse**: knisternde Fackeln, tropfendes Wasser und klirrende Ketten, singende Kristalle, grollende Lava, flüsternde Geister, Regen und Donner, ein bedrohliches Dröhnen im Schattenreich und kosmische Klänge im Weltenriss. Auch die Ebenen ab Etage 41 klingen eigen: tickende Uhrwerke, raschelnde Seiten, heulender Eiswind, klappernde Knochen, Ambossschläge und funkelnde Sterne. Betrittst du eine neue Ebene, ertönt ein tiefer Gong.
+
+### Turm-Bosse
+
+Jeder Turm-Boss hat mindestens einen **Trick**. Er kündigt ihn im Kampftext an, und es gibt immer eine Antwort darauf. Weiter oben haben die Bosse zwei oder drei Tricks.
+
+| Trick | Was passiert | Was hilft |
+|---|---|---|
+| ⚡ **Aufladen** | Der Boss holt weit aus und trifft im nächsten Zug sicher mit gewaltiger Wucht. | **Deckung** (Eiserne Haltung oder Eisenhaut-Trank) fängt den größten Teil ab, eine **Betäubung** bricht den Schlag ab. |
+| 🐾 **Diener** | Der Boss ruft Diener. Deine direkten Treffer gehen zuerst auf sie, und jeder Diener greift dich an. | Mehrfachtreffer räumen sie schnell weg. **Gift, Brand und Blutung** treffen trotzdem den Boss. |
+| 🪞 **Spiegelschild** | Für zwei Züge wirft der Boss die Hälfte deines direkten Schadens auf dich zurück. | Abwarten: heilen, Deckung, Stärkungen. Schaden über Zeit wird nicht gespiegelt. |
+| 🌀 **Verwandlung** | Bei halben LP verwandelt sich der Boss, heilt sich etwas und kämpft mit neuen, stärkeren Angriffen. | Fähigkeiten und Tränke für die zweite Hälfte aufsparen. |
+| 💀 **Wiedergeburt** | Einmal pro Kampf steht der Boss bei 0 LP wieder auf. | Nicht alles zu früh verbrauchen. |
+| 🔒 **Siegel** | Ein Fluch sperrt eine deiner Fähigkeiten für zwei Züge (nie den Grundangriff). | Andere Fähigkeiten nutzen. **Gegengift** oder **Läuterung** brechen das Siegel. |
+
+Manche Turm-Bosse sind außerdem gegen Feuer oder Gift gefeit, saugen dir Leben aus oder weichen oft aus. Alle Turm-Bosse, denen du begegnet bist, stehen im **Bestiarium** unter „Turm-Bosse“.
+
+| Etage | Turm-Boss | Tricks |
+|---|---|---|
+| 5 | Torwächter Eisenbart | ⚡ |
+| 10 | Kerkermeister Grimmbold | 🐾 |
+| 15 | Kristallgolem | 🪞, giftfest |
+| 20 | Magmawurm Glutschlund | 🌀, feuerfest |
+| 25 | Die Graue Witwe | 🔒, Lebensraub |
+| 30 | Sturmharpyie Kreischkralle | ⚡, weicht aus |
+| 35 | Dein Schattenzwilling | 🪞 |
+| 40 | Rissbewahrer Xal'Zorr | 🐾 (zweimal) |
+| 45 | Uhrwerk-Koloss | ⚡ 🪞 |
+| 50 | Der Gesichtslose Bibliothekar | 🔒 🐾 |
+| 55 | Sporenmutter | 🐾, Gift |
+| 60 | Frostwyrm Gletscherzahn | 🌀 ⚡ |
+| 65 | Blutrosen-Gräfin | 🪞, Lebensraub |
+| 70 | Knochenkönig Ossarion | 💀 🐾 |
+| 75 | Schmiedetitan Ambossar | ⚡ 🌀, feuerfest |
+| 80 | Die Spiegelkönigin | 🪞 🔒, weicht aus |
+| 85 | Albtraumweber | 🔒 🌀 |
+| 90 | Sternenseher Astralon | ⚡ 🐾 |
+| 95 | Urdrache Aurelion | 🌀 ⚡, feuerfest |
+| 100 | Der Turmherr | 🐾 🌀 💀 |
 
 ---
 

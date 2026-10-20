@@ -5,8 +5,9 @@ const BST=[
  {k:"mimik",n:MIMIC.n,cat:t("best.cSpec"),mv:MIMIC.mv,svg:()=>mimicSvg(),d:MIMIC.d},
  {k:"wolf",n:WOLF.n,cat:t("best.cSpec"),mv:WOLF.mv,svg:()=>wolfSvg(),d:WOLF.d},
  {k:"rival",n:RIVT.n,cat:t("best.cSpec"),mv:RIVT.mv,svg:()=>knight(3,3,2,true,"#4a148c","#6c3fa0",null,"ss",null),d:RIVT.d},
- ...BOSS.map((b,i)=>({k:"b"+i,n:b.n,cat:t("best.cBoss"),mv:b.mv,svg:()=>bossSvg(i),d:LORE[i][0]}))];
-const bKey=f=>f.mimic?"mimik":f.moon?"wolf":f.rival?"rival":f.boss&&f.bi>=0?"b"+f.bi:"et"+Math.max(0,ET.findIndex(t=>t.t===f.et));
+ ...BOSS.map((b,i)=>({k:"b"+i,n:b.n,cat:t("best.cBoss"),mv:b.mv,svg:()=>bossSvg(i),d:LORE[i][0]})),
+ ...TBOSS.map((b,i)=>({k:"tb"+i,n:b.n,cat:t("best.cTBoss"),mv:b.mv,svg:()=>tbossSvg(i,0),d:b.d}))];
+const bKey=f=>f.mimic?"mimik":f.moon?"wolf":f.rival?"rival":f.tbi>=0?"tb"+f.tbi:f.boss&&f.bi>=0?"b"+f.bi:"et"+Math.max(0,ET.findIndex(t=>t.t===f.et));
 function bSeen(f){const k=bKey(f);S.bst=S.bst||{};(S.bst[k]=S.bst[k]||{s:0,w:0}).s++}
 function bWin(f){const k=bKey(f);S.bst=S.bst||{};(S.bst[k]=S.bst[k]||{s:1,w:0}).w++}
 const EFX=t("best.efx");
