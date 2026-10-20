@@ -53,11 +53,21 @@ b12w:{b:"wide",f:"#f3e5f5",e:"#fff",g:"#ce93d8",fx:()=>FIRE("#8e24aa","#e1bee7")
 t1:{b:"wide",f:"#fff27a",e:"#fff",g:"#ffd54a",fx:()=>SPARK},
 t3:{b:"dagger",f:"#f3a6ff",e:"#fff",g:"#e056fd",fx:()=>CLOCK}};
 const weaponSvg=id=>{const v=VIS[id];return `<g style="filter:drop-shadow(0 0 5px ${v.g})"><path d="${BL[v.b]}" fill="${v.f}" stroke="${v.e}" stroke-width="1.5"/><path d="M107.5 10V92" stroke="${v.e}" stroke-width="1" opacity=".6"/>${v.fx()}</g><circle cx="107.5" cy="97" r="3" fill="${v.g}" stroke="#0006"/>`};
-// Fundstücke (gen): Effekte wie bei den festen verzauberten Waffen – Partikel je gewürfeltem Effekt, Leuchten und Zierde nach Seltenheit
-const GFX={burn:()=>FIRE("#ff5a00","#ffb300"),poison:()=>DRIP,stun:()=>ICE,crit:()=>SPARK,life:()=>SMOKE("#c0392b")+`<path class="dr" d="M100 70q-3 5 0 7q3-2 0-7z" fill="#e53935"/><path class="dr" style="animation-delay:.6s" d="M114 50q-3 5 0 7q3-2 0-7z" fill="#e53935"/>`};
+// Fundstücke (gen): Effekte sitzen am Schlagteil der Waffe (Punkte je Waffenart), je Effekt ein eigener Stil; Leuchten und Zierde wachsen mit der Seltenheit
+const GPTS={schwert:[[107.5,86],[107.5,68],[107.5,50],[107.5,32],[107.5,14]],dolch:[[107.5,92],[107.5,78],[107.5,64],[107.5,54]],axt:[[127,58],[128,49],[122,43],[113,42]],
+ keule:[[107.5,32],[99,42],[116,42],[107.5,52]],helle:[[107.5,4],[107.5,14],[119,16],[120,26]],bogen:[[116,86],[119,105],[116,124],[110,70]],stab:[[107.5,3],[98,12],[117,12],[107.5,22]]};
+const GFX={
+ burn:(x,y,i)=>fm(x,y+2,.75,"#ff5a00",i*.13)+fm(x,y+2,.42,"#ffd54f",i*.13+.06),
+ poison:(x,y,i)=>`<circle class="pl" cx="${x}" cy="${y}" r="3.2" fill="#7ed957" opacity=".5"/><path class="dr" style="animation-delay:${i*.3}s" d="M${x} ${y+2}q-2.6 4.5 0 6.5q2.6-2 0-6.5z" fill="#9be564" stroke="#2e7d32" stroke-width=".6"/>`,
+ stun:(x,y,i)=>`<polygon points="${x},${y-6} ${x+2.6},${y} ${x},${y+4} ${x-2.6},${y}" fill="#e8fbff" stroke="#7fd6ff" stroke-width=".8" transform="rotate(${(i%2?24:-24)} ${x} ${y})"/>${i%2?ST(x+5,y-3,"#fff",i*.2):""}`,
+ crit:(x,y,i)=>ST(x+(i%2?5:-5),y,"#fff6a0",i*.18)+`<circle class="tw" style="animation-delay:${i*.2}s" cx="${x}" cy="${y}" r="1.4" fill="#fff27a"/>`,
+ life:(x,y,i)=>`<ellipse class="fl2" style="animation-delay:${i*.35}s" cx="${x+(i%2?3:-3)}" cy="${y}" rx="1.7" ry="2.6" fill="#e53935"/><circle class="pl" cx="${x}" cy="${y}" r="3" fill="#8e1b1b" opacity=".45"/>`};
 const genGlow=it=>`style="filter:drop-shadow(0 0 ${3+it.r*2.5}px ${it.c})"`;
-const genFx=it=>{const ks=[it.m,...Object.keys(it.fx)].filter((k,i,a)=>it.fx[k]&&a.indexOf(k)===i&&GFX[k]).slice(0,3);
- return ks.map(k=>GFX[k]()).join("")+(it.r>=2?`<path class="glow" d="M107.5 16V88" stroke="${it.c}" stroke-width="2.2" opacity=".85"/>`:"")+(it.r>=3?`<g class="rot"><circle cx="107.5" cy="56" r="17" fill="none" stroke="${it.c}" stroke-width="2" stroke-dasharray="3 4"/></g>`+ST(96,24,"#fff",.2)+ST(120,70,"#fff",.7):"")};
+const genFx=it=>{const pts=GPTS[it.cat]||GPTS.schwert,ks=[it.m,...Object.keys(it.fx)].filter((k,i,a)=>it.fx[k]&&a.indexOf(k)===i&&GFX[k]).slice(0,3);
+ const cx=pts.reduce((a,p)=>a+p[0],0)/pts.length,cy=pts.reduce((a,p)=>a+p[1],0)/pts.length;
+ return ks.map((k,j)=>pts.map((p,i)=>(i+j)%ks.length===0||ks.length===1?GFX[k](p[0],p[1],i):"").join("")).join("")
+  +(it.r>=2?`<circle class="pl" cx="${cx}" cy="${cy}" r="${it.r>=3?30:24}" fill="${it.c}" opacity=".22"/>`+(it.cat==="schwert"||it.cat==="dolch"?`<path class="glow" d="M107.5 ${it.cat==="dolch"?56:16}V${it.cat==="dolch"?94:88}" stroke="${it.c}" stroke-width="2" opacity=".85"/>`:""):"")
+  +(it.r>=3?`<g class="rot"><circle cx="${cx}" cy="${cy}" r="19" fill="none" stroke="${it.c}" stroke-width="1.8" stroke-dasharray="3 4"/></g>`+ST(cx-14,cy-16,"#fff",.2)+ST(cx+15,cy+14,"#fff",.7):"")};
 const AV={
 mo:b=>b?`<circle class="pl" cx="61" cy="88" r="64" fill="#cfd8ff"/>`:`<path d="M60 68a12 12 0 1 0 9 20a9 9 0 1 1-9-20z" fill="#eef"/>`+ST(82,66,"#fff",0)+ST(40,100,"#fff",.6),
 wp:b=>b?"":`<ellipse cx="34" cy="64" rx="13" ry="9" fill="#6bbf6b" stroke="#0004"/><ellipse cx="88" cy="64" rx="13" ry="9" fill="#6bbf6b" stroke="#0004"/><polygon points="26,60 34,46 40,60" fill="#8fe08f"/><polygon points="82,60 88,46 96,60" fill="#8fe08f"/>`,
