@@ -69,6 +69,111 @@ ph=>BSV(`<g class="rot" style="transform-box:fill-box;transform-origin:center">$
  ${[[52,58],[72,58],[62,64]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="1.5" fill="#b388ff"/>`).join("")}</g>
  ${ST(20,30,"#fff",0)}${ST(106,26,"#e040fb",.5)}${ST(18,130,"#b388ff",1)}`,40)];
 const tbossSvg=(i,ph)=>TBOSSV[i]?TBOSSV[i](ph?1:0):knight(4,4,3,true,TBOSS[i].tint);
+// ---- Figuren der Turm-Bosse 9–20 ----
+// Wurm/Drache: Körper als dicke Linie, b Körper, g Glühen, sc Schuppen
+const WYRM=(b,g,sc,head)=>`<g class="br"><path d="M30 148Q20 110 48 96Q76 82 62 54Q54 36 72 22" stroke="#000" stroke-width="30" fill="none" stroke-linecap="round" opacity=".35"/>
+ <path d="M30 148Q20 110 48 96Q76 82 62 54Q54 36 72 22" stroke="${b}" stroke-width="26" fill="none" stroke-linecap="round"/>
+ ${[[34,126],[40,108],[58,90],[64,70],[60,50]].map(p=>`<path d="M${p[0]-7} ${p[1]}l7-5 7 5" stroke="${sc}" stroke-width="2" fill="none"/>`).join("")}
+ <path d="M58 26Q66 4 92 14Q104 22 96 34L74 38Z" fill="${b}" stroke="#000"/><path d="M92 30L106 40 88 40Z" fill="#111"/>
+ ${[94,99,103].map(x=>`<path d="M${x} 33l1.6 5 1.6-5" fill="#fff"/>`).join("")}<circle class="glow" cx="82" cy="20" r="3.5" fill="${g}" style="filter:drop-shadow(0 0 4px ${g})"/>${head||""}</g>`;
+TBOSSV.push(
+// 9 Uhrwerk-Koloss
+ph=>BSV(`<rect x="42" y="110" width="16" height="36" rx="3" fill="#8d6e3a" stroke="#3e2c10"/><rect x="66" y="110" width="16" height="36" rx="3" fill="#8d6e3a" stroke="#3e2c10"/>
+ <path d="M38 144h24v8h-26zM62 144h24l2 8h-26z" fill="#5d4a2c"/>
+ <g class="br">${limbB("M34 66Q20 86 24 108","#a1793a",10)}<rect x="16" y="104" width="16" height="12" rx="3" fill="#5d4a2c"/>
+ <rect x="32" y="56" width="60" height="58" rx="8" fill="#b8860b" stroke="#3e2c10" stroke-width="2"/>${[40,84].map(x=>[62,104].map(y=>`<circle cx="${x}" cy="${y}" r="1.8" fill="#3e2c10"/>`).join("")).join("")}
+ ${gear(62,84,16,8,"#ffd54f",4)}<path d="M92 66l14-10M104 52l6 8" stroke="#8d6e3a" stroke-width="4"/>
+ <rect x="44" y="20" width="36" height="34" rx="6" fill="#a1793a" stroke="#3e2c10" stroke-width="2"/><rect class="glow" x="48" y="32" width="28" height="7" rx="3" fill="#ff6d00" style="filter:drop-shadow(0 0 4px #ff6d00)"/>
+ <path d="M50 46h24" stroke="#3e2c10" stroke-width="2" stroke-dasharray="3 2"/><path d="M62 20V10" stroke="#3e2c10" stroke-width="3"/><circle class="glow" cx="62" cy="9" r="3" fill="#ff6d00"/>
+ ${limbB("M90 66Q104 84 104 104","#a1793a",10)}<path d="M96 104h18v14h-18z" fill="#5d4a2c" stroke="#3e2c10"/><path d="M100 118v6M110 118v6" stroke="#5d4a2c" stroke-width="3"/></g>
+ <ellipse class="fl2" cx="30" cy="40" rx="6" ry="4" fill="#eee" opacity=".4"/>`,44),
+// 10 Der Gesichtslose Bibliothekar
+ph=>BSV(`<g class="hov"><path class="wv" d="M36 62Q24 120 30 150H94Q100 120 88 62Z" fill="#4e342e" stroke="#1b0f0a"/>
+ <path d="M54 62v88M70 62v88" stroke="#3e2723"/><path d="M36 62Q62 54 88 62L84 76Q62 70 40 76Z" fill="#6d4c41"/>
+ ${limbB("M40 70Q28 86 36 100","#4e342e",8)}${limbB("M84 70Q98 82 92 100","#4e342e",8)}
+ <path d="M30 98l32-6 32 6v22l-32-6-32 6z" fill="#efe3c6" stroke="#5d4037"/><path d="M62 92v22" stroke="#5d4037"/>${[0,1,2].map(i=>`<path d="M${36+i*2} ${104+i*4}h20M${68+i*2} ${104+i*4}h20" stroke="#8d6e63" stroke-width=".8"/>`).join("")}
+ <circle class="glow" cx="62" cy="104" r="16" fill="#ffca28" opacity=".25"/>
+ <path d="M46 52Q44 18 62 16Q80 18 78 52Q70 62 62 62Q54 62 46 52Z" fill="#3e2723"/><ellipse cx="62" cy="42" rx="12" ry="15" fill="#e8e0d0"/><path d="M54 38q8 3 16 0" stroke="#d6cbb6" fill="none"/></g>
+ ${[[18,40,0],[104,30,.6],[110,96,1.2],[14,110,.9]].map(b=>`<g class="hov" style="animation-delay:${b[2]}s"><path d="M${b[0]-8} ${b[1]}l8-4 8 4v10l-8-4-8 4z" fill="${["#8b1e1e","#1e5b8b","#2e7d32","#6d4c41"][Math.round(b[2]*3)%4]}" stroke="#111"/></g>`).join("")}`,38),
+// 11 Sporenmutter
+ph=>BSV(`<path d="M30 150q6-24 20-30M94 150q-6-24-20-30M50 150q4-16 10-24M74 150q-4-16-10-24" stroke="#6d4c41" stroke-width="5" fill="none" stroke-linecap="round"/>
+ <g class="br"><path d="M44 130Q40 90 50 66H74Q84 90 80 130Z" fill="#e8e0c8" stroke="#8d8070"/>
+ <path d="M48 76q-24 6-30 30M76 76q24 4 32 26" stroke="#7cb342" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="18" cy="108" r="5" fill="#aed581"/><circle cx="108" cy="104" r="5" fill="#aed581"/>
+ <circle class="glow" cx="55" cy="96" r="3" fill="#ccff90"/><circle class="glow" cx="69" cy="96" r="3" fill="#ccff90"/><path d="M56 108q6 4 12 0" stroke="#5d4037" fill="none"/>
+ <path d="M14 70Q20 18 62 14Q104 18 110 70Q62 58 14 70Z" fill="#8bc34a" stroke="#33691e" stroke-width="2"/>
+ ${[[34,40,6],[62,28,7],[88,42,5],[50,56,4],[78,58,4]].map(c=>`<circle cx="${c[0]}" cy="${c[1]}" r="${c[2]}" fill="#f1f8e9" opacity=".8"/>`).join("")}
+ <path d="M20 68q8 6 14 0q8 6 14 0q8 6 14 0q8 6 14 0q8 6 14 0q8 6 14 0" stroke="#558b2f" fill="none"/></g>
+ ${DOTS(8,"#ccff90","fl2",150,1.4).replace(/cx="(\d+)"/g,(m,x)=>`cx="${10+x%110}"`)}`,46),
+// 12 Frostwyrm Gletscherzahn (Phase 2: Panzer gesprengt)
+ph=>BSV(`<ellipse cx="62" cy="150" rx="50" ry="7" fill="#b3e5fc" opacity=".6"/>${WYRM(ph?"#4fc3f7":"#90a4ae",ph?"#fff":"#4fc3f7",ph?"#e1f5fe":"#546e7a",
+ `<path d="M60 18l-8-14 12 8zM70 12l0-12 8 10z" fill="#e1f5fe" stroke="#4fc3f7"/>`+(ph?`<path d="M18 80Q4 50 28 40Q24 62 40 70Z" fill="#b3e5fc" opacity=".8" stroke="#e1f5fe"/>`+ICE:`<path d="M40 100l-14-6 4 14zM56 80l-12-12 0 14zM66 60l-6-14 10 6z" fill="#cfd8dc" stroke="#546e7a"/>`))}
+ ${[[100,44,0],[20,30,.5]].map(p=>`<ellipse class="fl2" style="animation-delay:${p[2]}s" cx="${p[0]}" cy="${p[1]}" rx="6" ry="4" fill="#e1f5fe" opacity=".6"/>`).join("")}`,50),
+// 13 Blutrosen-Gräfin
+ph=>BSV(`<path d="M30 150Q38 100 46 72H78Q86 100 94 150Z" fill="#880e4f" stroke="#3a0020"/><path d="M38 150Q46 110 54 80M86 150Q78 110 70 80" stroke="#ad1457" fill="none"/>
+ ${[[40,140],[60,146],[84,140],[50,124],[74,122]].map(r=>`<circle cx="${r[0]}" cy="${r[1]}" r="4" fill="#e91e63"/><circle cx="${r[0]}" cy="${r[1]}" r="2" fill="#880e4f"/>`).join("")}
+ <g class="br"><path d="M46 72Q62 64 78 72L76 90Q62 96 48 90Z" fill="#c2185b" stroke="#3a0020"/>
+ ${limbB("M48 76Q34 90 30 104","#f3d6d6",5)}${limbB("M76 76Q92 82 100 92","#f3d6d6",5)}
+ <path class="sway" d="M100 92Q118 110 108 132Q100 146 112 154" stroke="#33691e" stroke-width="2.5" fill="none"/>${[[106,104],[114,120],[106,140]].map(p=>`<path d="M${p[0]} ${p[1]}l4-2" stroke="#33691e" stroke-width="1.5"/>`).join("")}
+ <rect x="58" y="58" width="8" height="10" fill="#f3d6d6"/><ellipse cx="62" cy="46" rx="12" ry="14" fill="#f3d6d6" stroke="#0003"/>
+ <path d="M48 46Q46 20 62 20Q78 20 76 46Q80 66 84 74Q70 56 62 58Q54 56 40 74Q44 66 48 46Z" fill="#1a0008"/><ellipse cx="62" cy="46" rx="11" ry="13" fill="#f3d6d6"/>
+ <path d="M56 44l3 1M65 45l3-1" stroke="#000" stroke-width="1.5"/><circle class="glow" cx="57" cy="46" r="1.3" fill="#ff1744"/><circle class="glow" cx="67" cy="46" r="1.3" fill="#ff1744"/><path d="M59 53q3 2 6 0" stroke="#b71c1c" stroke-width="2" fill="none"/>
+ ${[50,58,66,74].map((x,i)=>`<circle cx="${x}" cy="${24-(i%3?2:0)}" r="4" fill="#e91e63" stroke="#880e4f"/>`).join("")}</g>
+ ${Array.from({length:4},(_,i)=>`<ellipse class="dr" style="animation-delay:${i*.35}s;animation-duration:2.6s" cx="${24+i*24}" cy="${20+i*8}" rx="2.5" ry="1.6" fill="#e91e63"/>`).join("")}`,38),
+// 14 Knochenkönig Ossarion
+ph=>BSV(`<path class="wv" d="M42 62Q20 110 26 150L56 124Z" fill="#311b92" stroke="#0006"/>
+ <path d="M48 110l-4 36M76 110l4 36" stroke="#e0e0e0" stroke-width="6" stroke-linecap="round"/><path d="M38 146h12M74 146h12" stroke="#e0e0e0" stroke-width="5" stroke-linecap="round"/>
+ <g class="br"><path d="M46 60h32l-2 46H48Z" fill="none"/>${[64,72,80,88].map(y=>`<path d="M46 ${y}q16 4 32 0" stroke="#e0e0e0" stroke-width="3" fill="none"/>`).join("")}<path d="M62 58v50" stroke="#e0e0e0" stroke-width="4"/>
+ <path d="M48 104q14 8 28 0" stroke="#e0e0e0" stroke-width="4" fill="none"/>
+ ${limbB("M46 62Q34 84 38 102","#e0e0e0",4)}${limbB("M78 62Q94 76 98 92","#e0e0e0",4)}
+ <path d="M96 94l10-40 8 2-6 40z" fill="#d7ccc8" stroke="#5d4037"/><circle cx="110" cy="50" r="9" fill="#e0e0e0" stroke="#5d4037"/><circle cx="107" cy="49" r="2" fill="#333"/><circle cx="113" cy="49" r="2" fill="#333"/>
+ <path d="M48 46Q46 22 62 20Q78 22 76 46Q74 58 62 60Q50 58 48 46Z" fill="#eeeeee" stroke="#9e9e9e"/>
+ <ellipse cx="55" cy="40" rx="4.5" ry="5" fill="#111"/><ellipse cx="69" cy="40" rx="4.5" ry="5" fill="#111"/><circle class="glow" cx="55" cy="41" r="1.8" fill="#69f0ae"/><circle class="glow" cx="69" cy="41" r="1.8" fill="#69f0ae"/>
+ <path d="M60 48l2-4 2 4z" fill="#111"/><path d="M54 54h16M57 52v4M62 52v4M67 52v4" stroke="#555"/>
+ <path d="M46 24l2-14 7 8 7-12 7 12 7-8 2 14z" fill="#ffd54f" stroke="#b8860b"/><circle cx="62" cy="14" r="2.4" fill="#e53935"/></g>`,40),
+// 15 Schmiedetitan Ambossar (Phase 2: Rüstung glüht)
+ph=>{const a=ph?"#ff8f00":"#5d4037",l=ph?"#fff176":"#ff6f00";return BSV(`${ph?`<circle class="pl" cx="62" cy="86" r="62" fill="#ff6d00" opacity=".3"/>`:""}<rect x="40" y="112" width="18" height="34" rx="3" fill="${a}" stroke="#1b0f0a"/><rect x="66" y="112" width="18" height="34" rx="3" fill="${a}" stroke="#1b0f0a"/>
+ <path d="M36 144h24v8h-26zM64 144h24l2 8h-26z" fill="#3e2723"/>
+ <g class="br">${limbB("M32 64Q18 88 24 108","#8d6e63",13)}<circle cx="24" cy="110" r="8" fill="#a1887f" stroke="#0005"/>
+ <path d="M28 58Q62 44 96 58L90 116H34Z" fill="${a}" stroke="#1b0f0a" stroke-width="2"/><path class="tw" d="M44 70l10 12-6 10 12 14M80 66l-8 14 8 8" stroke="${l}" stroke-width="2.5" fill="none" style="filter:drop-shadow(0 0 3px ${l})"/>
+ <rect x="32" y="104" width="60" height="8" fill="#3e2723"/><rect x="56" y="102" width="12" height="12" fill="#c9a227" stroke="#3e2723"/>
+ <circle cx="62" cy="36" r="17" fill="#a1887f" stroke="#0005"/><path d="M45 38Q46 66 62 72Q78 66 79 38Q72 50 62 50Q52 50 45 38Z" fill="${l}" style="filter:drop-shadow(0 0 4px ${l})"/>${fm(55,62,.5,"#ffd54f",0)}${fm(69,62,.5,"#ffd54f",.2)}
+ <path d="M50 30l7 3M74 30l-7 3" stroke="#3e2723" stroke-width="2.5"/><circle class="glow" cx="55" cy="35" r="2" fill="${l}"/><circle class="glow" cx="69" cy="35" r="2" fill="${l}"/>
+ ${limbB("M92 62Q104 76 102 96","#8d6e63",13)}<path d="M98 100V30" stroke="#5d4037" stroke-width="6"/><rect x="82" y="12" width="34" height="24" rx="3" fill="#455a64" stroke="#1c262b" stroke-width="2"/><circle cx="102" cy="98" r="8" fill="#a1887f" stroke="#0005"/>
+ ${ph?fm(90,14,.8,"#ff6d00",0)+fm(108,14,.8,"#ffd54f",.2):""}</g>`,46)},
+// 16 Die Spiegelkönigin
+ph=>BSV(`<path d="M32 150Q40 100 48 70H76Q84 100 92 150Z" fill="#b0bec5" stroke="#546e7a"/>${[[44,130],[62,112],[80,132],[54,92],[70,96]].map(p=>`<polygon points="${p[0]},${p[1]-8} ${p[0]+6},${p[1]} ${p[0]},${p[1]+8} ${p[0]-6},${p[1]}" fill="#e3f2fd" stroke="#90a4ae"/>`).join("")}
+ <g class="br"><path d="M48 70Q62 62 76 70L74 88Q62 94 50 88Z" fill="#cfd8dc" stroke="#546e7a"/>${limbB("M50 74Q38 88 34 100","#eceff1",5)}${limbB("M74 74Q86 82 92 90","#eceff1",5)}
+ <ellipse cx="102" cy="84" rx="16" ry="22" fill="#c9a227" stroke="#5d4a2c" stroke-width="2"/><ellipse cx="102" cy="84" rx="12" ry="18" fill="#9fa8da"/><path class="pl" d="M96 72l8-4 2 4-8 16z" fill="#fff" opacity=".8"/>
+ <ellipse cx="62" cy="46" rx="12" ry="15" fill="#eceff1" stroke="#90a4ae"/><path d="M56 44h4M64 44h4" stroke="#455a64" stroke-width="1.6"/><circle class="glow" cx="58" cy="45" r="1.3" fill="#40c4ff"/><circle class="glow" cx="66" cy="45" r="1.3" fill="#40c4ff"/>
+ <path d="M50 30l4-16 6 10 2-14 2 14 6-10 4 16z" fill="#e3f2fd" stroke="#90a4ae"/>${ST(62,12,"#fff",0)}${ST(30,30,"#e3f2fd",.4)}${ST(20,90,"#fff",.8)}</g>`,38),
+// 17 Albtraumweber (Phase 2: Maske zerbrochen, viele Augen)
+ph=>BSV(`${[[-1,0],[1,0],[-1,1],[1,1]].map(([s,k])=>`<path class="sway" style="animation-delay:${k*.4}s" d="M${62+s*14} ${96+k*8}Q${62+s*46} ${70+k*16} ${62+s*52} ${148-k*4}" stroke="#1a0f2a" stroke-width="5" fill="none" stroke-linecap="round"/>`).join("")}
+ <path d="M20 20L62 70L104 20M10 70H114M30 120L62 70L94 120" stroke="#e1bee7" stroke-width=".8" fill="none" opacity=".5"/>
+ <g class="br"><ellipse cx="62" cy="104" rx="26" ry="22" fill="#2a1540" stroke="#7c4dff"/><path d="M48 98q14 10 28 0" stroke="#7c4dff" fill="none"/>
+ <ellipse cx="62" cy="64" rx="18" ry="20" fill="#311b4a" stroke="#7c4dff"/>
+ <path d="M48 50Q62 36 76 50Q78 70 62 80Q46 70 48 50Z" fill="${ph?"#4a148c":"#f3e5f5"}" stroke="#7c4dff"/>
+ ${ph?[[55,56],[69,56],[62,48],[56,66],[68,66],[62,72]].map(p=>`<circle class="glow" cx="${p[0]}" cy="${p[1]}" r="2.6" fill="#ff1744"/>`).join("")+`<path d="M62 40l-4 14 6 8-4 12" stroke="#000" stroke-width="2" fill="none"/>`:`<path d="M54 56q3-3 6 0M64 56q3-3 6 0" stroke="#311b4a" stroke-width="2" fill="none"/><path d="M56 68q6 4 12 0" stroke="#311b4a" fill="none"/>`}</g>
+ ${SMOKE(ph?"#ff1744":"#b39ddb")}`,46),
+// 18 Sternenseher Astralon
+ph=>BSV(`<g class="rot" style="animation-duration:14s"><ellipse cx="62" cy="80" rx="56" ry="56" fill="none" stroke="#c9a227" stroke-width="1.5" stroke-dasharray="6 6" opacity=".7"/></g>
+ <path class="wv" d="M38 64Q26 120 30 150H94Q98 120 86 64Z" fill="#1a237e" stroke="#0d1240"/>${[[44,90],[76,104],[56,132],[82,138],[50,116]].map((p,i)=>ST(p[0],p[1],"#fff59d",i*.3)).join("")}
+ <g class="br">${limbB("M40 70Q28 88 32 104","#1a237e",8)}<circle cx="32" cy="106" r="5" fill="#e0c09a"/>
+ <circle cx="62" cy="44" r="14" fill="#e0c09a" stroke="#0004"/><path d="M48 46Q50 80 62 86Q74 80 76 46Q70 56 62 56Q54 56 48 46Z" fill="#eceff1"/>
+ <path d="M54 42h5M65 42h5" stroke="#555" stroke-width="2"/><path d="M40 36Q62 -10 84 36Z" fill="#283593" stroke="#0d1240"/>${ST(62,18,"#fff59d",.2)}
+ ${limbB("M84 70Q96 80 98 96","#1a237e",8)}<path d="M100 150V20" stroke="#8d6e63" stroke-width="4"/><circle cx="100" cy="98" r="5" fill="#e0c09a"/>
+ <circle class="glow" cx="100" cy="16" r="9" fill="#fff59d" style="filter:drop-shadow(0 0 6px #fff59d)"/>${ST(100,16,"#fff",0)}</g>`,40),
+// 19 Urdrache Aurelion (Phase 2: Flügel gespreizt, Feuer)
+ph=>BSV(`${ph?`<g class="flap"><path d="M40 70Q-4 20 4 90Q16 76 22 92Q30 78 40 92Z" fill="#ffb300" stroke="#8d6e00"/></g><g class="flap r"><path d="M84 70Q128 24 124 90Q112 76 106 92Q98 78 88 92Z" fill="#ffb300" stroke="#8d6e00"/></g>`:`<path d="M44 80Q20 60 18 100L40 96Z" fill="#c9a227" stroke="#8d6e00"/>`}
+ <ellipse cx="62" cy="150" rx="50" ry="8" fill="#ffd54f" opacity=".5"/>${Array.from({length:8},(_,i)=>`<ellipse cx="${20+i*12}" cy="${148+(i%2)*3}" rx="5" ry="2.5" fill="#ffd54f" stroke="#8d6e00"/>`).join("")}
+ ${WYRM("#d4a017","#ff1744","#8d6e00",`<path d="M60 16l-10-14 14 8zM70 10l0-12 10 10z" fill="#8d6e00"/>`+(ph?fm(110,44,.9,"#ff6d00",0)+fm(116,52,.7,"#ffd54f",.15):""))}`,50),
+// 20 Der Turmherr (Phase 2: entfesselt, Krone in Flammen)
+ph=>BSV(`${ph?`<circle class="pl" cx="62" cy="80" r="64" fill="#7c4dff" opacity=".35"/>`:""}<path class="wv" d="M38 60Q10 110 18 152L58 128Z" fill="#4a148c" stroke="#0006"/><path class="wv" d="M86 60Q114 110 106 152L66 128Z" fill="#4a148c" stroke="#0006" style="animation-delay:.4s"/>
+ <rect x="44" y="108" width="15" height="38" rx="3" fill="#37474f"/><rect x="65" y="108" width="15" height="38" rx="3" fill="#37474f"/><path d="M40 144h22v8h-24zM62 144h22l2 8h-24z" fill="#1c262b"/>
+ <g class="br">${limbB("M38 64Q24 86 30 104","#455a64",10)}<circle cx="30" cy="106" r="6" fill="#90a4ae"/>
+ <path d="M34 58Q62 46 90 58L86 110H38Z" fill="#455a64" stroke="#1c262b" stroke-width="2"/><path d="M62 58v52M40 84h44" stroke="#c9a227" stroke-width="2"/><circle cx="62" cy="80" r="8" fill="#c9a227" stroke="#5d4a2c"/><circle class="glow" cx="62" cy="80" r="4" fill="${ph?"#ff1744":"#7c4dff"}"/>
+ <path d="M44 40Q44 20 62 18Q80 20 80 40V54H44Z" fill="#37474f" stroke="#1c262b" stroke-width="2"/><rect class="glow" x="50" y="36" width="24" height="5" rx="2" fill="${ph?"#ff1744":"#b388ff"}" style="filter:drop-shadow(0 0 4px ${ph?"#ff1744":"#7c4dff"})"/>
+ <path d="M42 22l4-16 8 10 8-14 8 14 8-10 4 16z" fill="#ffd54f" stroke="#b8860b"/>${[50,62,74].map(x=>`<circle cx="${x}" cy="16" r="2" fill="#e53935"/>`).join("")}${ph?fm(50,8,.6,"#7c4dff",0)+fm(62,4,.7,"#e040fb",.15)+fm(74,8,.6,"#7c4dff",.3):""}
+ ${limbB("M86 64Q100 80 100 98","#455a64",10)}<path d="M100 150V24" stroke="#c9a227" stroke-width="4"/><circle cx="100" cy="100" r="6" fill="#90a4ae"/><circle class="glow" cx="100" cy="20" r="8" fill="${ph?"#ff1744":"#7c4dff"}" style="filter:drop-shadow(0 0 6px #e040fb)"/>${ST(100,20,"#fff",0)}</g>`,44));
 // ---- Turm-Ebenen 9–20 (Etagen 41–100), Stil wie TBGS in art.js ----
 const gear=(x,y,r,n,c,d,rev)=>`<g class="rot" style="animation-duration:${d}s;${rev?"animation-direction:reverse":""}"><polygon points="${Array.from({length:n*4},(_,k)=>{const a=k*Math.PI/(n*2),q=k%4<2?r:r*.82;return (x+q*Math.cos(a)).toFixed(1)+","+(y+q*Math.sin(a)).toFixed(1)}).join(" ")}" fill="${c}" stroke="#0006"/><circle cx="${x}" cy="${y}" r="${r*.55}" fill="none" stroke="#0004" stroke-width="${r*.12}"/><circle cx="${x}" cy="${y}" r="${r*.18}" fill="#1a1208"/></g>`;
 const DOTS=(n,c,cls,ymax,sz)=>Array.from({length:n},(_,i)=>`<circle class="${cls}" style="animation-delay:${(i*.37)%2.4}s" cx="${(i*89+31)%600}" cy="${(i*53+17)%(ymax||180)}" r="${sz?sz*(i%3?1:1.6):i%3?1:1.8}" fill="${c}"/>`).join("");
