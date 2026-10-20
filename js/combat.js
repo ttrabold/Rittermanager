@@ -12,7 +12,7 @@ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 // Gegner: Geschlecht, Ausrüstung je Stufe und – ab Stufe 6 – verzauberte Gegenstände mit echter Wirkung
 function mk(L,t,boss){
  const sc=1+.08*S.star,hp=Math.round((40+L*12)*t.hp*sc);
- const e={lvl:L,name:boss?t.n:"",ehp:hp,emax:hp,atk:(3+L*2)*t.atk*sc,def:Math.floor(L*.8*t.def),tier:Math.min(4,Math.floor(L/2)),tint:t.tint||"#6b2d8f",mv:t.mv,boss:!!boss,enr:false,et:t.t||"Boss",bi:boss?BOSS.indexOf(t):-1};
+ const e={lvl:L,name:boss?t.n:"",ehp:hp,emax:hp,atk:(3+L*2)*t.atk*sc,def:Math.floor(L*.8*t.def),tier:Math.min(4,Math.floor(L/2)),tint:t.tint||"#6b2d8f",mv:t.mv,boss:!!boss,enr:false,et:t.t||"Boss",bi:boss?BOSS.indexOf(t):-1,tbi:boss?TBOSS.indexOf(t):-1,tr:t.tr||{}};
  if(!boss){const fem=Math.random()<.4,bt=e.tier,light=t.t==="Räuber"||t.t==="Bogenschütze";
   let at=clamp(bt-rnd(0,2),0,light?2:4);if(t.t==="Panzerritter")at=Math.max(at,Math.min(4,bt));
   const CATS={Ritter:["schwert","schwert","helle","axt"],Räuber:["dolch","axt","keule"],Feuerritter:["schwert","axt"],Panzerritter:["keule","helle"],Bogenschütze:["bogen"],Magier:["stab"]}[t.t]||["schwert"],wcat=CATS[rnd(0,CATS.length-1)];
@@ -34,7 +34,7 @@ function setup(e,tour,keep){
 function startFight(){if(S.en<2)return;S.en-=2;if(evMaybe())return;setup(mk(Math.max(1,lvl()+rnd(-1,1)),ET[rnd(0,ET.length-1)]))}
 function startTour(){const fee=tourFee();if(bagFull()||S.en<4||S.gold<fee)return;S.en-=4;S.gold-=fee;setup(mk(Math.max(1,lvl()),ET[rnd(0,ET.length-1)]),1)}
 function startTower(){if(bagFull()||!S.tunl||S.en<4)return;S.en-=4;towerFloor(S.tcur||1)}
-function towerFloor(n,keep){if(n>1&&(n-1)%5===0)setTimeout(()=>sfx("gong"),300);const b=n%5===0,bs=BOSS[(n/5-1)%BOSS.length],e=b?mk(bs.L+Math.floor(n/3),bs,true):mk(lvl()+Math.floor(n/2),ET[rnd(0,ET.length-1)]);e.tower=n;setup(e,0,keep)}
+function towerFloor(n,keep){if(n>1&&(n-1)%5===0)setTimeout(()=>sfx("gong"),300);let e;if(n%5===0){const {i,c}=tbossAt(n),bs=TBOSS[i];e=mk(bs.L+Math.floor(n/3)+10*c,bs,true);e.cyc=c;if(c)e.name=t("tw.shadow")+e.name}else e=mk(lvl()+Math.floor(n/2),ET[rnd(0,ET.length-1)]);e.tower=n;setup(e,0,keep)}
 function nextTour(){if(F.tower)return towerFloor(F.tower+1,{php:Math.min(F.pmax,F.php+Math.round(F.pmax*.2)),pp:F.pp});const k={php:Math.min(F.pmax,F.php+Math.round(F.pmax*.3)),pp:F.pp},r=F.tour+1;setup(mk(Math.max(1,lvl()+r-1),ET[rnd(0,ET.length-1)]),r,k)}
 function startBoss(){const b=BOSS[S.boss];if(bagFull()||!b||S.en<3||S.ruhm<b.req)return;S.en-=3;setup(mk(b.L,b,true))}
 function leaveTower(){F.over=true;msg=t("tw.leave",S.tcur,S.tbest);save();home()}
@@ -49,7 +49,7 @@ function fight(){if(QUICK)return;
  const dm=(w)=>{const v=w==="e"?f.hE:f.hP;return v?`<span class="dmg ${w==="p"?"late":""}" style="left:30px">-${v}</span>`:""};
  app.innerHTML=`<div class="scene fs">${f.tower?TBG(ttier(f.tower)):BG}
  <div class="box eb"><b>${f.name}</b> <span class="mut">${t("cb.lv")}${f.lvl}${f.tour?" · "+t("hg.tour")+" "+f.tour+"/3":""}${f.tower?" · "+t("tw.floor")+" "+f.tower:""}${f.boss?" · "+t("cb.boss"):""}</span> ${ic(f.eb,{bleed:"🩸",burn:"🔥",poison:"☠️",stun:"💫",guard:"🛡️",weak:"😨"})}${bar(f.ehp,f.emax,"#c0392b")}<span class="mut">${Math.max(0,f.ehp)}/${f.emax}</span></div>
- <div class="es ${f.boss?"big":""} ${f.hE?"hit":""}">${dm("e")}<div class="lg ${f.lE?"lungeE":""}"><div class="kw ${f.ko==="e"?(f.boss?"koB":"koE"):f.ko==="p"?"cheerE":""}">${f.moon?wolfSvg():f.mimic?mimicSvg():f.boss&&f.bi>=0?bossSvg(f.bi):enemyKn(f)}</div></div></div>
+ <div class="es ${f.boss?"big":""} ${f.hE?"hit":""}">${dm("e")}<div class="lg ${f.lE?"lungeE":""}"><div class="kw ${f.ko==="e"?(f.boss?"koB":"koE"):f.ko==="p"?"cheerE":""}">${f.moon?wolfSvg():f.mimic?mimicSvg():f.tbi>=0?(f.cyc?`<div style="filter:brightness(.55) saturate(1.4)">${tbossSvg(f.tbi,f.ts&&f.ts.ph)}</div>`:tbossSvg(f.tbi,f.ts&&f.ts.ph)):f.boss&&f.bi>=0?bossSvg(f.bi):enemyKn(f)}</div></div></div>
  <div class="ps ${f.hP?"hit late":""}">${dm("p")}<div class="lg ${f.lP?"lungeP":""}"><div class="kw ${f.ko==="p"?"koP":f.ko==="e"?"cheer":""}">${pk()}</div></div>${S.cmp?`<div class="fcmp">${compSvg(S.cmp,44)}</div>`:""}</div>
  <div class="box pb"><b>${S.name}</b> <span class="mut">${t("cb.lv")}${lvl()}</span>${tl()} ${ic(f.pb,{buff:"💥",guard:"🛡️",poison:"☠️",burn:"🔥",stun:"💫",regen:"💗"})}${bar(f.php,f.pmax,"#2e8b57")}<span class="mut">${Math.max(0,f.php)}/${f.pmax}</span></div>${VXH(f)}</div>
  <div class="msg">${f.log}</div><div class="grid">${ui}</div>`;
