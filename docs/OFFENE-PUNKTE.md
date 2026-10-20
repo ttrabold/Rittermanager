@@ -1,46 +1,12 @@
 # Offene Punkte
 
-Stand: 19.10.2026, nach dem Update „Übersetzungen (Deutsch/Englisch)“ (live mit Version 0.1.0; davor intern v14–v18).
+Die offenen Punkte stehen als GitHub Issues: https://github.com/ttrabold/Rittermanager/issues
 
-## Zufallsbeute – Feinschliff
+Labels: `zufallsbeute`, `i18n`, `balance`, `idee`, dazu `bug`, `enhancement`, `documentation`.
 
-Aus der unabhängigen Prüfung, bewusst aufgeschoben:
-
-- [ ] **Namenszusatz und Leuchtfarbe** richten sich nach dem ersten gewürfelten Effekt statt nach dem stärksten (`js/loot.js`, `genItem`).
-- [ ] **Basisnamen unter Stufe 10** passen nicht zum Wert, zum Beispiel „Holzschwert +16“. Ein „Holzschild +5“ ist besser als das Turmschild (+4).
-- [ ] **Ritter-Darstellung:**
-  - Zufallsschwerter leuchten nicht, die anderen Waffenarten schon (`js/art.js`, Schwert-Pfad ohne Glow).
-  - Das Waffenmodell nimmt die Stufe der Marktwaffe statt der des Fundes.
-  - Jeder verzauberte Schild wird als Turmschild gezeichnet.
-- [ ] **Vergleich (▲/▼):**
-  - Bei Ausweichen fehlt das „%“.
-  - Die Grundwirkung der Waffenart, etwa Bogen +12 % Krit gegen Axt mit Blutung, wird nicht verglichen.
-  - Runen auf dem angelegten Teil werden ignoriert, Aufwertungen dagegen mitgerechnet.
-- [ ] **Ganzzahl-Effekte** (LP, Heilung, Ausweichen) wachsen über Gegenstandsstufe 50 weiter, Prozent-Effekte nicht.
-- [ ] **Keine Warnung**, wenn ein Fund den Beutel überfüllt. Man merkt es erst an den gesperrten Knöpfen auf der Burg.
-- [ ] **Veraltete Texte:**
-  - In `js/unlock.js` steht „mit Pokal und Turnierschatz“.
-  - In der Anleitung liest sich die Tabelle so, als gäbe die 10. Turm-Etage zwei Funde. Es ist einer, dafür eine Seltenheit besser.
-- [ ] **Test „Alle Bosse besiegbar (Ablauf)“** hängt davon ab, dass der Beutel nicht überläuft. Besser den Beutel in der Schleife leeren.
-- [ ] **`findLastIndex`** in `rarRoll` braucht Safari 15.4 oder neuer. Zur Sicherheit durch eine einfache Schleife ersetzen.
-
-## Übersetzungen (i18n)
-
-- [ ] **Englische Texte beim echten Spielen gegenlesen**, vor allem Kampflog, Ereignisse und Anleitung. Ton und Begriffe (HP, XP, Fame) einmal durchgehen.
-- [ ] **Veralteter Text** „mit Pokal und Turnierschatz“ (Freischaltung Turnier) steht jetzt in beiden Sprachdateien (`feat.tour`).
-
-## Balance
-
-- [ ] **Beim echten Spielen prüfen, ob das Spiel mit Zufallsbeute zu leicht geworden ist.** Die Simulation verliert nur noch 2–8 Bosskämpfe, vorher waren es 8–27. Stellschrauben in `genItem`: Grundwert-Faktoren, Seltenheitsbonus und Turm-Bonus (`lvl()+Etage/10` in `js/combat.js`).
-- [ ] **Vulkanus (Boss 3)** ist in manchen Simulationsläufen eine starke Hürde, mit bis zu ~50 Niederlagen in einem Ausreißer. Das gab es schon vor den Änderungen.
-- [ ] **Schilde** sind ein dritter verzauberter Platz mit zusätzlicher Stärke. Beobachten, ob das zu viel ist.
-- [ ] **Kriegskasse** (100 Gold pro Stufe für 15 Ruhm pro Stufe): Die Simulation wartet zusätzlich auf eine Mindeststufe für Bosse, deshalb zeigt sie die Wirkung nicht. Beim echten Spielen prüfen, ob sie das Warten auf Ruhm spürbar verkürzt.
-
-## Ideen für später
-
-- Eine Anzeige der Spielstatistik
-- Ein Erfolgssystem
-- Ein fester Wochen-Turm mit Bestenliste
+- Übersicht: `gh issue list`
+- Neuen Punkt anlegen: `gh issue create --title "…" --label balance`
+- Erledigt: Issue schließen (im Commit mit `Fixes #N`)
 
 ## Hinweise zum Arbeiten
 
