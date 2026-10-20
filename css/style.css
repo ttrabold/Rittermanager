@@ -171,4 +171,6 @@ svg.vP{transform:scaleX(-1)}
 .blc2{animation:blc2 5s infinite}.blc3{animation:blc3 7.5s infinite}
 @keyframes blc2{0%,40%{fill:var(--c0)}50%,90%{fill:var(--c1)}100%{fill:var(--c0)}}
 @keyframes blc3{0%,26%{fill:var(--c0)}33%,59%{fill:var(--c1)}66%,92%{fill:var(--c2)}100%{fill:var(--c0)}}
+@keyframes blc2s{0%,40%{stroke:var(--c0)}50%,90%{stroke:var(--c1)}100%{stroke:var(--c0)}}
+@keyframes blc3s{0%,26%{stroke:var(--c0)}33%,59%{stroke:var(--c1)}66%,92%{stroke:var(--c2)}100%{stroke:var(--c0)}}
 @media (prefers-reduced-motion:reduce){.fxc2,.fxc3,.blc2,.blc3{animation:none}}

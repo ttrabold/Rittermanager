@@ -65,7 +65,9 @@ const GFX={
 const genGlow=it=>`style="filter:drop-shadow(0 0 ${3+it.r*2.5}px ${it.c})"`;
 // Effekte eines Fundstücks: stärkster zuerst, höchstens drei
 // Metallteile anderer Waffenarten wechseln mit den Effekten die Farbe (Halo der Stabkugel ausgenommen)
-const genTint=(h,c,gb)=>gb?h.replace(new RegExp('(<(?!circle class="pl")[a-z]+ [^>]*?)fill="'+c+'"','g'),(m,a)=>a+'fill="'+c+'" style="'+gb.st+";animation:"+gb.cls+" "+(gb.cls==="blc2"?5:7.5)+'s infinite"'):h;
+const genTint=(h,c,gb,cat)=>{if(!gb)return h;const an=n=>" style=\""+gb.st+";animation:"+gb.cls+n+" "+(gb.cls==="blc2"?5:7.5)+"s infinite\"";
+ if(cat==="bogen")return h.replace(/(<path [^>]*?)stroke="([^"]+)"/g,(m,a,col)=>/^#(?:eee|[0-9a-f]{6})$/i.test(col)&&!/M108 66V144/.test(m)?a+'stroke="'+col+'"'+an("s"):m).replace(/(<path d="M108 66V144" )stroke="#eee"/,(m,a)=>a+'stroke="#eee"'+an("s"));
+ return h.replace(new RegExp('(<(?!circle class="pl")[a-z]+ [^>]*?)fill="'+c+'"','g'),(m,a)=>a+'fill="'+c+'"'+an(""))};
 const genKs=it=>[it.m,...Object.keys(it.fx)].filter((k,i,a)=>it.fx[k]&&a.indexOf(k)===i&&GFX[k]).slice(0,3);
 // Klinge wechselt mit den Effekten durch (CSS-Variablen --c0…, Animation blc2/blc3)
 const genBlade=it=>{const ks=genKs(it);return ks.length<2?null:{cls:"blc"+ks.length,st:ks.map((k,i)=>`--c${i}:${LFX[k].c}`).join(";")}};
@@ -132,7 +134,7 @@ function knight(w,a,s,flip,plume,ow,oa,wi,ai,fem,robe,wcat){
  ${head}${plm}
  ${av(0)}
  ${limb(fem?"M82 66Q97 80 105 101":"M85 66Q98 80 105 101",ac)}${arm?`<circle cx="96" cy="82" r="${fem?3.8:4.5}" fill="${ac}" stroke="${ln}"/>`:""}
- ${wcat&&wcat!=="schwert"?genTint(catSvg(wcat,w,ow,wi&&(itm(wi)||{}).c),ow||WC[w],gb):`${wi&&VIS[wi]?weaponSvg(wi):`<g ${wi&&(itm(wi)||{}).gen?genGlow(itm(wi)):""}><path d="M104 96V20L107.5 8L111 20V96Z" fill="${wc}" ${gb?`class="${gb.cls}" style="${gb.st}"`:""} stroke="${wi&&(itm(wi)||{}).gen?itm(wi).c:"#0005"}" stroke-width="${wi&&(itm(wi)||{}).gen?1.6:1}"/><path d="M107.5 14V94" stroke="#fff7"/></g>`}
+ ${wcat&&wcat!=="schwert"?genTint(catSvg(wcat,w,ow,wi&&(itm(wi)||{}).c),ow||WC[w],gb,wcat):`${wi&&VIS[wi]?weaponSvg(wi):`<g ${wi&&(itm(wi)||{}).gen?genGlow(itm(wi)):""}><path d="M104 96V20L107.5 8L111 20V96Z" fill="${wc}" ${gb?`class="${gb.cls}" style="${gb.st}"`:""} stroke="${wi&&(itm(wi)||{}).gen?itm(wi).c:"#0005"}" stroke-width="${wi&&(itm(wi)||{}).gen?1.6:1}"/><path d="M107.5 14V94" stroke="#fff7"/></g>`}
  <path d="M96 94h23q2 3 0 6h-23q-2-3 0-6z" fill="#7a4a1c" stroke="#0004"/><rect x="105" y="100" width="5" height="12" fill="#5b3a1c"/><circle cx="107.5" cy="114" r="3" fill="#d4a017" stroke="#0005"/>`}
  ${wi&&(itm(wi)||{}).gen?genFx(itm(wi)):""}
  <circle cx="107.5" cy="105.5" r="${fem?5.2:6}" fill="${arm?ac:sk}" stroke="#0006"/><path d="M102.5 103.5h10M102.5 107h10" stroke="#0003"/>
