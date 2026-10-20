@@ -774,7 +774,7 @@ After every tower boss you enter a new, ever more menacing level:
 | 91–95 | 💰 Golden Hoard | Mountains of gold, and an eye blinking in the dark |
 | 96–100 | 👑 Tower Crown | The top of the tower at sunrise |
 
-**After floor 100** the tower starts over, but as a **shadow run**: the same levels, only darker, and the same bosses as stronger **shadow bosses** (e.g. "Shadow Gatekeeper Ironbeard"). Every further hundred makes them stronger still.
+**After floor 100** the tower starts over, but as a **shadow run**: the same levels, only darker, and the same bosses as stronger **shadow bosses** (e.g. "Gatekeeper Ironbeard (Shadow)"). Every further hundred makes them stronger still.
 
 Every level has its **own music and soundscape**: crackling torches, dripping water and rattling chains, singing crystals, rumbling lava, whispering ghosts, rain and thunder, a menacing drone in the Shadow Realm and cosmic sounds in the World Rift. When you enter a new level, a deep gong sounds. The levels from floor 41 on sound different too: ticking clockwork, rustling pages, howling icy wind, rattling bones, anvil strikes and twinkling stars.
 

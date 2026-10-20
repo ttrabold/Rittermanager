@@ -774,7 +774,7 @@ Nach jedem Turm-Boss betrittst du eine neue, immer bedrohlichere Ebene:
 | 91–95 | 💰 Goldener Hort | Berge von Gold, und im Dunkeln blinzelt ein Auge |
 | 96–100 | 👑 Turmkrone | Die Turmspitze im Sonnenaufgang |
 
-**Nach Etage 100** beginnt der Turm von vorn, aber als **Schatten-Durchlauf**: dieselben Ebenen, nur dunkler, und dieselben Bosse als stärkere **Schatten-Bosse** (z. B. „Schatten-Torwächter Eisenbart“). Jeder weitere Hunderter macht sie noch stärker.
+**Nach Etage 100** beginnt der Turm von vorn, aber als **Schatten-Durchlauf**: dieselben Ebenen, nur dunkler, und dieselben Bosse als stärkere **Schatten-Bosse** (z. B. „Torwächter Eisenbart (Schatten)“). Jeder weitere Hunderter macht sie noch stärker.
 
 Jede Ebene hat ihre **eigene Musik und Geräuschkulisse**: knisternde Fackeln, tropfendes Wasser und klirrende Ketten, singende Kristalle, grollende Lava, flüsternde Geister, Regen und Donner, ein bedrohliches Dröhnen im Schattenreich und kosmische Klänge im Weltenriss. Auch die Ebenen ab Etage 41 klingen eigen: tickende Uhrwerke, raschelnde Seiten, heulender Eiswind, klappernde Knochen, Ambossschläge und funkelnde Sterne. Betrittst du eine neue Ebene, ertönt ein tiefer Gong.
 

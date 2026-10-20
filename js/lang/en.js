@@ -97,7 +97,7 @@ I18N.en={
   chArm:n=>`⚡ <b>${n} winds up for a huge blow!</b> Take cover or stun them!`,chBreak:n=>`💫 ${n} is stunned – the huge blow fizzles out!`,
   rfUp:n=>`🪞 <b>${n} raises a mirror shield!</b> Direct hits partly bounce back.`,rfHit:d=>`🪞 The mirror throws ${d} damage back at you!`,
   seal:(n,s)=>`🔒 ${n} seals your skill <b>${s}</b>!`,unseal:"🔓 The seals are broken.",noPois:n=>`${n} is immune to poison.`},
- tw:{floor:"Floor",shadow:"Shadow ",leave:(c,b)=>`You leave the tower. Next time you continue on <b>floor ${c}</b>. Record: floor ${b}.`,leaveB:"Leave the tower",
+ tw:{floor:"Floor",shadow:n=>`${n} (Shadow)`,leave:(c,b)=>`You leave the tower. Next time you continue on <b>floor ${c}</b>. Record: floor ${b}.`,leaveB:"Leave the tower",
   done:n=>`Floor ${n} cleared! You catch your breath (+20% HP).`,ether:"You find an ether potion! 🔷",ether2:"Plus a greater ether potion! 💠",
   lost:b=>`The tower has beaten you – you must start again on floor 1. Record: floor ${b}.`,deeper:x=>"The air grows heavier … "+x,
   hall:"Tower Hall of Fame",hallNone:"No finished tower run yet. A run ends when you are defeated in the tower."},

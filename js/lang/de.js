@@ -97,7 +97,7 @@ I18N.de={
   chArm:n=>`⚡ <b>${n} holt weit aus!</b> Geh in Deckung oder betäube ihn!`,chBreak:n=>`💫 ${n} ist betäubt – der Riesenschlag verpufft!`,
   rfUp:n=>`🪞 <b>${n} hebt einen Spiegelschild!</b> Direkte Treffer prallen teilweise zurück.`,rfHit:d=>`🪞 Der Spiegel wirft ${d} Schaden auf dich zurück!`,
   seal:(n,s)=>`🔒 ${n} versiegelt deine Kunst <b>${s}</b>!`,unseal:"🔓 Die Siegel sind gebrochen.",noPois:n=>`${n} ist gegen Gift gefeit.`},
- tw:{floor:"Etage",shadow:"Schatten-",leave:(c,b)=>`Du verlässt den Turm. Beim nächsten Besuch geht es auf <b>Etage ${c}</b> weiter. Rekord: Etage ${b}.`,leaveB:"Turm verlassen",
+ tw:{floor:"Etage",shadow:n=>`${n} (Schatten)`,leave:(c,b)=>`Du verlässt den Turm. Beim nächsten Besuch geht es auf <b>Etage ${c}</b> weiter. Rekord: Etage ${b}.`,leaveB:"Turm verlassen",
   done:n=>`Etage ${n} geschafft! Du verschnaufst kurz (+20 % LP).`,ether:"Du findest einen Äthertrank! 🔷",ether2:"Dazu ein Großer Äthertrank! 💠",
   lost:b=>`Der Turm hat dich bezwungen – du musst wieder auf Etage 1 beginnen. Rekord: Etage ${b}.`,deeper:x=>"Die Luft wird schwerer … "+x,
   hall:"Ruhmeshalle des Turms",hallNone:"Noch kein abgeschlossener Turmlauf. Ein Lauf endet, wenn du im Turm besiegt wirst."},

@@ -35,7 +35,7 @@ function setup(e,tour,keep){
 function startFight(){if(S.en<2)return;S.en-=2;if(evMaybe())return;setup(mk(Math.max(1,lvl()+rnd(-1,1)),ET[rnd(0,ET.length-1)]))}
 function startTour(){const fee=tourFee();if(bagFull()||S.en<4||S.gold<fee)return;S.en-=4;S.gold-=fee;setup(mk(Math.max(1,lvl()),ET[rnd(0,ET.length-1)]),1)}
 function startTower(){if(bagFull()||!S.tunl||S.en<4)return;S.en-=4;towerFloor(S.tcur||1)}
-function towerFloor(n,keep){if(n>1&&(n-1)%5===0)setTimeout(()=>sfx("gong"),300);let e;if(n%5===0){const {i,c}=tbossAt(n),bs=TBOSS[i];e=mk(bs.L+Math.floor(n/3)+10*c,bs,true);e.cyc=c;if(c)e.name=t("tw.shadow")+e.name}else e=mk(lvl()+Math.floor(n/2),ET[rnd(0,ET.length-1)]);e.tower=n;setup(e,0,keep)}
+function towerFloor(n,keep){if(n>1&&(n-1)%5===0)setTimeout(()=>sfx("gong"),300);let e;if(n%5===0){const {i,c}=tbossAt(n),bs=TBOSS[i];e=mk(bs.L+Math.floor(n/3)+10*c,bs,true);e.cyc=c;if(c)e.name=t("tw.shadow",e.name)}else e=mk(lvl()+Math.floor(n/2),ET[rnd(0,ET.length-1)]);e.tower=n;setup(e,0,keep)}
 function nextTour(){if(F.tower)return towerFloor(F.tower+1,{php:Math.min(F.pmax,F.php+Math.round(F.pmax*.2)),pp:F.pp});const k={php:Math.min(F.pmax,F.php+Math.round(F.pmax*.3)),pp:F.pp},r=F.tour+1;setup(mk(Math.max(1,lvl()+r-1),ET[rnd(0,ET.length-1)]),r,k)}
 function startBoss(){const b=BOSS[S.boss];if(bagFull()||!b||S.en<3||S.ruhm<b.req)return;S.en-=3;setup(mk(b.L,b,true))}
 function leaveTower(){F.over=true;msg=t("tw.leave",S.tcur,S.tbest);save();home()}
