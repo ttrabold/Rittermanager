@@ -30,10 +30,9 @@ jobs:
       - name: Version bestimmen
         id: ver
         run: |
-          # Semantic Versioning: ?v=MAJOR.MINOR.PATCH in index.html, CACHE in sw.js muss gleich sein
-          VER=$(grep -oE 'css/style\.css\?v=[^"]+' index.html | sed 's/.*?v=//')
+          # Semantic Versioning: Version V="MAJOR.MINOR.PATCH" steht nur in index.html
+          VER=$(grep -oE 'var V="[^"]+"' index.html | sed 's/.*="//; s/"$//')
           [[ "$VER" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error::Version in index.html ist kein X.Y.Z: '$VER'"; exit 1; }
-          grep -q "\"ritter-v${VER}\"" sw.js || { echo "::error::CACHE in sw.js passt nicht zu Version $VER"; exit 1; }
           echo "ver=$VER" >> "$GITHUB_OUTPUT"
           echo "tag=v${VER}" >> "$GITHUB_OUTPUT"
           echo "zip=dist/sir-grindalot-v${VER}.zip" >> "$GITHUB_OUTPUT"

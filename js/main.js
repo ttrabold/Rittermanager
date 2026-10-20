@@ -8,4 +8,4 @@ if(!Array.isArray(S.sk))S.sk=SK.filter(s=>s.id!=="hieb"&&s.lv<=lvl()).slice(-skM
 if(!S.q||S.q.day!==S.day)qGen();
 home();
 // Als App installierbar und offline spielbar (nur über http/https, nicht per Doppelklick)
-if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register("sw.js").catch(()=>{});
+if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register("sw.js?v="+VERSION).catch(()=>{});

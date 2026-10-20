@@ -12,7 +12,8 @@ node scripts/i18n-check.js
 [ -f index.html ] || { echo "index.html fehlt" >&2; exit 1; }
 
 # Lokale Verweise aus index.html (href/src), ohne ?v=…, ohne http(s)-Links und ohne Anker
-refs=$(grep -oE '(href|src)="[^"]+"' index.html | sed -E 's/^(href|src)="//; s/"$//; s/[?#].*$//' | grep -vE '^(https?:|//|data:|$)' || true)
+# (auch die Skriptliste im Lader: "js/….js")
+refs=$({ grep -oE '(href|src)="[^"]+"' index.html; grep -oE '"js/[^"]+\.js"' index.html | sed 's/^/src=/'; grep -oE 'css/style\.css' index.html | sed 's/^/href="/;s/$/"/'; } | sed -E 's/^(href|src)="//; s/"$//; s/[?#].*$//' | grep -vE '^(https?:|//|data:|$)|[+]' || true)
 
 files=$(printf '%s\n' index.html $refs | sort -u)
 

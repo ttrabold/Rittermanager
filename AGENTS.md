@@ -29,8 +29,8 @@ Code-Kommentare, Commit-Nachrichten und Docs sind Deutsch. Das Spiel selbst ist 
 ## Aufbau
 
 ```
-index.html          lädt alle Skripte in fester Reihenfolge, ?v=X.Y.Z an jeder URL
-sw.js               Service-Worker, Konstante CACHE = "ritter-vX.Y.Z"
+index.html          Version `var V="X.Y.Z"` (einzige Stelle) und Lader, der alle Skripte in fester Reihenfolge mit ?v=V lädt
+sw.js               Service-Worker, Cache-Name "ritter-v<Version>" aus sw.js?v=… (kommt aus main.js/VERSION)
 css/style.css
 js/*.js             Spiellogik, klassische Skripte (keine ES-Module)
 js/i18n.js          Sprachwahl, t(), loc() – lädt als erstes
@@ -65,9 +65,10 @@ Behaupte nie, etwas funktioniere, ohne die Testseite wirklich geladen zu haben. 
 
 ## Veröffentlichen
 
-- **Version erhöhen** bei jeder Änderung an ausgelieferten Dateien, nach Semantic Versioning (`MAJOR.MINOR.PATCH`): `?v=X.Y.Z` an allen Einträgen in `index.html` und `CACHE = "ritter-vX.Y.Z"` in `sw.js`, beide gleich. Solange das Spiel ein Prototyp ist, bleibt MAJOR bei 0: neue Funktionen oder Balance-Änderungen → MINOR (0.2.0), reine Fehlerbehebungen → PATCH (0.1.1). 1.0.0 erst, wenn Spielstände dauerhaft stabil bleiben sollen. Sonst sehen Spieler alte Dateien. Die im Spiel angezeigte Version (`VERSION`, Spielstand-Bildschirm „Über das Spiel“) und der Release-Tag (`vX.Y.Z`) werden aus diesem `?v=` gelesen, es gibt keine weitere Stelle zum Hochzählen.
-- **Release für itch.io:** GitHub → Actions → „Release (itch.io-Artefakt)“. Pro Version gibt es genau ein Release; existiert der Tag schon, bricht der Workflow ab, dann zuerst die Version erhöhen. Der Workflow prüft auch, dass `index.html` und `sw.js` dieselbe Version haben.
+- **Version erhöhen** bei jeder Änderung an ausgelieferten Dateien, nach Semantic Versioning (`MAJOR.MINOR.PATCH`): `var V="X.Y.Z"` im Kopf von `index.html`. Das ist die **einzige Stelle**: Sie hängt an allen Dateien als `?v=` und am Service-Worker (`sw.js?v=…`). Solange das Spiel ein Prototyp ist, bleibt MAJOR bei 0: neue Funktionen oder Balance-Änderungen → MINOR (0.2.0), reine Fehlerbehebungen → PATCH (0.1.1). 1.0.0 erst, wenn Spielstände dauerhaft stabil bleiben sollen. Sonst sehen Spieler alte Dateien. Die im Spiel angezeigte Version (`VERSION`, Spielstand-Bildschirm „Über das Spiel“) und der Release-Tag (`vX.Y.Z`) werden aus `V` gelesen, es gibt keine weitere Stelle zum Hochzählen.
+- **Release für itch.io:** GitHub → Actions → „Release (itch.io-Artefakt)“. Pro Version gibt es genau ein Release; existiert der Tag schon, bricht der Workflow ab, dann zuerst die Version erhöhen. Der Workflow liest die Version aus `index.html` und prüft, dass sie `X.Y.Z` ist.
 - **itch.io-Seite:** Prototyp-Hinweis und Kurzbeschreibung stehen in `docs/itch-seite.md` und werden von Hand auf itch.io übernommen.
+- **Devlog bei großen Änderungen:** Nach jeder großen Änderung (neue Funktion, Balance-Umbau, neues Release) einen Devlog-Entwurf für itch.io anlegen: `docs/itch-devlog-X.Y.Z.md` (Version des Release) und daraus `docs/itch-devlog-X.Y.Z.html` zum Kopieren. Vorlage ist `docs/itch-devlog-0.1.0.md`/`.html`: Kopf mit Anleitung (Edit game → Devlog → Create new post), Title, Tags, danach der englische Text in einem Codeblock. Passende Bilder aus `docs/itch/` nennen, neue Screenshots dort ablegen. Ton: persönlich, ehrlich über den Prototyp-Stand, Spielersicht statt Technik. Der Entwurf wird mit der Änderung eingecheckt; Veröffentlichen auf itch.io macht der Nutzer von Hand. Am Ende der Arbeit kurz anbieten, den Devlog zu schreiben, falls er fehlt.
 - **GitHub Pages** veröffentlicht über `.github/workflows/pages.yml` (Pages-Quelle: „GitHub Actions“, in beiden Repos). Ausgeliefert werden nur Laufzeitdateien; Änderungen nur an `docs/`, `tests/`, `scripts/`, AGENTS.md oder CLAUDE.md lösen keine Veröffentlichung aus. Veröffentlichungen laufen nacheinander (Concurrency-Gruppe `pages`).
 - Größere Änderungen zuerst ins Test-Repo: `git push test <branch>:main`, dann in der Vorschau prüfen. Erst nach Bestätigung per Fast-Forward nach `main` und `git push origin main`.
 - Test-Vorschau und Live-Seite teilen sich denselben Origin und damit denselben `localStorage`. Dort nie Speicherstände löschen oder überschreiben. Zerstörende Tests nur per `file://` oder `localhost`.
