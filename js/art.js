@@ -22,7 +22,7 @@ miss:c=>`<span class="mt ${c}">${t("vx.miss")}</span>`,
 dodge:c=>`<span class="mt ${c}">${t("vx.dodge")}</span>`,
 ko:c=>`<span class="soul ${c}">${c==="vP"?"💫":"👻"}</span><span class="kot ${c}">K.O.</span>`,
 bko:c=>`<span class="flash" style="animation-delay:1.2s"></span><span class="ring ${c}" style="animation-delay:1.3s"></span><span class="ring red r2 ${c}" style="animation-delay:1.55s"></span><span class="blast ${c}" style="animation-delay:1.4s">✨</span><span class="kot ${c}" style="animation-delay:2.1s;font-size:19px">${t("vx.beaten")}</span>`};
-const VXH=f=>(f.vfx||[]).map(v=>`<div class="vfx" style="--d:${v[2]?1.1:0}s">${VX[v[0]](v[1])}</div>`).join("");
+const VXH=f=>(f.vfx||[]).map(v=>`<div class="vfx" style="--d:${v[2]?1.1:0}s">${(VX[v[0]]?VX[v[0]](v[1]):"")}</div>`).join("");
 const fm=(x,y,s,c,d)=>`<path class="fk" style="animation-delay:${d}s" d="M${x} ${y}q${-5*s} ${-12*s} 0 ${-26*s}q${9*s} ${11*s} 0 ${26*s}z" fill="${c}"/>`;
 const ST=(x,y,c,d)=>`<path class="tw" style="animation-delay:${d}s" d="M${x} ${y-5}l1.6 3.4 3.4 1.6-3.4 1.6-1.6 3.4-1.6-3.4-3.4-1.6 3.4-1.6z" fill="${c}"/>`;
 const FIRE=(a,b)=>[[103,92,1],[112,80,1],[103,66,1.1],[112,52,1.1],[103,38,1],[112,26,1],[107.5,14,1.3]].map((p,i)=>fm(p[0],p[1],p[2],i%2?a:b,i*.07)+fm(p[0],p[1],p[2]*.55,"#fff3a0",i*.07+.05)).join("")+`<circle class="fl2" cx="108" cy="20" r="2" fill="${b}"/><circle class="fl2" style="animation-delay:.7s" cx="102" cy="40" r="1.6" fill="${a}"/><circle class="fl2" style="animation-delay:1.3s" cx="114" cy="30" r="1.8" fill="${b}"/>`;

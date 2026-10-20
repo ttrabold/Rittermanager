@@ -27,10 +27,10 @@ function mk(L,t,boss){
 }
 const enemyKn=f=>f.look?knight(f.look.wt,f.look.at,f.look.sh,true,f.tint,f.look.wc,f.look.ac,f.look.wi,f.look.ai,f.look.fem,f.look.robe,f.look.wcat):knight(f.tier,f.tier,Math.min(3,Math.floor(f.lvl/3)),true,f.tint);
 function setup(e,tour,keep){
- F=Object.assign({php:keep?keep.php:maxhp(),pmax:maxhp(),menu:"main",anim:"",dmg:"",hE:0,hP:0,lP:0,lE:0,vfx:[],over:false,next:false,tour:tour||0,pp:keep?keep.pp:null,ts:tbState(),pb:{buff:0,guard:0,poison:0,burn:0,stun:0,regen:0},eb:{bleed:0,burn:0,poison:0,ps:0,stun:0,guard:0,weak:0},log:(e.tower?towerIntro(e.tower):"")+(e.boss&&e.bi>=0&&!e.tower?`📜 <i>${LORE[e.bi][0]}</i><br>`:"")+(e.intro||"")+((S.buffs||[]).length?`✨ ${t("cb.active")}: ${S.buffs.map(b=>bname(b)+" ("+b.n+")").join(", ")}<br>`:"")+(e.moon?`🌕 <i>${t("cb.howl")}</i><br>`:"")+(ttn()?t("cb.enters",S.name+" "+ttn())+"<br>":"")+(e.boss?t("cb.bossIn",e.name):t("cb.foeIn"))},e);
+ F=Object.assign({php:keep?keep.php:maxhp(),pmax:maxhp(),menu:"main",anim:"",dmg:"",hE:0,hP:0,lP:0,lE:0,vfx:[],over:false,next:false,tour:tour||0,pp:keep?keep.pp:null,ts:tbState(),uq:uqNew(),pb:{buff:0,guard:0,poison:0,burn:0,stun:0,regen:0},eb:{bleed:0,burn:0,poison:0,ps:0,stun:0,guard:0,weak:0},log:(e.tower?towerIntro(e.tower):"")+(e.boss&&e.bi>=0&&!e.tower?`📜 <i>${LORE[e.bi][0]}</i><br>`:"")+(e.intro||"")+((S.buffs||[]).length?`✨ ${t("cb.active")}: ${S.buffs.map(b=>bname(b)+" ("+b.n+")").join(", ")}<br>`:"")+(e.moon?`🌕 <i>${t("cb.howl")}</i><br>`:"")+(ttn()?t("cb.enters",S.name+" "+ttn())+"<br>":"")+(e.boss?t("cb.bossIn",e.name):t("cb.foeIn"))},e);
  if(!F.pp){F.pp={};SK.forEach(s=>F.pp[s.id]=s.pp)}
  if(e.boss&&e.bi>=0&&!e.tower&&S.merc){F.merc=1;S.merc=0;F.log+="<br>🗡️ "+t("cb.mercIn")}
- tbStart(F);bSeen(F);save();fight();
+ tbStart(F);uStart(F);bSeen(F);save();fight();
 }
 function startFight(){if(S.en<2)return;S.en-=2;if(evMaybe())return;setup(mk(Math.max(1,lvl()+rnd(-1,1)),ET[rnd(0,ET.length-1)]))}
 function startTour(){const fee=tourFee();if(bagFull()||S.en<4||S.gold<fee)return;S.en-=4;S.gold-=fee;setup(mk(Math.max(1,lvl()),ET[rnd(0,ET.length-1)]),1)}
@@ -59,7 +59,7 @@ function fight(){if(QUICK)return;
 const fmtLine=x=>x.replace(t("cb.reDmg"),'<b class="dn">$1</b>$2').replace(t("cb.reHeal"),'$1 <b class="hn">$2</b>');
 function fin(l){F.log=l.map(x=>`<div class="ll">${fmtLine(x)}</div>`).join("");F.menu="main";if(!QUICK)fight()}
 function useSkill(id){
- const f=F,s=SKD(id);if(!s||!eqSk().includes(id)||tbSealed(id))return;const l=[t("cb.uses",S.name,s.n)];
+ const f=F,s=SKD(id);if(!s||!eqSk().includes(id)||tbSealed(id))return;const l=[t("cb.uses",S.name,s.n)];uMorphCheck(f,l);
  if(s.pp<99){if(f.pp[id]<1)return;f.pp[id]--}
  if(id!=="hieb")qProg("skill",1,l);
  f.anim="";f.dmg="";f.hE=0;f.hP=0;f.lP=s.pw>0?1:0;f.lE=0;f.vfx=[];
@@ -68,16 +68,16 @@ function useSkill(id){
  else if(s.pw>0&&f.fx&&Math.random()*100<(f.fx.dodge||0)){l.push(t("cb.eDodge",f.name));sfx("miss");f.vfx.push(["dodge","vE",0])}
  else{f.vfx.push([s.vx||"slash",s.self?"vP":"vE",0]);
   if(s.pw>0){
-   const hits=s.hits||1,pierce=s.fx==="pierce",hs=[];let pw=s.pw,tot=0,anyCrit=false;
+   const hits=s.hits||1,pierce=s.fx==="pierce"||uHas("pierce"),hs=[];let pw=s.pw,tot=0,anyCrit=false;
    if(s.fx==="exec"&&f.ehp<f.emax*.35){pw*=2.5;l.push(t("cb.exec"))}
    pw*=wk.dmg||1;if(wk.reach&&f.ehp>f.emax*.7){pw*=1+wk.reach;l.push("🔱 "+t("cb.reach"))}
    const hitsN=hits+(wk.dbl&&Math.random()<wk.dbl?1:0);if(hitsN>hits)l.push("🔪 "+t("cb.dbl"));
-   for(let h=0;h<hitsN;h++){let d=(5+Math.floor((wk.magic?(S.st+S.ge)*.65:S.st*1.3))+wBon())*(h>=hits?.5:1)*pw*(f.pb.buff>0?1.5:1)*(1+.1*S.star)*(1+buffV("dmg")+.1*blessV("dmg"))+rnd(0,3);
-    const crit=s.crit||Math.random()<Math.min(.6,S.ge*.03+fxv("crit")+buffV("crit")+compV("crit")+(wk.crit||0));if(crit){d*=1.5;S.crits++;anyCrit=true;qProg("crit",1,l)}
+   for(let h=0;h<hitsN;h++){let d=(5+Math.floor((wk.magic?(S.st+S.ge)*.65:S.st*1.3))+wBon())*(h>=hits?.5:1)*pw*(f.pb.buff>0?1.5:1)*(1+.1*S.star)*(1+buffV("dmg")+.1*blessV("dmg"))*uDmgMul(f)+rnd(0,3);
+    const crit=s.crit||Math.random()<Math.min(.6,S.ge*.03+fxv("crit")+buffV("crit")+compV("crit")+(wk.crit||0)+uCritB(f));if(crit){d*=1.5;S.crits++;anyCrit=true;qProg("crit",1,l)}
     if(f.eb.guard&&!pierce)d*=.5;const hd=Math.max(1,Math.round(d-(pierce?0:f.def*(1-(wk.armor||0)))));hs.push(hd);tot+=hd}
    f.anim="e";f.dmg=tot;f.hE=tot;sfx(anyCrit?"crit":"hit");
    if(wk.bleed&&Math.random()<wk.bleed&&!f.eb.bleed){f.eb.bleed=3;l.push("🪓 "+t("cb.axe"))}if(wk.stun&&Math.random()<wk.stun){f.eb.stun=1;l.push("🔨 "+t("cb.club"))}
-   l.push((anyCrit?t("cb.crit")+" ":"")+(hitsN>1?t("cb.hits",hitsN,tot):t("cb.dmg",tot))+(pierce?" "+t("cb.pierce"):""));f.ehp-=tbHits(f,hs,l);encHit(tot,l);
+   l.push((anyCrit?t("cb.crit")+" ":"")+(hitsN>1?t("cb.hits",hitsN,tot):t("cb.dmg",tot))+(pierce?" "+t("cb.pierce"):""));f.ehp-=tbHits(f,hs,l);encHit(tot,l);uOnHit(f,tot,anyCrit,l);
    if(s.life){const o=f.php;f.php=Math.min(f.pmax,f.php+Math.round(tot*s.life));if(f.php>o)l.push(t("cb.life",f.php-o))}
   }
   if(s.fx==="stun"&&Math.random()<(s.ch||.4)){f.eb.stun=1;l.push(t("cb.eStun"))}
@@ -126,20 +126,23 @@ function enemyAct(l,fm){
 function enemyTurn(l){
  const f=F;
  if(f.ehp<=0&&!tbRevive(f,l))return endFight(true,l);
- f.eb.guard=0;tbTick(f);
+ f.eb.guard=0;tbTick(f);uTurnStart(f,l);
  for(const[k,d,e]of[["bleed",4+f.lvl,"🩸"],["burn",6+f.lvl,"🔥"],["poison",(4+f.lvl)*Math.max(1,f.eb.ps),"☠️"]])if(f.eb[k]>0){f.ehp-=d;f.eb[k]--;if(k==="poison"&&!f.eb.poison)f.eb.ps=0;l.push(t("cb.dot."+k,f.name,d)+" "+e);if(f.ehp<=0&&!tbRevive(f,l))return endFight(true,l)}
  compTurn(f,l);mercTurn(f,l);if(f.ehp<=0&&!tbRevive(f,l))return endFight(true,l);
  tbPre(f,l);
  if(f.fx&&f.fx.regen&&f.ehp<f.emax){const o=f.ehp;f.ehp=Math.min(f.emax,f.ehp+Math.round(f.fx.regen*(1+f.lvl/20)));l.push(t("cb.eRegen",f.name,f.ehp-o))}
  if(f.boss&&!f.enr&&!(f.tr&&f.tr.phase)&&f.ehp<f.emax/2){f.enr=true;f.atk*=1.3;l.push(t("cb.rage",f.name))}
- if(!tbAct(f,l))enemyAct(l);
+ const p0=f.php;if(uTime(f,l)){}else if(!tbAct(f,l))enemyAct(l);
+ uMirror(f,p0-f.php,l);
  const rg=fxv("regen");if(rg&&f.php<f.pmax){f.php=Math.min(f.pmax,f.php+rg);l.push(t("cb.armRegen",rg))}
  if(f.pb.poison>0){const d=2+Math.floor(f.lvl/2);f.took=1;f.php-=d;f.pb.poison--;l.push(t("cb.pPoisT",d))}
  if(f.pb.burn>0){const d=4+f.lvl;f.took=1;f.php-=d;f.pb.burn--;l.push(t("cb.pBurnT",d))}
  if(f.pb.regen>0){const o=f.php;f.php=Math.min(f.pmax,f.php+Math.round(f.pmax*.08));f.pb.regen--;if(f.php>o)l.push(t("cb.breath",f.php-o))}
  compRescue(f,l);if(f.eb.weak>0)f.eb.weak--;if(f.pb.buff>0)f.pb.buff--;if(f.pb.guard>0)f.pb.guard--;
- if(f.php<=0)return endFight(false,l);
- if(f.pb.stun){f.pb.stun=0;l.push(t("cb.pSkip"));enemyAct(l);if(f.php<=0)return endFight(false,l)}
+ if(f.php<=0&&!uPhoenix(f,l))return endFight(false,l);
+ if(f.ehp<=0&&!tbRevive(f,l))return endFight(true,l);
+ uMorphCheck(f,l);
+ if(f.pb.stun){f.pb.stun=0;l.push(t("cb.pSkip"));enemyAct(l);if(f.php<=0&&!uPhoenix(f,l))return endFight(false,l)}
  fin(l);
 }
 function endFight(win,l){
