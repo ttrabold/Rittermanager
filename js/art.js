@@ -53,6 +53,11 @@ b12w:{b:"wide",f:"#f3e5f5",e:"#fff",g:"#ce93d8",fx:()=>FIRE("#8e24aa","#e1bee7")
 t1:{b:"wide",f:"#fff27a",e:"#fff",g:"#ffd54a",fx:()=>SPARK},
 t3:{b:"dagger",f:"#f3a6ff",e:"#fff",g:"#e056fd",fx:()=>CLOCK}};
 const weaponSvg=id=>{const v=VIS[id];return `<g style="filter:drop-shadow(0 0 5px ${v.g})"><path d="${BL[v.b]}" fill="${v.f}" stroke="${v.e}" stroke-width="1.5"/><path d="M107.5 10V92" stroke="${v.e}" stroke-width="1" opacity=".6"/>${v.fx()}</g><circle cx="107.5" cy="97" r="3" fill="${v.g}" stroke="#0006"/>`};
+// Fundstücke (gen): Effekte wie bei den festen verzauberten Waffen – Partikel je gewürfeltem Effekt, Leuchten und Zierde nach Seltenheit
+const GFX={burn:()=>FIRE("#ff5a00","#ffb300"),poison:()=>DRIP,stun:()=>ICE,crit:()=>SPARK,life:()=>SMOKE("#c0392b")+`<path class="dr" d="M100 70q-3 5 0 7q3-2 0-7z" fill="#e53935"/><path class="dr" style="animation-delay:.6s" d="M114 50q-3 5 0 7q3-2 0-7z" fill="#e53935"/>`};
+const genGlow=it=>`style="filter:drop-shadow(0 0 ${3+it.r*2.5}px ${it.c})"`;
+const genFx=it=>{const ks=[it.m,...Object.keys(it.fx)].filter((k,i,a)=>it.fx[k]&&a.indexOf(k)===i&&GFX[k]).slice(0,3);
+ return ks.map(k=>GFX[k]()).join("")+(it.r>=2?`<path class="glow" d="M107.5 16V88" stroke="${it.c}" stroke-width="2.2" opacity=".85"/>`:"")+(it.r>=3?`<g class="rot"><circle cx="107.5" cy="56" r="17" fill="none" stroke="${it.c}" stroke-width="2" stroke-dasharray="3 4"/></g>`+ST(96,24,"#fff",.2)+ST(120,70,"#fff",.7):"")};
 const AV={
 mo:b=>b?`<circle class="pl" cx="61" cy="88" r="64" fill="#cfd8ff"/>`:`<path d="M60 68a12 12 0 1 0 9 20a9 9 0 1 1-9-20z" fill="#eef"/>`+ST(82,66,"#fff",0)+ST(40,100,"#fff",.6),
 wp:b=>b?"":`<ellipse cx="34" cy="64" rx="13" ry="9" fill="#6bbf6b" stroke="#0004"/><ellipse cx="88" cy="64" rx="13" ry="9" fill="#6bbf6b" stroke="#0004"/><polygon points="26,60 34,46 40,60" fill="#8fe08f"/><polygon points="82,60 88,46 96,60" fill="#8fe08f"/>`,
@@ -110,8 +115,9 @@ function knight(w,a,s,flip,plume,ow,oa,wi,ai,fem,robe,wcat){
  ${head}${plm}
  ${av(0)}
  ${limb(fem?"M82 66Q97 80 105 101":"M85 66Q98 80 105 101",ac)}${arm?`<circle cx="96" cy="82" r="${fem?3.8:4.5}" fill="${ac}" stroke="${ln}"/>`:""}
- ${wcat&&wcat!=="schwert"?catSvg(wcat,w,ow,wi&&(itm(wi)||{}).c):`${wi&&VIS[wi]?weaponSvg(wi):`<g ${wi&&(itm(wi)||{}).gen?`style="filter:drop-shadow(0 0 4px ${itm(wi).c})"`:""}><path d="M104 96V20L107.5 8L111 20V96Z" fill="${wc}" stroke="#0005"/><path d="M107.5 14V94" stroke="#fff7"/></g>`}
+ ${wcat&&wcat!=="schwert"?catSvg(wcat,w,ow,wi&&(itm(wi)||{}).c):`${wi&&VIS[wi]?weaponSvg(wi):`<g ${wi&&(itm(wi)||{}).gen?genGlow(itm(wi)):""}><path d="M104 96V20L107.5 8L111 20V96Z" fill="${wc}" stroke="${wi&&(itm(wi)||{}).gen?itm(wi).c:"#0005"}" stroke-width="${wi&&(itm(wi)||{}).gen?1.6:1}"/><path d="M107.5 14V94" stroke="#fff7"/></g>`}
  <path d="M96 94h23q2 3 0 6h-23q-2-3 0-6z" fill="#7a4a1c" stroke="#0004"/><rect x="105" y="100" width="5" height="12" fill="#5b3a1c"/><circle cx="107.5" cy="114" r="3" fill="#d4a017" stroke="#0005"/>`}
+ ${wi&&(itm(wi)||{}).gen?genFx(itm(wi)):""}
  <circle cx="107.5" cy="105.5" r="${fem?5.2:6}" fill="${arm?ac:sk}" stroke="#0006"/><path d="M102.5 103.5h10M102.5 107h10" stroke="#0003"/>
  ${s>0?`<path d="M12 64h32v24q0 19-16 28q-16-9-16-28z" fill="${SC[s]}" stroke="#0006" stroke-width="2"/><path d="M16 68h24v20q0 15-12 22q-12-7-12-22z" fill="none" stroke="#fff4" stroke-width="1.5"/><path d="M28 70v40M16 84h24" stroke="#fff6" stroke-width="3"/><circle cx="28" cy="84" r="3.5" fill="#d4a017" stroke="#0004"/>`:""}
  </g></svg>`}
