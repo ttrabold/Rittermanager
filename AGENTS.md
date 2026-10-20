@@ -38,7 +38,7 @@ js/lang/de.js, en.js  alle Spieltexte je Sprache
 tests/index.html    Testseite (Browser), enthält alle Tests
 tests/sim.js        Balance-Simulation: simRun(maxDay)
 ANLEITUNG.md        Spielanleitung für Spieler (ANLEITUNG.en.md: Englisch)
-docs/OFFENE-PUNKTE.md   Übergabeliste für die nächste Runde
+docs/OFFENE-PUNKTE.md   Verweis auf die GitHub Issues (offene Punkte)
 docs/superpowers/   Specs und Pläne zu größeren Features
 ```
 
@@ -76,4 +76,4 @@ Behaupte nie, etwas funktioniere, ohne die Testseite wirklich geladen zu haben. 
 ## Dokumentation pflegen
 
 - Spielregeln, Werte oder Bedienung geändert: `ANLEITUNG.md` und `ANLEITUNG.en.md` anpassen.
-- Aufgeschobene Punkte oder Ideen: in `docs/OFFENE-PUNKTE.md` eintragen, erledigte abhaken oder entfernen.
+- Aufgeschobene Punkte oder Ideen: als GitHub Issue anlegen (`gh issue create`), erledigte schließen.
