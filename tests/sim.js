@@ -1,17 +1,21 @@
 // Ritter Manager – Balance-Simulation: ein simulierter Spieler spielt das ganze Spiel durch (läuft auf tests/index.html)
+// Kampf-KI des simulierten Spielers: Tränke bei Not, Stärkungen gegen Bosse, sonst die stärkste Fähigkeit
+function simAI(){let t=0;while(F&&!F.over&&t++<120){const f=F;
+   if(f.php<f.pmax*.35){const k=["x","H","h"].find(k=>S.it[k]>0);if(k){useItem(k);continue}}
+   if((f.pb.burn||f.pb.poison)&&S.it.g&&f.php<f.pmax*.55){useItem("g");continue}
+   const av=eqSk().filter(id=>f.pp[id]>0&&!tbSealed(id));
+   // Angekündigter Riesenschlag (Turm-Boss lädt auf): in Deckung gehen
+   if(f.ts&&f.ts.arm&&!f.pb.guard){if(av.includes("halt")){useSkill("halt");continue}if(S.it.e>0){useItem("e");continue}}
+   if(f.boss&&f.pb.buff===0&&av.includes("ruf")){useSkill("ruf");continue}
+   if(f.boss&&!f.eb.weak&&av.includes("furcht")){useSkill("furcht");continue}
+   if(f.php<f.pmax*.5&&av.includes("licht")){useSkill("licht");continue}
+   let b="hieb",bv=0;for(const id of av){const s=SKD(id);if(!s.pw)continue;let v=s.pw*(s.hits||1)*s.acc*(s.crit?1.5:1);if(s.fx==="exec"&&f.ehp<f.emax*.35)v*=2.5;if(!f.boss&&s.pp<99&&f.emax<400)v*=.3;if(v>bv){bv=v;b=id}}useSkill(b)}}
 function simRun(maxDay,seedLog){
  const of=fight;fight=()=>{};const oNS=nightShow;nightShow=()=>{};const T={unl:{},boss:{},lvl:{},rival:{},log:[]};let deaths=0,bossTries=0,bossFails=0;
  S=fresh();unlCheck();S.lvl0=1;S.sk=[];qGen();F=null;EVN=null;
  const potionsBuy=()=>{const want={h:3,H:lvl()>=8?2:0,x:lvl()>=20?1:0,g:1,a:S.tunl?2:0};for(const k in want){const t=IT.find(x=>x.k===k);while(S.it[k]<want[k]&&S.gold>=ip(t.p)+30){S.gold-=ip(t.p);S.it[k]++}}};
  const gearBuy=()=>{for(const [k,L] of[["w",W],["a",A],["s",SH]])for(let i=L.length-1;i>S[k];i--)if(S.gold>=L[i][1]+20){S.gold-=L[i][1];S[k]=i;break}};
- const fightAI=()=>{let t=0;while(F&&!F.over&&t++<120){const f=F;
-   if(f.php<f.pmax*.35){const k=["x","H","h"].find(k=>S.it[k]>0);if(k){useItem(k);continue}}
-   if((f.pb.burn||f.pb.poison)&&S.it.g&&f.php<f.pmax*.55){useItem("g");continue}
-   const av=eqSk().filter(id=>f.pp[id]>0&&!tbSealed(id));
-   if(f.boss&&f.pb.buff===0&&av.includes("ruf")){useSkill("ruf");continue}
-   if(f.boss&&!f.eb.weak&&av.includes("furcht")){useSkill("furcht");continue}
-   if(f.php<f.pmax*.5&&av.includes("licht")){useSkill("licht");continue}
-   let b="hieb",bv=0;for(const id of av){const s=SKD(id);if(!s.pw)continue;let v=s.pw*(s.hits||1)*s.acc*(s.crit?1.5:1);if(s.fx==="exec"&&f.ehp<f.emax*.35)v*=2.5;if(!f.boss&&s.pp<99&&f.emax<400)v*=.3;if(v>bv){bv=v;b=id}}useSkill(b)}
+ const fightAI=()=>{simAI();
   if(F&&F.over&&F.ko==="p")deaths++};
  // Beutel aufräumen wie ein Spieler: alles Nicht-Angelegte einzeln zerlegen (auch Aufgewertetes, das salvageAll auslässt)
  const tidy=all=>{if(!all&&!bagFull())return;for(const it of bagItems())salvage(it.id)};
@@ -45,3 +49,13 @@ function simRun(maxDay,seedLog){
  const L=T.lvl,dayOfLvl=n=>{for(const d in L)if(L[d]>=n)return +d;return null};
  return {tage:Object.keys(L).length,stufe:lvl(),bosse:S.boss,tode:deaths,bossVersuche:bossTries,bossNiederlagen:bossFails,
   freischaltung:T.unl,bossTag:T.boss,rivaleTag:T.rival,stufeTag:Object.fromEntries([2,4,6,8,10,12,15,18,20,25,30,40,50].map(n=>[n,dayOfLvl(n)])),gold:S.gold,ruhm:S.ruhm,gebaeude:bldSum(),ds:S.mat.ds,leder:S.mat.le,bossFehl:T.bf||{},haenger:T.haenger||[],beute:{w:(eq("w")||{}).b,a:(eq("a")||{}).b,sh:(eq("sh")||{}).b,r:[S.ew,S.ea,S.es].map(id=>(itm(id)||{}).r)}}}
+
+// Turm-Boss gegen Referenzhelden (Spec „Balance-Abnahme“): Siegquote 0..1; old = alter Bosskampf-Boss an dieser Etage
+function bossDuel(n,old,runs,L){const of=fight;fight=()=>{};let w=0;
+ try{for(let r=0;r<(runs||200);r++){hero(L||duelL(n));S.star=0;S.w=W.length-1;S.a=A.length-1;S.s=SH.length-1;Object.assign(S.it,{h:3,H:2,g:1});if(!S.sk.includes("halt"))S.sk[0]="halt";F=null;
+  if(old){const b=BOSS[(n/5-1)%BOSS.length],e=mk(b.L+Math.floor(n/3),b,true);e.tower=n;setup(e,0)}else{S.tcur=n;S.en=9;startTower()}
+  simAI();if(F.over&&F.ko==="e")w++}}finally{fight=of}
+ return w/(runs||200)}
+// Stufe des Referenzhelden je Etage
+let duelL=n=>Math.max(10,Math.round(1.9*n-14));
+const bossTable=runs=>{const r=[];for(let n=5;n<=100;n+=5)r.push([n,Math.round(bossDuel(n,true,runs)*100),Math.round(bossDuel(n,false,runs)*100)]);return r};
