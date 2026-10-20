@@ -3,7 +3,7 @@ const fresh=()=>({mat:Object.fromEntries(MAT.map(m=>[m.k,0])),pr:{sm:{lv:1,xp:0}
 const eq=k=>itm(S[k==="w"?"ew":k==="a"?"ea":"es"]);
 const ikey=k=>k==="w"?(S.ew||wKey()):k==="a"?(S.ea||"a"+S.a):(S.es||"s"+S.s);
 const upl=k=>(S.up||{})[ikey(k)]||0;
-const fxv=k=>{let v=0;for(const s of["ew","ea","es"]){const i=itm(S[s]);if(i&&i.fx[k])v+=i.fx[k]}for(const q of["w","a","sh"])for(const r of((S.ru||{})[ikey(q)]||[])){const R=RU.find(x=>x.id===r);if(R&&R.fx[k])v+=R.fx[k]}return v};
+const fxv=k=>{let v=0;for(const s of["ew","ea","es"]){const i=itm(S[s]);if(i&&!i.u&&i.fx[k])v+=i.fx[k]}for(const q of["w","a","sh"])for(const r of((S.ru||{})[ikey(q)]||[])){const R=RU.find(x=>x.id===r);if(R&&R.fx[k])v+=R.fx[k]}return v};
 const wBon=()=>{const e=eq("w");return (e?e.b:W[S.w][2])+upl("w")*2};
 const aBon=()=>{const e=eq("a");return (e?e.b:A[S.a][2])+upl("a")};
 const sBon=()=>{const e=eq("sh");return (e?e.b:SH[S.s][2])+upl("sh")};
