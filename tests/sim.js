@@ -59,3 +59,10 @@ function bossDuel(n,old,runs,L){const of=fight;fight=()=>{};let w=0;
 // Stufe des Referenzhelden je Etage
 let duelL=n=>Math.max(10,Math.round(1.9*n-14));
 const bossTable=runs=>{const r=[];for(let n=5;n<=100;n+=5)r.push([n,Math.round(bossDuel(n,true,runs)*100),Math.round(bossDuel(n,false,runs)*100)]);return r};
+
+// Einzigartige Waffe gegen einen Legendären gleicher Art und Stufe: Siegquote (0..1) gegen den Turm-Boss der Etage n (Referenzheld wie bossDuel)
+function uniqDuel(id,n,runs,L0){const of=fight;fight=()=>{};let w=0,l=0;const d=UNIQ.find(x=>x.id===id),R=runs||60;
+ try{for(let r=0;r<R;r++)for(const mode of[0,1]){hero(L0||duelL(n));S.star=0;S.w=W.length-1;S.a=A.length-1;S.s=SH.length-1;Object.assign(S.it,{h:3,H:2,g:1});if(!S.sk.includes("halt"))S.sk[0]="halt";
+  const il=lvl()+Math.floor(n/10),it=mode?genUnique(id,il):genItem(il,3,"w",d.cat);S.gear.push(it);S.ew=it.id;F=null;S.tcur=n;S.en=9;startTower();simAI();const win=F.over&&F.ko==="e";if(mode)w+=win?1:0;else l+=win?1:0}}finally{fight=of}
+ return [Math.round(l/R*100),Math.round(w/R*100)]}
+const uniqTable=(n,runs,L)=>UNIQ.map(u=>[u.id,...uniqDuel(u.id,n,runs,L)]);

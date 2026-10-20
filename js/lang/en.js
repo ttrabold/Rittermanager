@@ -123,8 +123,8 @@ I18N.en={
  ue:{
   nm:{dbl:"Double Strike",time:"Time Rift",chain:"Chain Lightning",soul:"Soul Drain",blood:"Bloodlust",mirror:"Mirror Blade",mercy:"Mercy Strike",pierce:"Armour Breaker",ret:"Return",phoenix:"Phoenix Heart",storm:"Storm Call",morph:"Transformation",laser:"Laser Beam"},
   d:{dbl:p=>`${p}% chance of a second blow (70% damage)`,time:p=>`${p}% chance that the foe skips its turn`,chain:p=>`Critical hits leap over as lightning (${p}% damage, ignores armour)`,
-   soul:p=>`${p}% chance per hit to regain a skill point`,blood:p=>`Every hit +${p}% damage (up to +40%), but −2% max HP per turn`,mirror:p=>`${p}% of damage taken hits the foe`,
-   mercy:p=>`${p}% chance to finish a foe below 25% HP (bosses lose 20% HP)`,pierce:()=>"ignores armour and guard",ret:p=>`${p}% chance of a returning blow (60% damage)`,
+   soul:p=>`${p}% chance per hit to regain a skill point`,blood:p=>`Every hit +${p}% damage (up to +50%), but −1% max HP per turn`,mirror:p=>`${p}% of damage taken hits the foe`,
+   mercy:p=>`${p}% chance to finish a foe below 25% HP (bosses lose 20% HP)`,pierce:()=>"ignores armour and guard",ret:p=>`${p}% chance of a returning blow (80% damage)`,
    phoenix:p=>`Once per fight you rise again at 0 HP with ${p}% HP`,storm:p=>`+${p}% damage for 3 rounds at the start of a fight`,morph:p=>`Below half HP it transforms: +${p}% damage, +15% crit`,laser:p=>`${p}% chance of an energy beam (80% damage, ignores armour)`},
   log:{dbl:x=>`⚔️ Double Strike! One more blow: ${x} damage.`,ret:x=>`🏹 The blow returns: ${x} damage.`,laser:x=>`🔆 Laser beam! ${x} damage.`,chain:x=>`⚡ The lightning leaps over: ${x} damage.`,soul:n=>`👻 Soul Drain! ${n} recharges by one point.`,
    mercy:()=>"💀 Mercy Strike! The foe falls.",mercyB:x=>`💀 Mercy Strike lands hard: ${x} damage.`,blood:n=>`🩸 Bloodlust costs you ${n} HP.`,mirror:x=>`🪞 Mirror Blade: ${x} damage thrown back at the foe.`,time:n=>`⏳ Time Rift! ${n} freezes and skips its turn.`,phoenix:h=>`🔥 Phoenix Heart! You rise again with ${h} HP.`,storm:()=>"🌩️ Storm Call! Your damage rises for 3 rounds.",morph:()=>"🌀 Your weapon transforms!"}},
