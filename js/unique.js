@@ -36,7 +36,7 @@ const uBloodMax=.4;
 function uDmgMul(f){const e=uEq();if(!e||!f.uq)return 1;let m=1;if(uHas("blood"))m*=1+Math.min(uBloodMax,f.uq.bl*uVal("blood",e));if(f.uq.mo)m*=1+uVal("morph",e);return m}
 const uCritB=f=>f.uq&&f.uq.mo?.15:0;
 // Zusatzschaden nach einem Treffer; löst selbst keine weiteren Effekte aus
-function uOnHit(f,tot,crit,l){const e=uEq();if(!e||!f.uq||f.ehp<=0)return;let add=0;const raw=tot+f.def,hit=(k,x)=>{x=Math.max(1,Math.round(x));add+=x;f.ehp-=x;l.push(t("ue.log."+k,x));f.vfx.push(["u_"+k,"vE",0])};
+function uOnHit(f,tot,crit,l){const e=uEq();if(!e||!f.uq||f.ehp<=0)return;let add=0;if(uHas("pierce"))f.vfx.push(["u_pierce","vE",0]);const raw=tot+f.def,hit=(k,x)=>{x=Math.max(1,Math.round(x));add+=x;f.ehp-=x;l.push(t("ue.log."+k,x));f.vfx.push(["u_"+k,"vE",0])};
  if(uHas("dbl")&&Math.random()<uVal("dbl",e))hit("dbl",tot*.7);
  if(uHas("ret")&&Math.random()<uVal("ret",e))hit("ret",tot*.6);
  if(uHas("laser")&&Math.random()<uVal("laser",e))hit("laser",raw*.8);

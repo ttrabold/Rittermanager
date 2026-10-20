@@ -263,3 +263,30 @@ UNIQV.trugspiegel=(ph,big)=>`<defs><linearGradient id="utr-m" x1="0" y1="0" x2="
 // Große und kleine Fassung
 const uniqBig=(id,ph)=>`<svg class="ub" viewBox="0 0 300 600" aria-hidden="true">${UNIQV[id](ph?1:0,true)}</svg>`;
 const uniqSmall=(id,ph)=>{const g=UG[id];return `<g class="us" data-u="${id}" transform="translate(${(107.5-g[0]*g[2]).toFixed(1)} ${(105.5-g[1]*g[2]).toFixed(1)}) scale(${g[2]})">${UNIQV[id](ph?1:0,false)}</g>`};
+// ---- Kampfanimationen (VX: c = "vE" Gegner / "vP" Spieler) ----
+Object.assign(VX,{
+u_dbl:c=>`<svg class="${c}" viewBox="0 0 120 120"><path class="sl r" d="M8 104L112 14"/><path class="sl r b" d="M12 12L108 110"/></svg><span class="udbl ${c}">×2</span>`,
+u_chain:c=>`<svg class="uchain" viewBox="0 0 300 160"><path d="M40 0L120 60L96 66L176 116L152 122L230 160" stroke="#fff" stroke-width="7" fill="none"/><path d="M40 0L120 60L96 66L176 116L152 122L230 160" stroke="#7fd0ff" stroke-width="14" fill="none" opacity=".6"/></svg><span class="flash" style="background:#bfe6ff"></span>`,
+u_laser:c=>`<span class="ulcharge"></span><span class="ulaser"></span><span class="flash" style="background:#ff2fb4"></span>`,
+u_ret:c=>`<svg class="uret" viewBox="0 0 200 20"><path d="M10 10H170" stroke="#fff" stroke-width="5"/><path d="M10 10l16-9v18z" fill="#ffd54f"/><path d="M170 10l-12-8m12 8l-12 8" stroke="#ffd54f" stroke-width="4"/></svg>`,
+u_soul:c=>`<span class="rise ${c}">👻💚✨</span>`,
+u_blood:c=>`<span class="ublood ${c}"></span>`,
+u_mercy:c=>`<span class="flash"></span><span class="blast ${c}">💀</span>`,
+u_pierce:c=>`<svg class="${c}" viewBox="0 0 120 120"><path class="sl r" d="M60 4L60 116"/></svg><span class="blast ${c}">💥</span>`,
+u_time:c=>`<span class="ring ${c}" style="border-color:#b388ff"></span><span class="spin ${c}">⏳</span>`,
+u_mirror:c=>`<span class="umirror ${c}"></span><span class="blast ${c}">🪞</span>`,
+u_phoenix:c=>`<span class="flash fire"></span><span class="rise ${c}">🔥🔥🔥</span><span class="blast ${c}">🔥</span>`,
+u_storm:c=>`<span class="aura ${c}">🌩️</span><span class="flash" style="background:#90caf9"></span>`,
+u_morph:c=>`<span class="flash" style="background:#e040fb"></span><span class="aura ${c}">🌀</span>`});
+// ---- Enthüllung: Blitz schlägt in die Truhe, Deckel springt auf, die Waffe dreht sich heraus, Name und Effekt schlagen ein ----
+function uniqueReveal(it){if(typeof document==="undefined"||!document.body)return;const old=document.getElementById("ureveal");if(old)old.remove();
+ const d=UNIQ.find(x=>x.id===it.u),el=document.createElement("div");el.id="ureveal";
+ el.innerHTML=`<div class="ur-st"><div class="ur-bgl"></div><svg class="ur-bolt" viewBox="0 0 100 300" preserveAspectRatio="none"><path d="M54 0L38 90L62 96L30 190L52 196L40 300" stroke="#fff" stroke-width="5" fill="none"/><path d="M54 0L38 90L62 96L30 190L52 196L40 300" stroke="#8ad4ff" stroke-width="12" fill="none" opacity=".6"/></svg>
+  <div class="ur-beam"></div>
+  <div class="ur-w">${uniqBig(it.u)}</div>
+  <svg class="ur-chest" viewBox="0 0 200 150"><path d="M20 60h160v80H20z" fill="#5a3a1c" stroke="#1c1008" stroke-width="4"/><path d="M20 90h160M60 60v80M140 60v80" stroke="#8a8a8a" stroke-width="5"/><rect x="88" y="84" width="24" height="26" rx="4" fill="#c9971a" stroke="#5d4a2c" stroke-width="3"/><g class="ur-lid"><path d="M14 62Q14 12 100 12Q186 12 186 62Z" fill="#6a4624" stroke="#1c1008" stroke-width="4"/><path d="M60 14v48M140 14v48" stroke="#8a8a8a" stroke-width="5"/></g></svg>
+  <div class="ur-t"><b>✦ ${t("ux.tag")}</b><span>${it.n}</span></div>
+  <div class="ur-e">${d.ef.map(k=>`<div><b>${t("ue.nm."+k)}</b><br>${t("ue.d."+k,uPct(k,it))}</div>`).join("")}</div>
+  <button class="p ur-b">${t("ux.reveal")}</button><div class="ur-fl"></div></div>`;
+ const close=()=>{el.remove();document.removeEventListener("keydown",key,true)},key=e=>{if(e.key==="Enter"||e.key==="Escape"||e.key===" "){e.preventDefault();e.stopPropagation();close()}};
+ el.querySelector("button").onclick=close;document.addEventListener("keydown",key,true);document.body.appendChild(el)}

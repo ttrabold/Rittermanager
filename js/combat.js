@@ -54,6 +54,7 @@ function fight(){if(QUICK)return;
  <div class="ps ${f.hP?"hit late":""}">${dm("p")}<div class="lg ${f.lP?"lungeP":""}"><div class="kw ${f.ko==="p"?"koP":f.ko==="e"?"cheer":""}">${pk()}</div></div>${S.cmp?`<div class="fcmp">${compSvg(S.cmp,44)}</div>`:""}</div>
  <div class="box pb"><b>${S.name}</b> <span class="mut">${t("cb.lv")}${lvl()}</span>${tl()} ${ic(f.pb,{buff:"💥",guard:"🛡️",poison:"☠️",burn:"🔥",stun:"💫",regen:"💗"})}${bar(f.php,f.pmax,"#2e8b57")}<span class="mut">${Math.max(0,f.php)}/${f.pmax}</span></div>${VXH(f)}</div>
  <div class="msg">${f.log}</div><div class="grid">${ui}</div>`;
+ if(f.reveal){const r=f.reveal;f.reveal=null;uniqueReveal(r)}
 }
 // Kampftext: eine Zeile pro Aktion, Schaden rot, Heilung grün
 const fmtLine=x=>x.replace(t("cb.reDmg"),'<b class="dn">$1</b>$2').replace(t("cb.reHeal"),'$1 <b class="hn">$2</b>');
