@@ -1,0 +1,149 @@
+<!doctype html><html lang="de"><meta charset="utf-8"><title>Einzigartige Waffen – Konzepte 3</title>
+<style>
+body{margin:0;background:#0c0906;color:#f0d9a0;font:15px Georgia,serif;padding:16px}
+h1{font-size:20px;margin:0 0 4px}p{margin:2px 0 12px;color:#cdbb92}
+.row{display:flex;flex-wrap:wrap;gap:16px}
+.card{width:360px;border-radius:12px;border:2px solid #6a5630;overflow:hidden;background:#050403}
+.st{height:600px;position:relative;overflow:hidden}
+.lab{padding:8px 12px;background:#000;font-size:13px;line-height:1.35}.lab b{font-size:16px}
+svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.fl{animation:fl 3.6s ease-in-out infinite alternate}@keyframes fl{to{transform:translateY(-10px) rotate(1deg)}}
+.fl2{animation:fl 2.6s ease-in-out infinite alternate-reverse}
+.rot{transform-box:fill-box;transform-origin:center;animation:rot 7s linear infinite}.rotr{transform-box:fill-box;transform-origin:center;animation:rot 11s linear infinite reverse}
+@keyframes rot{to{transform:rotate(360deg)}}
+.pl{animation:pl 1.6s ease-in-out infinite alternate}@keyframes pl{from{opacity:.1}to{opacity:.32}}
+.pu{transform-box:fill-box;transform-origin:center;animation:pu 1.2s ease-in-out infinite}@keyframes pu{50%{transform:scale(1.08)}}
+.zz{animation:zz .45s steps(2) infinite}.zz2{animation:zz .31s steps(2) infinite .1s}@keyframes zz{50%{opacity:.2}}
+.up{animation:up 3s linear infinite}@keyframes up{0%{transform:translateY(40px);opacity:0}15%{opacity:1}100%{transform:translateY(-440px);opacity:0}}
+.dr{animation:dr 2.2s ease-in infinite}@keyframes dr{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(90px);opacity:0}}
+.col{animation:colm 2.4s ease-in-out infinite alternate}@keyframes colm{from{opacity:.15}to{opacity:.5}}
+.beam{transform-box:fill-box;transform-origin:left;animation:bm 3.4s ease-in-out infinite}@keyframes bm{0%,50%{transform:scaleX(0);opacity:0}58%{transform:scaleX(1);opacity:1}78%{opacity:1;transform:scaleX(1)}100%{opacity:0;transform:scaleX(1)}}
+.charge{transform-box:fill-box;transform-origin:center;animation:ch 3.4s ease-in infinite}@keyframes ch{0%{transform:scale(.3);opacity:0}45%{transform:scale(1.2);opacity:.9}55%,100%{transform:scale(.3);opacity:0}}
+.ghost{animation:gh 3.2s ease-in-out infinite}@keyframes gh{0%{transform:translate(70px,0);opacity:0}20%{opacity:1}50%{transform:translate(-120px,0)}80%{opacity:1}100%{transform:translate(70px,0);opacity:0}}
+.vein{stroke-dasharray:9 6;animation:vn 1.2s linear infinite}@keyframes vn{to{stroke-dashoffset:-30}}
+.wing{transform-box:fill-box;animation:wg 2.2s ease-in-out infinite alternate}.wl{transform-origin:100% 50%}.wr{transform-origin:0 50%;animation-direction:alternate-reverse}@keyframes wg{from{transform:rotate(-5deg)}to{transform:rotate(6deg)}}
+</style>
+<h1>Einzigartige Waffen – Konzepte 3</h1>
+<p>Keine Druckwellen mehr unten. Dafür sind die Waffen selbst viel aufwendiger: Runen, Zacken, Flügel, Edelsteine, Ketten und schwebende Einzelteile.</p>
+<div class="row">
+
+<!-- 1 DONNERZAHN -->
+<div class="card"><div class="st" style="background:radial-gradient(ellipse at 50% 30%,#0f3a66,#060a14 72%)"><svg viewBox="0 0 300 600">
+ <defs><linearGradient id="bl" x1="0" x2="1"><stop offset="0" stop-color="#1f5a9a"/><stop offset=".45" stop-color="#f4fbff"/><stop offset="1" stop-color="#1f5a9a"/></linearGradient>
+ <linearGradient id="col" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fd0ff" stop-opacity="0"/><stop offset=".5" stop-color="#7fd0ff"/><stop offset="1" stop-color="#7fd0ff" stop-opacity="0"/></linearGradient></defs>
+ <rect class="col" x="100" y="0" width="100" height="600" fill="url(#col)"/>
+ <circle class="pl" cx="150" cy="210" r="170" fill="#4aa8ff"/>
+ <g class="rotr"><circle cx="150" cy="210" r="132" fill="none" stroke="#7fd0ff" stroke-width="1.5" stroke-dasharray="4 10"/></g>
+ <g class="fl2"><path d="M26 150l14-36l14 36l-14 14z" fill="#7fd0ff"/><path d="M262 110l12-30l12 30l-12 12z" fill="#bfe6ff"/><path d="M40 300l10-24l10 24l-10 9z" fill="#bfe6ff"/><path d="M250 270l12-28l12 28l-12 10z" fill="#7fd0ff"/></g>
+ <g class="fl">
+ <!-- Klinge mit Zinken -->
+ <path d="M92 428L66 128L100 40L126 104L150 6L174 104L200 40L234 128L208 428Z" fill="url(#bl)" stroke="#d8f2ff" stroke-width="3.5"/>
+ <path d="M150 10V420" stroke="#1a4a80" stroke-width="4"/><path d="M106 410L86 140M194 410L214 140" stroke="#7fd0ff" stroke-width="2.5" opacity=".8"/>
+ <g fill="#eaf7ff" stroke="#1a4a80" stroke-width="1.5"><path d="M92 420l-16-8l12-14z"/><path d="M89 372l-16-8l12-14z"/><path d="M86 324l-16-8l12-14z"/><path d="M83 276l-16-8l12-14z"/><path d="M80 228l-16-8l12-14z"/><path d="M208 420l16-8l-12-14z"/><path d="M211 372l16-8l-12-14z"/><path d="M214 324l16-8l-12-14z"/><path d="M217 276l16-8l-12-14z"/><path d="M220 228l16-8l-12-14z"/></g>
+ <g class="zz2" stroke="#7fd0ff" stroke-width="3" fill="none" stroke-linecap="round" style="filter:drop-shadow(0 0 6px #7fd0ff)"><path d="M132 70l14 10l-14 10l14 10"/><path d="M168 110l-14 10l14 10l-14 10"/><path d="M132 150l14 10l-14 10l14 10"/><path d="M168 190l-14 10l14 10l-14 10"/><path d="M132 230l14 10l-14 10l14 10"/><path d="M168 270l-14 10l14 10l-14 10"/><path d="M132 310l14 10l-14 10l14 10"/><path d="M168 350l-14 10l14 10l-14 10"/></g>
+ <g class="zz"><path d="M102 46L150 190L126 196L164 320L140 326L172 420" stroke="#fff" stroke-width="6" fill="none" style="filter:drop-shadow(0 0 12px #7fd0ff)"/></g>
+ <g class="zz2"><path d="M98 38Q150 100 202 38" stroke="#fff27a" stroke-width="6" fill="none" style="filter:drop-shadow(0 0 14px #ffe066)"/><path d="M70 126Q150 180 230 126" stroke="#9fe0ff" stroke-width="3" fill="none"/><path d="M100 40L92 20M200 40L208 20M150 6L150 -16M126 104L112 90M174 104L188 90" stroke="#fff" stroke-width="3"/></g>
+ <!-- Parierstange mit Flügeln -->
+ <path d="M44 438Q150 404 256 438L242 468Q150 442 58 468Z" fill="#c9971a" stroke="#5d4a2c" stroke-width="3.5"/>
+ <path d="M48 440L10 396L22 442L10 462L52 458ZM252 440L290 396L278 442L290 462L248 458Z" fill="#ffd54f" stroke="#5d4a2c" stroke-width="2.5"/>
+ <path d="M60 446L26 414M60 452L22 446M240 446L274 414M240 452L278 446" stroke="#8a6410" stroke-width="2"/>
+ <circle cx="96" cy="448" r="9" fill="#4aa8ff" stroke="#ffd54f" stroke-width="3"/><circle cx="204" cy="448" r="9" fill="#4aa8ff" stroke="#ffd54f" stroke-width="3"/>
+ <circle cx="150" cy="450" r="20" fill="#1a4a80" stroke="#ffd54f" stroke-width="5"/><path d="M150 432l14 18l-14 18l-14 -18z" fill="#7fd0ff" stroke="#fff" stroke-width="2"/><circle class="pu" cx="150" cy="450" r="5" fill="#fff"/>
+ <!-- Griff mit Wicklung -->
+ <rect x="136" y="470" width="28" height="92" rx="7" fill="#3a2a1c" stroke="#150f08" stroke-width="2.5"/>
+ <path d="M136 486l28-8M136 504l28-8M136 522l28-8M136 540l28-8" stroke="#a07a30" stroke-width="3.5"/>
+ <!-- Drachenkopf-Knauf -->
+ <path d="M122 566Q150 548 178 566L172 592Q150 604 128 592Z" fill="#c9971a" stroke="#5d4a2c" stroke-width="3"/><path d="M130 568l-10-14l18 6ZM170 568l10-14l-18 6Z" fill="#ffd54f" stroke="#5d4a2c"/><circle cx="138" cy="580" r="4" fill="#7fd0ff"/><circle cx="162" cy="580" r="4" fill="#7fd0ff"/>
+ </g>
+ <circle class="up" cx="60" cy="560" r="3" fill="#bfe6ff"/><circle class="up" style="animation-delay:.8s" cx="240" cy="580" r="2.5" fill="#fff"/><circle class="up" style="animation-delay:1.6s" cx="120" cy="570" r="3" fill="#7fd0ff"/><circle class="up" style="animation-delay:2.2s" cx="190" cy="560" r="2" fill="#fff27a"/>
+ </svg></div><div class="lab"><b>Donnerzahn</b> · Schwert · Blitzkette<br>Fünf Zinken, gezackte Schneiden, glühende Blitzrunen, geflügelte Parierstange mit Edelsteinen, Drachenkopf-Knauf.</div></div>
+
+<!-- 2 SONNENLASER -->
+<div class="card"><div class="st" style="background:radial-gradient(ellipse at 50% 25%,#4a1050,#08030c 72%)"><svg viewBox="0 0 300 600">
+ <circle class="pl" cx="150" cy="160" r="180" fill="#ff2fb4"/>
+ <g class="rotr"><ellipse cx="150" cy="160" rx="146" ry="38" fill="none" stroke="#ff7ad9" stroke-width="2" stroke-dasharray="8 8"/></g>
+ <g class="fl">
+ <!-- Schaft mit Spiralen -->
+ <rect x="140" y="250" width="20" height="330" rx="8" fill="#3a1840" stroke="#150418" stroke-width="2.5"/>
+ <path d="M140 270q20 12 20 24q-20 12 -20 24q20 12 20 24q-20 12 -20 24q20 12 20 24q-20 12 -20 24q20 12 20 24" stroke="#ff2fb4" stroke-width="3" fill="none"/>
+ <circle cx="150" cy="420" r="8" fill="#c9971a" stroke="#5d4a2c" stroke-width="2"/><circle class="pu" cx="150" cy="420" r="3" fill="#ff7ad9"/>
+ <path d="M130 585q20 24 40 0z" fill="#c9971a" stroke="#5d4a2c" stroke-width="2"/>
+ <!-- goldene Flügel am Kopf -->
+ <g class="wing wl"><path d="M120 214Q60 200 8 120Q40 150 64 140Q50 168 86 176Q76 196 118 198Z" fill="#c9971a" stroke="#5d4a2c" stroke-width="3"/><path d="M110 206Q70 196 34 150M108 196Q80 186 56 160" stroke="#ffd54f" stroke-width="2" fill="none"/></g>
+ <g class="wing wr"><path d="M180 214Q240 200 292 120Q260 150 236 140Q250 168 214 176Q224 196 182 198Z" fill="#c9971a" stroke="#5d4a2c" stroke-width="3"/><path d="M190 206Q230 196 266 150M192 196Q220 186 244 160" stroke="#ffd54f" stroke-width="2" fill="none"/></g>
+ <path d="M104 224Q150 280 196 224L180 200Q150 240 120 200Z" fill="#c9971a" stroke="#5d4a2c" stroke-width="3.5"/>
+ <circle cx="150" cy="236" r="9" fill="#ff2fb4" stroke="#ffd54f" stroke-width="3"/>
+ <!-- Ringe, Sonne -->
+ <g class="rot"><ellipse cx="150" cy="160" rx="112" ry="30" fill="none" stroke="#ffd54f" stroke-width="6" style="filter:drop-shadow(0 0 8px #ffd54f)"/></g>
+ <g class="rotr" style="animation-duration:8s"><circle cx="150" cy="160" r="90" fill="none" stroke="#ff2fb4" stroke-width="4" stroke-dasharray="16 10"/></g>
+ <circle cx="150" cy="160" r="64" fill="#2a0f30" stroke="#ffd54f" stroke-width="6"/><circle cx="150" cy="160" r="56" fill="none" stroke="#ff2fb4" stroke-width="2" stroke-dasharray="3 5"/>
+ <circle class="pu" cx="150" cy="160" r="48" fill="#ff2fb4" style="filter:drop-shadow(0 0 26px #ff2fb4)"/><circle class="pu" cx="150" cy="160" r="28" fill="#fff"/>
+ <g class="rot" style="animation-duration:3s"><path d="M150 160L150 108M150 160L196 186M150 160L104 186" stroke="#fff" stroke-width="3" opacity=".55"/></g>
+ <g class="rot" style="animation-duration:3.4s"><circle cx="150" cy="22" r="10" fill="#ffd54f" style="filter:drop-shadow(0 0 12px #ffd54f)"/></g>
+ <g class="rotr" style="animation-duration:5s"><circle cx="150" cy="298" r="8" fill="#ff7ad9" style="filter:drop-shadow(0 0 10px #ff2fb4)"/></g>
+ <g class="rot" style="animation-duration:4.4s"><circle cx="150" cy="40" r="6" fill="#fff"/></g>
+ <circle class="charge" cx="210" cy="160" r="30" fill="#fff" style="filter:drop-shadow(0 0 16px #ff2fb4)"/>
+ <path class="beam" d="M214 150H440V170H214Z" fill="#fff" style="filter:drop-shadow(0 0 20px #ff2fb4) drop-shadow(0 0 44px #b01a8a)"/>
+ </g>
+ <circle class="up" cx="80" cy="580" r="3" fill="#ff9be6"/><circle class="up" style="animation-delay:1s" cx="230" cy="580" r="3" fill="#ffd54f"/><circle class="up" style="animation-delay:1.9s" cx="150" cy="580" r="2.5" fill="#fff"/>
+ </svg></div><div class="lab"><b>Sonnenlaser</b> · Stab · Laserstrahl<br>Goldene Schwingen, eine Sonne in goldenem Rahmen mit drei Ringen und Satelliten, Spiralschaft. Lädt sichtbar auf und schießt.</div></div>
+
+<!-- 3 WIEDERKEHR -->
+<div class="card"><div class="st" style="background:radial-gradient(ellipse at 50% 50%,#4a3a10,#080602 72%)"><svg viewBox="0 0 300 600">
+ <circle class="pl" cx="170" cy="300" r="190" fill="#ffd54f"/>
+ <g class="rot" style="animation-duration:16s"><circle cx="170" cy="300" r="150" fill="none" stroke="#ffd54f" stroke-width="2" stroke-dasharray="2 12" stroke-linecap="round"/></g>
+ <g class="rotr"><circle cx="170" cy="300" r="112" fill="none" stroke="#fff3b0" stroke-width="1.5" stroke-dasharray="20 14"/></g>
+ <g class="fl">
+ <!-- Mondphasen schweben -->
+ <g class="fl2"><circle cx="40" cy="120" r="14" fill="#fff3b0"/><circle cx="48" cy="116" r="13" fill="#4a3a10"/><circle cx="262" cy="470" r="11" fill="#fff3b0"/><circle cx="256" cy="466" r="11" fill="#4a3a10"/><circle cx="40" cy="500" r="9" fill="#fff3b0"/></g>
+ <!-- Bogenkörper -->
+ <path d="M210 24Q56 300 210 576Q104 300 210 24Z" fill="#f2e3b0" stroke="#fff" stroke-width="3.5"/>
+ <path d="M198 64Q92 300 198 536" stroke="#c9971a" stroke-width="6" fill="none"/>
+ <path d="M190 120Q120 300 190 480" stroke="#fff" stroke-width="2" fill="none" opacity=".8"/>
+ <g stroke="#c9971a" stroke-width="3" fill="none"><path d="M168 150l-14 10l14 10"/><path d="M148 200l-14 10l14 10"/><path d="M140 260l-14 10l14 10"/><path d="M140 330l-14 10l14 10"/><path d="M148 390l-14 10l14 10"/><path d="M168 440l-14 10l14 10"/></g>
+ <!-- Flügelspitzen -->
+ <g class="wing wl"><path d="M210 24L250 -4L240 30L270 18L238 54L218 46Z" fill="#fff3b0" stroke="#c9971a" stroke-width="2.5"/></g>
+ <g class="wing wr"><path d="M210 576L250 604L240 570L270 582L238 546L218 554Z" fill="#fff3b0" stroke="#c9971a" stroke-width="2.5"/></g>
+ <path d="M210 24Q196 300 210 576" stroke="#fff" stroke-width="3.5" fill="none" style="filter:drop-shadow(0 0 12px #ffd54f)"/>
+ <!-- Griff mit Edelstein -->
+ <rect x="96" y="262" width="32" height="76" rx="10" fill="#5b3a1c" stroke="#150f08" stroke-width="2.5"/><path d="M96 280h32M96 300h32M96 320h32" stroke="#c9971a" stroke-width="3"/>
+ <path d="M100 258Q112 246 124 258" stroke="#c9971a" stroke-width="5" fill="none"/><path d="M100 342Q112 354 124 342" stroke="#c9971a" stroke-width="5" fill="none"/>
+ <circle cx="112" cy="300" r="9" fill="#ffd54f" stroke="#5d4a2c" stroke-width="2"/><circle class="pu" cx="112" cy="300" r="4" fill="#fff"/>
+ <!-- Geisterpfeil -->
+ <g class="ghost"><g style="filter:drop-shadow(0 0 14px #ffd54f)"><path d="M222 300H80" stroke="#fff" stroke-width="6"/><path d="M80 300l18-12v24z" fill="#fff"/><path d="M222 300l-12-14m12 14l-12 14M232 300l-12-14m12 14l-12 14" stroke="#ffd54f" stroke-width="4"/></g></g>
+ <g class="ghost" style="animation-delay:.18s;opacity:.5"><path d="M222 300H80" stroke="#ffd54f" stroke-width="3"/></g>
+ <g class="ghost" style="animation-delay:.34s;opacity:.25"><path d="M222 300H80" stroke="#ffd54f" stroke-width="2"/></g>
+ <circle class="pu" cx="210" cy="300" r="10" fill="#ffd54f" style="filter:drop-shadow(0 0 12px #fff)"/>
+ </g>
+ <circle class="up" cx="70" cy="580" r="3" fill="#fff3b0"/><circle class="up" style="animation-delay:1s" cx="250" cy="580" r="3" fill="#ffd54f"/><circle class="up" style="animation-delay:2s" cx="160" cy="580" r="2.5" fill="#fff"/>
+ </svg></div><div class="lab"><b>Wiederkehr</b> · Bogen · Wiederkehr<br>Sichelbogen aus Mondlicht mit Runenschnitzerei, Flügelspitzen, goldenem Griff mit Edelstein und schwebenden Mondphasen.</div></div>
+
+<!-- 4 BLUTDURST -->
+<div class="card"><div class="st" style="background:radial-gradient(ellipse at 50% 28%,#5a0c0c,#080202 72%)"><svg viewBox="0 0 300 600">
+ <circle class="pl" cx="150" cy="190" r="180" fill="#ff1a1a"/>
+ <g class="rotr"><circle cx="150" cy="190" r="146" fill="none" stroke="#ff3a2a" stroke-width="2" stroke-dasharray="6 10"/></g>
+ <g class="fl">
+ <!-- Schaft aus Knochen mit Ketten -->
+ <rect x="136" y="170" width="28" height="410" rx="10" fill="#2a1410" stroke="#0a0303" stroke-width="3"/>
+ <g fill="#d9cfc0" stroke="#150f08" stroke-width="2"><ellipse cx="150" cy="260" rx="20" ry="9"/><ellipse cx="150" cy="330" rx="20" ry="9"/><ellipse cx="150" cy="400" rx="20" ry="9"/><ellipse cx="150" cy="470" rx="20" ry="9"/><ellipse cx="150" cy="540" rx="20" ry="9"/></g>
+ <g stroke="#9a9a9a" stroke-width="4" fill="none"><path class="fl2" d="M164 250q36 20 30 60q-6 36 8 60"/><path class="fl2" d="M136 300q-36 20 -30 60q6 36 -8 60"/></g>
+ <g fill="#2a1410" stroke="#9a9a9a" stroke-width="2"><circle cx="202" cy="370" r="7"/><circle cx="98" cy="420" r="7"/></g>
+ <!-- Klingen -->
+ <g class="pu"><path d="M138 130Q58 36 4 120Q36 172 -10 238Q92 256 138 196Z" fill="#3a0808" stroke="#ff4a3a" stroke-width="4.5"/><path d="M162 130Q242 36 296 120Q264 172 310 238Q208 256 162 196Z" fill="#3a0808" stroke="#ff4a3a" stroke-width="4.5"/>
+ <path d="M130 140Q70 84 26 130M130 166Q64 158 20 196M130 190Q80 210 30 222M170 140Q230 84 274 130M170 166Q236 158 280 196M170 190Q220 210 270 222" stroke="#7a0a0a" stroke-width="2.5" fill="none"/>
+ <g fill="#ff4a3a" stroke="#5a0808" stroke-width="1.5"><path d="M4 120L-16 98L16 110z"/><path d="M-10 238L-26 260L8 244z"/><path d="M296 120L316 98L284 110z"/><path d="M310 238L326 260L292 244z"/><path d="M-6 180l-22 8l18 10z"/><path d="M306 180l22 8l-18 10z"/></g></g>
+ <path class="vein" d="M134 146Q80 116 26 134M134 182Q72 188 18 206M162 146Q220 116 274 134M162 182Q228 188 282 206M134 206Q92 222 40 226M166 206Q208 222 260 226" stroke="#ff2a1a" stroke-width="5" fill="none" style="filter:drop-shadow(0 0 10px #f00)"/>
+ <!-- Totenkopf mit Hörnern -->
+ <path d="M122 120Q100 80 116 56Q120 90 134 106ZM178 120Q200 80 184 56Q180 90 166 106Z" fill="#d9cfc0" stroke="#150f08" stroke-width="2.5"/>
+ <circle cx="150" cy="150" r="40" fill="#e6dccb" stroke="#150f08" stroke-width="3.5"/><ellipse cx="136" cy="146" rx="10" ry="12" fill="#150f08"/><ellipse cx="164" cy="146" rx="10" ry="12" fill="#150f08"/>
+ <circle class="zz" cx="136" cy="148" r="4.4" fill="#ff2a1a" style="filter:drop-shadow(0 0 8px #f00)"/><circle class="zz" cx="164" cy="148" r="4.4" fill="#ff2a1a" style="filter:drop-shadow(0 0 8px #f00)"/>
+ <path d="M144 160l6-8l6 8z" fill="#150f08"/><path d="M134 174h32M139 170v10M145 170v10M151 170v10M157 170v10M163 170v10" stroke="#150f08" stroke-width="2.2"/>
+ <path class="dr" d="M26 220q-7 16 0 24q7-8 0-24z" fill="#e01010"/><path class="dr" style="animation-delay:.6s" d="M274 220q-7 16 0 24q7-8 0-24z" fill="#e01010"/><path class="dr" style="animation-delay:1.2s" d="M150 196q-7 16 0 24q7-8 0-24z" fill="#e01010"/><path class="dr" style="animation-delay:1.7s" d="M80 244q-6 14 0 20q6-6 0-20z" fill="#e01010"/><path class="dr" style="animation-delay:.3s" d="M222 244q-6 14 0 20q6-6 0-20z" fill="#e01010"/>
+ <!-- Knauf: Dornenkugel -->
+ <circle cx="150" cy="580" r="20" fill="#7a1a1a" stroke="#150f08" stroke-width="3"/><path d="M150 556v-12M150 604v12M126 580h-12M174 580h12M133 563l-8 -8M167 563l8 -8M133 597l-8 8M167 597l8 8" stroke="#ff4a3a" stroke-width="4" stroke-linecap="round"/><circle class="pu" cx="150" cy="580" r="7" fill="#ff2a1a"/>
+ </g>
+ <circle class="up" cx="70" cy="580" r="3" fill="#ff6a5a"/><circle class="up" style="animation-delay:1s" cx="240" cy="580" r="3" fill="#ff2a1a"/><circle class="up" style="animation-delay:1.8s" cx="150" cy="580" r="2.5" fill="#ffb0a0"/>
+ </svg></div><div class="lab"><b>Blutdurst</b> · Axt · Blutdurst<br>Gewaltige Doppelaxt mit Hörnern, Zacken, pulsierenden Blutadern, Knochenschaft mit Ketten und Dornenknauf.</div></div>
+
+</div>
+</html>

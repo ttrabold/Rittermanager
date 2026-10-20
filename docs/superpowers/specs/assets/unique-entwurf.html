@@ -1,0 +1,106 @@
+<!doctype html><html lang="de"><meta charset="utf-8"><title>Einzigartige Waffen – Entwürfe</title>
+<style>
+body{margin:0;background:#1b1712;color:#f0d9a0;font:15px Georgia,serif;padding:16px}
+h1{font-size:20px;margin:0 0 4px}h2{font-size:16px;margin:22px 0 6px}p{margin:2px 0 10px;color:#cdbb92}
+.row{display:flex;flex-wrap:wrap;gap:14px}
+.card{width:340px;height:420px;position:relative;overflow:hidden;border-radius:10px;border:2px solid #5a4a30;background:#0d0a07}
+.card .lab{position:absolute;left:0;right:0;bottom:0;padding:8px 10px;background:#000a;font-size:13px;z-index:9}
+.stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+svg{overflow:visible}
+button{background:#3a2e1e;color:#f0d9a0;border:1px solid #7a6540;border-radius:6px;padding:4px 10px;cursor:pointer;margin:0 4px 6px 0}
+/* A: Strahlen */
+.rays{position:absolute;left:50%;top:44%;width:900px;height:900px;margin:-450px;background:repeating-conic-gradient(from 0deg,#ffd54f33 0 6deg,#0000 6deg 20deg);animation:spin 14s linear infinite;mask:radial-gradient(circle,#000 10%,#0000 62%);-webkit-mask:radial-gradient(circle,#000 10%,#0000 62%)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rise{animation:rise 1.6s cubic-bezier(.2,.9,.2,1.1) both}@keyframes rise{0%{transform:translateY(160px) scale(.2) rotate(-40deg);opacity:0}60%{opacity:1}100%{transform:none}}
+.float{animation:flt 3s ease-in-out infinite alternate 1.6s}@keyframes flt{to{transform:translateY(-12px)}}
+.flash{position:absolute;inset:0;background:#fff;animation:fl 1.2s ease-out both}@keyframes fl{0%{opacity:.95}100%{opacity:0}}
+.txt{position:absolute;left:0;right:0;top:12px;text-align:center;z-index:5;animation:fade 1s 1s both}
+.txt b{display:block;font-size:11px;letter-spacing:3px;color:#ffb74d}.txt span{font-size:22px}
+.eff{position:absolute;left:0;right:0;bottom:58px;text-align:center;font-size:13px;color:#ffe0a0;animation:fade 1s 1.8s both;z-index:5}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.spark{position:absolute;width:5px;height:5px;border-radius:50%;background:#fff4b0;box-shadow:0 0 8px #ffd54f;animation:up 2.6s linear infinite}
+@keyframes up{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(-300px);opacity:0}}
+/* B: Truhe / Amboss */
+.bolt{position:absolute;left:50%;top:0;width:6px;height:210px;margin-left:-3px;background:linear-gradient(#fff,#8ad4ff);filter:drop-shadow(0 0 10px #8ad4ff);animation:bolt 2.8s infinite;transform-origin:top}
+@keyframes bolt{0%,8%{opacity:0;transform:scaleY(0)}9%{opacity:1;transform:scaleY(1)}14%{opacity:0}16%{opacity:1}20%,100%{opacity:0}}
+.smoke{position:absolute;left:50%;bottom:120px;width:160px;height:160px;margin-left:-80px;border-radius:50%;background:radial-gradient(#8a7a6a,#0000 70%);animation:sm 3s ease-out infinite}
+@keyframes sm{0%{transform:scale(.2);opacity:.9}100%{transform:scale(2.4) translateY(-40px);opacity:0}}
+.reveal{animation:rv 2.8s ease-out infinite}@keyframes rv{0%,12%{opacity:0;transform:scale(.4)}30%{opacity:1;transform:scale(1.15)}40%,100%{opacity:1;transform:scale(1)}}
+/* C: Karte */
+.flip{perspective:900px}.flipin{width:200px;height:290px;position:relative;transform-style:preserve-3d;animation:fp 4s ease-in-out infinite}
+@keyframes fp{0%,10%{transform:rotateY(0)}35%,85%{transform:rotateY(180deg)}100%{transform:rotateY(360deg)}}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.back{background:repeating-linear-gradient(45deg,#3a2c14 0 8px,#2a200e 8px 16px);border:3px solid #c9a227}
+.front{transform:rotateY(180deg);background:linear-gradient(160deg,#2a1a40,#10081e);border:3px solid #ffb300;box-shadow:0 0 30px #ffb30088}
+.front .sh{position:absolute;inset:0;border-radius:10px;background:linear-gradient(115deg,#0000 30%,#fff3 50%,#0000 70%);background-size:250% 100%;animation:sheen 2.4s linear infinite}
+@keyframes sheen{from{background-position:150% 0}to{background-position:-100% 0}}
+/* Kampf */
+.bgc{position:absolute;inset:0;background:linear-gradient(#1e3a5a,#4a3a30 70%,#2a2220)}
+.foe{position:absolute;right:36px;bottom:70px;width:70px;height:110px;background:#6a3a4a;border-radius:30px 30px 6px 6px;animation:foe 3s infinite}
+.foe:before{content:"";position:absolute;left:14px;top:-34px;width:42px;height:42px;border-radius:50%;background:#8a5a6a}
+@keyframes foe{0%,44%,50%,100%{transform:none;filter:none}46%{transform:translateX(8px);filter:brightness(2.4)}}
+.hero{position:absolute;left:34px;bottom:70px;width:60px;height:100px;background:#8d6e3a;border-radius:26px 26px 6px 6px}
+.hero:before{content:"";position:absolute;left:10px;top:-32px;width:40px;height:40px;border-radius:50%;background:#e0b48a}
+.beam{position:absolute;left:112px;bottom:156px;height:8px;width:0;background:linear-gradient(90deg,#fff,#ff2fb4 40%,#8a2be2);border-radius:4px;box-shadow:0 0 14px 4px #ff2fb4,0 0 40px 10px #8a2be288;transform-origin:left;animation:bm 3s infinite}
+@keyframes bm{0%,30%{width:0;opacity:0}34%{width:0;opacity:1;height:4px}42%{width:170px;height:12px}52%{width:170px;height:6px;opacity:1}60%,100%{width:170px;height:2px;opacity:0}}
+.zap{position:absolute;right:60px;bottom:120px;width:90px;height:90px;border-radius:50%;background:radial-gradient(#fff,#ff2fb4aa 40%,#0000 70%);animation:zp 3s infinite}
+@keyframes zp{0%,40%{transform:scale(0);opacity:0}46%{transform:scale(1.2);opacity:1}60%,100%{transform:scale(1.8);opacity:0}}
+.hit2{position:absolute;right:44px;bottom:150px;font:bold 26px Georgia;color:#ffd54f;text-shadow:0 0 8px #f80,0 2px 0 #000;animation:dm 3s infinite}
+@keyframes dm{0%,46%{opacity:0;transform:translateY(0)}50%{opacity:1}100%{opacity:0;transform:translateY(-40px)}}
+.slash{position:absolute;right:40px;bottom:120px;width:110px;height:6px;background:linear-gradient(90deg,#0000,#fff,#8ad4ff);border-radius:3px;box-shadow:0 0 10px #8ad4ff;opacity:0}
+.s1{transform:rotate(-30deg);animation:sl 2.6s infinite}.s2{transform:rotate(30deg);bottom:140px;animation:sl 2.6s .25s infinite}
+@keyframes sl{0%,30%{opacity:0;clip-path:inset(0 100% 0 0)}36%{opacity:1;clip-path:inset(0 0 0 0)}50%,100%{opacity:0;clip-path:inset(0 0 0 0)}}
+.arc{position:absolute;right:50px;bottom:100px;width:110px;height:120px;opacity:0;animation:arc 2.6s infinite}
+@keyframes arc{0%,44%{opacity:0}48%{opacity:1}60%,100%{opacity:0}}
+</style>
+<h1>Einzigartige Waffen – Entwürfe</h1>
+<p>Zwei Fragen: <b>1)</b> Wie soll die Enthüllung beim Drop aussehen (A, B oder C)? <b>2)</b> Passen die Kampfeffekte unten in Stil und Wucht? Die Waffenfiguren sind grobe Platzhalter, die endgültigen bekommen je ein eigenes Design.</p>
+
+<h2>1) Enthüllung beim Drop (läuft in Schleife)</h2>
+<div class="row">
+
+<div class="card"><div class="stage" style="background:radial-gradient(#3a2a10,#0d0a07 70%)">
+ <div class="rays"></div><div class="flash"></div>
+ <div class="txt"><b>EINZIGARTIGE WAFFE</b><span>Donnerzahn</span></div>
+ <div class="rise"><div class="float"><svg width="150" height="260" viewBox="0 0 60 130" style="filter:drop-shadow(0 0 18px #8ad4ff)"><path d="M26 108V26L30 4L34 26V108Z" fill="#cfeaff" stroke="#fff"/><path d="M30 10V100" stroke="#8ad4ff" stroke-width="2"/><path d="M22 106h16v5H22z" fill="#c9a227"/><rect x="28" y="111" width="4" height="14" fill="#5b3a1c"/><path d="M30 24l-8 14 8-3-6 16 10-18-8 3z" fill="#fff27a"/></svg></div></div>
+ <div class="eff">⚡ Blitzkette: Kritische Treffer springen als Blitz auf den Gegner über.</div>
+ <i class="spark" style="left:60px;bottom:90px"></i><i class="spark" style="left:260px;bottom:110px;animation-delay:.7s"></i><i class="spark" style="left:160px;bottom:70px;animation-delay:1.4s"></i><i class="spark" style="left:100px;bottom:130px;animation-delay:2s"></i>
+</div><div class="lab"><b>A · Lichtstrahlen</b> – Blitz, drehende Strahlen, Waffe steigt auf und schwebt</div></div>
+
+<div class="card"><div class="stage" style="background:linear-gradient(#10131a,#2a2220)">
+ <div class="bolt"></div><div class="smoke"></div>
+ <svg width="220" height="90" viewBox="0 0 220 90" style="position:absolute;bottom:92px"><path d="M30 80V50h160v30z" fill="#4e3a22" stroke="#2a1c0c" stroke-width="3"/><path d="M20 50q90-50 180 0z" fill="#6a4a28" stroke="#2a1c0c" stroke-width="3"/><rect x="100" y="44" width="20" height="18" fill="#c9a227"/></svg>
+ <div class="reveal" style="position:absolute;bottom:130px"><svg width="110" height="210" viewBox="0 0 60 130" style="filter:drop-shadow(0 0 16px #ff2fb4)"><path d="M28 12h4v20h-4z" fill="#8a5a28"/><circle class="pl" cx="30" cy="10" r="9" fill="#ff2fb4"/><circle cx="30" cy="10" r="4" fill="#fff"/><rect x="28" y="22" width="4" height="100" rx="2" fill="#5b3a1c" stroke="#2a1c0c"/><path d="M24 24q6-8 12 0" stroke="#c9a227" stroke-width="3" fill="none"/></svg></div>
+ <div class="txt" style="animation-delay:.2s"><b>EINZIGARTIGE WAFFE</b><span>Sonnenlaser</span></div>
+ <div class="eff" style="animation-delay:1s">🔆 Laserstrahl: Schießt einen Energiestrahl auf den Gegner.</div>
+</div><div class="lab"><b>B · Truhe und Blitz</b> – Blitz schlägt in eine Truhe, Rauch, Waffe schießt heraus</div></div>
+
+<div class="card"><div class="stage" style="background:radial-gradient(#2a1a40,#0d0a07 75%)">
+ <div class="flip"><div class="flipin">
+  <div class="face back"><div style="font-size:60px;color:#c9a227">?</div></div>
+  <div class="face front"><div class="sh"></div>
+   <div style="font-size:11px;letter-spacing:3px;color:#ffb300;position:absolute;top:12px">EINZIGARTIG</div>
+   <svg width="110" height="150" viewBox="0 0 70 100" style="filter:drop-shadow(0 0 10px #ffb300);margin-top:10px"><path d="M10 90Q-8 50 14 8Q16 30 20 52Q30 70 14 92Z" fill="#e8b04a" stroke="#fff"/><path d="M14 8V92" stroke="#fff" stroke-width=".8"/><path d="M14 8l30 20M14 92L44 70" stroke="#b8860b" stroke-width="1.4"/><circle cx="58" cy="50" r="7" fill="#ffd54f" stroke="#fff"/></svg>
+   <div style="font-size:20px;margin-top:4px">Wiederkehr</div><div style="font-size:12px;color:#ffe0a0;text-align:center;padding:0 12px">Der Pfeil kehrt als zweiter Schlag zurück.</div>
+  </div></div></div>
+</div><div class="lab"><b>C · Sammelkarte</b> – verdeckte Karte dreht sich um, Glanz läuft darüber</div></div>
+</div>
+
+<h2>2) Einzigartige Effekte im Kampf (Schleife)</h2>
+<div class="row">
+
+<div class="card"><div class="bgc"></div><div class="hero"></div><div class="foe"></div>
+ <svg style="position:absolute;left:84px;bottom:130px" width="40" height="70" viewBox="0 0 60 130"><circle cx="30" cy="10" r="9" fill="#ff2fb4"/><rect x="28" y="22" width="4" height="100" fill="#5b3a1c"/></svg>
+ <div class="beam"></div><div class="zap"></div><div class="hit2">−84</div>
+ <div class="lab"><b>Laserstrahl</b> – Energiestrahl vom Stab zum Gegner, Einschlag, Bildschirm flackert</div></div>
+
+<div class="card"><div class="bgc"></div><div class="hero"></div><div class="foe"></div>
+ <div class="slash s1"></div><div class="slash s2"></div><div class="hit2" style="animation-delay:.2s;right:60px">−31 ×2</div>
+ <div class="lab"><b>Doppelschlag</b> – zwei Hiebe kurz nacheinander, „×2“ am Schadenswert</div></div>
+
+<div class="card"><div class="bgc"></div><div class="hero"></div><div class="foe"></div>
+ <svg class="arc" viewBox="0 0 110 120"><path d="M2 10L40 30L28 44L70 60L52 76L100 110" stroke="#fff" stroke-width="3" fill="none" style="filter:drop-shadow(0 0 6px #8ad4ff)"/></svg>
+ <div class="hit2" style="color:#8ad4ff;right:50px">⚡ Blitzkette −22</div>
+ <div class="lab"><b>Blitzkette</b> – nach einem kritischen Treffer springt ein Blitz auf den Gegner</div></div>
+</div>
+</html>
